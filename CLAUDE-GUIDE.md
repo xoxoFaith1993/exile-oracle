@@ -73,7 +73,8 @@ for 15 minutes).
 - "How close am I to the top 1% of my ascendancy? What closes the gap fastest?"
 - "Find me upgrades under 5 divines, best DPS per divine first."
 - "What if I swap my helmet for this item?" (paste the item: Ctrl+C on it in game)
-- "Compare my build with this one" (paste a Path of Building code)
+- "Compare my build with this one" (paste a Path of Building code): with builds from the vault it shows on the
+  **Compare** page (shape chart, stat bars, both trees on one tree, gear and skills)
 
 **Builds and patch notes**
 - "What does this build cost, and in what order should I buy it?" (paste a PoB code)

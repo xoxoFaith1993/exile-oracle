@@ -645,7 +645,12 @@ def t_whatif(a):
 def t_compare(a):
     con = db.connect()
     try:
-        return pob.compare(con, _ref(a, 'a_'), _ref(a, 'b_'))
+        r = pob.compare(con, _ref(a, 'a_'), _ref(a, 'b_'))
+        if a.get('show') and a.get('a_build_id') and a.get('b_build_id'):   # put it on the Compare page
+            from poe2kit import compare
+            compare.push(con, a['a_build_id'], a['b_build_id'], a.get('note'))
+            r['shown'] = 'On the Compare page (radar, stat bars, max hits, the two trees overlaid, gear, skills).'
+        return r
     finally:
         con.close()
 
@@ -736,8 +741,10 @@ TOOLS = [
      S(build_id=NUM, pob_code=STR, slot=STR, item_text=STR, main_group=NUM) | {'required': ['slot', 'item_text']},
      t_whatif),
     ('poe2_compare', 'Compare two builds in Path of Building side by side (b vs a, % differences). Use a_build_id / '
-     'a_pob_code and b_build_id / b_pob_code.', S(a_build_id=NUM, a_pob_code=STR, b_build_id=NUM, b_pob_code=STR),
-     t_compare),
+     'a_pob_code and b_build_id / b_pob_code (a = the player). show=true (vault ids only) puts it on the '
+     'Compare page of the dashboard: a radar, stat bars, biggest hit per damage type, the two passive trees overlaid, gear slot by slot '
+     'and skills; note = your short verdict shown on top. Use show=true whenever the player asks to compare builds.',
+     S(a_build_id=NUM, a_pob_code=STR, b_build_id=NUM, b_pob_code=STR, show=BOOL, note=STR), t_compare),
     ('poe2_read_rare', 'Read a rare item: tier (T1 = best) and roll % of each mod, plus a quality summary. '
      'base = base type (e.g. "Vile Robe"), mods = one mod per line.', S(base=STR, mods=STR) | {'required': ['base', 'mods']},
      t_read_rare),
@@ -867,7 +874,7 @@ FEED_WORDS = {
     'poe2_sessions': 'read your play sessions', 'poe2_craft': 'worked on a craft',
     'poe2_my_characters': 'listed your characters', 'poe2_import_character': 'imported a character',
     'poe2_upgrades': 'tried every unique in every slot', 'poe2_whatif': 'tested an item swap',
-    'poe2_compare': 'compared two builds', 'poe2_read_rare': 'read a rare item',
+    'poe2_compare': 'compared two builds (Compare page)', 'poe2_read_rare': 'read a rare item',
     'poe2_build_planner': 'worked on the in-game Build Planner', 'poe2_levelling': 'checked the levelling route',
     'poe2_lab': 'used the Build Lab', 'poe2_oracle': 'read the market history (the Oracle)', 'poe2_campaign': 'read the campaign guide', 'poe2_atlas': 'planned the atlas', 'poe2_doctor': 'checked the app for problems',
     'poe2_from_overlay': 'read the items you sent', 'poe2_trade_link': 'made a trade-site link',

@@ -174,6 +174,15 @@ Your tree, and every item priced (rares estimated from craft cost).
 
 ![Passive tree + build value](docs/screenshots/passive-tree.jpg)
 
+### Compare
+Any two builds side by side, visually: a shape chart (damage, toughness, life, resistances, speed), stat bars with the
+difference, the biggest hit each survives per damage type, the two passive trees on one tree (blue: only yours, red:
+only theirs, gold: both), gear slot by slot and skills. Ask the Oracle to compare builds and it lands here with its
+verdict.
+
+![Compare](docs/screenshots/compare.jpg)
+![Two trees on one](docs/screenshots/compare-tree.jpg)
+
 ### Top 1% check
 You vs the top 1% of your ascendancy: level, DPS, toughness, gear value.
 

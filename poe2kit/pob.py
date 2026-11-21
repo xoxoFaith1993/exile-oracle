@@ -77,7 +77,69 @@ def version():
         return 'not installed'
 
 
+_asc_starts = {}
+
+
+def _ascendancy_start(node_id):
+    """True for the start points of other ascendancies: GGG's character data lists them for everyone, Path of
+    Building doesn't draw them, so they aren't really missing (found on the author's import, 2026-11-21)."""
+    if 'ids' not in _asc_starts:
+        ids = set()
+        try:
+            p = config.newest_gamefiles(os.path.join('tables', 'passiveskills.json'))
+            d = json.load(open(p, encoding='utf-8')) if p else []
+            for r in (d if isinstance(d, list) else d.get('rows') or []):
+                if str(r.get('Id') or '').startswith('Ascendancy') and str(r.get('Id') or '').rstrip('_').endswith('Start'):
+                    ids.add(str(r.get('PassiveSkillGraphId')))
+        except Exception:
+            pass
+        _asc_starts['ids'] = ids
+    return str(node_id) in _asc_starts['ids']
+
+
+def filled_weapon_set(xml_text):
+    """(xml, note) with the weapon set that has the weapons switched on. A character whose weapons sit only in
+    weapon set II (set I empty) was measured with NO weapon: no staff damage, no "+levels to spells" (found on
+    the author's Comet build, 2026-11-21). The game uses the set the weapons are in, so this does too."""
+    import re as _re
+    if 'name="Weapon 1 Swap"' not in xml_text:
+        return xml_text, None
+    def item(slot):
+        m = _re.search(r'<Slot [^>]*itemId="(\d+)"[^>]*name="%s"' % _re.escape(slot), xml_text) or \
+            _re.search(r'<Slot [^>]*name="%s"[^>]*itemId="(\d+)"' % _re.escape(slot), xml_text)
+        return int(m.group(1)) if m else 0
+    first = item('Weapon 1') or item('Weapon 2')
+    second = item('Weapon 1 Swap') or item('Weapon 2 Swap')
+    using_second = _re.search(r'<Items [^>]*useSecondWeaponSet="true"', xml_text) is not None
+    if not first and second and not using_second:
+        fixed = _re.sub(r'(<(?:Items|ItemSet) [^>]*?)useSecondWeaponSet="[^"]*"', r'\1useSecondWeaponSet="true"', xml_text)
+        if fixed == xml_text:   # the attribute wasn't there: add it
+            fixed = _re.sub(r'<Items ', '<Items useSecondWeaponSet="true" ', xml_text, count=1)
+        return fixed, 'Fixed automatically: weapon set I is empty, so it was measured with weapon set II, where the weapons are.'
+    return xml_text, None
+
+
+# Auto-fixes (the author, 2026-11-21: "we need to be able to auto fix this stuff for anyone"). Each one repairs a known
+# import problem before Path of Building measures a build, for every player and every build, and says what it did
+# (the note shows with the build's warnings). Add new ones here as they are found; each is
+# fix(xml) -> (xml, note or None), and must leave a correct build unchanged.
+AUTOFIXES = [filled_weapon_set]
+
+
+def autofix(xml_text):
+    notes = []
+    for fix in AUTOFIXES:
+        try:
+            xml_text, note = fix(xml_text)
+        except Exception:
+            note = None
+        if note:
+            notes.append(note)
+    return xml_text, notes
+
+
 def calc(xml_text, use_cache=True, timeout=300, main_group=None):
+    xml_text, fixnotes = autofix(xml_text)
     with open(SCRIPT, 'rb') as f:
         script = hashlib.sha1(f.read()).hexdigest()
     key = hashlib.sha1((version() + script + str(main_group) + xml_text).encode('utf-8')).hexdigest()
@@ -100,9 +162,11 @@ def calc(xml_text, use_cache=True, timeout=300, main_group=None):
             raise RuntimeError('PoB failed: ' + ' | '.join(tail))
         with open(out_path, encoding='utf-8') as f:
             res = json.load(f)
-        missing = sum(1 for l in p.stdout.splitlines() if l.startswith('missing node'))
+        ids = [l.split()[-1] for l in p.stdout.splitlines() if l.startswith('missing node')]
+        missing = len([i for i in ids if not _ascendancy_start(i)])   # GGG lists every ascendancy's start point
         res['warnings'] = [f'{missing} passive nodes in this build no longer exist in PoB {version()} '
                            '(tree changed since the build was made)'] if missing else []
+        res['warnings'] += fixnotes
         res['pob_version'] = version()
         with open(cpath, 'w', encoding='utf-8') as f:
             json.dump(res, f)

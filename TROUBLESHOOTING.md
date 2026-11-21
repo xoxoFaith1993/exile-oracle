@@ -128,6 +128,12 @@ by itself.
 - Game log not found: the doctor shows the folder it looked in. Steam, Flatpak Steam and SD-card libraries are
   searched; the game folder can also be set in Settings. The in-game Build Planner folder is found in the game's Proton prefix in any of those libraries.
 
+## Damage looks far too low
+| Problem | Check | Fix |
+|---|---|---|
+| A build's DPS is much lower than in game | Character page: "Weapon set I is empty" warning? | fixed since 0.6.x: weapons only in set II are measured with set II. Re-open the page (Path of Building measures again) |
+| Gem level lower than in game | the skill's level in game includes "+ levels" from gear | the gem shows its own level; gear levels are counted in the DPS |
+
 ## Build Vault: paste / delete
 | Problem | Check | Fix |
 |---|---|---|

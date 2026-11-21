@@ -334,6 +334,19 @@ def vault_paste_check():
           'Build Vault: paste a code or link, no duplicates, poe.ninja opens its page, delete')
 
 
+def weaponset_check():
+    """A build whose weapons sit only in weapon set II is measured with set II (not with no weapon)."""
+    from poe2kit import pob
+    xml = ('<PathOfBuilding2><Items activeItemSet="1" useSecondWeaponSet="nil"><ItemSet id="1" useSecondWeaponSet="nil">'
+           '<Slot itemId="0" name="Weapon 1"/><Slot itemId="18" name="Weapon 1 Swap"/><Slot itemId="0" name="Weapon 2"/>'
+           '<Slot itemId="13" name="Weapon 2 Swap"/></ItemSet></Items></PathOfBuilding2>')
+    fixed, note = pob.filled_weapon_set(xml)
+    normal, n2 = pob.filled_weapon_set(xml.replace('itemId="0" name="Weapon 1"', 'itemId="5" name="Weapon 1"'))
+    check(note and fixed.count('useSecondWeaponSet="true"') == 2 and n2 is None and 'useSecondWeaponSet="nil"' in normal
+          and pob.autofix(xml)[1] == [note],
+          'empty weapon set I: measured with set II')
+
+
 def campaign_check():
     """R16 / R21: the rush route maps onto the game's zones, and a zone gives a route card."""
     from poe2kit import campaign
@@ -443,6 +456,7 @@ if __name__ == '__main__':
     alerts_check()
     patchwatch_check()
     vault_paste_check()
+    weaponset_check()
     mcp()
     if '--pob' in sys.argv:
         pob_part()

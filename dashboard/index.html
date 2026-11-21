@@ -376,6 +376,16 @@ input[type=checkbox] { accent-color: var(--eo-blood-hi); }
 .tlbar.plan { background: #5a1e26; color: #f1d0d4; } .tlbar.market { background: #4a3c1c; color: #f0e1b8; }
 .tlbar.uniques { background: #3d2a4f; color: #e2d4f0; } .tlbar.farm { background: #1f3d2c; color: #cfe9d8; }
 .tlnow { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--eo-blood-hi, #dc3a4e); }
+.cmpA { color: #5fa8e8; } .cmpB { color: #e8605f; }
+.cmpbar { display: grid; grid-template-columns: 190px 1fr 90px; gap: 4px 10px; align-items: center; margin: 5px 0; }
+.cmpbar .b { height: 9px; border-radius: 3px; margin: 2px 0; }
+.cmpbar .b.a { background: #5fa8e8; } .cmpbar .b.b { background: #e8605f; }
+.cmpgear { display: grid; grid-template-columns: 1fr 110px 1fr; gap: 6px 12px; align-items: center; }
+.cmpgear .it { display: flex; gap: 8px; align-items: center; padding: 5px 8px; border: 1px solid #2a2219; border-radius: 4px; min-height: 44px; }
+.cmpgear .it.diff { border-color: #6b5a2a; }
+.cmpgear .it img { width: 34px; height: 34px; object-fit: contain; }
+.gemtag { display: inline-block; padding: 1px 7px; margin: 2px; border-radius: 3px; background: #241c14; font-size: 12px; }
+.gemtag.only { outline: 1px solid currentColor; }
 .mmlvl { font: 700 10px var(--eo-display); letter-spacing: .1em; text-transform: uppercase; padding: 1px 7px; border-radius: 999px; border: 1px solid; }
 .mmlvl.deadly { color: #ff7b7b; border-color: #7a2a2a; } .mmlvl.risky { color: #e9c46a; border-color: #6b5a2a; } .mmlvl.fine { color: var(--eo-good); border-color: #3f5f33; }
 #mmtable td { vertical-align: top; } #mmtable .tiers { font-size: 12px; color: var(--eo-muted); }
@@ -449,6 +459,7 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
   <button data-tab="lab">Build Lab</button>
   <button data-tab="builds">Builds</button>
   <button data-tab="character">Character</button>
+  <button data-tab="compare">Compare</button>
   <button data-tab="top1">Top 1%</button>
   <button data-tab="sessions">Sessions</button>
   <div class="ng">Craft</div>
@@ -613,6 +624,26 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
     <div id="mmhome-tablets"></div>
   </section>
   <section id="character"><div id="charview"><div class="card empty">Pick a build on the Builds tab, or ask the Oracle to show one.</div></div></section>
+  <section id="compare">
+    <div class="card"><div class="lab-head"><h2 style="margin:0">Compare</h2><span style="flex:1"></span>
+      <label class="small"><span class="cmpA">■</span> <select class="crin" id="cmpa" style="max-width:260px"></select></label>
+      <button class="btn" id="cmpswap" title="Swap the two">⇄</button>
+      <label class="small"><span class="cmpB">■</span> <select class="crin" id="cmpb" style="max-width:260px"></select></label></div>
+      <div class="sub">Two builds side by side, measured by Path of Building. Ask the Oracle to compare builds and it lands here with its verdict.</div>
+      <div id="cmphead" style="margin-top:10px"></div></div>
+    <div class="grid2">
+      <div class="card"><h2>Shape</h2><div class="sub">Further out is better. The rim is the better of the two; each ring in is 10× less.</div><div id="cmpradar"></div></div>
+      <div class="card"><h2>Biggest hit you survive</h2><div class="sub">Per damage type: the shortest bar is the weak spot.</div><div id="cmphits"></div></div>
+    </div>
+    <div class="card"><h2>Stat by stat</h2><div id="cmpbars"></div></div>
+    <div class="card"><div class="lab-head"><h2 style="margin:0">Passive trees</h2><span class="small muted" id="cmptreesub"></span></div>
+      <div class="small" style="margin:6px 0"><span class="cmpA">●</span> only <span id="cmptna"></span> · <span class="cmpB">●</span> only <span id="cmptnb"></span> · <span style="color:#e3b341">●</span> both</div>
+      <div class="lab-tree" id="cmptree" style="height:520px"><div class="zbtn"><button data-z="1.4">+</button><button data-z="0.7">−</button><button data-z="fit">⤢</button></div>
+        <div class="legend">hover a node for its name · Ctrl + scroll to zoom · drag to move</div></div>
+      <div id="cmpkeys" class="small" style="margin-top:8px"></div></div>
+    <div class="card"><h2>Gear, slot by slot</h2><div id="cmpgear"></div></div>
+    <div class="card"><h2>Skills</h2><div id="cmpskills"></div></div>
+  </section>
   <section id="top1">
     <div class="card"><h2>Top 1% check</h2><div class="sub">Your character against the top 1% of your ascendancy on poe.ninja: level, damage, toughness and gear value. Benchmarks are read on request (ask the Oracle to refresh them).</div>
       <label class="small">Character <select class="crin" id="t1build"></select></label> <button class="btn" id="t1go">Check</button></div>
@@ -864,6 +895,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   if (b.dataset.tab === 'tablets') { loadAtlasPlan(); mmPlace('tablet'); }
   if (b.dataset.tab === 'campaign') loadCampaign();
   if (b.dataset.tab === 'prophecy') loadProphecy();
+  if (b.dataset.tab === 'compare') loadCompare();
   if (b.dataset.tab === 'economy') { loadLeagues(); loadOverview(); loadMovers(); loadMarket(); loadOracle($('#ordaysel').value); }
   if (b.dataset.tab === 'builds') loadBuilds();
   if (b.dataset.tab === 'alerts') loadAlerts(true);
@@ -1231,6 +1263,9 @@ document.addEventListener('click', async e => {
 
 // ---------- ready-made questions on every page (click = copy, paste in your AI chat) ----------
 const PAGE_ASKS = {
+  compare: [['How do I close the biggest gap?', 'Look at the Compare page: what is the cheapest way for me to close the biggest gap to that build?'],
+            ['Compare me with a top player', 'Compare my active character with a top 1% player of my ascendancy and show it on the Compare page.'],
+            ['Which of my builds is better for bossing?', 'Compare my builds for pinnacle bossing and show the best two on the Compare page.']],
   maps: [['How should I roll my waystones?', 'How should I roll my waystones for my build and strategy, and is juicing worth it right now?'],
          ['Which map mods should I avoid?', 'Which waystone modifiers are deadly for my build? Make me a search string that hides them.'],
          ['What would I earn per hour?', 'What would I earn per hour with my build on each strategy right now? Use the earnings numbers and give the ranges.']],
@@ -1375,6 +1410,62 @@ async function loadActive() {
   } catch (e) {}
 }
 loadActive();
+
+// ---------- Compare (two builds, visually) ----------
+let CMP = null;
+const cfmt = (v, f) => v == null ? '–' : f === 'big' ? big(v) : f === 'pct' ? `${(+v).toFixed(0)}%` : f === 'dec' ? (+v).toFixed(2) : f === 'mult' ? `${Math.round(v * 100)}%` : Math.round(v).toLocaleString();
+async function loadCompare(a, b) {
+  const sa = $('#cmpa'), sb = $('#cmpb');
+  if (!sa.options.length) {
+    const bl = await get('/api/builds');
+    const opts = (bl || []).map(x => `<option value="${x.id}">#${x.id} ${esc(x.label)} (${esc(x.ascendancy || '')} ${x.level || ''})</option>`).join('');
+    sa.innerHTML = opts; sb.innerHTML = opts;
+    sa.onchange = sb.onchange = () => loadCompare(sa.value, sb.value);
+    $('#cmpswap').onclick = () => loadCompare(sb.value, sa.value);
+  }
+  $('#cmphead').innerHTML = '<span class="spin"></span> Path of Building is measuring both builds…';
+  const r = await get('/api/compare' + (a && b ? `?a=${a}&b=${b}` : ''));
+  if (r.error) { $('#cmphead').innerHTML = `<div class="muted">${esc(r.error)}</div>`; return; }
+  CMP = r; sa.value = r.a.id; sb.value = r.b.id;
+  const nm = x => esc((x.label || '').split(' (')[0]);
+  const card = (x, cls) => `<div><div class="small ${cls}">■ ${x.owner === 'me' ? 'yours' : esc(x.owner || '')}</div><div style="font:700 16px var(--eo-display)">${nm(x)}</div>
+    <div class="small muted">${esc(x.ascendancy || x.class || '')} · level ${esc(x.level)} · ${esc(x.main_skill || '')} · ${x.value_div != null ? Math.round(x.value_div).toLocaleString() + ' div of gear' : ''}</div></div>`;
+  $('#cmphead').innerHTML = `<div class="grid2">${card(r.a, 'cmpA')}${card(r.b, 'cmpB')}</div>
+    ${r.pushed && r.pushed.note ? `<div class="flag ok" style="margin-top:10px"><b>The Oracle:</b> ${esc(r.pushed.note)}</div>` : ''}
+    <div style="margin-top:10px"><div class="small muted">Biggest gaps</div>${r.gaps.map(g => `<div style="margin-top:3px">• ${esc(g.text)}</div>`).join('')}</div>`;
+  drawRadar(r.radar);
+  const hmax = Math.max(...r.hits.flatMap(h => [h.a || 0, h.b || 0]), 1);
+  $('#cmphits').innerHTML = r.hits.map(h => `<div class="cmpbar" style="grid-template-columns:90px 1fr 120px"><span class="small">${h.type}</span>
+    <div><div class="b a" style="width:${100 * (h.a || 0) / hmax}%"></div><div class="b b" style="width:${100 * (h.b || 0) / hmax}%"></div></div>
+    <span class="small"><span class="cmpA">${cfmt(h.a)}</span> / <span class="cmpB">${cfmt(h.b)}</span></span></div>`).join('');
+  $('#cmpbars').innerHTML = r.bars.map(x => { const m = Math.max(Math.abs(x.a || 0), Math.abs(x.b || 0), 1);
+    const tag = x.pct == null || x.better == null ? '' : `<span class="pill" style="color:${x.better === 'a' ? '#5fa8e8' : '#e8605f'}">${x.pct > 0 ? '+' : ''}${x.pct > 999 ? Math.round(x.pct / 100) + '×' : x.pct + '%'}</span>`;
+    return `<div class="cmpbar"><span class="small">${esc(x.label)}</span><div><div class="b a" style="width:${100 * Math.max(0, x.a || 0) / m}%"></div><div class="b b" style="width:${100 * Math.max(0, x.b || 0) / m}%"></div></div>
+      <span class="small"><span class="cmpA">${cfmt(x.a, x.fmt)}</span> / <span class="cmpB">${cfmt(x.b, x.fmt)}</span> ${tag}</span></div>`; }).join('');
+  $('#cmptna').textContent = `${nm(r.a)} (${r.tree.only_a.length})`; $('#cmptnb').textContent = `${nm(r.b)} (${r.tree.only_b.length})`;
+  $('#cmptreesub').textContent = `${r.tree.both.length} shared${r.tree.same_version ? '' : ' · different tree versions: drawn on the first'}`;
+  const box = $('#cmptree'); const old = box.querySelector('svg'); if (old) old.remove();
+  await drawTree({ tree: { version: r.tree.version, allocated: [...r.tree.both, ...r.tree.only_a, ...r.tree.only_b], jewel_nodes: [], only_a: r.tree.only_a, only_b: r.tree.only_b } }, box);
+  $('#cmpkeys').innerHTML = `<b>Keystones:</b> <span class="cmpA">${r.keystones.a.map(esc).join(', ') || 'none'}</span> · <span class="cmpB">${r.keystones.b.map(esc).join(', ') || 'none'}</span>`;
+  const it = (x, diff) => !x ? '<div class="it muted small">empty</div>' : `<div class="it${diff ? ' diff' : ''}">${x.icon ? `<img src="${ic(x.icon, 34)}" alt="">` : `<img src="/artfind?n=${encodeURIComponent(x.name || '')}&b=${encodeURIComponent(x.base || '')}" alt="" onerror="this.remove()">`}
+    <div><div class="small ${RCOL[x.rarity] || ''}"><b>${esc(x.name || x.base || '')}</b></div><div class="small muted">${esc(x.base && x.base !== x.name ? x.base : '')}${x.value_div != null ? ` · ${x.value_div < 1 ? '<1' : Math.round(x.value_div)} div` : ''}</div></div></div>`;
+  $('#cmpgear').innerHTML = `<div class="cmpgear"><div class="small cmpA">${nm(r.a)}</div><div></div><div class="small cmpB">${nm(r.b)}</div>` +
+    r.gear.map(g => `${it(g.a, !g.same)}<div class="small muted" style="text-align:center">${esc(g.slot)}</div>${it(g.b, !g.same)}`).join('') + '</div>';
+  const onlyA = new Set(r.skills.only_a), onlyB = new Set(r.skills.only_b);
+  const col = (list, only, cls) => list.map(g => `<div style="margin:6px 0">${g.skills.map(s => `<span class="gemtag ${only.has(s) ? 'only ' + cls : ''}"><b>${esc(s)}</b></span>`).join('')}
+    ${g.supports.map(s => `<span class="gemtag ${only.has(s) ? 'only ' + cls : ''}">${esc(s)}</span>`).join('')}</div>`).join('') || '<div class="muted small">none</div>';
+  $('#cmpskills').innerHTML = `<div class="small muted">Outlined: only this build has it.</div><div class="grid2"><div><div class="small cmpA">${nm(r.a)}</div>${col(r.skills.a, onlyA, 'cmpA')}</div><div><div class="small cmpB">${nm(r.b)}</div>${col(r.skills.b, onlyB, 'cmpB')}</div></div>`;
+}
+function drawRadar(axes) {
+  const W = 420, H = 360, cx = W / 2, cy = H / 2 + 6, R = 130, n = axes.length;
+  const pt = (i, v) => [cx + R * v * Math.sin(2 * Math.PI * i / n), cy - R * v * Math.cos(2 * Math.PI * i / n)];
+  let g = '';
+  for (const ring of [1 / 3, 2 / 3, 1]) g += `<polygon points="${axes.map((_, i) => pt(i, ring).join(',')).join(' ')}" fill="none" stroke="#2f261c"/>`;
+  axes.forEach((a, i) => { const [x, y] = pt(i, 1); const [lx, ly] = pt(i, 1.17);
+    g += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#2f261c"/><text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-size="12" fill="#b9a98c">${esc(a.axis)}</text>`; });
+  const poly = (k, c) => `<polygon points="${axes.map((a, i) => pt(i, a[k]).join(',')).join(' ')}" fill="${c}" fill-opacity=".22" stroke="${c}" stroke-width="2"/>`;
+  $('#cmpradar').innerHTML = `<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-width:520px;display:block;margin:auto">${g}${poly('a', '#5fa8e8')}${poly('b', '#e8605f')}</svg>`;
+}
 
 // ---------- Prophecy (R14): omen, timeline, forecasts, patch prophecy, farming oracle, chase uniques ----------
 const pnum = v => v == null ? '–' : v >= 100 ? Math.round(v).toLocaleString() : v >= 1 ? v.toFixed(2) : v.toPrecision(2);
@@ -1980,7 +2071,7 @@ function renderCharacter(c, el) {
     <div class="card"><div class="char-head"><h2>${esc(c.label)}</h2><span class="muted">Level ${esc(c.level)} ${esc(c.ascendancy || c.class)}</span>
       <span class="pill">${esc(c.league || '')}</span><span class="pill">${esc(c.owner)}</span>
       <span class="muted">Main skill <b style="color:var(--text-primary)">${esc(c.main_skill)}</b> · ${c.dps.toLocaleString()} DPS</span></div>
-      ${(c.warnings || []).map(w => `<div class="small" style="color:var(--warning)">⚠ ${esc(w)}</div>`).join('')}</div>
+      ${(c.warnings || []).map(w => w.startsWith('Fixed automatically') ? `<div class="small" style="color:var(--eo-good)">✔ ${esc(w)}</div>` : `<div class="small" style="color:var(--warning)">⚠ ${esc(w)}</div>`).join('')}</div>
     <div class="char-grid">
       <div>
         <div class="card"><h2>Equipment</h2><div class="inv">${inv}</div>
@@ -2029,6 +2120,7 @@ function treeHint(box) {   // a short "hold Ctrl to zoom" note when someone scro
 async function drawTree(c, box) {
   const t = TREES[c.tree.version] || (TREES[c.tree.version] = await get('/api/tree?v=' + encodeURIComponent(c.tree.version)));
   const alloc = new Set(c.tree.allocated); const jn = new Set(c.tree.jewel_nodes);
+  const onlyA = new Set(c.tree.only_a || []), onlyB = new Set(c.tree.only_b || []);   // Compare page: two trees in one
   const nodes = t.nodes.filter(n => !n.a); const byId = {}; t.nodes.forEach(n => byId[n.id] = n);
   let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
   nodes.forEach(n => { x0 = Math.min(x0, n.x); y0 = Math.min(y0, n.y); x1 = Math.max(x1, n.x); y1 = Math.max(y1, n.y); });
@@ -2036,21 +2128,23 @@ async function drawTree(c, box) {
   const edge = e => {
     const a = byId[e[0]], b = byId[e[1]]; if (!a || !b || a.a || b.a) return '';
     const on = alloc.has(a.id) && alloc.has(b.id);
+    const side = on && (onlyA.has(a.id) || onlyA.has(b.id)) && !onlyB.has(a.id) && !onlyB.has(b.id) ? ' ea'
+      : on && (onlyB.has(a.id) || onlyB.has(b.id)) && !onlyA.has(a.id) && !onlyA.has(b.id) ? ' eb' : '';
     const d = e.length > 2 ? `M${a.x},${a.y}A${e[2]},${e[2]} 0 0 ${e[3]} ${b.x},${b.y}` : `M${a.x},${a.y}L${b.x},${b.y}`;
-    return `<path d="${d}" data-a="${a.id}" data-b="${b.id}" class="${on ? 'eon' : 'eoff'}"/>`;
+    return `<path d="${d}" data-a="${a.id}" data-b="${b.id}" class="${on ? 'eon' + side : 'eoff'}"/>`;
   };
   const on = nodes.filter(n => alloc.has(n.id));
   const nodeSvg = n => {
     const a = alloc.has(n.id), r = R[n.k] || 20;
     const shape = n.k === 'jewel' ? `<rect x="${n.x - r}" y="${n.y - r}" width="${2 * r}" height="${2 * r}" transform="rotate(45 ${n.x} ${n.y})" class="${a || jn.has(n.id) ? 'non' : 'noff'}"/>`
-      : `<circle cx="${n.x}" cy="${n.y}" r="${r}" class="${a ? 'non' : 'noff'} k-${n.k}"/>`;
+      : `<circle cx="${n.x}" cy="${n.y}" r="${r}" class="${a ? 'non' + (onlyA.has(n.id) ? ' na' : onlyB.has(n.id) ? ' nb' : '') : 'noff'} k-${n.k}"/>`;
     const img = n.i && (n.k === 'keystone' || n.k === 'notable') ? `<image href="${artSrc(n.i)}" x="${n.x - r * .8}" y="${n.y - r * .8}" width="${r * 1.6}" height="${r * 1.6}" clip-path="circle(50%)" pointer-events="none" ${a ? '' : 'class="dimimg"'}/>` : '';
     return `<g data-n="${n.id}">${shape}${img}</g>`;
   };
   box.insertAdjacentHTML('afterbegin', `<svg viewBox="${x0} ${y0} ${x1 - x0} ${y1 - y0}" preserveAspectRatio="xMidYMid meet">
     <style>.eoff{stroke:#2b2a26;stroke-width:9;fill:none}.eon{stroke:#d8b25a;stroke-width:16;fill:none}
       .noff{fill:#151513;stroke:#3a3832;stroke-width:6}.non{fill:#3b2f12;stroke:#e3b341;stroke-width:9}
-      .k-keystone.noff{stroke:#55524a}.k-notable.noff{stroke:#4a4740}.dimimg{opacity:.35;filter:grayscale(1)}</style>
+      .na{stroke:#5fa8e8;fill:#13263a}.nb{stroke:#e8605f;fill:#3a1414}.eon.ea{stroke:#5fa8e8}.eon.eb{stroke:#e8605f}.k-keystone.noff{stroke:#55524a}.k-notable.noff{stroke:#4a4740}.dimimg{opacity:.35;filter:grayscale(1)}</style>
     <g>${t.edges.map(edge).join('')}</g><g>${nodes.map(nodeSvg).join('')}</g></svg>`);
   const svg = box.querySelector('svg');
   let vb = [x0, y0, x1 - x0, y1 - y0];

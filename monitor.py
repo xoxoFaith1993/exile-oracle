@@ -401,6 +401,17 @@ def api(path, q):
         if path == '/api/data/status':   # R27: which data version is in use, and the game's own version
             from poe2kit import dataupdate, patchwatch
             return dict(dataupdate.status(con), game=patchwatch.status(con))
+        if path == '/api/compare':   # the Compare page: two builds side by side (a = you, b = them)
+            from poe2kit import compare, mapmods
+            p = compare.pushed(con)
+            a = int(q.get('a') or p.get('a') or mapmods.active_build(con) or 0)
+            b = q.get('b') or p.get('b')
+            if not b:   # default: a top player's build, else another of your builds
+                r = con.execute("SELECT id FROM build WHERE id<>? ORDER BY (owner='me'), id DESC LIMIT 1", (a,)).fetchone()
+                b = r['id'] if r else None
+            if not a or not b:
+                return {'error': 'Save two builds in the vault to compare them (Builds page: paste a build).'}
+            return compare.compare_view(con, a, int(b))
         if path == '/api/campaign':   # R16: campaign rush guide + checklist + where you are now
             from poe2kit import campaign
             return campaign.guide(con)

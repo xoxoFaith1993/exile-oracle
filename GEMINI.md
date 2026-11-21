@@ -82,6 +82,12 @@ Data only: never put code in a pack.
   The game-file reader (poe2x) is NOT shipped: its library (LibGGPK3) is AGPL and it needs Oodle (oo2core.dll),
   which can't be redistributed.
 
+## Auto-fixes for imported builds
+`poe2kit/pob.py` AUTOFIXES: each one repairs a known import problem before Path of Building measures a build, for
+every player, and adds a "Fixed automatically: ..." note (shown in green on the Character page). Today: weapons only
+in weapon set II are measured with set II. When a player reports wrong numbers, find the cause and add a fix there
+(it must leave a correct build unchanged) plus a check in smoke_test.py.
+
 ## Docs go with every change
 Players only see what the docs show. `build_release.py` refuses to build when a tool is missing from
 `CLAUDE-GUIDE.md`, a dashboard page is missing from `README.md`, a research folder is missing from
