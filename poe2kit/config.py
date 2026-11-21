@@ -16,7 +16,7 @@ import re
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)                      # the app folder (code, dashboard, pobhost)
 
-VERSION = '0.6.0'
+VERSION = '0.6.1'
 APP_NAME = 'Exile Oracle'
 REPO = 'xoxoFaith1993/exile-oracle'   # GitHub: releases + update check (was poe2-toolkit; GitHub redirects)
 
