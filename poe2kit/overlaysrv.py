@@ -175,21 +175,76 @@ DEFAULTS = {'listing': 'securable', 'search_range_pct': 10, 'quick_close_px': 15
 KEY_RX = __import__('re').compile(r'^((Ctrl|Alt|Shift)\+){0,3}(F([1-9]|1[0-2])|[A-Z0-9])$')
 
 
+def clean_key(key):
+    """'ctrl + alt+d' -> 'Ctrl+Alt+D' (modifiers in a fixed order), or '' when it isn't a key we can use."""
+    parts = [p for p in str(key or '').replace(' ', '').split('+') if p]
+    mods = [m for m in ('Ctrl', 'Alt', 'Shift') if any(p.lower() == m.lower() for p in parts)]
+    rest = [p.upper() for p in parts if p.lower() not in ('ctrl', 'alt', 'shift')]
+    if len(rest) != 1:
+        return ''
+    k = '+'.join(mods + rest)
+    return k if KEY_RX.match(k) else ''
+
+
 def clean_commands(cmds):
     """Keep valid rows: text up to 120 characters on one line, key like F5 / Ctrl+F1 / Alt+H (or none)."""
     out = []
     for c in (cmds or [])[:20]:
         text = ' '.join(str((c or {}).get('text') or '').split())[:120]
-        key = str((c or {}).get('key') or '').replace(' ', '')
-        parts = [p.capitalize() if p.lower() in ('ctrl', 'alt', 'shift') else p.upper() for p in key.split('+')] if key else []
-        key = '+'.join(parts)
         if not text:
             continue
-        out.append({'text': text, 'key': key if KEY_RX.match(key) else ''})
+        out.append({'text': text, 'key': clean_key((c or {}).get('key'))})
     return out
 
 
 HOTKEYS = {'quick': 'Ctrl+D', 'detailed': 'Ctrl+Alt+D', 'settings': 'Ctrl+Shift+D'}
+KEY_NAMES = {'quick': 'quick check', 'detailed': 'detailed check', 'settings': 'overlay settings'}
+# keys the game itself (or Windows) already uses by default: taking them would break that action in game
+GAME_KEYS = {'Ctrl+C': "the game's copy-item key", 'Ctrl+Alt+C': "the game's detailed copy-item key",
+             'Ctrl+V': 'paste in chat', 'Ctrl+A': 'select all in chat', 'Ctrl+X': 'cut in chat',
+             'Ctrl+Z': 'undo in chat', 'Alt+F4': 'closes the game', 'Ctrl+F': 'stash search',
+             'Alt+Enter': 'full screen', 'Ctrl+Enter': 'chat'}
+
+
+def price_keys(s=None):
+    from . import config
+    s = s if s is not None else config.settings()
+    got = s.get('price_keys') or {}
+    return {k: clean_key(got.get(k)) or v for k, v in HOTKEYS.items()}
+
+
+def key_warnings(keys, commands):
+    """Plain warnings for a set of price-check keys: two jobs on one key, a key the game needs, a bare letter."""
+    out = []
+    seen = {}
+    for k, key in keys.items():
+        seen.setdefault(key, []).append(KEY_NAMES.get(k, k))
+    for c in commands or []:
+        if c.get('key'):
+            seen.setdefault(c['key'], []).append(f'chat command {c["text"]}')
+    for key, who in seen.items():
+        if len(who) > 1:
+            out.append(f'{key} is set for {" and ".join(who)}: only one of them will work.')
+    for k, key in keys.items():
+        if key in GAME_KEYS:
+            out.append(f'{key} ({KEY_NAMES[k]}) is {GAME_KEYS[key]}: pick another key.')
+        elif '+' not in key and not key.startswith('F'):
+            out.append(f'{key} ({KEY_NAMES[k]}) has no Ctrl / Alt / Shift: the game uses most single keys. '
+                       'Add a modifier.')
+    return out
+
+
+def key_problems():
+    """What overlay.pyw last reported: keys Windows wouldn't give it (another program holds them)."""
+    from . import config
+    import json
+    try:
+        d = json.load(open(os.path.join(config.HOME, 'overlay_keys.json'), encoding='utf-8'))
+    except (OSError, ValueError):
+        return []
+    keys = price_keys()
+    return [f'{d["failed"][k]} ({KEY_NAMES.get(k, k)}) is taken by another program on this PC: pick another key '
+            'or close that program.' for k in d.get('failed', {}) if d['failed'][k] == keys.get(k)]
 
 
 def options():
@@ -197,8 +252,10 @@ def options():
     s = config.settings()
     out = {'overlay': bool(s.get('overlay', False)),
            'live_trade': bool(s.get('live_trade', False)),
-           'supported': osutil.IS_WIN, 'running': running(), 'hotkeys': HOTKEYS}
+           'supported': osutil.IS_WIN, 'running': running(), 'hotkeys': price_keys(s),
+           'default_hotkeys': HOTKEYS}
     out.update({k: s.get(k, v) for k, v in DEFAULTS.items()})
+    out['key_warnings'] = key_warnings(out['hotkeys'], out['chat_commands']) + key_problems()
     return out
 
 
@@ -235,6 +292,21 @@ def set_options(b):
         ch['popup_position'] = b['popup_position']
     if isinstance(b.get('chat_commands'), list):
         ch['chat_commands'] = clean_commands(b['chat_commands'])
+    if isinstance(b.get('price_keys'), dict):
+        keys = price_keys()
+        for k in HOTKEYS:
+            if k in b['price_keys']:
+                v = clean_key(b['price_keys'][k]) if b['price_keys'][k] else HOTKEYS[k]   # empty = back to default
+                if not v:
+                    out = options()
+                    out['error'] = f'"{b["price_keys"][k]}" isn\'t a key we can use: try F1-F12, or Ctrl / Alt / Shift + a letter.'
+                    return out
+                if v in ('Ctrl+C', 'Ctrl+Alt+C'):   # the overlay presses these itself: it would set itself off
+                    out = options()
+                    out['error'] = f'{v} is the game\'s copy-item key, which the overlay presses for you: pick another key.'
+                    return out
+                keys[k] = v
+        ch['price_keys'] = keys
     for k, lo, hi in (('search_range_pct', 0, 50), ('quick_close_px', 50, 800)):
         if k in b:
             try:

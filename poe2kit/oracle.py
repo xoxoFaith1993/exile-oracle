@@ -11,6 +11,7 @@ import time
 
 from . import config, db
 
+MIN_EX = 1   # items worth less than one Exalted Orb aren't worth trading: left out of the outlook (the author)
 PHASES = [('day 1-3', 0, 3), ('week 1', 3, 7), ('week 2-3', 7, 22), ('week 4+', 22, 10 ** 6)]
 _data = {}
 
@@ -103,6 +104,8 @@ def advice(con=None, league=None, day=None):
     from . import ninja
     league = league or ninja.current_league(con)
     start = league_start(con, league)
+    if start:
+        _now_day['d'] = (time.time() - start) / 86400
     if day is None:
         day = (time.time() - start) / 86400 if start else None
     d = data()
@@ -119,9 +122,16 @@ def advice(con=None, league=None, day=None):
     out['coming_up'] = [s for s in d['strategies'] if nxt and s['phase'] == nxt[0]]
     out['patterns_now'] = [p for p in d['patterns'] if p['phase'] == ph]
     items = []
+    from . import money
+    live_ex = (money.rates(con, league) or {}).get('ex_per_div')
+    skipped = 0
     for item in d['curves_div']:
         o = outlook(item, day)
         price, chg7 = _live(con, league, item)
+        worth = _worth_ex(item, day, price, live_ex)
+        if worth is not None and worth < MIN_EX:
+            skipped += 1
+            continue
         c = o['change_pct']
         if c is None:
             verdict = 'past the researched days' if day > 70 else 'no data'
@@ -134,10 +144,31 @@ def advice(con=None, league=None, day=None):
         items.append(dict(o, item=item, verdict=verdict, price_div=price, change_7d_pct=chg7))
     items.sort(key=lambda x: (x['change_pct'] is None, -abs(x['change_pct'] or 0)))
     out['items'] = items
+    out['skipped_cheap'] = skipped
     if day > 70:
         out['note'] = ('Late league: the researched curves end around day 70, so item outlooks are mostly blank. '
                        'The week 4+ strategies still apply. From the 1.0 launch (day 0) every item has a full outlook.')
     return out
+
+
+def _worth_ex(item, day, price_div, live_ex):
+    """An item's worth in Exalted Orbs: today's live price when we have it (for the current day), else the median of
+    what it was worth on that league day in past launches (price in div x that day's Ex per Div)."""
+    if price_div is not None and live_ex and day is not None and abs(day - (_now_day.get('d') or -1)) < 1:
+        return price_div * live_ex
+    vals = []
+    for lg in (data()['curves_div'].get(item) or {}):
+        v = _at(_curve(item, lg), day)
+        rt = (data().get('ratios') or {}).get(lg) or {}
+        days = sorted((int(k), x.get('ex_per_div')) for k, x in rt.items() if x.get('ex_per_div'))
+        if v and days:
+            ex = min(days, key=lambda kv: abs(kv[0] - day))[1]
+            vals.append(v * ex)
+    vals.sort()
+    return vals[len(vals) // 2] if vals else (price_div * live_ex if price_div is not None and live_ex else None)
+
+
+_now_day = {}
 
 
 def hold_note(item):

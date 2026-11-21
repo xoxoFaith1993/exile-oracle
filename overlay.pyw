@@ -3,6 +3,7 @@
 Hover an item in Path of Exile 2 and press
   Ctrl+D       quick check: the popup closes when you move the mouse away
   Ctrl+Alt+D   detailed: the popup stays so you can tick stats and search again (click the game or Esc to close)
+  (both, and Ctrl+Shift+D for the overlay settings, can be changed in those settings: price_keys)
   Ctrl+Shift+D overlay settings
   F5, F9, ...  chat commands (/hideout, /exit, ...: Enter, the text, Enter; edit them in the settings)
 The hotkeys exist only while the game is in front. Each press makes this program press Ctrl+Alt+C once in the game
@@ -457,18 +458,44 @@ def main(argv):
                     cmds['on'].append(CMD_BASE + n)
             cmds['sig'], cmds['list'] = sig, lst
 
-    def set_hotkeys(on):
-        """Ctrl+D / Ctrl+Alt+D exist only while the game is the window in front: other programs keep their Ctrl+D."""
-        if on and not hk['on']:
-            a = u32.RegisterHotKey(hwnd_main, HOTKEY_QUICK, MOD_CONTROL | MOD_NOREPEAT, VK_D)
-            b = u32.RegisterHotKey(hwnd_main, HOTKEY_DETAIL, MOD_CONTROL | MOD_ALT | MOD_NOREPEAT, VK_D)
-            c = u32.RegisterHotKey(hwnd_main, HOTKEY_SETTINGS, MOD_CONTROL | MOD_SHIFT | MOD_NOREPEAT, VK_D)
-            hk['on'] = bool(a or b or c)
-        elif not on and hk['on']:
-            u32.UnregisterHotKey(hwnd_main, HOTKEY_QUICK)
-            u32.UnregisterHotKey(hwnd_main, HOTKEY_DETAIL)
-            u32.UnregisterHotKey(hwnd_main, HOTKEY_SETTINGS)
+    def price_keys():
+        """The player's price-check keys from the settings (Ctrl+D / Ctrl+Alt+D / Ctrl+Shift+D unless changed)."""
+        try:
+            from poe2kit import overlaysrv
+            return overlaysrv.price_keys()
+        except Exception as e:
+            log(f'price keys unreadable, using defaults: {e}')
+            return {'quick': 'Ctrl+D', 'detailed': 'Ctrl+Alt+D', 'settings': 'Ctrl+Shift+D'}
+
+    def report_keys(failed):
+        """Tell the settings page which keys Windows refused (another program holds them)."""
+        try:
+            with open(os.path.join(config.HOME, 'overlay_keys.json'), 'w', encoding='utf-8') as f:
+                json.dump({'failed': failed, 'at': time.time()}, f)
+        except OSError:
+            pass
+
+    def set_hotkeys(on, keys=None):
+        """The price-check keys exist only while the game is the window in front: other programs keep their Ctrl+D.
+        keys: the current settings; when they change while registered, the old keys are let go first."""
+        keys = keys or hk.get('keys') or price_keys()
+        sig = json.dumps(keys, sort_keys=True)
+        if hk['on'] and (not on or sig != hk.get('sig')):
+            for i in (HOTKEY_QUICK, HOTKEY_DETAIL, HOTKEY_SETTINGS):
+                u32.UnregisterHotKey(hwnd_main, i)
             hk['on'] = False
+        if on and not hk['on']:
+            failed = {}
+            for name, hid in (('quick', HOTKEY_QUICK), ('detailed', HOTKEY_DETAIL), ('settings', HOTKEY_SETTINGS)):
+                k = parse_key(keys.get(name))
+                if not (k and u32.RegisterHotKey(hwnd_main, hid, k[0] | MOD_NOREPEAT, k[1])):
+                    failed[name] = keys.get(name)
+            if failed != hk.get('failed'):
+                if failed:
+                    log(f'keys Windows would not give us: {failed}')
+                report_keys(failed)
+                hk['failed'] = failed
+            hk['on'], hk['sig'] = True, sig
 
     def set_esc(on):
         if on and not esc['on']:
@@ -556,7 +583,9 @@ def main(argv):
                 elif popup.shown and not esc['on']:
                     set_esc(True)
             front = game_in_front()
-            set_hotkeys(front)
+            if down['tick'] % 5 == 0 or 'keys' not in hk:   # re-read the price-check keys twice a second
+                hk['keys'] = price_keys()
+            set_hotkeys(front, hk['keys'])
             if down['tick'] % 5 == 0 or not front:   # re-read the command list twice a second (settings edits)
                 set_commands(front)
             if popup.shown and popup.alive() and getattr(popup, 'quick', False) and popup.moved_away()                     and time.time() - popup.since > 0.3:

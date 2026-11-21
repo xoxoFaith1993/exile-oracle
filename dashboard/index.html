@@ -676,7 +676,7 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
       <div id="cllink"></div></div>
     <div class="card"><h2>Other AI apps <span class="pill">connectors</span></h2><div class="sub">Exile Oracle's tools work in any app that speaks MCP, not just Claude. Connect one and ask it the same things. The Oracle feed in the Build Lab shows which app is asking.</div>
       <div id="connlist"></div></div>
-    <div class="card"><h2>Price-check overlay <span class="pill">Windows</span></h2><div class="sub">Press Ctrl+D on an item in game (Ctrl+Alt+D to keep it open and tick rows) and a price popup appears: poe.ninja, our craft estimate and, if you switch it on, live prices from the official trade site (one search per item you copy, like Exiled Exchange 2 does). Run the game in windowed fullscreen. The only keys it ever sends are the ones you ask for: Ctrl+Alt+C to copy the item when you press Ctrl+D, and your own chat commands (F5 /hideout and so on).</div>
+    <div class="card"><h2>Price-check overlay <span class="pill">Windows</span></h2><div class="sub">Press Ctrl+D on an item in game (Ctrl+Alt+D to keep it open and tick rows; both can be changed below) and a price popup appears: poe.ninja, our craft estimate and, if you switch it on, live prices from the official trade site (one search per item you copy, like Exiled Exchange 2 does). Run the game in windowed fullscreen. The only keys it ever sends are the ones you ask for: Ctrl+Alt+C to copy the item when you press Ctrl+D, and your own chat commands (F5 /hideout and so on).</div>
       <div id="ovopts"></div></div>
     <div class="card"><h2>Monitor jobs</h2><div class="sub">What runs in the background, how often, and how it went last time.</div><div id="jobs"></div></div></section>
 </main>
@@ -1087,7 +1087,7 @@ async function loadOracle(day) {
     ${r.note ? `<div class="flag warn" style="margin-top:8px">${esc(r.note)}</div>` : ''}
     <div class="lab-two" style="margin-top:6px"><div><div class="small muted" style="margin-top:8px">Do now</div><ul class="or-do">${strat(r.do_now || [], true)}</ul></div>
       <div><div class="small muted" style="margin-top:8px">Coming up${r.next_phase ? ' (' + esc(r.next_phase.name) + ')' : ''}</div><ul class="or-do">${strat(r.coming_up || []) || '<li>Nothing new: keep doing the above.</li>'}</ul></div></div>
-    ${rows ? `<div class="small muted" style="margin-top:12px">The next 7 days, as in past launches (change in Divines)</div><table class="up" style="margin-top:6px"><tr><th>Item</th><th></th><th class="num">Next 7 days</th><th class="num">Usual peak</th><th class="num">Now</th><th class="num">Last 7 days</th></tr>${rows}</table>` : ''}
+    ${rows ? `<div class="small muted" style="margin-top:12px">The next 7 days, as in past launches (change in Divines)</div><table class="up" style="margin-top:6px"><tr><th>Item</th><th></th><th class="num">Next 7 days</th><th class="num">Usual peak</th><th class="num">Now</th><th class="num">Last 7 days</th></tr>${rows}</table>${r.skipped_cheap ? `<div class="small muted" style="margin-top:6px">${r.skipped_cheap} item${r.skipped_cheap > 1 ? 's' : ''} worth less than 1 Exalted Orb left out: not worth trading.</div>` : ''}` : ''}
     <div class="chips">${labAsk('What should I sell or hold right now?', 'Using the Oracle (poe2_oracle) and my characters, what should I sell, hold or buy right now?')}${labAsk('Plan my 1.0 launch money', 'Plan my first week of the 1.0 launch for money: what to farm, sell and hold each day, using poe2_oracle at day 0.')}</div>`;
 }
 async function loadHomeOracle() {
@@ -2050,9 +2050,36 @@ async function loadOverlay() {
       <span class="muted">(${o.running ? '● running' : 'not running'})</span></label>
     <label class="small" style="display:block;margin-top:6px"><input type="checkbox" id="ovtrade"${o.live_trade ? ' checked' : ''}> Live trade-site prices
       <span class="muted">— uses GGG's trade site the way Exiled Exchange 2 does; it isn't an official public API, so it's your choice</span></label>`;
+  const hk = o.hotkeys || {}, dk = o.default_hotkeys || {};
+  $('#ovopts').insertAdjacentHTML('beforeend', `<div class="small" style="margin-top:12px"><b>Keys</b> <span class="muted">(click a box, then press the keys you want; they only work while the game is in front)</span></div>
+    <div style="display:grid;grid-template-columns:auto auto auto;gap:6px 10px;align-items:center;margin-top:6px;max-width:460px">
+      ${[['quick', 'Quick check'], ['detailed', 'Detailed check (stays open)'], ['settings', 'Overlay settings']].map(([k, l]) =>
+        `<span class="small">${l}</span><input class="ovkey" data-pk="${k}" value="${esc(hk[k])}" readonly style="width:130px;text-align:center;cursor:pointer"><button class="btn ovkdef" data-pk="${k}" title="back to ${esc(dk[k])}">↺ ${esc(dk[k])}</button>`).join('')}
+    </div>
+    ${(o.key_warnings || []).length || ovErr ? `<div class="small" style="margin-top:8px;color:var(--warning)">⚠ ${[ovErr, ...(o.key_warnings || [])].filter(Boolean).map(esc).join('<br>⚠ ')}</div>` : ''}`);
+  ovErr = '';
+  const saveKey = async (k, v) => { const r = await post('/api/overlay/options', { price_keys: { [k]: v } }); ovErr = (r && r.error) || ''; loadOverlay(); };
+  document.querySelectorAll('.ovkey').forEach(i => {
+    i.onfocus = () => { i.value = 'press keys…'; };
+    i.onblur = () => { if (i.value === 'press keys…') i.value = hk[i.dataset.pk]; };
+    i.onkeydown = e => {
+      e.preventDefault();
+      if (e.key === 'Escape') { i.blur(); return; }
+      let k = null;
+      if (/^F([1-9]|1[0-2])$/.test(e.key)) k = e.key;
+      else if (/^Key[A-Z]$/.test(e.code)) k = e.code.slice(3);
+      else if (/^Digit[0-9]$/.test(e.code)) k = e.code.slice(5);
+      if (!k) return;
+      k = [e.ctrlKey && 'Ctrl', e.altKey && 'Alt', e.shiftKey && 'Shift', k].filter(Boolean).join('+');
+      i.value = k; i.blur();
+      if (k !== hk[i.dataset.pk]) saveKey(i.dataset.pk, k);
+    };
+  });
+  document.querySelectorAll('.ovkdef').forEach(b => b.onclick = () => saveKey(b.dataset.pk, ''));
   $('#ovon').onchange = async e => { await post('/api/overlay/options', { overlay: e.target.checked }); loadOverlay(); };
   $('#ovtrade').onchange = async e => { await post('/api/overlay/options', { live_trade: e.target.checked }); loadOverlay(); };
 }
+let ovErr = '';
 
 // ---------- update banner ----------
 async function checkUpdate() {
