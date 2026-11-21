@@ -84,6 +84,67 @@ def detached(args, cwd=None):
                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
+def bring_to_front(hwnd):
+    """Put a window of ours in front even when a background process opened it (the monitor starts the poe.ninja
+    window, and Windows keeps background programs from stealing the foreground). Windows only; best effort."""
+    if not IS_WIN or not hwnd:
+        return False
+    import ctypes
+    u32, k32 = ctypes.windll.user32, ctypes.windll.kernel32
+    if u32.IsIconic(hwnd):
+        u32.ShowWindow(hwnd, 9)                          # SW_RESTORE
+    fg = u32.GetForegroundWindow()
+    me, other = k32.GetCurrentThreadId(), u32.GetWindowThreadProcessId(fg, None)
+    attached = bool(other and other != me and u32.AttachThreadInput(other, me, True))
+    try:
+        flags = 0x0001 | 0x0002 | 0x0040                 # SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW
+        u32.SetWindowPos(hwnd, -1, 0, 0, 0, 0, flags)     # HWND_TOPMOST, then back: lifts it above everything
+        u32.SetWindowPos(hwnd, -2, 0, 0, 0, 0, flags)     # HWND_NOTOPMOST
+        u32.BringWindowToTop(hwnd)
+        ok = bool(u32.SetForegroundWindow(hwnd))
+    finally:
+        if attached:
+            u32.AttachThreadInput(other, me, False)
+    return ok
+
+
+def set_window_icon(hwnd, ico):
+    """Give a window (and its taskbar button) our icon instead of Python's. Windows only; best effort."""
+    if not IS_WIN or not hwnd or not os.path.exists(ico):
+        return False
+    import ctypes
+    from ctypes import wintypes as wt
+    u32 = ctypes.windll.user32
+    u32.LoadImageW.restype = wt.HANDLE   # 64-bit handles: don't let ctypes cut them to 32 bits
+    u32.LoadImageW.argtypes = [wt.HINSTANCE, wt.LPCWSTR, wt.UINT, ctypes.c_int, ctypes.c_int, wt.UINT]
+    u32.SendMessageW.argtypes = [wt.HWND, wt.UINT, wt.WPARAM, wt.LPARAM]
+    for size, which in ((16, 0), (32, 1), (48, 1)):   # ICON_SMALL = 0, ICON_BIG = 1
+        h = u32.LoadImageW(None, ico, 1, size, size, 0x10)   # IMAGE_ICON, LR_LOADFROMFILE
+        if h:
+            u32.SendMessageW(hwnd, 0x0080, which, h)   # WM_SETICON
+    return True
+
+
+def find_window(title_start):
+    """The first visible top-level window whose title starts with this text (Windows), else None."""
+    if not IS_WIN:
+        return None
+    import ctypes
+    import ctypes.wintypes as wt
+    u32 = ctypes.windll.user32
+    found = []
+
+    def each(h, _):
+        buf = ctypes.create_unicode_buffer(512)
+        u32.GetWindowTextW(h, buf, 512)
+        if u32.IsWindowVisible(h) and buf.value.startswith(title_start):
+            found.append(h)
+            return False
+        return True
+    u32.EnumWindows(ctypes.WINFUNCTYPE(wt.BOOL, wt.HWND, wt.LPARAM)(each), 0)
+    return found[0] if found else None
+
+
 def process_running(fragment):
     """Is a program whose name or command line contains `fragment` running? (e.g. 'Path of Building')"""
     frag = fragment.lower()

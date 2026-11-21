@@ -34,13 +34,14 @@ BUTTON = r'''(() => {
   if (document.getElementById('eo-save')) return;
   const bar = document.createElement('div');
   bar.id = 'eo-save';
-  bar.style.cssText = 'position:fixed;top:10px;right:16px;z-index:2147483647;display:flex;gap:8px;align-items:center;' +
-    'background:#1c1712;border:1px solid #8a6f3e;border-radius:4px;padding:8px 12px;box-shadow:0 4px 18px #000a;' +
-    'font:600 13px Georgia,serif;color:#e2d6bf';
-  bar.innerHTML = '<span style="color:#c9a45c">◈ Exile Oracle</span>' +
-    '<button id="eo-save-btn" style="background:linear-gradient(#c8283c,#a3192e);color:#fff;border:1px solid #e05566;' +
-    'border-radius:3px;padding:6px 12px;font:600 12px Georgia,serif;cursor:pointer">Save this build</button>' +
-    '<span id="eo-save-msg" style="font:12px sans-serif;color:#b8a888"></span>';
+  bar.style.cssText = 'position:fixed;top:14px;right:20px;z-index:2147483647;display:flex;gap:12px;align-items:center;' +
+    'background:#1c1712;border:2px solid #c9a45c;border-radius:6px;padding:12px 16px;box-shadow:0 6px 28px #000c;' +
+    'font:600 16px Georgia,serif;color:#e2d6bf;max-width:calc(100vw - 40px);flex-wrap:wrap';
+  bar.innerHTML = '<span style="color:#c9a45c;font-size:17px;letter-spacing:.04em">◈ Exile Oracle</span>' +
+    '<button id="eo-save-btn" style="background:linear-gradient(#d8304a,#a3192e);color:#fff;border:1px solid #f07080;' +
+    'border-radius:4px;padding:12px 22px;font:700 17px Georgia,serif;letter-spacing:.03em;cursor:pointer;' +
+    'box-shadow:0 0 14px #c8283c88">💾 Save this build to my vault</button>' +
+    '<span id="eo-save-msg" style="font:14px sans-serif;color:#e2d6bf;max-width:320px"></span>';
   document.body.appendChild(bar);
   document.getElementById('eo-save-btn').onclick = async () => {
     const m = document.getElementById('eo-save-msg'); m.textContent = 'reading the page…';
@@ -101,6 +102,25 @@ def main():
                               background_color='#0c0a09', text_select=True)
     api._window = w
     w.events.loaded += lambda: w.evaluate_js(BUTTON)
+
+    def to_front():
+        """Our icon (not Python's), then in front: the background monitor opened it, and Windows would leave it
+        behind the dashboard."""
+        import time
+        from poe2kit import osutil
+        h = None
+        try:
+            h = int(w.native.Handle.ToInt64())
+        except Exception:
+            for _ in range(20):
+                h = osutil.find_window(w.title)
+                if h:
+                    break
+                time.sleep(0.15)
+        if h:
+            osutil.set_window_icon(h, os.path.join(HERE, 'dashboard', 'poe2kit.ico'))
+            osutil.bring_to_front(h)
+    w.events.shown += to_front
     from poe2kit import config
     webview.start(gui='edgechromium' if os.name == 'nt' else None, private_mode=False,
                   storage_path=os.path.join(config.HOME, 'webview'))

@@ -70,7 +70,8 @@ def _raise(hwnd):
     if u32.IsIconic(hwnd):
         u32.ShowWindow(hwnd, 9)        # SW_RESTORE
     u32.ShowWindow(hwnd, 5)            # SW_SHOW
-    u32.SetForegroundWindow(hwnd)
+    from . import osutil
+    osutil.bring_to_front(hwnd)        # works even when the tray / monitor (background) asks
 
 
 def _linux_cmd(prof):
