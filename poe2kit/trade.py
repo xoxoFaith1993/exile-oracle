@@ -147,12 +147,12 @@ def enabled():
     return bool(config.settings().get('live_trade', False))
 
 
-def _req(path, data=None, limiter='search'):
+def _req(path, data=None, limiter='search', max_wait=MAX_WAIT):
     if not enabled():   # switched off: never contact the trade site (stat/currency lists fall back to saved copies)
         raise RuntimeError('Live trade prices are off')
     if limiter:
         w = _wait_for(limiter)
-        if w > MAX_WAIT:
+        if w > max_wait:
             raise RuntimeError(f'Trade site limit reached: try again in {math.ceil(w)} s')
         if w:
             time.sleep(w)
@@ -178,8 +178,8 @@ def _req(path, data=None, limiter='search'):
         raise RuntimeError(f'Trade site said {e.code}: {msg}') from None
 
 
-def _get(path, limiter='fetch'):
-    return _req(path, None, limiter)
+def _get(path, limiter='fetch', max_wait=MAX_WAIT):
+    return _req(path, None, limiter, max_wait)
 
 
 # ---------------- query ----------------

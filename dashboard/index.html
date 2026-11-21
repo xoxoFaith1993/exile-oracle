@@ -2089,8 +2089,8 @@ async function loadWanted() {
         <div class="lab-head" style="flex-wrap:wrap;gap:8px"><b style="font-size:15px">${esc(w.name)}</b>
           ${w.target ? `<span class="pill">buy at or under ${esc(w.target)}</span>` : ''}<span style="flex:1"></span>
           <button class="btn wtcheck" data-w="${w.id}">Check now</button>
-          <a class="btn" style="text-decoration:none" href="${esc(w.url)}" target="_blank" rel="noopener">Open on trade site</a>
-          <a class="btn" style="text-decoration:none" href="${esc(w.live_url)}" target="_blank" rel="noopener" title="The trade site's own live search: it tells you the moment a new match is listed">Open live search</a>
+          <button class="btn wtbrowse" data-u="${esc(w.url)}" title="Opens in your default browser">Open on trade site</button>
+          <button class="btn wtbrowse" data-u="${esc(w.live_url)}" title="The trade site's own live search (in your default browser): it tells you the moment a new match is listed">Open live search</button>
           <button class="btn wtdel" data-w="${w.id}">Remove</button></div>
         <div class="small muted" style="margin-top:4px">${(w.labels || []).map(esc).join(' · ')}${w.league ? ' · ' + esc(w.league) : ''}</div>
         <div class="small" style="margin-top:6px" id="wtres-${w.id}">${L ? `Checked ${esc(when(L.ts))}: <b>${L.total}</b> listed${L.prev_total != null && L.prev_total !== L.total ? ` (was ${L.prev_total})` : ''} · cheapest <b>${esc(L.low || '?')}</b>${L.median ? ` · middle of the cheapest 10: ${esc(L.median)}` : ''}` : '<span class="muted">Not checked yet: press Check now.</span>'}</div>
@@ -2103,18 +2103,23 @@ async function loadWanted() {
     }).join('')) + `<div class="small muted" style="margin-top:6px">${esc(r.note || '')}</div>`;
   if ($('#wtallow')) $('#wtallow').onclick = async () => { await post('/api/wanted/allow', {}); loadWanted(); };
   document.querySelectorAll('.wtcheck').forEach(b => b.onclick = async () => {
-    b.disabled = true; b.textContent = 'Checking…';
-    const x = await post('/api/wanted/check', { id: b.dataset.w });
+    b.disabled = true; b.textContent = 'Checking…'; const slow = setTimeout(() => { if (b.isConnected) b.textContent = 'Waiting for the trade site…'; }, 3000);
+    const x = await post('/api/wanted/check', { id: b.dataset.w }); clearTimeout(slow);
     if (!x.ok) { b.disabled = false; b.textContent = 'Check now'; $('#wtres-' + b.dataset.w).innerHTML = `<span style="color:var(--accent)">${esc(x.error || 'Check failed')}</span>`; return; }
     loadWanted();
   });
   document.querySelectorAll('.wtopen').forEach(b => b.onclick = async () => {
-    const win = window.open('about:blank', '_blank');   // opened now, so the browser doesn't block it as a pop-up
-    b.disabled = true; b.textContent = 'Opening…';
-    const x = await post('/api/wanted/open', { id: b.dataset.w, listing: b.dataset.l });
+    b.disabled = true; b.textContent = 'Opening…';   // the app opens it in the default browser
+    const slow = setTimeout(() => { if (b.isConnected) b.textContent = 'Waiting for the trade site…'; }, 3000);
+    const x = await post('/api/wanted/open', { id: b.dataset.w, listing: b.dataset.l }); clearTimeout(slow);
     b.disabled = false; b.textContent = 'Open this listing';
-    if (x.ok) { if (win) win.location = x.url; else window.open(x.url, '_blank'); if (x.total > 1) b.title = `${x.total} identical listings match`; }
-    else { if (win) win.close(); b.insertAdjacentHTML('afterend', `<span class="small" style="color:var(--accent)"> ${esc(x.error)}</span>`); }
+    if (x.ok && !x.opened) window.open(x.url, '_blank');
+    if (x.ok && x.total > 1) b.title = `${x.total} identical listings match`;
+    if (!x.ok) b.insertAdjacentHTML('afterend', `<span class="small" style="color:var(--accent)"> ${esc(x.error)}</span>`);
+  });
+  document.querySelectorAll('.wtbrowse').forEach(b => b.onclick = async () => {
+    const x = await post('/api/wanted/browse', { url: b.dataset.u });
+    if (!x.ok) window.open(b.dataset.u, '_blank');
   });
   document.querySelectorAll('.wtwhisper').forEach(b => b.onclick = async () => {
     try { await navigator.clipboard.writeText(b.dataset.t); b.textContent = 'Copied: paste in game'; } catch (e) { b.textContent = 'Copy failed'; }

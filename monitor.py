@@ -806,10 +806,13 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     data = tradewatch.add(c, body.get('text'), body.get('name'), body.get('target'), body.get('unit') or 'div') \
                         if act == 'add' else tradewatch.check(c, body.get('id')) if act == 'check' \
                         else tradewatch.remove(c, body.get('id')) if act == 'remove' \
-                        else tradewatch.open_listing(c, body.get('id'), body.get('listing')) if act == 'open' \
+                        else tradewatch.open_listing(c, body.get('id'), body.get('listing'), browser=True) if act == 'open' \
                         else tradewatch.pin(c, body.get('id'), body.get('listing'))
                 finally:
                     c.close()
+            elif u.path == '/api/wanted/browse':   # trade-site links open in the player's default browser
+                from poe2kit import tradewatch
+                data = tradewatch.browse(body.get('url'))
             elif u.path == '/api/wanted/allow':   # the player switches trade-site checks on (same switch as the overlay)
                 config.save_settings({'live_trade': True})
                 data = {'ok': True}

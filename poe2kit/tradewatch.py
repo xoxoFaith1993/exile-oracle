@@ -37,6 +37,7 @@ from . import db
 KEY = 'wishlist:trade'
 MAX = 30
 COOLDOWN = 60          # seconds between checks of the same search
+WAIT = 20              # a button press waits this long for GGG's rate limit before saying "try again"
 HISTORY = 200
 SITE = 'https://www.pathofexile.com'
 
@@ -236,13 +237,13 @@ def check(con, wid):
     value_of = _value_of(con, league)
     lq = urllib.parse.quote(league)
     try:
-        s = json.loads(trade._req(f'/api/trade2/search/poe2/{lq}', {'query': e['query'], 'sort': {'price': 'asc'}}, 'search'))
+        s = json.loads(trade._req(f'/api/trade2/search/poe2/{lq}', {'query': e['query'], 'sort': {'price': 'asc'}}, 'search', WAIT))
         ids = s.get('result') or []
         total = s.get('total', len(ids))
         top = ids[:10]
         got = {}
         if top:
-            f = json.loads(trade._get(f"/api/trade2/fetch/{','.join(top)}?query={s['id']}", 'fetch'))
+            f = json.loads(trade._get(f"/api/trade2/fetch/{','.join(top)}?query={s['id']}", 'fetch', WAIT))
             for r in f.get('result') or []:
                 if r and r.get('listing', {}).get('price'):
                     got[r['id']] = r
@@ -259,7 +260,7 @@ def check(con, wid):
             gone_ids.update(sure_gone)
             need = [i for i in ask if i not in sure_gone][:10]
             if need:
-                f2 = json.loads(trade._get(f"/api/trade2/fetch/{','.join(need)}?query={s['id']}", 'fetch'))
+                f2 = json.loads(trade._get(f"/api/trade2/fetch/{','.join(need)}?query={s['id']}", 'fetch', WAIT))
                 found = {r['id']: r for r in f2.get('result') or [] if r}
                 for i in need:
                     if i in found and found[i].get('listing', {}).get('price'):
@@ -337,7 +338,20 @@ def listing_query(e, l):
     return q
 
 
-def open_listing(con, wid, listing_id):
+def browse(url):
+    """Open a trade-site link in the player's default browser (the dashboard's app window can't open new windows
+    itself). Only links to GGG's trade site."""
+    if not isinstance(url, str) or not url.startswith(SITE + '/trade2/'):
+        return {'ok': False, 'error': 'Only trade-site links open from here.'}
+    import webbrowser
+    try:
+        webbrowser.open(url)
+        return {'ok': True}
+    except Exception as e:
+        return {'ok': False, 'error': f'Could not open the browser: {e}'}
+
+
+def open_listing(con, wid, listing_id, browser=False):
     """Press "Open this listing": ONE search for that listing's exact stats and price; returns the trade-site link."""
     from . import trade
     e = next((x for x in _load(con) if x['id'] == wid), None)
@@ -352,14 +366,17 @@ def open_listing(con, wid, listing_id):
         return {'ok': False, 'off': True, 'error': 'Trade-site checks are off.'}
     lq = urllib.parse.quote(e['league'])
     try:
-        s = json.loads(trade._req(f'/api/trade2/search/poe2/{lq}', {'query': listing_query(e, l), 'sort': {'price': 'asc'}}, 'search'))
+        s = json.loads(trade._req(f'/api/trade2/search/poe2/{lq}', {'query': listing_query(e, l), 'sort': {'price': 'asc'}}, 'search', WAIT))
     except Exception as ex:
         return {'ok': False, 'error': str(ex)}
     total = s.get('total', 0)
     if not total:
         return {'ok': False, 'gone': True, 'error': 'Not found on the trade site any more: probably sold or taken down.'}
-    return {'ok': True, 'url': f"{SITE}/trade2/search/poe2/{lq}/{s['id']}", 'total': total,
-            'exact': listing_id in (s.get('result') or [])}
+    out = {'ok': True, 'url': f"{SITE}/trade2/search/poe2/{lq}/{s['id']}", 'total': total,
+           'exact': listing_id in (s.get('result') or [])}
+    if browser:
+        out['opened'] = browse(out['url']).get('ok', False)
+    return out
 
 
 def view_one(e, rt):
