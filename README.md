@@ -213,6 +213,16 @@ Every line of a patch that hits your builds, with buff / nerf tags.
 
 ![Patch notes](docs/screenshots/patch-notes.jpg)
 
+### Alerts you choose
+- Pick what you're told about: your items, the Oracle's calls (a new omen, countdowns), patch notes, news, updates.
+- Market moves come as one daily digest. Only **real** moves count: the item trades, the move held for 2+ hours, and
+  it's worth the minimum. Thin-market spikes are left out.
+- Filter tabs, mute an item, mark all read. Dashboard only: nothing pops up in game.
+
+### Question chips
+Every page has ready-made questions. A click opens Claude (or ChatGPT) with the question already typed in: press
+Enter. Settings → Question chips picks the app, or plain copy.
+
 ### Game data that updates itself
 After a patch (1.0 included), what Exile Oracle knows about the game (zones, atlas, campaign rewards, research)
 updates by itself within hours: a small data update, checked file by file before it's used, with the previous data

@@ -52,6 +52,7 @@ you assume.
   - campaign: `campaign.py` (rush guide, checklist, the route panel's zone card);
   - characters: `chars.py` (the active character every page follows);
   - data updates: `dataupdate.py` (data-only packs from our GitHub, checked, switched, rolled back; R27);
+  - alerts: `alerts.py` (the kinds the player picked, real-move filters, daily market digest, the Oracle's calls);
   - platform differences: `osutil.py`;
   - checks: `doctor.py`.
 - `dashboard/`: `index.html` (dashboard), `overlay.html` (popup) and `route.html` (the campaign route panel).

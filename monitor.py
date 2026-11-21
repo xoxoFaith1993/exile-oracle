@@ -43,8 +43,6 @@ PATCH_WATCH = os.path.join(HERE, 'patch-watch', 'steam') if os.path.isdir(os.pat
     else os.path.join(config.HOME, 'patch-watch', 'steam')
 STEAM_NEWS = 'https://api.steampowered.com/ISteamNews/GetNewsForApp/v2/?appid=2694490&count=15&format=json'
 NEWS_WORDS = ['patch notes', 'hotfix', '1.0', 'league']   # plus the player's own watch words (config.profile)
-ALERT_MOVE_PCT = 15     # your build's items
-MARKET_MOVE_PCT = 40    # anything else, if it's worth >= 1 div
 JOBS = {'prices': 30, 'exchange': 60, 'news': 20, 'install': 10, 'gamedata': 720, 'pob': 720, 'ggg_apps': 10080,
         'mybuilds': 2, 'clientlog': 1, 'update': 720, 'dataupdate': 360}
 
@@ -62,6 +60,12 @@ def setup_log():
 
 
 def alert(con, kind, title, detail=''):
+    try:   # the player picks which kinds of alert they want (Settings → Alerts)
+        from poe2kit import alerts as _al
+        if not _al.wanted(kind):
+            return
+    except Exception:
+        pass
     recent = con.execute('SELECT 1 FROM alert WHERE title=? AND ts>?', (title, time.time() - 12 * 3600)).fetchone()
     if recent:
         return
@@ -101,28 +105,13 @@ def _my_item_names(con):
 
 
 def job_alerts(con):
+    """Price alerts by the player's rules (poe2kit/alerts.py): their items, real market moves (or a daily digest),
+    and the Oracle's calls."""
+    from poe2kit import alerts as _al
     league = ninja.current_league(con)
     rt = money.rates(con, league)
-    latest = con.execute('SELECT MAX(ts) FROM price WHERE league=?', (league,)).fetchone()[0]
-    if not latest:
-        return
-    prev = con.execute('SELECT MAX(ts) FROM price WHERE league=? AND ts<=?', (league, latest - 20 * 3600)).fetchone()[0]
-    if not prev:
-        return
-    mine = _my_item_names(con)
-    rows = con.execute(
-        'SELECT n.name, n.base, n.value nv, o.value ov FROM (SELECT item_key, name, base, value FROM price WHERE league=? AND ts=?) n '
-        'JOIN (SELECT item_key, value FROM price WHERE league=? AND ts=?) o USING(item_key) WHERE o.value>0',
-        (league, latest, league, prev)).fetchall()
-    for r in rows:
-        pct = (r['nv'] / r['ov'] - 1) * 100
-        title_name = r['name'].split(' (')[0].split(' [')[0].lower()
-        is_mine = title_name in mine
-        if (is_mine and abs(pct) >= ALERT_MOVE_PCT) or (not is_mine and r['nv'] >= 1 and abs(pct) >= MARKET_MOVE_PCT):
-            arrow = 'up' if pct > 0 else 'down'
-            alert(con, 'price-mine' if is_mine else 'price-market',
-                  f"{r['name']} {arrow} {abs(pct):.0f}% in a day",
-                  f"{money.fmt(r['ov'], rt)} -> {money.fmt(r['nv'], rt)}" + (' (in your build)' if is_mine else ''))
+    _al.run(con, alert, league, rt, _my_item_names(con))
+    _al.oracle_run(con, alert)
 
 
 def job_exchange(con):
@@ -447,8 +436,11 @@ def api(path, q):
             s['paths'] = {'home': config.HOME, 'poe2': config.poe2_dir(), 'client_log': config.client_log(),
                           'version': config.VERSION}
             return s
+        if path == '/api/alerts/settings':
+            from poe2kit import alerts as _al
+            return _al.settings()
         if path == '/api/alerts':
-            rows = con.execute('SELECT * FROM alert ORDER BY ts DESC LIMIT 60').fetchall()
+            rows = con.execute('SELECT * FROM alert ORDER BY ts DESC LIMIT 150').fetchall()
             return [dict(r) for r in rows]
         if path == '/api/alerts/seen':
             con.execute('UPDATE alert SET seen=1')
@@ -754,6 +746,21 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 try:
                     data = dataupdate.check(c) if u.path.endswith('check') else dataupdate.rollback()
                     data['status'] = dataupdate.status(c)
+                finally:
+                    c.close()
+            elif u.path == '/api/ask/open':   # a question chip: open the AI app with the question typed in
+                from poe2kit import overlaysrv
+                data = overlaysrv.open_question(body.get('text'))
+            elif u.path == '/api/alerts/settings':   # Settings → Alerts (and "mute this item")
+                from poe2kit import alerts as _al
+                data = _al.save(body)
+            elif u.path == '/api/alerts/delete':   # clear read alerts
+                from poe2kit import db as _db
+                c = _db.connect()
+                try:
+                    c.execute('DELETE FROM alert WHERE seen=1')
+                    c.commit()
+                    data = {'ok': True}
                 finally:
                     c.close()
             elif u.path == '/api/route/size':

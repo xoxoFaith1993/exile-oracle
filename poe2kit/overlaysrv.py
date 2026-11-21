@@ -180,7 +180,7 @@ CHAT_DEFAULTS = [   # Exiled Exchange 2's defaults: one chat command per key pre
     {'text': '/invite @last', 'key': ''}, {'text': '/tradewith @last', 'key': ''}, {'text': '/hideout @last', 'key': ''}]
 DEFAULTS = {'listing': 'securable', 'search_range_pct': 10, 'quick_close_px': 150, 'popup_position': 'centre',
             'overlay_on_copy': False, 'chat_commands': CHAT_DEFAULTS, 'ask_claude_target': 'app',
-            'route_overlay': True, 'route_corner': 'right'}
+            'route_overlay': True, 'route_corner': 'right', 'ask_chips': 'claude'}
 KEY_RX = __import__('re').compile(r'^((Ctrl|Alt|Shift)\+){0,3}(F([1-9]|1[0-2])|[A-Z0-9])$')
 
 
@@ -298,6 +298,8 @@ def set_options(b):
         ch['route_corner'] = b['route_corner']
     if b.get('listing') in ('securable', 'online'):
         ch['listing'] = b['listing']
+    if b.get('ask_chips') in ('claude', 'chatgpt', 'copy'):
+        ch['ask_chips'] = b['ask_chips']
     if b.get('ask_claude_target') in ('app', 'code'):
         ch['ask_claude_target'] = b['ask_claude_target']
     if b.get('popup_position') in ('centre', 'mouse'):
@@ -330,6 +332,29 @@ def set_options(b):
         start() if ch['overlay'] else stop()
         time.sleep(1.5)
     return options()
+
+
+def open_question(text):
+    """A question chip on the dashboard: open the player's AI app with the question typed in (they press Enter).
+    No AI app lets another program SEND a message, so this is the closest: Claude's desktop app takes
+    claude://claude.ai/new?q=..., ChatGPT takes chatgpt.com/?q=... in the browser. 'copy' = clipboard only."""
+    import urllib.parse
+    import webbrowser
+    from . import config, osutil
+    how = config.settings().get('ask_chips') or 'claude'
+    q = urllib.parse.quote(' '.join(str(text or '').split())[:2000])
+    if not q or how == 'copy':
+        return {'ok': False, 'how': 'copy'}
+    try:
+        if how == 'chatgpt':
+            webbrowser.open('https://chatgpt.com/?q=' + q)
+        elif osutil.IS_WIN:
+            os.startfile('claude://claude.ai/new?q=' + q)
+        else:
+            webbrowser.open('https://claude.ai/new?q=' + q)
+        return {'ok': True, 'how': how}
+    except Exception as e:
+        return {'ok': False, 'how': 'copy', 'why': str(e)}
 
 
 def autostart():

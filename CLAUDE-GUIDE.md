@@ -87,6 +87,9 @@ for 15 minutes).
 - "How did my last session go? Maps per hour, deaths, average map time?"
 
 ## 4. Tips
+- The **"Ask the Oracle:" chips** on every page open Claude with the question typed in: just press Enter. (Claude
+  shows a short safety note on prompts that arrive from a link; that's normal.) Settings → Question chips can switch
+  them to ChatGPT or plain copy.
 - Ask Claude to **"show it on the dashboard"**: it can put charts, tables, build costs, upgrades and compares on the
   dashboard's *From the Oracle* tab while it explains in chat.
 - Prices follow poe.ninja and GGG's Currency Exchange; early in a league they move fast. Ask "refresh prices" first

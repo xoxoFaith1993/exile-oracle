@@ -128,6 +128,13 @@ by itself.
 - Game log not found: the doctor shows the folder it looked in. Steam, Flatpak Steam and SD-card libraries are
   searched; the game folder can also be set in Settings. The in-game Build Planner folder is found in the game's Proton prefix in any of those libraries.
 
+## Alerts and question chips
+| Problem | Check | Fix |
+|---|---|---|
+| Too many / too few alerts | Alerts page → "What to alert me about" (settings.json `alerts`) | switch kinds off, raise the thresholds, mute an item, or set market moves to the daily digest |
+| An expected alert never came | that kind is on? the item muted? market moves need volume / listings and must hold 2+ hours | lower the thresholds; "My items" covers only items in your own builds and watch list |
+| A question chip doesn't open Claude | Settings → Question chips; is the Claude desktop app installed? | it is copied as well: paste it; or pick "only copies it". Claude's caution note on link prompts is normal |
+
 ## Game data updates (R27)
 The app checks our GitHub for a newer **data pack** every 6 hours (Settings → Game data: version, last check, Check
 now, Go back). Packs are data only (JSON), never code.

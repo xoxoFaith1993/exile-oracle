@@ -265,6 +265,18 @@ def dataupdate_check():
           ('' if r.returncode == 0 else ' -> ' + (r.stdout + r.stderr)[-400:]))
 
 
+def alerts_check():
+    """Alert rules: same unit on both sides, settings round-trip, kinds can be switched off."""
+    from poe2kit import alerts
+    check(alerts.pair(1.2, 2.5, {'ex_per_div': 480}) == '1.20 div -> 2.50 div'
+          and alerts.pair(0.04, 0.2, {'ex_per_div': 480}).endswith(' ex'), 'alerts show both sides in one unit')
+    s = alerts.save({'news': {'on': False}, 'market': {'mode': 'each', 'pct': 55}, 'mute': 'Test Item'})
+    ok = not s['news']['on'] and s['market']['mode'] == 'each' and s['market']['pct'] == 55 and 'Test Item' in s['muted']
+    ok = ok and not alerts.wanted('news') and alerts.wanted('patch')
+    alerts.save({'news': {'on': True}, 'market': {'mode': 'digest', 'pct': 40}, 'unmute': 'Test Item'})
+    check(ok and alerts.wanted('news'), 'alert settings: switch kinds off, thresholds, mute')
+
+
 def campaign_check():
     """R16 / R21: the rush route maps onto the game's zones, and a zone gives a route card."""
     from poe2kit import campaign
@@ -371,6 +383,7 @@ if __name__ == '__main__':
     prophecy_check()
     atlasplan_check()
     dataupdate_check()
+    alerts_check()
     mcp()
     if '--pob' in sys.argv:
         pob_part()
