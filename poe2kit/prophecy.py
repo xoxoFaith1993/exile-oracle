@@ -197,6 +197,25 @@ def forecast_item(con, item, league=None, day=None, price=None):
     return out
 
 
+CAT_NAMES = {'LineageSupportGems': 'Lineage support gems', 'SoulCores': 'Soul cores', 'UncutGems': 'Uncut gems'}
+
+
+def forecast_groups():
+    """The forecast's items by category (friendly names), and the key items the Oracle watches (quick picks)."""
+    from . import forecast, oracle
+    groups = {}
+    for name, it in forecast._oracle().m.get('items', {}).items():
+        if name == 'Divine Orb':
+            continue
+        c = it.get('category') or 'Other'
+        groups.setdefault(CAT_NAMES.get(c, c), []).append(name)
+    for v in groups.values():
+        v.sort()
+    key = [n for n in oracle.data().get('curves_div', {}) if n != 'Divine Orb']
+    return {'groups': dict(sorted(groups.items(), key=lambda kv: (kv[0] == 'Other', kv[0]))), 'popular': key,
+            'count': sum(len(v) for v in groups.values())}
+
+
 def forecast_items():
     from . import forecast, oracle
     try:

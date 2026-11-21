@@ -376,7 +376,7 @@ def api(path, q):
         if path == '/api/forecast':   # R14: one item's forecast fan + its past launches
             from poe2kit import prophecy
             if not q.get('item'):
-                return {'items': prophecy.forecast_items()}
+                return dict(prophecy.forecast_groups(), items=prophecy.forecast_items())
             return prophecy.forecast_item(con, q['item'], q.get('league') or None,
                                           float(q['day']) if q.get('day') else None)
         if path == '/api/prophecy/patch':   # R14: the newest stored patch notes, read by the rulebook

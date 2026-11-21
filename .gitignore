@@ -6,5 +6,6 @@ settings.json
 /screenshots/
 *.zip
 release/private_patterns.txt
+release/private_soften.txt
 gameart/
 /linux/
