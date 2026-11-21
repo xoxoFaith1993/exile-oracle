@@ -1,0 +1,6497 @@
+{
+ "made": "2026-11-21",
+ "about": "Exile Oracle farming returns: what each endgame strategy drops, what that is worth in Divines per hour in each league phase (priced with GGG Currency Exchange history of Fate of the Vaal 0.4, Runes of Aldur 0.5 and Forbidden Rites 0.5.5), what it needs from the character, and how GGG treated it.",
+ "phases": {
+  "d0-2": "day 0-2",
+  "week1": "week 1 (days 3-9)",
+  "wk2-3": "weeks 2-3 (days 10-24)",
+  "wk4-8": "weeks 4-8 (days 25-59)",
+  "late": "late (day 60+)"
+ },
+ "method": {
+  "prices": "Median Divine price of each exchange item per phase and league: days 0-6 from the app DB ls_price (hourly), days 10-70 from 54 sampled GGG hourly digests (2 per day: 10,14,21,28,35,42,49,56,70), Forbidden Rites days 63-77 from the app DB ex_price. Volume-weighted pair ratios (poe2kit.leaguestart).",
+  "fixed_costs": "fixed_cost_div [recorded, late]: weeks 0-3 use recorded x0.8-1.25, week 4+ ranges recorded..late (tablet prices rose 2-10x in Forbidden Rites).",
+  "value": "net per league = outputs x price - exchange inputs x price, at the source's pace; leagues where under 80% of the basket is priced are skipped. low = 0.45 x (worst league, low fixed values, high costs); mid = 0.70 x (median league, mid values); high = 1.0 x (best league, high values, jackpots, low costs).",
+  "efficiency": {
+   "low": 0.45,
+   "mid": 0.7,
+   "high": 1.0
+  },
+  "labels": {
+   "data-backed": "prices (GGG exchange)",
+   "community claim": "drop counts and div/h from creators, guides, sellers",
+   "estimate": "pace factors, requirements, fixed costs, claim-only strategies"
+  }
+ },
+ "best_by_phase": {
+  "d0-2": [
+   {
+    "name": "Alch-and-go mapping (no juice)",
+    "low": 2.2,
+    "mid": 3.9,
+    "high": 6.7
+   },
+   {
+    "name": "Trial of the Sekhemas (relics, barya, carries)",
+    "low": 1.4,
+    "mid": 3.8,
+    "high": 8.0
+   },
+   {
+    "name": "Essence farming",
+    "low": 1.4,
+    "mid": 2.8,
+    "high": 5.0
+   },
+   {
+    "name": "Currency Exchange flipping (gold-fee arbitrage)",
+    "low": 0.1,
+    "mid": 1.5,
+    "high": 4.0
+   }
+  ],
+  "week1": [
+   {
+    "name": "Ritual/Wildwood: Fracturing Orb farm with Sacred Bloom",
+    "low": 11.1,
+    "mid": 39.7,
+    "high": 88.8
+   },
+   {
+    "name": "Expedition: Grand Expedition remnant rush",
+    "low": 19.9,
+    "mid": 39.7,
+    "high": 82.7
+   },
+   {
+    "name": "Boss rush: Vessel of Kulemak (empowered)",
+    "low": 2.2,
+    "mid": 26.1,
+    "high": 69.6
+   },
+   {
+    "name": "Delirium: boss rush (Simulacrum + fragments)",
+    "low": 11.2,
+    "mid": 19.6,
+    "high": 54.9
+   },
+   {
+    "name": "Delirium: budget splinter farm (1 tablet, T15)",
+    "low": 8.7,
+    "mid": 19.5,
+    "high": 36.6
+   },
+   {
+    "name": "Trial of Chaos (0.5.5 rework, 30 rooms)",
+    "low": 4.9,
+    "mid": 18.3,
+    "high": 71.7
+   }
+  ],
+  "wk2-3": [
+   {
+    "name": "Boss rush: Arbiter of Ash (Crisis Fragments)",
+    "low": 15.9,
+    "mid": 58.2,
+    "high": 131.1
+   },
+   {
+    "name": "Ritual/Wildwood: Fracturing Orb farm with Sacred Bloom",
+    "low": 19.6,
+    "mid": 48.1,
+    "high": 94.0
+   },
+   {
+    "name": "Boss rush: Vessel of Kulemak (empowered)",
+    "low": 6.6,
+    "mid": 43.4,
+    "high": 109.3
+   },
+   {
+    "name": "Delirium: 200% city juicing (Simulacrum farm)",
+    "low": 18.6,
+    "mid": 42.0,
+    "high": 78.6
+   },
+   {
+    "name": "Expedition: Grand Expedition remnant rush",
+    "low": 21.1,
+    "mid": 39.3,
+    "high": 78.9
+   },
+   {
+    "name": "Breach: Hiveblood into Genesis Tree catalysts",
+    "low": 4.3,
+    "mid": 23.0,
+    "high": 56.1
+   }
+  ],
+  "wk4-8": [
+   {
+    "name": "Ritual: Rite of the Nameless city chains (omen farm)",
+    "low": 22.7,
+    "mid": 63.3,
+    "high": 220.6
+   },
+   {
+    "name": "Ritual/Wildwood: Fracturing Orb farm with Sacred Bloom",
+    "low": 34.8,
+    "mid": 62.6,
+    "high": 101.5
+   },
+   {
+    "name": "Ritual: Rite of the Nameless, T16 omen farm",
+    "low": 14.6,
+    "mid": 51.2,
+    "high": 208.0
+   },
+   {
+    "name": "Abyss: Abyssal Trove / Omen of Light + Cranium farm",
+    "low": 12.0,
+    "mid": 37.3,
+    "high": 171.1
+   },
+   {
+    "name": "Delirium: 200% city juicing (Simulacrum farm)",
+    "low": 19.3,
+    "mid": 33.8,
+    "high": 53.5
+   },
+   {
+    "name": "Expedition: Grand Expedition remnant rush",
+    "low": 17.6,
+    "mid": 31.6,
+    "high": 64.5
+   }
+  ],
+  "late": [
+   {
+    "name": "Ritual: Rite of the Nameless city chains (omen farm)",
+    "low": 19.7,
+    "mid": 76.6,
+    "high": 373.8
+   },
+   {
+    "name": "Ritual/Wildwood: Fracturing Orb farm with Sacred Bloom",
+    "low": 36.2,
+    "mid": 67.1,
+    "high": 111.3
+   },
+   {
+    "name": "Ritual: Rite of the Nameless, T16 omen farm",
+    "low": 9.5,
+    "mid": 65.1,
+    "high": 358.7
+   },
+   {
+    "name": "Abyss: Abyssal Trove / Omen of Light + Cranium farm",
+    "low": 14.7,
+    "mid": 63.7,
+    "high": 187.9
+   },
+   {
+    "name": "Delirium: 200% city juicing (Simulacrum farm)",
+    "low": 20.6,
+    "mid": 37.7,
+    "high": 62.1
+   },
+   {
+    "name": "Expedition: Grand Expedition remnant rush",
+    "low": 16.8,
+    "mid": 34.3,
+    "high": 74.2
+   }
+  ]
+ },
+ "strategies": [
+  {
+   "name": "Ritual: Rite of the Nameless, T16 omen farm",
+   "mechanic": "Ritual",
+   "kind": "session",
+   "number_label": "community claim (counts from one recorded session) valued with GGG exchange data",
+   "source_session": {
+    "who": "MisoxShiru (via farmofexile)",
+    "url": "https://farmofexile.com/poe2/article/t16-rite-of-the-nameless-omen-farm",
+    "video": "https://www.youtube.com/watch?v=a_O5tamDhR4",
+    "patch": "0.5.5",
+    "sample": "42 maps (7 Rites); 3.5 h derived from 243.7 div profit at 70 div/h"
+   },
+   "pace": {
+    "maps_per_hour": 12
+   },
+   "outputs": [
+    {
+     "item": "Omen of Whittling",
+     "per_map_or_hour": "3.73 per hour",
+     "per_map": 0.311,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/t16-rite-of-the-nameless-omen-farm",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Omen of Sinistral Annulment",
+     "per_map_or_hour": "1.15 per hour",
+     "per_map": 0.096,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/t16-rite-of-the-nameless-omen-farm",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Omen of Dextral Annulment",
+     "per_map_or_hour": "0.86 per hour",
+     "per_map": 0.072,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/t16-rite-of-the-nameless-omen-farm",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Omen of Sinistral Erasure",
+     "per_map_or_hour": "0.29 per hour",
+     "per_map": 0.024,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/t16-rite-of-the-nameless-omen-farm",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Omen of Dextral Erasure",
+     "per_map_or_hour": "0.29 per hour",
+     "per_map": 0.024,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/t16-rite-of-the-nameless-omen-farm",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    }
+   ],
+   "inputs_per_hour": [
+    {
+     "item": "Head of the King",
+     "count": 2.0,
+     "priced_by": "GGG Currency Exchange"
+    }
+   ],
+   "investment": "Ritual atlas tree, Jado master (Partial Translations), Head of the King keys (from King in the Mists), ~10-20 div of tablets per session. Fixed costs: 6-18 div/h (2.4 rare Ritual tablets/h (65%+ omen chance) at ~3 div when recorded, more later; Freedom of Faith negligible.",
+   "requirements": {
+    "dps_min": 1000000,
+    "ehp_min": 30000,
+    "notes": "T16 6-mod waystones with Ritual monsters re-appearing in every map of the chain; source pace ~4 min/map. Capped elemental res; the chain stacks map modifiers.",
+    "label": "estimate (rules of thumb from guides and creator Path of Building snapshots)"
+   },
+   "earliest_phase": "week1",
+   "leagues_used": [
+    "Fate of the Vaal",
+    "Runes of Aldur",
+    "Forbidden Rites"
+   ],
+   "leagues_note": null,
+   "div_per_hour": {
+    "d0-2": null,
+    "week1": {
+     "low": 1.7,
+     "mid": 5.1,
+     "high": 17.0,
+     "source_pace_median": 7.2,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk2-3": {
+     "low": 4.6,
+     "mid": 10.4,
+     "high": 39.3,
+     "source_pace_median": 14.9,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk4-8": {
+     "low": 14.6,
+     "mid": 51.2,
+     "high": 208.0,
+     "source_pace_median": 73.1,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "late": {
+     "low": 9.5,
+     "mid": 65.1,
+     "high": 358.7,
+     "source_pace_median": 93.1,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    }
+   },
+   "div_per_hour_label": "estimate: community drop counts x GGG exchange prices (data-backed) x pace factor; net of inputs",
+   "div_per_hour_by_league": {
+    "Fate of the Vaal": {
+     "week1": {
+      "net_div_h_source_pace": 11.3,
+      "gross": 13.68,
+      "exchange_inputs": 2.39,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 17.61,
+      "gross": 20.0,
+      "exchange_inputs": 2.39,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 213.97,
+      "gross": 216.35,
+      "exchange_inputs": 2.39,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 364.75,
+      "gross": 367.13,
+      "exchange_inputs": 2.39,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Runes of Aldur": {
+     "week1": {
+      "net_div_h_source_pace": 13.37,
+      "gross": 16.87,
+      "exchange_inputs": 3.51,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 21.04,
+      "gross": 23.43,
+      "exchange_inputs": 2.39,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 50.49,
+      "gross": 53.98,
+      "exchange_inputs": 3.5,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 39.22,
+      "gross": 45.37,
+      "exchange_inputs": 6.16,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Forbidden Rites": {
+     "week1": {
+      "net_div_h_source_pace": 21.76,
+      "gross": 25.14,
+      "exchange_inputs": 3.38,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 44.1,
+      "gross": 48.17,
+      "exchange_inputs": 4.07,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 85.08,
+      "gross": 89.09,
+      "exchange_inputs": 4.01,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 105.05,
+      "gross": 108.2,
+      "exchange_inputs": 3.14,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    }
+   },
+   "unpriced_upside": "Ritual reward uniques (Mageblood / Headhunter reported, no public rate).",
+   "community_claims": [
+    {
+     "value": "105 div/h (70 at recording prices)",
+     "who": "farmofexile repricing of MisoxShiru",
+     "patch": "0.5.5",
+     "label": "claim"
+    },
+    {
+     "value": "~95 div/h T16, ~58 T15",
+     "who": "farmofexile overview",
+     "patch": "0.5.5",
+     "label": "claim"
+    }
+   ],
+   "meta_history": [
+    {
+     "league": "0.1 Early Access",
+     "period": "Dec 2024 - Mar 2025",
+     "note": "Minor farm (Audience with the King); 0.1.1 raised the omen chance."
+    },
+    {
+     "league": "0.2 Dawn of the Hunt",
+     "period": "Apr 4-7 2025 (exploit), then whole league",
+     "note": "Freedom of Faith unlimited-reroll exploit; fixed in 0.2.0d with bans. Omens became guaranteed rewards; \"10+ div per 3-4 h session\" (poe-vault)."
+    },
+    {
+     "league": "0.3 Third Edict",
+     "period": "Aug-Dec 2025",
+     "note": "Top-tier per seller guides; He Approaches lost +30% Audience chance at launch."
+    },
+    {
+     "league": "0.4 Fate of the Vaal",
+     "period": "Dec 2025 - May 2026",
+     "note": "Lesser farm (8-10 div/h titles); top omens rose 15-50x in Divines by week 6 (data)."
+    },
+    {
+     "league": "0.5 Runes of Aldur",
+     "period": "May-Sep 2026",
+     "note": "Rite of the Nameless + Queen's Rituals; 32-100+ div/h titles; reroll-cost cap (0.5.0b HF11) and Hilda tablet nerf (0.5.1 HF8)."
+    },
+    {
+     "league": "0.5.5 Forbidden Rites",
+     "period": "Sep-Nov 2026 (league mechanic)",
+     "note": "Meta farm: Rite of the Nameless city chains ~100 div/h (farmofexile); deferral bugs fixed 0.5.5c/d."
+    }
+   ],
+   "nerfs": [
+    {
+     "date": "2025-01-16",
+     "patch": "0.1.1",
+     "what": "Buff: increased chance for Omens as Ritual rewards."
+    },
+    {
+     "date": "2025-04-07",
+     "patch": "0.2.0d",
+     "what": "Freedom of Faith reroll exploit capped; abusers banned."
+    },
+    {
+     "date": "2025-06-05",
+     "patch": "0.2.1",
+     "what": "Buff: rarest Ritual rewards six times more frequent."
+    },
+    {
+     "date": "2025-08-20",
+     "patch": "0.3.0",
+     "what": "He Approaches lost its +30% Audience with the King chance."
+    },
+    {
+     "date": "2026-06-02",
+     "patch": "0.5.0b HF11",
+     "what": "Reroll cost can no longer be reduced by more than 90%."
+    },
+    {
+     "date": "2026-06-08",
+     "patch": "0.5.1 HF8",
+     "what": "Hilda Ancient Inscriptions: 8% tablet effect per different tablet (from 25%)."
+    },
+    {
+     "date": "2026-06-11",
+     "patch": "0.5.2",
+     "what": "Buff: Queen's Rituals +10 omens in the first favour set."
+    },
+    {
+     "date": "2026-09-17",
+     "patch": "0.5.5c",
+     "what": "Deferred items no longer update their cost multiple times per area (bug fix)."
+    }
+   ],
+   "confidence": "medium",
+   "caveat": null
+  },
+  {
+   "name": "Ritual: Rite of the Nameless city chains (omen farm)",
+   "mechanic": "Ritual",
+   "kind": "session",
+   "number_label": "community claim (counts from one recorded session) valued with GGG exchange data",
+   "source_session": {
+    "who": "XTheFarmerX (via farmofexile)",
+    "url": "https://farmofexile.com/poe2/article/ritual-omen-farming-in-rite-of-the-nameless-city-chains",
+    "video": "https://www.youtube.com/watch?v=9geBdXsPi0A",
+    "patch": "0.5.5",
+    "sample": "session; 5.5 h derived (536.5 div net at 97.5 div/h); ~21 maps/h derived from per-map cost"
+   },
+   "pace": {
+    "maps_per_hour": 21
+   },
+   "outputs": [
+    {
+     "item": "Omen of Chaotic Rarity",
+     "per_map_or_hour": "16.4 per hour",
+     "per_map": 0.781,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/ritual-omen-farming-in-rite-of-the-nameless-city-chains",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Omen of Chaotic Effectiveness",
+     "per_map_or_hour": "15.3 per hour",
+     "per_map": 0.729,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/ritual-omen-farming-in-rite-of-the-nameless-city-chains",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Omen of Chaotic Quantity",
+     "per_map_or_hour": "14.7 per hour",
+     "per_map": 0.7,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/ritual-omen-farming-in-rite-of-the-nameless-city-chains",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Omen of Chaotic Monsters",
+     "per_map_or_hour": "13.5 per hour",
+     "per_map": 0.643,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/ritual-omen-farming-in-rite-of-the-nameless-city-chains",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Omen of Whittling",
+     "per_map_or_hour": "3.45 per hour",
+     "per_map": 0.164,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/ritual-omen-farming-in-rite-of-the-nameless-city-chains",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Omen of Sinistral Annulment",
+     "per_map_or_hour": "0.91 per hour",
+     "per_map": 0.043,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/ritual-omen-farming-in-rite-of-the-nameless-city-chains",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Omen of Sinistral Erasure",
+     "per_map_or_hour": "0.73 per hour",
+     "per_map": 0.035,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/ritual-omen-farming-in-rite-of-the-nameless-city-chains",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Omen of Dextral Annulment",
+     "per_map_or_hour": "0.73 per hour",
+     "per_map": 0.035,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/ritual-omen-farming-in-rite-of-the-nameless-city-chains",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Omen of Dextral Erasure",
+     "per_map_or_hour": "0.36 per hour",
+     "per_map": 0.017,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/ritual-omen-farming-in-rite-of-the-nameless-city-chains",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Omen of Dextral Crystallisation",
+     "per_map_or_hour": "2.7 per hour",
+     "per_map": 0.129,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/ritual-omen-farming-in-rite-of-the-nameless-city-chains",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Omen of Sinistral Crystallisation",
+     "per_map_or_hour": "1.45 per hour",
+     "per_map": 0.069,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/ritual-omen-farming-in-rite-of-the-nameless-city-chains",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Omen of Bartering",
+     "per_map_or_hour": "34.5 per hour",
+     "per_map": 1.643,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/ritual-omen-farming-in-rite-of-the-nameless-city-chains",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Call of the Shadows",
+     "per_map_or_hour": "9.45 per hour",
+     "per_map": 0.45,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/ritual-omen-farming-in-rite-of-the-nameless-city-chains",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    }
+   ],
+   "inputs_per_hour": [
+    {
+     "item": "Omen of Chaotic Effectiveness",
+     "count": 21,
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Omen of Chaotic Rarity",
+     "count": 21,
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Head of the King",
+     "count": 2.1,
+     "priced_by": "GGG Currency Exchange"
+    }
+   ],
+   "investment": "Ritual atlas, Head of the King keys, one Omen of Chaotic Rarity + Effectiveness per map (re-supplied by the farm itself), T15 waystones. Fixed costs: 1-6 div/h (0.3 Ritual tablets per map (~2 chaos each when recorded) + Freedom of Faith.",
+   "requirements": {
+    "dps_min": 700000,
+    "ehp_min": 25000,
+    "notes": "Creator used a slow budget build on T15 6-mod (pack size + monster rarity). Faster builds do better.",
+    "label": "estimate (rules of thumb from guides and creator Path of Building snapshots)"
+   },
+   "earliest_phase": "week1",
+   "leagues_used": [
+    "Fate of the Vaal",
+    "Runes of Aldur",
+    "Forbidden Rites"
+   ],
+   "leagues_note": null,
+   "div_per_hour": {
+    "d0-2": null,
+    "week1": {
+     "low": 6.3,
+     "mid": 12.7,
+     "high": 29.9,
+     "source_pace_median": 18.2,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk2-3": {
+     "low": 8.2,
+     "mid": 16.6,
+     "high": 52.0,
+     "source_pace_median": 23.7,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk4-8": {
+     "low": 22.7,
+     "mid": 63.3,
+     "high": 220.6,
+     "source_pace_median": 90.4,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "late": {
+     "low": 19.7,
+     "mid": 76.6,
+     "high": 373.8,
+     "source_pace_median": 109.4,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    }
+   },
+   "div_per_hour_label": "estimate: community drop counts x GGG exchange prices (data-backed) x pace factor; net of inputs",
+   "div_per_hour_by_league": {
+    "Fate of the Vaal": {
+     "week1": {
+      "net_div_h_source_pace": 15.33,
+      "gross": 26.16,
+      "exchange_inputs": 10.83,
+      "coverage": 0.95,
+      "unpriced": [
+       "Omen of Chaotic Effectiveness",
+       "Call of the Shadows"
+      ]
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 19.48,
+      "gross": 26.16,
+      "exchange_inputs": 6.69,
+      "coverage": 0.95,
+      "unpriced": [
+       "Omen of Chaotic Effectiveness",
+       "Call of the Shadows"
+      ]
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 221.56,
+      "gross": 226.58,
+      "exchange_inputs": 5.02,
+      "coverage": 0.95,
+      "unpriced": [
+       "Omen of Chaotic Effectiveness",
+       "Call of the Shadows"
+      ]
+     },
+     "late": {
+      "net_div_h_source_pace": 374.76,
+      "gross": 380.46,
+      "exchange_inputs": 5.71,
+      "coverage": 0.95,
+      "unpriced": [
+       "Omen of Chaotic Effectiveness",
+       "Call of the Shadows"
+      ]
+     }
+    },
+    "Runes of Aldur": {
+     "week1": {
+      "net_div_h_source_pace": 19.19,
+      "gross": 24.24,
+      "exchange_inputs": 5.04,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 24.75,
+      "gross": 29.61,
+      "exchange_inputs": 4.86,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 56.49,
+      "gross": 66.35,
+      "exchange_inputs": 9.86,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 49.72,
+      "gross": 65.19,
+      "exchange_inputs": 15.47,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Forbidden Rites": {
+     "week1": {
+      "net_div_h_source_pace": 30.73,
+      "gross": 38.62,
+      "exchange_inputs": 7.88,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 52.75,
+      "gross": 67.08,
+      "exchange_inputs": 14.33,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 93.91,
+      "gross": 108.93,
+      "exchange_inputs": 15.02,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 112.87,
+      "gross": 124.37,
+      "exchange_inputs": 11.5,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    }
+   },
+   "unpriced_upside": "Ritual reward uniques.",
+   "community_claims": [
+    {
+     "value": "101 div/h (97.5 at recording prices)",
+     "who": "farmofexile repricing of XTheFarmerX",
+     "patch": "0.5.5",
+     "label": "claim"
+    },
+    {
+     "value": "95+ div/h no cities (POEGuy), 150 div/h (TheMidTierGamer)",
+     "who": "YouTube titles",
+     "patch": "0.5.5",
+     "label": "claim"
+    },
+    {
+     "value": "90-110 div/h after 0.5.5c",
+     "who": "iggm [seller]",
+     "patch": "0.5.5",
+     "label": "claim"
+    }
+   ],
+   "meta_history": [
+    {
+     "league": "0.1 Early Access",
+     "period": "Dec 2024 - Mar 2025",
+     "note": "Minor farm (Audience with the King); 0.1.1 raised the omen chance."
+    },
+    {
+     "league": "0.2 Dawn of the Hunt",
+     "period": "Apr 4-7 2025 (exploit), then whole league",
+     "note": "Freedom of Faith unlimited-reroll exploit; fixed in 0.2.0d with bans. Omens became guaranteed rewards; \"10+ div per 3-4 h session\" (poe-vault)."
+    },
+    {
+     "league": "0.3 Third Edict",
+     "period": "Aug-Dec 2025",
+     "note": "Top-tier per seller guides; He Approaches lost +30% Audience chance at launch."
+    },
+    {
+     "league": "0.4 Fate of the Vaal",
+     "period": "Dec 2025 - May 2026",
+     "note": "Lesser farm (8-10 div/h titles); top omens rose 15-50x in Divines by week 6 (data)."
+    },
+    {
+     "league": "0.5 Runes of Aldur",
+     "period": "May-Sep 2026",
+     "note": "Rite of the Nameless + Queen's Rituals; 32-100+ div/h titles; reroll-cost cap (0.5.0b HF11) and Hilda tablet nerf (0.5.1 HF8)."
+    },
+    {
+     "league": "0.5.5 Forbidden Rites",
+     "period": "Sep-Nov 2026 (league mechanic)",
+     "note": "Meta farm: Rite of the Nameless city chains ~100 div/h (farmofexile); deferral bugs fixed 0.5.5c/d."
+    }
+   ],
+   "nerfs": [
+    {
+     "date": "2025-01-16",
+     "patch": "0.1.1",
+     "what": "Buff: increased chance for Omens as Ritual rewards."
+    },
+    {
+     "date": "2025-04-07",
+     "patch": "0.2.0d",
+     "what": "Freedom of Faith reroll exploit capped; abusers banned."
+    },
+    {
+     "date": "2025-06-05",
+     "patch": "0.2.1",
+     "what": "Buff: rarest Ritual rewards six times more frequent."
+    },
+    {
+     "date": "2025-08-20",
+     "patch": "0.3.0",
+     "what": "He Approaches lost its +30% Audience with the King chance."
+    },
+    {
+     "date": "2026-06-02",
+     "patch": "0.5.0b HF11",
+     "what": "Reroll cost can no longer be reduced by more than 90%."
+    },
+    {
+     "date": "2026-06-08",
+     "patch": "0.5.1 HF8",
+     "what": "Hilda Ancient Inscriptions: 8% tablet effect per different tablet (from 25%)."
+    },
+    {
+     "date": "2026-06-11",
+     "patch": "0.5.2",
+     "what": "Buff: Queen's Rituals +10 omens in the first favour set."
+    },
+    {
+     "date": "2026-09-17",
+     "patch": "0.5.5c",
+     "what": "Deferred items no longer update their cost multiple times per area (bug fix)."
+    }
+   ],
+   "confidence": "medium",
+   "caveat": null
+  },
+  {
+   "name": "Expedition: Grand Expedition remnant rush",
+   "mechanic": "Expedition",
+   "kind": "session",
+   "number_label": "community claim (counts from one recorded session) valued with GGG exchange data",
+   "source_session": {
+    "who": "KingPinUwU (via farmofexile)",
+    "url": "https://farmofexile.com/poe2/article/grand-expedition-remnant-rush",
+    "video": "https://www.youtube.com/watch?v=dxJBGuX01u8",
+    "patch": "0.5.5",
+    "sample": "1 hour"
+   },
+   "pace": {
+    "maps_per_hour": 10
+   },
+   "outputs": [
+    {
+     "item": "Divine Orb",
+     "per_map_or_hour": "16 per hour",
+     "per_map": 1.6,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/grand-expedition-remnant-rush",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Chaos Orb",
+     "per_map_or_hour": "23 per hour",
+     "per_map": 2.3,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/grand-expedition-remnant-rush",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Astrid's Creativity",
+     "per_map_or_hour": "2 per hour",
+     "per_map": 0.2,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/grand-expedition-remnant-rush",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Shattered Triskelion",
+     "per_map_or_hour": "8 per hour",
+     "per_map": 0.8,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/grand-expedition-remnant-rush",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Uhtred's Saga",
+     "per_map_or_hour": "2 per hour",
+     "per_map": 0.2,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/grand-expedition-remnant-rush",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Perfect Chaos Orb",
+     "per_map_or_hour": "1 per hour",
+     "per_map": 0.1,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/grand-expedition-remnant-rush",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Greater Chaos Orb",
+     "per_map_or_hour": "12 per hour",
+     "per_map": 1.2,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/grand-expedition-remnant-rush",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Perfect Orb of Augmentation",
+     "per_map_or_hour": "5 per hour",
+     "per_map": 0.5,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/grand-expedition-remnant-rush",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Orb of Annulment",
+     "per_map_or_hour": "2 per hour",
+     "per_map": 0.2,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/grand-expedition-remnant-rush",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Celestial Alloy",
+     "per_map_or_hour": "1 per hour",
+     "per_map": 0.1,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/grand-expedition-remnant-rush",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Hedgewitch Assandra's Rune of Wisdom",
+     "per_map_or_hour": "1 per hour",
+     "per_map": 0.1,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/grand-expedition-remnant-rush",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Olroth's Resolve",
+     "per_map_or_hour": "1 per hour",
+     "source": "https://farmofexile.com/poe2/article/grand-expedition-remnant-rush",
+     "label": "community claim",
+     "priced_by": "not on the exchange: 5.2-9.6 div (farmofexile: when recorded / late Forbidden Rites)"
+    },
+    {
+     "item": "Timeless Jewel",
+     "per_map_or_hour": "2 per hour",
+     "source": "https://farmofexile.com/poe2/article/grand-expedition-remnant-rush",
+     "label": "community claim",
+     "priced_by": "not on the exchange: 0.9-1.1 div (farmofexile: when recorded / late Forbidden Rites)"
+    },
+    {
+     "item": "Svalinn",
+     "per_map_or_hour": "1 per hour",
+     "source": "https://farmofexile.com/poe2/article/grand-expedition-remnant-rush",
+     "label": "community claim",
+     "priced_by": "not on the exchange: 0.4-1.7 div (farmofexile: when recorded / late Forbidden Rites)"
+    },
+    {
+     "item": "Uhtred's Omen",
+     "per_map_or_hour": "1 per hour",
+     "source": "https://farmofexile.com/poe2/article/grand-expedition-remnant-rush",
+     "label": "community claim (single lucky drop, high scenario only)",
+     "priced_by": "not on the exchange: 6.7-13.4 div (farmofexile: when recorded / late Forbidden Rites)"
+    }
+   ],
+   "inputs_per_hour": [],
+   "investment": "Expedition atlas tree (0.5.4+), Jado master, Forest + Lineage nodes; any waystone. Fixed costs: 2-4 div/h (Olroth/Uhtred Sagas and logbooks (0.05 per map).",
+   "requirements": {
+    "dps_min": 1000000,
+    "ehp_min": 25000,
+    "notes": "Only works on a fast character (source). Runic rares can have 10-20 mods (mtmmo [seller]).",
+    "label": "estimate (rules of thumb from guides and creator Path of Building snapshots)"
+   },
+   "earliest_phase": "week1",
+   "leagues_used": [
+    "Fate of the Vaal",
+    "Runes of Aldur",
+    "Forbidden Rites"
+   ],
+   "leagues_note": null,
+   "div_per_hour": {
+    "d0-2": null,
+    "week1": {
+     "low": 19.9,
+     "mid": 39.7,
+     "high": 82.7,
+     "source_pace_median": 56.8,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk2-3": {
+     "low": 21.1,
+     "mid": 39.3,
+     "high": 78.9,
+     "source_pace_median": 56.2,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk4-8": {
+     "low": 17.6,
+     "mid": 31.6,
+     "high": 64.5,
+     "source_pace_median": 45.1,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "late": {
+     "low": 16.8,
+     "mid": 34.3,
+     "high": 74.2,
+     "source_pace_median": 49.0,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    }
+   },
+   "div_per_hour_label": "estimate: community drop counts x GGG exchange prices (data-backed) x pace factor; net of inputs",
+   "div_per_hour_by_league": {
+    "Runes of Aldur": {
+     "week1": {
+      "net_div_h_source_pace": 57.38,
+      "gross": 57.38,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 53.63,
+      "gross": 53.63,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 35.78,
+      "gross": 35.78,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 33.88,
+      "gross": 33.88,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Forbidden Rites": {
+     "week1": {
+      "net_div_h_source_pace": 39.33,
+      "gross": 39.33,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 41.92,
+      "gross": 41.92,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 39.61,
+      "gross": 39.61,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 49.26,
+      "gross": 49.26,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    }
+   },
+   "unpriced_upside": null,
+   "community_claims": [
+    {
+     "value": "46 div/h (39.5 at recording)",
+     "who": "farmofexile repricing of KingPinUwU",
+     "patch": "0.5.5",
+     "label": "claim"
+    },
+    {
+     "value": "60+ div/h (Fubgun), 30+ (XTheFarmerX), 150 (Path of Evening), 75 (Kingdom Twelve)",
+     "who": "YouTube titles",
+     "patch": "0.5.5",
+     "label": "claim"
+    },
+    {
+     "value": "10-20 div/h, 50 ceiling",
+     "who": "timesaver [seller]",
+     "patch": "0.5.4",
+     "label": "claim"
+    },
+    {
+     "value": "85 div/h budget (LLYD), up to 100 div/map 6-man (MazBro)",
+     "who": "YouTube titles",
+     "patch": "0.5.3-0.5.4",
+     "label": "claim"
+    }
+   ],
+   "meta_history": [
+    {
+     "league": "0.1",
+     "period": "Dec 2024 - Mar 2025",
+     "note": "Logbooks, 9.5-10 div/h (JayOE title)."
+    },
+    {
+     "league": "0.2",
+     "period": "May 2025 on",
+     "note": "Artifacts doubled in 0.2.0g; \"Expedition got a big buff\"."
+    },
+    {
+     "league": "0.3",
+     "period": "Aug 2025",
+     "note": "Nerfed at launch: Olroth removed from logbooks, Detailed Records lost 30% logbook quantity."
+    },
+    {
+     "league": "0.5 Runes of Aldur",
+     "period": "2026-06-18 (0.5.3) to 2026-07-02",
+     "note": "Grand Expedition chest rework + Expedition atlas (0.5.4) made it a top farm (85-100 div/h titles); infinite re-run islands fixed 0.5.4b; hidden +50% monster rarity per remnant removed 0.5.4 HF3."
+    },
+    {
+     "league": "0.5.5 Forbidden Rites",
+     "period": "Sep-Nov 2026",
+     "note": "Expedition core; Grand Expedition remnant rush ~46 div/h (farmofexile); Aldur's Saga gone."
+    }
+   ],
+   "nerfs": [
+    {
+     "date": "2025-05-01",
+     "patch": "0.2.0g",
+     "what": "Buff: Artifacts doubled, Exotic Coinage +50%."
+    },
+    {
+     "date": "2025-08-20",
+     "patch": "0.3.0",
+     "what": "Olroth removed from logbooks; Detailed Records lost 30% logbook quantity."
+    },
+    {
+     "date": "2026-06-11",
+     "patch": "0.5.2",
+     "what": "Buff: remnant rewards in T14+ significantly improved; every logbook section has a Grand Expedition."
+    },
+    {
+     "date": "2026-06-18",
+     "patch": "0.5.3",
+     "what": "Buff: basic chests replaced by currency/unique/waystone chests; more remnants per tier."
+    },
+    {
+     "date": "2026-06-25",
+     "patch": "0.5.4 HF3",
+     "what": "Removed a hidden 50% increased monster rarity per remnant completed."
+    },
+    {
+     "date": "2026-07-02",
+     "patch": "0.5.4b",
+     "what": "Five Grand Expedition islands could be attempted infinitely: fixed."
+    },
+    {
+     "date": "2026-09-02",
+     "patch": "0.5.5",
+     "what": "Aldur's Saga no longer obtainable outside Runes of Aldur."
+    }
+   ],
+   "confidence": "medium",
+   "caveat": null
+  },
+  {
+   "name": "Ritual/Wildwood: Fracturing Orb farm with Sacred Bloom",
+   "mechanic": "Ritual (Sacred Bloom, 0.5.5 event)",
+   "kind": "session",
+   "number_label": "community claim (counts from one recorded session) valued with GGG exchange data",
+   "source_session": {
+    "who": "KingPinUwU (via farmofexile)",
+    "url": "https://farmofexile.com/poe2/article/fracturing-orb-farming-with-sacred-bloom",
+    "video": "https://www.youtube.com/watch?v=5J_UrM9pdYo",
+    "patch": "0.5.5",
+    "sample": "~14 maps, ~1.05 h derived"
+   },
+   "pace": {
+    "maps_per_hour": 13.3
+   },
+   "outputs": [
+    {
+     "item": "Fracturing Orb",
+     "per_map_or_hour": "10.5 per hour",
+     "per_map": 0.789,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/fracturing-orb-farming-with-sacred-bloom",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Orb of Annulment",
+     "per_map_or_hour": "3.8 per hour",
+     "per_map": 0.286,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/fracturing-orb-farming-with-sacred-bloom",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Omen of Catalysing Exaltation",
+     "per_map_or_hour": "0.95 per hour",
+     "per_map": 0.071,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/fracturing-orb-farming-with-sacred-bloom",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Omen of the Hunt",
+     "per_map_or_hour": "2.9 per hour",
+     "per_map": 0.218,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/fracturing-orb-farming-with-sacred-bloom",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Omen of Secret Compartments",
+     "per_map_or_hour": "0.95 per hour",
+     "per_map": 0.071,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/fracturing-orb-farming-with-sacred-bloom",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Greater Chaos Orb",
+     "per_map_or_hour": "2.9 per hour",
+     "per_map": 0.218,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/fracturing-orb-farming-with-sacred-bloom",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Perfect Jeweller's Orb",
+     "per_map_or_hour": "1.9 per hour",
+     "per_map": 0.143,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/fracturing-orb-farming-with-sacred-bloom",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Divine Orb",
+     "per_map_or_hour": "20 per hour",
+     "per_map": 1.504,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/fracturing-orb-farming-with-sacred-bloom",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    }
+   ],
+   "inputs_per_hour": [],
+   "investment": "Sacred Blooms (Ritual reward), Ritual tablets with \"two additional random modifiers\", 8-mod waystones, Doryani master. Fixed costs: 11-31 div/h (13 Sacred Blooms (~1 chaos) + 4 Ritual tablets/h (1.3 div when recorded, 7.7 div late).",
+   "requirements": {
+    "dps_min": 800000,
+    "ehp_min": 25000,
+    "notes": "Random tablet modifiers: the build must handle anything. Creator build \"not particularly fast\".",
+    "label": "estimate (rules of thumb from guides and creator Path of Building snapshots)"
+   },
+   "earliest_phase": "week1",
+   "leagues_used": [
+    "Runes of Aldur",
+    "Forbidden Rites"
+   ],
+   "leagues_note": "Fate of the Vaal skipped: its Fracturing Orb price (24 div by week 6) came from a bug that blocked the guaranteed source.",
+   "div_per_hour": {
+    "d0-2": null,
+    "week1": {
+     "low": 11.1,
+     "mid": 39.7,
+     "high": 88.8,
+     "source_pace_median": 56.7,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk2-3": {
+     "low": 19.6,
+     "mid": 48.1,
+     "high": 94.0,
+     "source_pace_median": 68.8,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk4-8": {
+     "low": 34.8,
+     "mid": 62.6,
+     "high": 101.5,
+     "source_pace_median": 89.4,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "late": {
+     "low": 36.2,
+     "mid": 67.1,
+     "high": 111.3,
+     "source_pace_median": 95.8,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    }
+   },
+   "div_per_hour_label": "estimate: community drop counts x GGG exchange prices (data-backed) x pace factor; net of inputs",
+   "div_per_hour_by_league": {
+    "Runes of Aldur": {
+     "week1": {
+      "net_div_h_source_pace": 38.31,
+      "gross": 38.31,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 57.34,
+      "gross": 57.34,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 112.53,
+      "gross": 112.53,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 111.34,
+      "gross": 111.34,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Forbidden Rites": {
+     "week1": {
+      "net_div_h_source_pace": 97.56,
+      "gross": 97.56,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 102.77,
+      "gross": 102.77,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 108.28,
+      "gross": 108.28,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 122.26,
+      "gross": 122.26,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    }
+   },
+   "unpriced_upside": null,
+   "community_claims": [
+    {
+     "value": "49 div/h (76 at recording)",
+     "who": "farmofexile repricing of KingPinUwU",
+     "patch": "0.5.5",
+     "label": "claim"
+    },
+    {
+     "value": "\"well over 100 div/h\", 9 Fracturing in 10 maps",
+     "who": "mmoexp [seller]",
+     "patch": "0.5.5",
+     "label": "claim"
+    }
+   ],
+   "meta_history": [
+    {
+     "league": "0.5.5",
+     "period": "Sep-Nov 2026",
+     "note": "Fracturing Orbs via Sacred Bloom; no nerf found."
+    }
+   ],
+   "nerfs": [
+    {
+     "date": "2025-01-16",
+     "patch": "0.1.1",
+     "what": "Buff: increased chance for Omens as Ritual rewards."
+    },
+    {
+     "date": "2025-04-07",
+     "patch": "0.2.0d",
+     "what": "Freedom of Faith reroll exploit capped; abusers banned."
+    },
+    {
+     "date": "2025-06-05",
+     "patch": "0.2.1",
+     "what": "Buff: rarest Ritual rewards six times more frequent."
+    },
+    {
+     "date": "2025-08-20",
+     "patch": "0.3.0",
+     "what": "He Approaches lost its +30% Audience with the King chance."
+    },
+    {
+     "date": "2026-06-02",
+     "patch": "0.5.0b HF11",
+     "what": "Reroll cost can no longer be reduced by more than 90%."
+    },
+    {
+     "date": "2026-06-08",
+     "patch": "0.5.1 HF8",
+     "what": "Hilda Ancient Inscriptions: 8% tablet effect per different tablet (from 25%)."
+    },
+    {
+     "date": "2026-06-11",
+     "patch": "0.5.2",
+     "what": "Buff: Queen's Rituals +10 omens in the first favour set."
+    },
+    {
+     "date": "2026-09-17",
+     "patch": "0.5.5c",
+     "what": "Deferred items no longer update their cost multiple times per area (bug fix)."
+    }
+   ],
+   "confidence": "low",
+   "caveat": "Sacred Bloom is a Forbidden Rites mechanic; 1.0 may not have it. Fracturing Orb had no 0.4-0.5 equivalent farm."
+  },
+  {
+   "name": "Delirium: boss rush (Simulacrum + fragments)",
+   "mechanic": "Delirium",
+   "kind": "session",
+   "number_label": "community claim (counts from one recorded session) valued with GGG exchange data",
+   "source_session": {
+    "who": "XTheFarmerX (via farmofexile)",
+    "url": "https://farmofexile.com/poe2/article/delirium-boss-rush",
+    "video": "https://www.youtube.com/watch?v=PK_GubzWCXM",
+    "patch": "0.5.5",
+    "sample": "5 h stream"
+   },
+   "pace": {
+    "maps_per_hour": 10
+   },
+   "outputs": [
+    {
+     "item": "Simulacrum",
+     "per_map_or_hour": "2.7 per hour",
+     "per_map": 0.27,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/delirium-boss-rush",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Breachlord Sac",
+     "per_map_or_hour": "0.8 per hour",
+     "per_map": 0.08,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/delirium-boss-rush",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Origin Cradle",
+     "per_map_or_hour": "0.4 per hour",
+     "per_map": 0.04,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/delirium-boss-rush",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Origin Spark",
+     "per_map_or_hour": "0.8 per hour",
+     "per_map": 0.08,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/delirium-boss-rush",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Ancient Crisis Fragment",
+     "per_map_or_hour": "0.8 per hour",
+     "per_map": 0.08,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/delirium-boss-rush",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Weathered Crisis Fragment",
+     "per_map_or_hour": "1.4 per hour",
+     "per_map": 0.14,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/delirium-boss-rush",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Faded Crisis Fragment",
+     "per_map_or_hour": "1.4 per hour",
+     "per_map": 0.14,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/delirium-boss-rush",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Concentrated Liquid Isolation",
+     "per_map_or_hour": "0.2 per hour",
+     "per_map": 0.02,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/delirium-boss-rush",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Divine Orb",
+     "per_map_or_hour": "5.4 per hour",
+     "per_map": 0.54,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/delirium-boss-rush",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Orb of Annulment",
+     "per_map_or_hour": "1.8 per hour",
+     "per_map": 0.18,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/delirium-boss-rush",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Perfect Jeweller's Orb",
+     "per_map_or_hour": "0.4 per hour",
+     "per_map": 0.04,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/delirium-boss-rush",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Rakiata's Flow",
+     "per_map_or_hour": "0.2 per hour",
+     "source": "https://farmofexile.com/poe2/article/delirium-boss-rush",
+     "label": "community claim (single lucky drop, high scenario only)",
+     "priced_by": "not on the exchange: 113-118 div (farmofexile: when recorded / late Forbidden Rites)"
+    }
+   ],
+   "inputs_per_hour": [],
+   "investment": "Delirium atlas, a few tablets; cheap. Fixed costs: 1.5-6.6 div/h (Visions of Paradise / Mastered Domain maps and Delirium tablets.",
+   "requirements": {
+    "dps_min": 400000,
+    "ehp_min": 15000,
+    "notes": "Clear a map and kill boss-level enemies (source); low bar.",
+    "label": "estimate (rules of thumb from guides and creator Path of Building snapshots)"
+   },
+   "earliest_phase": "week1",
+   "leagues_used": [
+    "Fate of the Vaal",
+    "Runes of Aldur",
+    "Forbidden Rites"
+   ],
+   "leagues_note": null,
+   "div_per_hour": {
+    "d0-2": null,
+    "week1": {
+     "low": 11.2,
+     "mid": 19.6,
+     "high": 54.9,
+     "source_pace_median": 28.1,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk2-3": {
+     "low": 12.3,
+     "mid": 22.8,
+     "high": 61.6,
+     "source_pace_median": 32.6,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk4-8": {
+     "low": 13.3,
+     "mid": 26.7,
+     "high": 70.5,
+     "source_pace_median": 38.2,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "late": {
+     "low": 13.5,
+     "mid": 29.6,
+     "high": 78.2,
+     "source_pace_median": 42.3,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    }
+   },
+   "div_per_hour_label": "estimate: community drop counts x GGG exchange prices (data-backed) x pace factor; net of inputs",
+   "div_per_hour_by_league": {
+    "Runes of Aldur": {
+     "week1": {
+      "net_div_h_source_pace": 32.49,
+      "gross": 32.49,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 29.15,
+      "gross": 29.15,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 36.09,
+      "gross": 36.09,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 36.6,
+      "gross": 36.6,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Forbidden Rites": {
+     "week1": {
+      "net_div_h_source_pace": 26.73,
+      "gross": 26.73,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 39.19,
+      "gross": 39.19,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 48.44,
+      "gross": 48.44,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 56.12,
+      "gross": 56.12,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    }
+   },
+   "unpriced_upside": null,
+   "community_claims": [
+    {
+     "value": "48 div/h (33 at recording; half of it one Rakiata's Flow)",
+     "who": "farmofexile",
+     "patch": "0.5.5",
+     "label": "claim"
+    }
+   ],
+   "meta_history": [
+    {
+     "league": "0.1",
+     "period": "Dec 2024 - Mar 2025",
+     "note": "Citadels + Arbiter 8-11 div/h titles."
+    },
+    {
+     "league": "0.2",
+     "period": "Apr-Aug 2025",
+     "note": "Citadels 10-15 div/h, Arbiter 10+ (titles); 0.2.0f unlimited attempts at difficulty 0."
+    },
+    {
+     "league": "0.4",
+     "period": "Jan 2026",
+     "note": "Citadel + deadly map boss rush 100-200 div/h (Byankuu title)."
+    },
+    {
+     "league": "0.5 Runes of Aldur",
+     "period": "2026-06-18 on",
+     "note": "Kulemak bone farm (55-120 div/h titles) after 0.5.3; 0.5.4 lowered pinnacle resistances."
+    },
+    {
+     "league": "0.5.5",
+     "period": "Sep-Nov 2026",
+     "note": "Arbiter fire-res only; farmofexile models Arbiter 122 / Aberration 53 / Kulemak 43 div/h at late prices; Bodach -1 div/h."
+    }
+   ],
+   "nerfs": [
+    {
+     "date": "2025-04-15",
+     "patch": "0.2.0f",
+     "what": "Buff: unlimited attempts at pinnacle difficulty 0."
+    },
+    {
+     "date": "2025-08-20",
+     "patch": "0.3.0",
+     "what": "Pinnacles drop splinters (not Arbiter)."
+    },
+    {
+     "date": "2025-12-04",
+     "patch": "0.4.0",
+     "what": "Arbiter of Ash no longer drops a rare corrupted tablet."
+    },
+    {
+     "date": "2026-06-18",
+     "patch": "0.5.3",
+     "what": "Vessel of Kulemak drops Ancient bones (Collarbone -88% within a week)."
+    },
+    {
+     "date": "2026-06-24",
+     "patch": "0.5.4",
+     "what": "Several pinnacle bosses had resistances lowered."
+    },
+    {
+     "date": "2026-09-02",
+     "patch": "0.5.5",
+     "what": "Arbiter of Ash: Fire Resistance only (was all elemental)."
+    }
+   ],
+   "confidence": "medium",
+   "caveat": null
+  },
+  {
+   "name": "Delirium: 200% city juicing (Simulacrum farm)",
+   "mechanic": "Delirium",
+   "kind": "session",
+   "number_label": "community claim (counts from one recorded session) valued with GGG exchange data",
+   "source_session": {
+    "who": "DEADRABB1T (via farmofexile)",
+    "url": "https://farmofexile.com/poe2/article/200-delirium-splinter-farm",
+    "video": "https://www.youtube.com/watch?v=4KXuoTEcGbI",
+    "patch": "0.5.5",
+    "sample": "15 maps, 1.5 h assumed by the page"
+   },
+   "pace": {
+    "maps_per_hour": 10
+   },
+   "outputs": [
+    {
+     "item": "Simulacrum",
+     "per_map_or_hour": "19.3 per hour",
+     "per_map": 1.93,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/200-delirium-splinter-farm",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    }
+   ],
+   "inputs_per_hour": [],
+   "investment": "City biome at 200% Delirium, 4 Delirium tablets (fracturing mirrors + splinter stack size), Jado; ~15-30 div. Fixed costs: 9.7-12 div/h (Four tablets (~3.7-5 div) per session + corrupted T16 waystones (60%+ monster rarity).",
+   "requirements": {
+    "dps_min": 1500000,
+    "ehp_min": 40000,
+    "notes": "Difficulty 5/5 (source): \"a build capable of comfortably clearing 200% Delirium maps\".",
+    "label": "estimate (rules of thumb from guides and creator Path of Building snapshots)"
+   },
+   "earliest_phase": "wk2-3",
+   "leagues_used": [
+    "Fate of the Vaal",
+    "Runes of Aldur",
+    "Forbidden Rites"
+   ],
+   "leagues_note": null,
+   "div_per_hour": {
+    "d0-2": null,
+    "week1": null,
+    "wk2-3": {
+     "low": 18.6,
+     "mid": 42.0,
+     "high": 78.6,
+     "source_pace_median": 60.0,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk4-8": {
+     "low": 19.3,
+     "mid": 33.8,
+     "high": 53.5,
+     "source_pace_median": 48.2,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "late": {
+     "low": 20.6,
+     "mid": 37.7,
+     "high": 62.1,
+     "source_pace_median": 53.9,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    }
+   },
+   "div_per_hour_label": "estimate: community drop counts x GGG exchange prices (data-backed) x pace factor; net of inputs",
+   "div_per_hour_by_league": {
+    "Runes of Aldur": {
+     "wk2-3": {
+      "net_div_h_source_pace": 86.33,
+      "gross": 86.33,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 54.94,
+      "gross": 54.94,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 57.78,
+      "gross": 57.78,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Forbidden Rites": {
+     "wk2-3": {
+      "net_div_h_source_pace": 53.51,
+      "gross": 53.51,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 63.22,
+      "gross": 63.22,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 71.77,
+      "gross": 71.77,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    }
+   },
+   "unpriced_upside": null,
+   "community_claims": [
+    {
+     "value": "46 div/h (29 at recording), ~580 splinters/map",
+     "who": "farmofexile",
+     "patch": "0.5.5",
+     "label": "claim"
+    },
+    {
+     "value": "80-100 div/h (300% juicing)",
+     "who": "LilBotQ YouTube title",
+     "patch": "0.5.5",
+     "label": "claim"
+    }
+   ],
+   "meta_history": [
+    {
+     "league": "0.1",
+     "period": "Jan 2025 on",
+     "note": "0.1.1 doubled splinters from Delirium bosses."
+    },
+    {
+     "league": "0.2",
+     "period": "Apr-May 2025",
+     "note": "0.2.0e made encounters 2.5x longer; 0.2.0g +80% splinters: Simulacrum farms took off."
+    },
+    {
+     "league": "0.5 Runes of Aldur",
+     "period": "Jun 2026",
+     "note": "4+ Simulacrums/map (15 div/map title) until 0.5.3 halved fog scaling and cut \"Are you sure\" tablet doubling."
+    },
+    {
+     "league": "0.5.5",
+     "period": "Sep-Nov 2026",
+     "note": "Grand Mirror fog limited to 10 maps at launch; 200% city juicing and boss rush ~40-48 div/h (farmofexile)."
+    }
+   ],
+   "nerfs": [
+    {
+     "date": "2025-01-16",
+     "patch": "0.1.1",
+     "what": "Buff: Delirium bosses drop 100% more Simulacrum Splinters."
+    },
+    {
+     "date": "2025-04-10",
+     "patch": "0.2.0e",
+     "what": "Encounters last ~2.5x longer."
+    },
+    {
+     "date": "2025-05-01",
+     "patch": "0.2.0g",
+     "what": "Buff: Delirium splinters +80%."
+    },
+    {
+     "date": "2026-06-18",
+     "patch": "0.5.3",
+     "what": "Fog scaling halved; \"Are you sure\" lost double tablet effect; Simulacrum starts at 100% delirious."
+    },
+    {
+     "date": "2026-09-02",
+     "patch": "0.5.5",
+     "what": "Grand Mirror fog spreads to 10 maps; packs stop scaling beyond 100% Deliriousness."
+    }
+   ],
+   "confidence": "medium",
+   "caveat": null
+  },
+  {
+   "name": "Delirium: budget splinter farm (1 tablet, T15)",
+   "mechanic": "Delirium",
+   "kind": "session",
+   "number_label": "community claim (counts from one recorded session) valued with GGG exchange data",
+   "source_session": {
+    "who": "DeadRabb1t (via farmofexile)",
+    "url": "https://farmofexile.com/poe2/article/budget-delirium-splinters-farm",
+    "video": "https://www.youtube.com/watch?v=2Xa4IBd11f0",
+    "patch": "0.5.5",
+    "sample": "50 maps, 4-5 h"
+   },
+   "pace": {
+    "maps_per_hour": 11
+   },
+   "outputs": [
+    {
+     "item": "Simulacrum",
+     "per_map_or_hour": "5.8 per hour",
+     "per_map": 0.527,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/budget-delirium-splinters-farm",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Divine Orb",
+     "per_map_or_hour": "6.9 per hour",
+     "per_map": 0.627,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/budget-delirium-splinters-farm",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Orb of Annulment",
+     "per_map_or_hour": "1.8 per hour",
+     "per_map": 0.164,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/budget-delirium-splinters-farm",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    }
+   ],
+   "inputs_per_hour": [],
+   "investment": "Full Delirium atlas tree, Jado; almost nothing per map. Fixed costs: 0.5-2.5 div/h (One cheap Delirium tablet per map + corrupted waystones.",
+   "requirements": {
+    "dps_min": 500000,
+    "ehp_min": 20000,
+    "notes": "T15/T16 corrupted maps with 30+ monster rarity.",
+    "label": "estimate (rules of thumb from guides and creator Path of Building snapshots)"
+   },
+   "earliest_phase": "week1",
+   "leagues_used": [
+    "Fate of the Vaal",
+    "Runes of Aldur",
+    "Forbidden Rites"
+   ],
+   "leagues_note": null,
+   "div_per_hour": {
+    "d0-2": null,
+    "week1": {
+     "low": 8.7,
+     "mid": 19.5,
+     "high": 36.6,
+     "source_pace_median": 27.9,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk2-3": {
+     "low": 10.5,
+     "mid": 19.8,
+     "high": 33.3,
+     "source_pace_median": 28.4,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk4-8": {
+     "low": 9.8,
+     "mid": 16.7,
+     "high": 26.0,
+     "source_pace_median": 23.9,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "late": {
+     "low": 10.2,
+     "mid": 17.9,
+     "high": 28.4,
+     "source_pace_median": 25.5,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    }
+   },
+   "div_per_hour_label": "estimate: community drop counts x GGG exchange prices (data-backed) x pace factor; net of inputs",
+   "div_per_hour_by_league": {
+    "Runes of Aldur": {
+     "week1": {
+      "net_div_h_source_pace": 36.99,
+      "gross": 36.99,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 33.69,
+      "gross": 33.69,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 24.34,
+      "gross": 24.34,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 25.16,
+      "gross": 25.16,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Forbidden Rites": {
+     "week1": {
+      "net_div_h_source_pace": 19.85,
+      "gross": 19.85,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 24.04,
+      "gross": 24.04,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 26.45,
+      "gross": 26.45,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 28.94,
+      "gross": 28.94,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    }
+   },
+   "unpriced_upside": null,
+   "community_claims": [
+    {
+     "value": "39 div/h (28 at recording)",
+     "who": "farmofexile",
+     "patch": "0.5.5",
+     "label": "claim"
+    },
+    {
+     "value": "0.52 Simulacrum/map, ~157 splinters/map",
+     "who": "drop-rates.json (same session)",
+     "patch": "0.5.5",
+     "label": "claim"
+    }
+   ],
+   "meta_history": [
+    {
+     "league": "0.1",
+     "period": "Jan 2025 on",
+     "note": "0.1.1 doubled splinters from Delirium bosses."
+    },
+    {
+     "league": "0.2",
+     "period": "Apr-May 2025",
+     "note": "0.2.0e made encounters 2.5x longer; 0.2.0g +80% splinters: Simulacrum farms took off."
+    },
+    {
+     "league": "0.5 Runes of Aldur",
+     "period": "Jun 2026",
+     "note": "4+ Simulacrums/map (15 div/map title) until 0.5.3 halved fog scaling and cut \"Are you sure\" tablet doubling."
+    },
+    {
+     "league": "0.5.5",
+     "period": "Sep-Nov 2026",
+     "note": "Grand Mirror fog limited to 10 maps at launch; 200% city juicing and boss rush ~40-48 div/h (farmofexile)."
+    }
+   ],
+   "nerfs": [
+    {
+     "date": "2025-01-16",
+     "patch": "0.1.1",
+     "what": "Buff: Delirium bosses drop 100% more Simulacrum Splinters."
+    },
+    {
+     "date": "2025-04-10",
+     "patch": "0.2.0e",
+     "what": "Encounters last ~2.5x longer."
+    },
+    {
+     "date": "2025-05-01",
+     "patch": "0.2.0g",
+     "what": "Buff: Delirium splinters +80%."
+    },
+    {
+     "date": "2026-06-18",
+     "patch": "0.5.3",
+     "what": "Fog scaling halved; \"Are you sure\" lost double tablet effect; Simulacrum starts at 100% delirious."
+    },
+    {
+     "date": "2026-09-02",
+     "patch": "0.5.5",
+     "what": "Grand Mirror fog spreads to 10 maps; packs stop scaling beyond 100% Deliriousness."
+    }
+   ],
+   "confidence": "medium",
+   "caveat": null
+  },
+  {
+   "name": "Breach: Hiveblood into Genesis Tree catalysts",
+   "mechanic": "Breach",
+   "kind": "session",
+   "number_label": "community claim (counts from one recorded session) valued with GGG exchange data",
+   "source_session": {
+    "who": "Masterer Mitch (via farmofexile)",
+    "url": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+    "video": "https://www.youtube.com/watch?v=BIxn4Vz_6LY",
+    "patch": "0.5.5",
+    "sample": "~1 h, ~150k Hiveblood, 617 catalysts"
+   },
+   "pace": {
+    "maps_per_hour": 20
+   },
+   "outputs": [
+    {
+     "item": "Flesh Catalyst",
+     "per_map_or_hour": "86 per hour",
+     "per_map": 4.3,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Neural Catalyst",
+     "per_map_or_hour": "69 per hour",
+     "per_map": 3.45,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Adaptive Catalyst",
+     "per_map_or_hour": "29 per hour",
+     "per_map": 1.45,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Uul-Netol's Catalyst",
+     "per_map_or_hour": "27 per hour",
+     "per_map": 1.35,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Xoph's Catalyst",
+     "per_map_or_hour": "52 per hour",
+     "per_map": 2.6,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Tul's Catalyst",
+     "per_map_or_hour": "37 per hour",
+     "per_map": 1.85,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Esh's Catalyst",
+     "per_map_or_hour": "50 per hour",
+     "per_map": 2.5,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Chayula's Catalyst",
+     "per_map_or_hour": "16 per hour",
+     "per_map": 0.8,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Carapace Catalyst",
+     "per_map_or_hour": "70 per hour",
+     "per_map": 3.5,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Reaver Catalyst",
+     "per_map_or_hour": "20 per hour",
+     "per_map": 1.0,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Sibilant Catalyst",
+     "per_map_or_hour": "24 per hour",
+     "per_map": 1.2,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Skittering Catalyst",
+     "per_map_or_hour": "15 per hour",
+     "per_map": 0.75,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Necrotic Catalyst",
+     "per_map_or_hour": "28 per hour",
+     "per_map": 1.4,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Refined Flesh Catalyst",
+     "per_map_or_hour": "11 per hour",
+     "per_map": 0.55,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Refined Neural Catalyst",
+     "per_map_or_hour": "8 per hour",
+     "per_map": 0.4,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Refined Adaptive Catalyst",
+     "per_map_or_hour": "10 per hour",
+     "per_map": 0.5,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Refined Uul-Netol's Catalyst",
+     "per_map_or_hour": "2 per hour",
+     "per_map": 0.1,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Refined Xoph's Catalyst",
+     "per_map_or_hour": "2 per hour",
+     "per_map": 0.1,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Refined Tul's Catalyst",
+     "per_map_or_hour": "12 per hour",
+     "per_map": 0.6,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Refined Esh's Catalyst",
+     "per_map_or_hour": "17 per hour",
+     "per_map": 0.85,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Refined Chayula's Catalyst",
+     "per_map_or_hour": "8 per hour",
+     "per_map": 0.4,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Refined Skittering Catalyst",
+     "per_map_or_hour": "9 per hour",
+     "per_map": 0.45,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Refined Reaver Catalyst",
+     "per_map_or_hour": "9 per hour",
+     "per_map": 0.45,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Refined Necrotic Catalyst",
+     "per_map_or_hour": "3 per hour",
+     "per_map": 0.15,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/breach-catalyst-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    }
+   ],
+   "inputs_per_hour": [],
+   "investment": "Breach atlas (Lavish Wombgift chance, pack size), Genesis Tree path, T15-16 waystones, Breach tablets. Fixed costs: 23.5-66 div/h (6 Breach tablets/h: 3.9 div each when recorded, ~11 div late in Forbidden Rites.",
+   "requirements": {
+    "dps_min": 500000,
+    "ehp_min": 20000,
+    "notes": "\"No expensive character needed\" (creator). Breach is dense: AoE clear matters more than single-target.",
+    "label": "estimate (rules of thumb from guides and creator Path of Building snapshots)"
+   },
+   "earliest_phase": "week1",
+   "leagues_used": [
+    "Fate of the Vaal",
+    "Runes of Aldur",
+    "Forbidden Rites"
+   ],
+   "leagues_note": null,
+   "div_per_hour": {
+    "d0-2": null,
+    "week1": {
+     "low": 2.4,
+     "mid": 9.0,
+     "high": 20.5,
+     "source_pace_median": 12.9,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk2-3": {
+     "low": 4.3,
+     "mid": 23.0,
+     "high": 56.1,
+     "source_pace_median": 32.8,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk4-8": {
+     "low": -2.4,
+     "mid": 13.8,
+     "high": 45.0,
+     "source_pace_median": 19.8,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "late": {
+     "low": -10.7,
+     "mid": 20.3,
+     "high": 81.7,
+     "source_pace_median": 29.0,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    }
+   },
+   "div_per_hour_label": "estimate: community drop counts x GGG exchange prices (data-backed) x pace factor; net of inputs",
+   "div_per_hour_by_league": {
+    "Runes of Aldur": {
+     "week1": {
+      "net_div_h_source_pace": 39.34,
+      "gross": 39.34,
+      "exchange_inputs": 0.0,
+      "coverage": 0.9,
+      "unpriced": [
+       "Necrotic Catalyst",
+       "Refined Necrotic Catalyst"
+      ]
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 38.99,
+      "gross": 38.99,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 60.59,
+      "gross": 60.59,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 42.28,
+      "gross": 42.28,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Forbidden Rites": {
+     "week1": {
+      "net_div_h_source_pace": 34.63,
+      "gross": 34.63,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 74.86,
+      "gross": 74.86,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 68.47,
+      "gross": 68.47,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 105.17,
+      "gross": 105.17,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    }
+   },
+   "unpriced_upside": null,
+   "community_claims": [
+    {
+     "value": "32 div/h (36 at recording)",
+     "who": "farmofexile",
+     "patch": "0.5.5",
+     "label": "claim"
+    },
+    {
+     "value": "30-60 div/h (Fubgun 0.5), 100+ (SaVeQ 0.5.5), 60 (Explosive Paddle), 20+ (Spud)",
+     "who": "YouTube titles",
+     "patch": "0.5-0.5.5",
+     "label": "claim"
+    },
+    {
+     "value": "20-26 div/h",
+     "who": "mtmmo [seller]",
+     "patch": "0.5.5",
+     "label": "claim"
+    },
+    {
+     "value": "16.8 div/h over 5 h",
+     "who": "boosting-site post [seller]",
+     "patch": "0.5.x",
+     "label": "claim"
+    }
+   ],
+   "meta_history": [
+    {
+     "league": "0.1 Early Access",
+     "period": "Dec 2024 - Mar 2025",
+     "note": "THE meta farm (splinters/Breachstones). Nerfed 0.1.0e (2024-12-17: lower density) and 0.1.1 (2025-01-16: -15% monsters and chests)."
+    },
+    {
+     "league": "0.2",
+     "period": "Apr-Aug 2025",
+     "note": "Nerfed at launch (fewer monsters, rings rarer), then +50% splinters in 0.2.0g; 4-12 div/h titles."
+    },
+    {
+     "league": "0.5 Runes of Aldur",
+     "period": "whole league",
+     "note": "Hiveblood -> Genesis Tree catalysts and rings; 30-100+ div/h titles."
+    },
+    {
+     "league": "0.5.5",
+     "period": "Sep-Oct 2026",
+     "note": "Rares in waves of 5 (launch nerf); Hiveblood still a top-3 farm (SaVeQ 100+ titles, farmofexile 32)."
+    }
+   ],
+   "nerfs": [
+    {
+     "date": "2024-12-17",
+     "patch": "0.1.0e",
+     "what": "Lowered baseline monster density of Breaches."
+    },
+    {
+     "date": "2025-01-16",
+     "patch": "0.1.1",
+     "what": "-15% monsters and small chests from Breaches."
+    },
+    {
+     "date": "2025-04-02",
+     "patch": "0.2.0",
+     "what": "Fewer Breach monsters; Breach rings greatly reduced."
+    },
+    {
+     "date": "2025-05-01",
+     "patch": "0.2.0g",
+     "what": "Buff: Breach splinters +50%."
+    },
+    {
+     "date": "2026-05-21",
+     "patch": "0.5.0",
+     "what": "Catalysts only from the Genesis Tree; Hiveblood/Wombgifts added."
+    },
+    {
+     "date": "2026-09-02",
+     "patch": "0.5.5",
+     "what": "Rares spawn in waves of 5; Breach-rare tablets +3 -> +2 (seller report)."
+    }
+   ],
+   "confidence": "medium",
+   "caveat": "Refined catalysts and Genesis Tree only exist from 0.5.0; in 0.4 catalysts dropped directly from Breach."
+  },
+  {
+   "name": "Abyss: Abyssal Trove / Omen of Light + Cranium farm",
+   "mechanic": "Abyss",
+   "kind": "session",
+   "number_label": "community claim (counts from one recorded session) valued with GGG exchange data",
+   "source_session": {
+    "who": "MisoxShiru (via farmofexile)",
+    "url": "https://farmofexile.com/poe2/article/abyssal-trove-cranium-farming",
+    "video": "https://www.youtube.com/watch?v=_Ig-0iiksAU",
+    "patch": "0.5.5",
+    "sample": "35 maps, ~3.5 h derived"
+   },
+   "pace": {
+    "maps_per_hour": 10
+   },
+   "outputs": [
+    {
+     "item": "Omen of Light",
+     "per_map_or_hour": "2.86 per hour",
+     "per_map": 0.286,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/abyssal-trove-cranium-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Omen of Abyssal Echoes",
+     "per_map_or_hour": "6 per hour",
+     "per_map": 0.6,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/abyssal-trove-cranium-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Ancient Rib",
+     "per_map_or_hour": "1.14 per hour",
+     "per_map": 0.114,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/abyssal-trove-cranium-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Ancient Jawbone",
+     "per_map_or_hour": "1.14 per hour",
+     "per_map": 0.114,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/abyssal-trove-cranium-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Preserved Cranium",
+     "per_map_or_hour": "1.71 per hour",
+     "per_map": 0.171,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/abyssal-trove-cranium-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Kulemak's Invitation",
+     "per_map_or_hour": "1.43 per hour",
+     "per_map": 0.143,
+     "per_run": null,
+     "source": "https://farmofexile.com/poe2/article/abyssal-trove-cranium-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    }
+   ],
+   "inputs_per_hour": [
+    {
+     "item": "Cryptic Key",
+     "count": 3,
+     "priced_by": "GGG Currency Exchange"
+    }
+   ],
+   "investment": "Jado (Partial Translations, Mysterious Gifts, Trove Seekers), Omen + Amanamu passives, Cryptic Keys. Fixed costs: 7-15 div/h (2 Abyss tablets + Unforeseen Consequences (0.2 tablets per map); Abyss tablets went 5 chaos -> 4.8 div.",
+   "requirements": {
+    "dps_min": 600000,
+    "ehp_min": 25000,
+    "notes": "T15 6-mod or corrupted T15/16 with 60%+ monster rarity.",
+    "label": "estimate (rules of thumb from guides and creator Path of Building snapshots)"
+   },
+   "earliest_phase": "week1",
+   "leagues_used": [
+    "Fate of the Vaal",
+    "Runes of Aldur",
+    "Forbidden Rites"
+   ],
+   "leagues_note": null,
+   "div_per_hour": {
+    "d0-2": null,
+    "week1": {
+     "low": 1.2,
+     "mid": 12.0,
+     "high": 18.9,
+     "source_pace_median": 17.1,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk2-3": {
+     "low": 3.9,
+     "mid": 15.3,
+     "high": 38.9,
+     "source_pace_median": 21.9,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk4-8": {
+     "low": 12.0,
+     "mid": 37.3,
+     "high": 171.1,
+     "source_pace_median": 53.2,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "late": {
+     "low": 14.7,
+     "mid": 63.7,
+     "high": 187.9,
+     "source_pace_median": 91.0,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    }
+   },
+   "div_per_hour_label": "estimate: community drop counts x GGG exchange prices (data-backed) x pace factor; net of inputs",
+   "div_per_hour_by_league": {
+    "Fate of the Vaal": {
+     "week1": {
+      "net_div_h_source_pace": 11.5,
+      "gross": 12.09,
+      "exchange_inputs": 0.59,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 17.34,
+      "gross": 17.93,
+      "exchange_inputs": 0.59,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 178.05,
+      "gross": 178.64,
+      "exchange_inputs": 0.59,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 194.86,
+      "gross": 195.44,
+      "exchange_inputs": 0.59,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Runes of Aldur": {
+     "week1": {
+      "net_div_h_source_pace": 24.26,
+      "gross": 24.85,
+      "exchange_inputs": 0.59,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 29.05,
+      "gross": 29.63,
+      "exchange_inputs": 0.59,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 41.58,
+      "gross": 42.81,
+      "exchange_inputs": 1.23,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 47.67,
+      "gross": 49.52,
+      "exchange_inputs": 1.85,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Forbidden Rites": {
+     "week1": {
+      "net_div_h_source_pace": 24.51,
+      "gross": 25.51,
+      "exchange_inputs": 1.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 44.51,
+      "gross": 45.24,
+      "exchange_inputs": 0.73,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 64.25,
+      "gross": 64.67,
+      "exchange_inputs": 0.43,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 101.96,
+      "gross": 102.57,
+      "exchange_inputs": 0.6,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    }
+   },
+   "unpriced_upside": null,
+   "community_claims": [
+    {
+     "value": "40 div/h (42 at recording)",
+     "who": "farmofexile",
+     "patch": "0.5.5",
+     "label": "claim"
+    },
+    {
+     "value": "55+ div/h \"Cranium farm\" (MisoxShiru), 60 div/h Omen of Light (Fubgun 0.5), 150 (Perra 0.5)",
+     "who": "YouTube titles",
+     "patch": "0.5-0.5.5",
+     "label": "claim"
+    },
+    {
+     "value": "100+ div/h post 0.4d (MisoxShiru)",
+     "who": "YouTube title",
+     "patch": "0.4",
+     "label": "claim"
+    }
+   ],
+   "meta_history": [
+    {
+     "league": "0.3 Rise of the Abyssal",
+     "period": "Aug-Dec 2025",
+     "note": "League mechanic; Abyss + Breach/Delirium juicing 10-20 div/h (SnooBAE85)."
+    },
+    {
+     "league": "0.4 Fate of the Vaal",
+     "period": "Dec 2025 - 2026-02-19",
+     "note": "Omen of Light farm via Amanamu's Void (100+ div/h title) until 0.4.0e HF2 fixed multiple omens per monster."
+    },
+    {
+     "league": "0.5 Runes of Aldur",
+     "period": "Jun 2026",
+     "note": "Abyss city / Omen of Light 30-150 div/h titles; 0.5.1 (2026-06-04) lowered Elite Abyss loot; Kulemak bones from 0.5.3."
+    },
+    {
+     "league": "0.5.5",
+     "period": "Sep-Oct 2026",
+     "note": "Abyssal Ravines everywhere; Trove/Cranium farm ~40-55 div/h."
+    }
+   ],
+   "nerfs": [
+    {
+     "date": "2025-09-03",
+     "patch": "0.3.0b",
+     "what": "\"Pits always have rewards\" modifier fixed (was not working)."
+    },
+    {
+     "date": "2026-02-19",
+     "patch": "0.4.0e HF2",
+     "what": "Amanamu's Void modifier dropped multiple omens instead of 1: fixed (Omen of Light farm)."
+    },
+    {
+     "date": "2026-06-04",
+     "patch": "0.5.1",
+     "what": "Elite Abyss monsters: lower damage, loot and experience."
+    },
+    {
+     "date": "2026-06-18",
+     "patch": "0.5.3",
+     "what": "Kulemak drops Ancient bones; Tasgul/Vandroth always drop Desecrated currency."
+    }
+   ],
+   "confidence": "medium",
+   "caveat": null
+  },
+  {
+   "name": "Boss rush: Vessel of Kulemak (empowered)",
+   "mechanic": "Abyss / pinnacle boss",
+   "kind": "model",
+   "number_label": "drop-table model (community samples) valued with GGG exchange data",
+   "source_session": {
+    "who": "poe2wiki drop table (n=100-200, 0.5.4) via farmofexile",
+    "url": "https://farmofexile.com/poe2/article/vessel-of-kulemak-empowered",
+    "patch": "0.5.3+",
+    "sample": "100 runs modelled; 16.6 runs/h derived (104 div net at 17.3 div/h)"
+   },
+   "pace": {
+    "runs_per_hour": 16.6
+   },
+   "outputs": [
+    {
+     "item": "Ancient Jawbone",
+     "per_map_or_hour": "6 per hour",
+     "per_map": null,
+     "per_run": 0.361,
+     "source": "https://farmofexile.com/poe2/article/vessel-of-kulemak-empowered",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Ancient Rib",
+     "per_map_or_hour": "5.8 per hour",
+     "per_map": null,
+     "per_run": 0.349,
+     "source": "https://farmofexile.com/poe2/article/vessel-of-kulemak-empowered",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Ancient Collarbone",
+     "per_map_or_hour": "4.8 per hour",
+     "per_map": null,
+     "per_run": 0.289,
+     "source": "https://farmofexile.com/poe2/article/vessel-of-kulemak-empowered",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Divine Orb",
+     "per_map_or_hour": "2.7 per hour",
+     "per_map": null,
+     "per_run": 0.163,
+     "source": "https://farmofexile.com/poe2/article/vessel-of-kulemak-empowered",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Undying Hate",
+     "per_map_or_hour": "0.5 per hour",
+     "source": "https://farmofexile.com/poe2/article/vessel-of-kulemak-empowered",
+     "label": "community claim",
+     "priced_by": "not on the exchange: 1.4-1.9 div (farmofexile: when recorded / late Forbidden Rites)"
+    }
+   ],
+   "inputs_per_hour": [
+    {
+     "item": "Kulemak's Invitation",
+     "count": 16.6,
+     "priced_by": "GGG Currency Exchange"
+    }
+   ],
+   "investment": "One Kulemak's Invitation per run (buy or farm from Abyssal Depths).",
+   "requirements": {
+    "dps_min": 1000000,
+    "ehp_min": 30000,
+    "notes": "Pinnacle: ~1M+ single-target DPS (timesaver [seller]); balanced cold/lightning/fire/physical mitigation.",
+    "label": "estimate (rules of thumb from guides and creator Path of Building snapshots)"
+   },
+   "earliest_phase": "week1",
+   "leagues_used": [
+    "Runes of Aldur",
+    "Forbidden Rites"
+   ],
+   "leagues_note": "Fate of the Vaal skipped: Kulemak did not drop bones before 0.5.3, so 0.4 bone prices had no boss supply.",
+   "div_per_hour": {
+    "d0-2": null,
+    "week1": {
+     "low": 2.2,
+     "mid": 26.1,
+     "high": 69.6,
+     "source_pace_median": 37.3,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk2-3": {
+     "low": 6.6,
+     "mid": 43.4,
+     "high": 109.3,
+     "source_pace_median": 62.0,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk4-8": {
+     "low": 9.4,
+     "mid": 15.4,
+     "high": 23.3,
+     "source_pace_median": 22.1,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "late": {
+     "low": 7.3,
+     "mid": 21.7,
+     "high": 45.7,
+     "source_pace_median": 30.9,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    }
+   },
+   "div_per_hour_label": "estimate: community drop counts x GGG exchange prices (data-backed) x pace factor; net of inputs",
+   "div_per_hour_by_league": {
+    "Runes of Aldur": {
+     "week1": {
+      "net_div_h_source_pace": 68.61,
+      "gross": 70.12,
+      "exchange_inputs": 1.5,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 108.34,
+      "gross": 109.65,
+      "exchange_inputs": 1.31,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 20.12,
+      "gross": 40.68,
+      "exchange_inputs": 20.56,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 15.48,
+      "gross": 54.55,
+      "exchange_inputs": 39.07,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Forbidden Rites": {
+     "week1": {
+      "net_div_h_source_pace": 4.24,
+      "gross": 54.28,
+      "exchange_inputs": 50.03,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 13.96,
+      "gross": 80.86,
+      "exchange_inputs": 66.9,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 22.34,
+      "gross": 94.41,
+      "exchange_inputs": 72.07,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 44.75,
+      "gross": 124.81,
+      "exchange_inputs": 80.07,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    }
+   },
+   "unpriced_upside": null,
+   "community_claims": [
+    {
+     "value": "43 div/h (17 at recording)",
+     "who": "farmofexile",
+     "patch": "0.5.5",
+     "label": "claim"
+    },
+    {
+     "value": "55-120 div/h (MazBro), 57 (ronarray), 100 (SaVeQ)",
+     "who": "YouTube titles",
+     "patch": "0.5.3-0.5.4",
+     "label": "claim"
+    }
+   ],
+   "meta_history": [
+    {
+     "league": "0.4 Fate of the Vaal",
+     "period": "Dec 2025 - 2026-02-19",
+     "note": "Omen of Light farm via Amanamu's Void (100+ div/h title) until 0.4.0e HF2 fixed multiple omens per monster."
+    },
+    {
+     "league": "0.5 Runes of Aldur",
+     "period": "Jun 2026",
+     "note": "Abyss city / Omen of Light 30-150 div/h titles; 0.5.1 (2026-06-04) lowered Elite Abyss loot; Kulemak bones from 0.5.3."
+    },
+    {
+     "league": "0.5.5",
+     "period": "Sep-Oct 2026",
+     "note": "Abyssal Ravines everywhere; Trove/Cranium farm ~40-55 div/h."
+    },
+    {
+     "league": "0.1",
+     "period": "Dec 2024 - Mar 2025",
+     "note": "Citadels + Arbiter 8-11 div/h titles."
+    },
+    {
+     "league": "0.2",
+     "period": "Apr-Aug 2025",
+     "note": "Citadels 10-15 div/h, Arbiter 10+ (titles); 0.2.0f unlimited attempts at difficulty 0."
+    },
+    {
+     "league": "0.4",
+     "period": "Jan 2026",
+     "note": "Citadel + deadly map boss rush 100-200 div/h (Byankuu title)."
+    },
+    {
+     "league": "0.5 Runes of Aldur",
+     "period": "2026-06-18 on",
+     "note": "Kulemak bone farm (55-120 div/h titles) after 0.5.3; 0.5.4 lowered pinnacle resistances."
+    },
+    {
+     "league": "0.5.5",
+     "period": "Sep-Nov 2026",
+     "note": "Arbiter fire-res only; farmofexile models Arbiter 122 / Aberration 53 / Kulemak 43 div/h at late prices; Bodach -1 div/h."
+    }
+   ],
+   "nerfs": [
+    {
+     "date": "2025-04-15",
+     "patch": "0.2.0f",
+     "what": "Buff: unlimited attempts at pinnacle difficulty 0."
+    },
+    {
+     "date": "2025-08-20",
+     "patch": "0.3.0",
+     "what": "Pinnacles drop splinters (not Arbiter)."
+    },
+    {
+     "date": "2025-12-04",
+     "patch": "0.4.0",
+     "what": "Arbiter of Ash no longer drops a rare corrupted tablet."
+    },
+    {
+     "date": "2026-06-18",
+     "patch": "0.5.3",
+     "what": "Vessel of Kulemak drops Ancient bones (Collarbone -88% within a week)."
+    },
+    {
+     "date": "2026-06-24",
+     "patch": "0.5.4",
+     "what": "Several pinnacle bosses had resistances lowered."
+    },
+    {
+     "date": "2026-09-02",
+     "patch": "0.5.5",
+     "what": "Arbiter of Ash: Fire Resistance only (was all elemental)."
+    }
+   ],
+   "confidence": "medium",
+   "caveat": "Bones only drop from Kulemak since 0.5.3 (2026-06-18); that patch crashed Ancient Collarbone 88% in a week. Every farmer adds ~17 bones/h to the market."
+  },
+  {
+   "name": "Boss rush: Arbiter of Ash (Crisis Fragments)",
+   "mechanic": "Pinnacle boss",
+   "kind": "model",
+   "number_label": "drop-table model (community samples) valued with GGG exchange data",
+   "source_session": {
+    "who": "poe2wiki table (235 kills, 0.3-0.5.0) via farmofexile",
+    "url": "https://farmofexile.com/poe2/article/the-arbiter-of-ash",
+    "patch": "0.5.5",
+    "sample": "100 runs modelled; ~20 runs/h derived"
+   },
+   "pace": {
+    "runs_per_hour": 20
+   },
+   "outputs": [
+    {
+     "item": "The Arbiter's Reliquary Key",
+     "per_map_or_hour": "0.1 per hour",
+     "per_map": null,
+     "per_run": 0.005,
+     "source": "https://farmofexile.com/poe2/article/the-arbiter-of-ash",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Morior Invictus",
+     "per_map_or_hour": "9.6 per hour",
+     "source": "https://farmofexile.com/poe2/article/the-arbiter-of-ash",
+     "label": "community claim",
+     "priced_by": "not on the exchange: 4.3-10.5 div (farmofexile: when recorded / late Forbidden Rites)"
+    },
+    {
+     "item": "Prism of Belief",
+     "per_map_or_hour": "4.6 per hour",
+     "source": "https://farmofexile.com/poe2/article/the-arbiter-of-ash",
+     "label": "community claim",
+     "priced_by": "not on the exchange: 31.3-39.1 div (farmofexile: when recorded / late Forbidden Rites)"
+    },
+    {
+     "item": "Sacred Flame",
+     "per_map_or_hour": "2.4 per hour",
+     "source": "https://farmofexile.com/poe2/article/the-arbiter-of-ash",
+     "label": "community claim",
+     "priced_by": "not on the exchange: 0.05-0.1 div (farmofexile: when recorded / late Forbidden Rites)"
+    },
+    {
+     "item": "Arbiter's Ignition",
+     "per_map_or_hour": "0.6 per hour",
+     "source": "https://farmofexile.com/poe2/article/the-arbiter-of-ash",
+     "label": "community claim",
+     "priced_by": "not on the exchange: 0.5-1.0 div (farmofexile: when recorded / late Forbidden Rites)"
+    }
+   ],
+   "inputs_per_hour": [
+    {
+     "item": "Ancient Crisis Fragment",
+     "count": 20,
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Faded Crisis Fragment",
+     "count": 20,
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Weathered Crisis Fragment",
+     "count": 20,
+     "priced_by": "GGG Currency Exchange"
+    }
+   ],
+   "investment": "One Ancient + Faded + Weathered Crisis Fragment per run (~8 div per run late Forbidden Rites).",
+   "requirements": {
+    "dps_min": 1000000,
+    "ehp_min": 25000,
+    "notes": "Level 82 boss, physical + fire; fire resistance only since 0.5.5. Bring fire res and a way out of ground effects.",
+    "label": "estimate (rules of thumb from guides and creator Path of Building snapshots)"
+   },
+   "earliest_phase": "wk2-3",
+   "leagues_used": [
+    "Forbidden Rites"
+   ],
+   "leagues_note": "Priced on Forbidden Rites only: the unique values are Forbidden Rites values, and fragment supply differed a lot between leagues.",
+   "div_per_hour": {
+    "d0-2": null,
+    "week1": null,
+    "wk2-3": {
+     "low": 15.9,
+     "mid": 58.2,
+     "high": 131.1,
+     "source_pace_median": 83.2,
+     "leagues_priced": [
+      "Forbidden"
+     ]
+    },
+    "wk4-8": {
+     "low": -25.2,
+     "mid": -5.7,
+     "high": 39.8,
+     "source_pace_median": -8.1,
+     "leagues_priced": [
+      "Forbidden"
+     ]
+    },
+    "late": {
+     "low": -52.4,
+     "mid": -48.0,
+     "high": -20.6,
+     "source_pace_median": -68.5,
+     "leagues_priced": [
+      "Forbidden"
+     ]
+    }
+   },
+   "div_per_hour_label": "estimate: community drop counts x GGG exchange prices (data-backed) x pace factor; net of inputs",
+   "div_per_hour_by_league": {
+    "Forbidden Rites": {
+     "wk2-3": {
+      "net_div_h_source_pace": -150.43,
+      "gross": 1.43,
+      "exchange_inputs": 151.86,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": -241.68,
+      "gross": 1.66,
+      "exchange_inputs": 243.34,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": -302.11,
+      "gross": 1.93,
+      "exchange_inputs": 304.04,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    }
+   },
+   "unpriced_upside": null,
+   "community_claims": [
+    {
+     "value": "122 div/h (32 at recording)",
+     "who": "farmofexile model",
+     "patch": "0.5.5",
+     "label": "claim"
+    },
+    {
+     "value": "10+ div/h (Mattjestic, 0.2)",
+     "who": "YouTube title",
+     "patch": "0.2",
+     "label": "claim"
+    }
+   ],
+   "meta_history": [
+    {
+     "league": "0.1",
+     "period": "Dec 2024 - Mar 2025",
+     "note": "Citadels + Arbiter 8-11 div/h titles."
+    },
+    {
+     "league": "0.2",
+     "period": "Apr-Aug 2025",
+     "note": "Citadels 10-15 div/h, Arbiter 10+ (titles); 0.2.0f unlimited attempts at difficulty 0."
+    },
+    {
+     "league": "0.4",
+     "period": "Jan 2026",
+     "note": "Citadel + deadly map boss rush 100-200 div/h (Byankuu title)."
+    },
+    {
+     "league": "0.5 Runes of Aldur",
+     "period": "2026-06-18 on",
+     "note": "Kulemak bone farm (55-120 div/h titles) after 0.5.3; 0.5.4 lowered pinnacle resistances."
+    },
+    {
+     "league": "0.5.5",
+     "period": "Sep-Nov 2026",
+     "note": "Arbiter fire-res only; farmofexile models Arbiter 122 / Aberration 53 / Kulemak 43 div/h at late prices; Bodach -1 div/h."
+    }
+   ],
+   "nerfs": [
+    {
+     "date": "2025-04-15",
+     "patch": "0.2.0f",
+     "what": "Buff: unlimited attempts at pinnacle difficulty 0."
+    },
+    {
+     "date": "2025-08-20",
+     "patch": "0.3.0",
+     "what": "Pinnacles drop splinters (not Arbiter)."
+    },
+    {
+     "date": "2025-12-04",
+     "patch": "0.4.0",
+     "what": "Arbiter of Ash no longer drops a rare corrupted tablet."
+    },
+    {
+     "date": "2026-06-18",
+     "patch": "0.5.3",
+     "what": "Vessel of Kulemak drops Ancient bones (Collarbone -88% within a week)."
+    },
+    {
+     "date": "2026-06-24",
+     "patch": "0.5.4",
+     "what": "Several pinnacle bosses had resistances lowered."
+    },
+    {
+     "date": "2026-09-02",
+     "patch": "0.5.5",
+     "what": "Arbiter of Ash: Fire Resistance only (was all elemental)."
+    }
+   ],
+   "confidence": "low",
+   "caveat": "99% of the value is two uniques (Prism of Belief, Morior Invictus) priced only at Forbidden Rites late values; buying 60 fragments an hour also moves their price."
+  },
+  {
+   "name": "Boss rush: the Aberration (Triskelion keys)",
+   "mechanic": "Expedition pinnacle boss",
+   "kind": "model",
+   "number_label": "drop-table model (community samples) valued with GGG exchange data",
+   "source_session": {
+    "who": "poe2wiki (562 kills, 0.5.0) via farmofexile",
+    "url": "https://farmofexile.com/poe2/article/the-aberration-farm",
+    "patch": "0.5.5",
+    "sample": "100 runs modelled at 2.5 min each (24 runs/h)"
+   },
+   "pace": {
+    "runs_per_hour": 24
+   },
+   "outputs": [
+    {
+     "item": "Venerable Starlit Ore",
+     "per_map_or_hour": "8.9 per hour",
+     "per_map": null,
+     "per_run": 0.371,
+     "source": "https://farmofexile.com/poe2/article/the-aberration-farm",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Warding Starlit Ore",
+     "per_map_or_hour": "8.9 per hour",
+     "per_map": null,
+     "per_run": 0.371,
+     "source": "https://farmofexile.com/poe2/article/the-aberration-farm",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Veridical Starlit Ore",
+     "per_map_or_hour": "3.6 per hour",
+     "per_map": null,
+     "per_run": 0.15,
+     "source": "https://farmofexile.com/poe2/article/the-aberration-farm",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Revered Starlit Ore",
+     "per_map_or_hour": "1.9 per hour",
+     "per_map": null,
+     "per_run": 0.079,
+     "source": "https://farmofexile.com/poe2/article/the-aberration-farm",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Olroth's Conviction",
+     "per_map_or_hour": "1.2 per hour",
+     "per_map": null,
+     "per_run": 0.05,
+     "source": "https://farmofexile.com/poe2/article/the-aberration-farm",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Olroth's Hubris",
+     "per_map_or_hour": "1.2 per hour",
+     "per_map": null,
+     "per_run": 0.05,
+     "source": "https://farmofexile.com/poe2/article/the-aberration-farm",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    }
+   ],
+   "inputs_per_hour": [
+    {
+     "item": "The Triskelion Reforged",
+     "count": 24,
+     "priced_by": "GGG Currency Exchange"
+    }
+   ],
+   "investment": "Kill Olroth once; then one Triskelion Reforged per run (made from Shattered Triskelions).",
+   "requirements": {
+    "dps_min": 1000000,
+    "ehp_min": 25000,
+    "notes": "\"A good build clearing it cleanly\" at 2.5 min/run.",
+    "label": "estimate (rules of thumb from guides and creator Path of Building snapshots)"
+   },
+   "earliest_phase": "wk2-3",
+   "leagues_used": [
+    "Fate of the Vaal",
+    "Runes of Aldur",
+    "Forbidden Rites"
+   ],
+   "leagues_note": null,
+   "div_per_hour": {
+    "d0-2": null,
+    "week1": null,
+    "wk2-3": {
+     "low": 3.3,
+     "mid": 13.2,
+     "high": 30.3,
+     "source_pace_median": 18.8,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk4-8": {
+     "low": 5.5,
+     "mid": 11.1,
+     "high": 19.4,
+     "source_pace_median": 15.8,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "late": {
+     "low": 2.5,
+     "mid": 7.6,
+     "high": 16.3,
+     "source_pace_median": 10.9,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    }
+   },
+   "div_per_hour_label": "estimate: community drop counts x GGG exchange prices (data-backed) x pace factor; net of inputs",
+   "div_per_hour_by_league": {
+    "Runes of Aldur": {
+     "wk2-3": {
+      "net_div_h_source_pace": 7.34,
+      "gross": 18.68,
+      "exchange_inputs": 11.35,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 12.18,
+      "gross": 15.79,
+      "exchange_inputs": 3.62,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 5.48,
+      "gross": 7.58,
+      "exchange_inputs": 2.1,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Forbidden Rites": {
+     "wk2-3": {
+      "net_div_h_source_pace": 30.26,
+      "gross": 36.34,
+      "exchange_inputs": 6.08,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 19.41,
+      "gross": 21.4,
+      "exchange_inputs": 1.99,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 16.3,
+      "gross": 27.58,
+      "exchange_inputs": 11.28,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    }
+   },
+   "unpriced_upside": null,
+   "community_claims": [
+    {
+     "value": "53 div/h (31 at recording)",
+     "who": "farmofexile model",
+     "patch": "0.5.5",
+     "label": "claim"
+    }
+   ],
+   "meta_history": [
+    {
+     "league": "0.1",
+     "period": "Dec 2024 - Mar 2025",
+     "note": "Citadels + Arbiter 8-11 div/h titles."
+    },
+    {
+     "league": "0.2",
+     "period": "Apr-Aug 2025",
+     "note": "Citadels 10-15 div/h, Arbiter 10+ (titles); 0.2.0f unlimited attempts at difficulty 0."
+    },
+    {
+     "league": "0.4",
+     "period": "Jan 2026",
+     "note": "Citadel + deadly map boss rush 100-200 div/h (Byankuu title)."
+    },
+    {
+     "league": "0.5 Runes of Aldur",
+     "period": "2026-06-18 on",
+     "note": "Kulemak bone farm (55-120 div/h titles) after 0.5.3; 0.5.4 lowered pinnacle resistances."
+    },
+    {
+     "league": "0.5.5",
+     "period": "Sep-Nov 2026",
+     "note": "Arbiter fire-res only; farmofexile models Arbiter 122 / Aberration 53 / Kulemak 43 div/h at late prices; Bodach -1 div/h."
+    }
+   ],
+   "nerfs": [
+    {
+     "date": "2025-04-15",
+     "patch": "0.2.0f",
+     "what": "Buff: unlimited attempts at pinnacle difficulty 0."
+    },
+    {
+     "date": "2025-08-20",
+     "patch": "0.3.0",
+     "what": "Pinnacles drop splinters (not Arbiter)."
+    },
+    {
+     "date": "2025-12-04",
+     "patch": "0.4.0",
+     "what": "Arbiter of Ash no longer drops a rare corrupted tablet."
+    },
+    {
+     "date": "2026-06-18",
+     "patch": "0.5.3",
+     "what": "Vessel of Kulemak drops Ancient bones (Collarbone -88% within a week)."
+    },
+    {
+     "date": "2026-06-24",
+     "patch": "0.5.4",
+     "what": "Several pinnacle bosses had resistances lowered."
+    },
+    {
+     "date": "2026-09-02",
+     "patch": "0.5.5",
+     "what": "Arbiter of Ash: Fire Resistance only (was all elemental)."
+    }
+   ],
+   "confidence": "low",
+   "caveat": "24 keys an hour is more than the market sells; realistic only at a few runs per hour."
+  },
+  {
+   "name": "Alch-and-go mapping (no juice)",
+   "mechanic": "Base mapping",
+   "kind": "model",
+   "number_label": "drop-table model (community samples) valued with GGG exchange data",
+   "source_session": {
+    "who": "drop-rates.json (Ronarray 0.2 30-map tests at 0% rarity; forum T7/T15 runs)",
+    "url": "research/drop-rates.md",
+    "patch": "0.2-0.5",
+    "sample": "30-50 maps per setup"
+   },
+   "pace": {
+    "maps_per_hour": 18
+   },
+   "outputs": [
+    {
+     "item": "Exalted Orb",
+     "per_map_or_hour": "137 per hour",
+     "per_map": 7.611,
+     "per_run": null,
+     "source": "research/drop-rates.md",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Divine Orb",
+     "per_map_or_hour": "2.7 per hour",
+     "per_map": 0.15,
+     "per_run": null,
+     "source": "research/drop-rates.md",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Chaos Orb",
+     "per_map_or_hour": "14 per hour",
+     "per_map": 0.778,
+     "per_run": null,
+     "source": "research/drop-rates.md",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Vaal Orb",
+     "per_map_or_hour": "41 per hour",
+     "per_map": 2.278,
+     "per_run": null,
+     "source": "research/drop-rates.md",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Orb of Alchemy",
+     "per_map_or_hour": "38 per hour",
+     "per_map": 2.111,
+     "per_run": null,
+     "source": "research/drop-rates.md",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Orb of Annulment",
+     "per_map_or_hour": "0.9 per hour",
+     "per_map": 0.05,
+     "per_run": null,
+     "source": "research/drop-rates.md",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    }
+   ],
+   "inputs_per_hour": [
+    {
+     "item": "Orb of Alchemy",
+     "count": 18,
+     "priced_by": "GGG Currency Exchange"
+    }
+   ],
+   "investment": "Nothing beyond sustaining waystones.",
+   "requirements": {
+    "dps_min": 100000,
+    "ehp_min": 8000,
+    "notes": "~100k effective single-target DPS barely clears T15; 200-500k is comfortable (timesaver [seller]). T1-T10 need much less.",
+    "label": "estimate (rules of thumb from guides and creator Path of Building snapshots)"
+   },
+   "earliest_phase": "d0-2",
+   "leagues_used": [
+    "Fate of the Vaal",
+    "Runes of Aldur",
+    "Forbidden Rites"
+   ],
+   "leagues_note": null,
+   "div_per_hour": {
+    "d0-2": {
+     "low": 2.2,
+     "mid": 3.9,
+     "high": 6.7,
+     "source_pace_median": 5.6,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "week1": {
+     "low": 1.9,
+     "mid": 3.7,
+     "high": 6.1,
+     "source_pace_median": 5.3,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk2-3": {
+     "low": 1.6,
+     "mid": 4.1,
+     "high": 6.1,
+     "source_pace_median": 5.9,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk4-8": {
+     "low": 1.7,
+     "mid": 3.7,
+     "high": 5.7,
+     "source_pace_median": 5.3,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "late": {
+     "low": 2.2,
+     "mid": 3.8,
+     "high": 6.1,
+     "source_pace_median": 5.4,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    }
+   },
+   "div_per_hour_label": "estimate: community drop counts x GGG exchange prices (data-backed) x pace factor; net of inputs",
+   "div_per_hour_by_league": {
+    "Fate of the Vaal": {
+     "d0-2": {
+      "net_div_h_source_pace": 4.81,
+      "gross": 4.92,
+      "exchange_inputs": 0.11,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "week1": {
+      "net_div_h_source_pace": 4.26,
+      "gross": 4.31,
+      "exchange_inputs": 0.05,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 3.56,
+      "gross": 3.59,
+      "exchange_inputs": 0.04,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 3.87,
+      "gross": 3.93,
+      "exchange_inputs": 0.06,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 4.83,
+      "gross": 4.87,
+      "exchange_inputs": 0.04,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Runes of Aldur": {
+     "d0-2": {
+      "net_div_h_source_pace": 6.68,
+      "gross": 7.02,
+      "exchange_inputs": 0.34,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "week1": {
+      "net_div_h_source_pace": 6.15,
+      "gross": 6.3,
+      "exchange_inputs": 0.15,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 6.15,
+      "gross": 6.2,
+      "exchange_inputs": 0.05,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 5.7,
+      "gross": 5.73,
+      "exchange_inputs": 0.03,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 6.06,
+      "gross": 6.09,
+      "exchange_inputs": 0.04,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Forbidden Rites": {
+     "d0-2": {
+      "net_div_h_source_pace": 5.6,
+      "gross": 5.84,
+      "exchange_inputs": 0.24,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "week1": {
+      "net_div_h_source_pace": 5.3,
+      "gross": 5.37,
+      "exchange_inputs": 0.07,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 5.89,
+      "gross": 6.01,
+      "exchange_inputs": 0.12,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 5.34,
+      "gross": 5.41,
+      "exchange_inputs": 0.07,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 5.4,
+      "gross": 5.47,
+      "exchange_inputs": 0.08,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    }
+   },
+   "unpriced_upside": "Rares/uniques to vendor or sell, waystones, tablets (not counted).",
+   "community_claims": [
+    {
+     "value": "0.125-0.5 div/h casual",
+     "who": "official forum / Steam posts",
+     "patch": "0.1",
+     "label": "claim"
+    }
+   ],
+   "meta_history": [
+    {
+     "league": "0.3",
+     "period": "2025-09-30 on",
+     "note": "0.3.1 juice buff (1-3 extra content per map, tablet values ~doubled): map crafting/juicing 10 div/h titles."
+    },
+    {
+     "league": "0.4",
+     "period": "Dec 2025",
+     "note": "Maps stopped scaling pack size with tier."
+    }
+   ],
+   "nerfs": [
+    {
+     "date": "2024-12-09",
+     "patch": "0.1.0c",
+     "what": "Chaos Orb drop rate spread to more valuable currency."
+    },
+    {
+     "date": "2025-05-01",
+     "patch": "0.2.0g",
+     "what": "Buff: ~20-30% more rare currency."
+    },
+    {
+     "date": "2025-09-30",
+     "patch": "0.3.1",
+     "what": "Buff: 1-3 extra content per map; tablet values ~doubled."
+    },
+    {
+     "date": "2026-05-21",
+     "patch": "0.5.0",
+     "what": "Divine Orbs more common; Transmutation/Augmentation significantly rarer."
+    }
+   ],
+   "confidence": "medium",
+   "caveat": null
+  },
+  {
+   "name": "Juiced T15-16 mapping (base currency only)",
+   "mechanic": "Base mapping",
+   "kind": "model",
+   "number_label": "drop-table model (community samples) valued with GGG exchange data",
+   "source_session": {
+    "who": "drop-rates.json (Ronarray 100% rarity; forum T15 20 maps; farmofexile divine rates)",
+    "url": "research/drop-rates.md",
+    "patch": "0.2-0.5.5",
+    "sample": "20-50 maps per setup"
+   },
+   "pace": {
+    "maps_per_hour": 10
+   },
+   "outputs": [
+    {
+     "item": "Exalted Orb",
+     "per_map_or_hour": "110 per hour",
+     "per_map": 11.0,
+     "per_run": null,
+     "source": "research/drop-rates.md",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Divine Orb",
+     "per_map_or_hour": "4.5 per hour",
+     "per_map": 0.45,
+     "per_run": null,
+     "source": "research/drop-rates.md",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Chaos Orb",
+     "per_map_or_hour": "22 per hour",
+     "per_map": 2.2,
+     "per_run": null,
+     "source": "research/drop-rates.md",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Vaal Orb",
+     "per_map_or_hour": "42 per hour",
+     "per_map": 4.2,
+     "per_run": null,
+     "source": "research/drop-rates.md",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Orb of Alchemy",
+     "per_map_or_hour": "28 per hour",
+     "per_map": 2.8,
+     "per_run": null,
+     "source": "research/drop-rates.md",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Orb of Annulment",
+     "per_map_or_hour": "1 per hour",
+     "per_map": 0.1,
+     "per_run": null,
+     "source": "research/drop-rates.md",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Greater Exalted Orb",
+     "per_map_or_hour": "3.5 per hour",
+     "per_map": 0.35,
+     "per_run": null,
+     "source": "research/drop-rates.md",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Perfect Exalted Orb",
+     "per_map_or_hour": "0.5 per hour",
+     "per_map": 0.05,
+     "per_run": null,
+     "source": "research/drop-rates.md",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    }
+   ],
+   "inputs_per_hour": [
+    {
+     "item": "Exalted Orb",
+     "count": 40,
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Omen of Chaotic Rarity",
+     "count": 5,
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Omen of Chaotic Quantity",
+     "count": 5,
+     "priced_by": "GGG Currency Exchange"
+    }
+   ],
+   "investment": "100-150% item rarity on gear; T15 exalted to 6 mods; Chaotic omens. Fixed costs: 0.5-3 div/h (Waystones and the odd tablet; league mechanics are separate strategies.",
+   "requirements": {
+    "dps_min": 500000,
+    "ehp_min": 20000,
+    "notes": "1M+ for heavily juiced maps (timesaver [seller]); capped res.",
+    "label": "estimate (rules of thumb from guides and creator Path of Building snapshots)"
+   },
+   "earliest_phase": "week1",
+   "leagues_used": [
+    "Fate of the Vaal",
+    "Runes of Aldur",
+    "Forbidden Rites"
+   ],
+   "leagues_note": null,
+   "div_per_hour": {
+    "d0-2": null,
+    "week1": {
+     "low": 1.6,
+     "mid": 3.6,
+     "high": 8.0,
+     "source_pace_median": 5.1,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk2-3": {
+     "low": 2.0,
+     "mid": 3.3,
+     "high": 8.3,
+     "source_pace_median": 4.7,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk4-8": {
+     "low": 0.5,
+     "mid": 2.5,
+     "high": 6.2,
+     "source_pace_median": 3.6,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "late": {
+     "low": 1.1,
+     "mid": 2.7,
+     "high": 5.5,
+     "source_pace_median": 3.8,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    }
+   },
+   "div_per_hour_label": "estimate: community drop counts x GGG exchange prices (data-backed) x pace factor; net of inputs",
+   "div_per_hour_by_league": {
+    "Fate of the Vaal": {
+     "week1": {
+      "net_div_h_source_pace": 4.29,
+      "gross": 6.47,
+      "exchange_inputs": 2.18,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 4.99,
+      "gross": 5.85,
+      "exchange_inputs": 0.86,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 5.34,
+      "gross": 5.98,
+      "exchange_inputs": 0.64,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 5.6,
+      "gross": 7.03,
+      "exchange_inputs": 1.43,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Runes of Aldur": {
+     "week1": {
+      "net_div_h_source_pace": 8.41,
+      "gross": 9.75,
+      "exchange_inputs": 1.34,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 8.65,
+      "gross": 9.85,
+      "exchange_inputs": 1.2,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 6.72,
+      "gross": 9.62,
+      "exchange_inputs": 2.9,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 5.51,
+      "gross": 10.02,
+      "exchange_inputs": 4.51,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Forbidden Rites": {
+     "week1": {
+      "net_div_h_source_pace": 5.59,
+      "gross": 8.61,
+      "exchange_inputs": 3.02,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 5.19,
+      "gross": 9.91,
+      "exchange_inputs": 4.72,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 4.16,
+      "gross": 9.01,
+      "exchange_inputs": 4.85,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 5.95,
+      "gross": 9.32,
+      "exchange_inputs": 3.37,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    }
+   },
+   "unpriced_upside": null,
+   "community_claims": [
+    {
+     "value": "6-20 div/h if sustained",
+     "who": "timesaver [seller]",
+     "patch": "0.5.4",
+     "label": "claim"
+    },
+    {
+     "value": "10 div/h map juicing (DEADRABB1T, SaVeQ)",
+     "who": "YouTube titles",
+     "patch": "0.3.1",
+     "label": "claim"
+    }
+   ],
+   "meta_history": [
+    {
+     "league": "0.3",
+     "period": "2025-09-30 on",
+     "note": "0.3.1 juice buff (1-3 extra content per map, tablet values ~doubled): map crafting/juicing 10 div/h titles."
+    },
+    {
+     "league": "0.4",
+     "period": "Dec 2025",
+     "note": "Maps stopped scaling pack size with tier."
+    }
+   ],
+   "nerfs": [
+    {
+     "date": "2024-12-09",
+     "patch": "0.1.0c",
+     "what": "Chaos Orb drop rate spread to more valuable currency."
+    },
+    {
+     "date": "2025-05-01",
+     "patch": "0.2.0g",
+     "what": "Buff: ~20-30% more rare currency."
+    },
+    {
+     "date": "2025-09-30",
+     "patch": "0.3.1",
+     "what": "Buff: 1-3 extra content per map; tablet values ~doubled."
+    },
+    {
+     "date": "2026-05-21",
+     "patch": "0.5.0",
+     "what": "Divine Orbs more common; Transmutation/Augmentation significantly rarer."
+    }
+   ],
+   "confidence": "low",
+   "caveat": "Divine rate per juiced map (0.3-0.6) is from small samples; league mechanic loot comes on top and is what the other strategies measure."
+  },
+  {
+   "name": "Essence farming",
+   "mechanic": "Essences",
+   "kind": "estimate",
+   "number_label": "estimate (no measured source)",
+   "source_session": {
+    "who": "drop-rates.json (0.96-1.2 essences/map in 0.2); 0.5 setup from aoeah [seller]; my estimate of the mix",
+    "url": "https://www.aoeah.com/news/4627",
+    "patch": "0.2 rates, 0.5 setup",
+    "sample": "50 + 20 maps (0.2)"
+   },
+   "pace": {
+    "maps_per_hour": 12
+   },
+   "outputs": [
+    {
+     "item": "Exalted Orb",
+     "per_map_or_hour": "90 per hour",
+     "per_map": 7.5,
+     "per_run": null,
+     "source": "https://www.aoeah.com/news/4627",
+     "label": "estimate",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Divine Orb",
+     "per_map_or_hour": "2.4 per hour",
+     "per_map": 0.2,
+     "per_run": null,
+     "source": "https://www.aoeah.com/news/4627",
+     "label": "estimate",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Chaos Orb",
+     "per_map_or_hour": "12 per hour",
+     "per_map": 1.0,
+     "per_run": null,
+     "source": "https://www.aoeah.com/news/4627",
+     "label": "estimate",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Greater Essence of *",
+     "per_map_or_hour": "30 per hour",
+     "source": "https://www.aoeah.com/news/4627",
+     "label": "estimate",
+     "priced_by": "GGG Currency Exchange (median of matching names)"
+    },
+    {
+     "item": "Perfect Essence of *",
+     "per_map_or_hour": "3 per hour",
+     "source": "https://www.aoeah.com/news/4627",
+     "label": "estimate",
+     "priced_by": "GGG Currency Exchange (median of matching names)"
+    },
+    {
+     "item": "Essence of Hysteria",
+     "per_map_or_hour": "0.4 per hour",
+     "source": "https://www.aoeah.com/news/4627",
+     "label": "estimate",
+     "priced_by": "GGG Currency Exchange (median of matching names)"
+    },
+    {
+     "item": "Essence of Horror",
+     "per_map_or_hour": "0.4 per hour",
+     "source": "https://www.aoeah.com/news/4627",
+     "label": "estimate",
+     "priced_by": "GGG Currency Exchange (median of matching names)"
+    },
+    {
+     "item": "Essence of Delirium",
+     "per_map_or_hour": "0.4 per hour",
+     "source": "https://www.aoeah.com/news/4627",
+     "label": "estimate",
+     "priced_by": "GGG Currency Exchange (median of matching names)"
+    },
+    {
+     "item": "Essence of Insanity",
+     "per_map_or_hour": "0.6 per hour",
+     "source": "https://www.aoeah.com/news/4627",
+     "label": "estimate",
+     "priced_by": "GGG Currency Exchange (median of matching names)"
+    }
+   ],
+   "inputs_per_hour": [
+    {
+     "item": "Vaal Orb",
+     "count": 3,
+     "priced_by": "GGG Currency Exchange"
+    }
+   ],
+   "investment": "Essence atlas cluster (Inexplicable Alchemy: 2 essences per monster), Doryani, Overseer tablet with additional essence. Fixed costs: 1-4 div/h (Essence tablets (3 per map for strong characters).",
+   "requirements": {
+    "dps_min": 300000,
+    "ehp_min": 15000,
+    "notes": "\"No expensive gear\", decent damage and speed.",
+    "label": "estimate (rules of thumb from guides and creator Path of Building snapshots)"
+   },
+   "earliest_phase": "d0-2",
+   "leagues_used": [
+    "Fate of the Vaal",
+    "Runes of Aldur",
+    "Forbidden Rites"
+   ],
+   "leagues_note": null,
+   "div_per_hour": {
+    "d0-2": {
+     "low": 1.4,
+     "mid": 2.8,
+     "high": 5.0,
+     "source_pace_median": 4.1,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "week1": {
+     "low": 1.3,
+     "mid": 2.6,
+     "high": 4.0,
+     "source_pace_median": 3.7,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk2-3": {
+     "low": 1.1,
+     "mid": 2.5,
+     "high": 4.4,
+     "source_pace_median": 3.6,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk4-8": {
+     "low": 0.3,
+     "mid": 1.5,
+     "high": 10.1,
+     "source_pace_median": 2.2,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "late": {
+     "low": 0.4,
+     "mid": 2.1,
+     "high": 18.4,
+     "source_pace_median": 3.0,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    }
+   },
+   "div_per_hour_label": "estimate: community drop counts x GGG exchange prices (data-backed) x pace factor; net of inputs",
+   "div_per_hour_by_league": {
+    "Fate of the Vaal": {
+     "d0-2": {
+      "net_div_h_source_pace": 4.36,
+      "gross": 4.37,
+      "exchange_inputs": 0.01,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "week1": {
+      "net_div_h_source_pace": 4.09,
+      "gross": 4.09,
+      "exchange_inputs": 0.01,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 3.71,
+      "gross": 3.72,
+      "exchange_inputs": 0.01,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 11.08,
+      "gross": 11.1,
+      "exchange_inputs": 0.02,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 19.36,
+      "gross": 19.43,
+      "exchange_inputs": 0.07,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Runes of Aldur": {
+     "d0-2": {
+      "net_div_h_source_pace": 5.79,
+      "gross": 5.83,
+      "exchange_inputs": 0.04,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "week1": {
+      "net_div_h_source_pace": 4.78,
+      "gross": 4.83,
+      "exchange_inputs": 0.05,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 4.61,
+      "gross": 4.67,
+      "exchange_inputs": 0.06,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 4.62,
+      "gross": 4.65,
+      "exchange_inputs": 0.03,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 4.9,
+      "gross": 4.96,
+      "exchange_inputs": 0.05,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Forbidden Rites": {
+     "d0-2": {
+      "net_div_h_source_pace": 5.1,
+      "gross": 5.11,
+      "exchange_inputs": 0.02,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "week1": {
+      "net_div_h_source_pace": 4.76,
+      "gross": 4.79,
+      "exchange_inputs": 0.02,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 5.2,
+      "gross": 5.24,
+      "exchange_inputs": 0.04,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 4.68,
+      "gross": 4.72,
+      "exchange_inputs": 0.05,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 5.52,
+      "gross": 5.57,
+      "exchange_inputs": 0.05,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    }
+   },
+   "unpriced_upside": null,
+   "community_claims": [
+    {
+     "value": "4-5 div/h ceiling (corruption setups)",
+     "who": "timesaver [seller]",
+     "patch": "0.5.4",
+     "label": "claim"
+    },
+    {
+     "value": "4+ div/h (Allie), 4-7 (SnooBAE85)",
+     "who": "YouTube titles",
+     "patch": "0.1-0.3",
+     "label": "claim"
+    }
+   ],
+   "meta_history": [
+    {
+     "league": "0.1-0.3",
+     "period": "2025",
+     "note": "Steady low farm, 4-7 div/h titles; 0.2.1 massively raised corruption upgrade chance."
+    },
+    {
+     "league": "0.5",
+     "period": "May 2026",
+     "note": "Base spawn chance lowered (atlas tree gives more); one essence mod per item."
+    }
+   ],
+   "nerfs": [
+    {
+     "date": "2025-06-05",
+     "patch": "0.2.1",
+     "what": "Buff: Greater-upgrade chance on corruption massively increased."
+    },
+    {
+     "date": "2026-05-21",
+     "patch": "0.5.0",
+     "what": "Lower base spawn chance for Essences, Strongboxes, Rogue Exiles (atlas gives more)."
+    }
+   ],
+   "confidence": "low",
+   "caveat": null
+  },
+  {
+   "name": "Trial of Chaos (0.5.5 rework, 30 rooms)",
+   "mechanic": "Ultimatum / Trial of Chaos",
+   "kind": "claim",
+   "number_label": "community claim ranges (no counts), discounted for pace",
+   "source_session": {
+    "who": "mmoexp 50-run log [seller]; aoeah run guide [seller]; official 0.5.5 notes",
+    "url": "https://www.aoeah.com/news/4783--poe-2-055-trial-of-chaos-guide-best-mods-drops--farm-strategy",
+    "patch": "0.5.5",
+    "sample": "50 runs (seller)"
+   },
+   "pace": {
+    "runs_per_hour": 2
+   },
+   "outputs": [
+    {
+     "item": "Victorious Fate",
+     "per_map_or_hour": "0.7 per hour",
+     "per_map": null,
+     "per_run": 0.35,
+     "source": "https://www.aoeah.com/news/4783--poe-2-055-trial-of-chaos-guide-best-mods-drops--farm-strategy",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Deadly Fate",
+     "per_map_or_hour": "0.7 per hour",
+     "per_map": null,
+     "per_run": 0.35,
+     "source": "https://www.aoeah.com/news/4783--poe-2-055-trial-of-chaos-guide-best-mods-drops--farm-strategy",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Cowardly Fate",
+     "per_map_or_hour": "0.7 per hour",
+     "per_map": null,
+     "per_run": 0.35,
+     "source": "https://www.aoeah.com/news/4783--poe-2-055-trial-of-chaos-guide-best-mods-drops--farm-strategy",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Soul Core of Tacati",
+     "per_map_or_hour": "2 per hour",
+     "per_map": null,
+     "per_run": 1.0,
+     "source": "https://www.aoeah.com/news/4783--poe-2-055-trial-of-chaos-guide-best-mods-drops--farm-strategy",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Soul Core of Zalatl",
+     "per_map_or_hour": "2 per hour",
+     "per_map": null,
+     "per_run": 1.0,
+     "source": "https://www.aoeah.com/news/4783--poe-2-055-trial-of-chaos-guide-best-mods-drops--farm-strategy",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "The Adorned",
+     "per_map_or_hour": "0.04 per hour",
+     "source": "https://www.aoeah.com/news/4783--poe-2-055-trial-of-chaos-guide-best-mods-drops--farm-strategy",
+     "label": "community claim (single lucky drop, high scenario only)",
+     "priced_by": "not on the exchange: 500-730 div (farmofexile: when recorded / late Forbidden Rites)"
+    },
+    {
+     "item": "mixed currency (Divine-equivalent)",
+     "per_map_or_hour": "10-40 div per hour",
+     "source": "https://www.aoeah.com/news/4783--poe-2-055-trial-of-chaos-guide-best-mods-drops--farm-strategy",
+     "label": "community claim",
+     "priced_by": "as claimed; flat across phases"
+    }
+   ],
+   "inputs_per_hour": [],
+   "investment": "Almost none (Ultimatums 3-5 ex). Fixed costs: 0.05-0.3 div/h (Inscribed Ultimatums 3-5 ex.",
+   "requirements": {
+    "dps_min": 1000000,
+    "ehp_min": 30000,
+    "notes": "30 rooms: 30k+ EHP, capped res, level 90; Trialmaster ~50M HP; skip Enraged Bosses unless bosses die in <5 s; Reduced Recovery ends flask/regen builds (aoeah [seller]).",
+    "label": "estimate (rules of thumb from guides and creator Path of Building snapshots)"
+   },
+   "earliest_phase": "week1",
+   "leagues_used": [
+    "Fate of the Vaal",
+    "Runes of Aldur",
+    "Forbidden Rites"
+   ],
+   "leagues_note": null,
+   "div_per_hour": {
+    "d0-2": null,
+    "week1": {
+     "low": 4.9,
+     "mid": 18.3,
+     "high": 71.7,
+     "source_pace_median": 26.2,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk2-3": {
+     "low": 5.0,
+     "mid": 20.3,
+     "high": 73.4,
+     "source_pace_median": 29.0,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "wk4-8": {
+     "low": 10.3,
+     "mid": 27.0,
+     "high": 84.7,
+     "source_pace_median": 38.6,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "late": {
+     "low": 10.3,
+     "mid": 30.3,
+     "high": 112.8,
+     "source_pace_median": 43.2,
+     "leagues_priced": [
+      "Fate",
+      "Runes",
+      "Forbidden"
+     ]
+    }
+   },
+   "div_per_hour_label": "estimate: community drop counts x GGG exchange prices (data-backed) x pace factor; net of inputs",
+   "div_per_hour_by_league": {
+    "Fate of the Vaal": {
+     "week1": {
+      "net_div_h_source_pace": 0.95,
+      "gross": 0.95,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 1.12,
+      "gross": 1.12,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 15.53,
+      "gross": 15.53,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 43.61,
+      "gross": 43.61,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Runes of Aldur": {
+     "week1": {
+      "net_div_h_source_pace": 2.55,
+      "gross": 2.55,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 4.28,
+      "gross": 4.28,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 13.74,
+      "gross": 13.74,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 13.22,
+      "gross": 13.22,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Forbidden Rites": {
+     "week1": {
+      "net_div_h_source_pace": 1.23,
+      "gross": 1.23,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 4.02,
+      "gross": 4.02,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 13.08,
+      "gross": 13.08,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 18.42,
+      "gross": 18.42,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    }
+   },
+   "unpriced_upside": null,
+   "community_claims": [
+    {
+     "value": "~12.6 div/run, ~48 div/h before the jackpot; The Adorned 729 div on run 40",
+     "who": "mmoexp [seller]",
+     "patch": "0.5.5",
+     "label": "claim"
+    },
+    {
+     "value": "32-45 div/h (4-5 runs/h)",
+     "who": "timesaver [seller]",
+     "patch": "0.5.5",
+     "label": "claim"
+    },
+    {
+     "value": "10-15 div/h",
+     "who": "seller guide (search snippet)",
+     "patch": "0.5.5",
+     "label": "claim"
+    },
+    {
+     "value": "1000 divines (Fridgely title)",
+     "who": "YouTube title",
+     "patch": "0.5.5",
+     "label": "claim"
+    }
+   ],
+   "meta_history": [
+    {
+     "league": "0.3",
+     "period": "Aug 2025",
+     "note": "More Vaal Orbs moved into the Trial of Chaos."
+    },
+    {
+     "league": "0.5.5",
+     "period": "Sep 2026 on",
+     "note": "Rework: 30 rooms, rewards currency + Soul Cores only; seller guides rank it #1 for endgame-ready builds; Wager of Chaos bug fixed 0.5.5c."
+    }
+   ],
+   "nerfs": [
+    {
+     "date": "2025-08-20",
+     "patch": "0.3.0",
+     "what": "More Vaal Orbs found in the Trial of Chaos."
+    },
+    {
+     "date": "2026-09-02",
+     "patch": "0.5.5",
+     "what": "Rewards only currency and Soul Cores; corrupted items removed; 30-room runs."
+    },
+    {
+     "date": "2026-09-17",
+     "patch": "0.5.5c",
+     "what": "Wager of Chaos now +2 (was bugged at +1)."
+    }
+   ],
+   "confidence": "low",
+   "caveat": null
+  },
+  {
+   "name": "Trial of the Sekhemas (relics, barya, carries)",
+   "mechanic": "Sekhemas",
+   "kind": "claim",
+   "number_label": "community claim ranges (no counts), discounted for pace",
+   "source_session": {
+    "who": "EmpyrianGaming 20 runs (kami-labs write-up, 0.1)",
+    "url": "https://kami-labs.fr/",
+    "patch": "0.1",
+    "sample": "20 runs"
+   },
+   "pace": {
+    "runs_per_hour": 2
+   },
+   "outputs": [
+    {
+     "item": "mixed currency (Divine-equivalent)",
+     "per_map_or_hour": "3-8 div per hour",
+     "source": "https://kami-labs.fr/",
+     "label": "community claim",
+     "priced_by": "as claimed; flat across phases"
+    }
+   ],
+   "inputs_per_hour": [],
+   "investment": "Relic set with 75% honour resistance (budget <2 div); Barya. Fixed costs: 0-1 div/h",
+   "requirements": {
+    "dps_min": 300000,
+    "ehp_min": 10000,
+    "notes": "75% honour resistance from relics; ~40% movement speed for carries. Runic Ward adds to starting honour (0.5.0+).",
+    "label": "estimate (rules of thumb from guides and creator Path of Building snapshots)"
+   },
+   "earliest_phase": "d0-2",
+   "leagues_used": [
+    "Fate of the Vaal",
+    "Runes of Aldur",
+    "Forbidden Rites"
+   ],
+   "leagues_note": null,
+   "div_per_hour": {
+    "d0-2": {
+     "low": 1.4,
+     "mid": 3.8,
+     "high": 8.0,
+     "source_pace_median": 5.5,
+     "leagues_priced": []
+    },
+    "week1": {
+     "low": 1.4,
+     "mid": 3.8,
+     "high": 8.0,
+     "source_pace_median": 5.5,
+     "leagues_priced": []
+    },
+    "wk2-3": {
+     "low": 1.4,
+     "mid": 3.8,
+     "high": 8.0,
+     "source_pace_median": 5.5,
+     "leagues_priced": []
+    },
+    "wk4-8": {
+     "low": 0.9,
+     "mid": 3.5,
+     "high": 8.0,
+     "source_pace_median": 5.0,
+     "leagues_priced": []
+    },
+    "late": {
+     "low": 0.9,
+     "mid": 3.5,
+     "high": 8.0,
+     "source_pace_median": 5.0,
+     "leagues_priced": []
+    }
+   },
+   "div_per_hour_label": "estimate: community drop counts x GGG exchange prices (data-backed) x pace factor; net of inputs",
+   "div_per_hour_by_league": {
+    "Fate of the Vaal": {
+     "d0-2": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "week1": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Runes of Aldur": {
+     "d0-2": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "week1": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Forbidden Rites": {
+     "d0-2": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "week1": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    }
+   },
+   "unpriced_upside": null,
+   "community_claims": [
+    {
+     "value": "2.6 div/run (no carries), 3.4 with carries",
+     "who": "EmpyrianGaming, 20 runs",
+     "patch": "0.1",
+     "label": "claim"
+    },
+    {
+     "value": "up to 8 div/h (Allie 0.1), 10-15 (SnooBAE85 0.3)",
+     "who": "YouTube titles",
+     "patch": "0.1-0.3",
+     "label": "claim"
+    },
+    {
+     "value": "1-2 div/h of value at 2 runs/h",
+     "who": "mmogah [seller]",
+     "patch": "0.5",
+     "label": "claim"
+    }
+   ],
+   "meta_history": [
+    {
+     "league": "0.1",
+     "period": "Dec 2024 - 2025-01-02",
+     "note": "Desperate Alliance merchant strat, up to 8 div/h; instance-manager exploit closed 0.1.0e HF5."
+    },
+    {
+     "league": "0.2-0.3",
+     "period": "2025",
+     "note": "Currency chests buffed 0.2.0g; 10-15 div/h titles in 0.3."
+    }
+   ],
+   "nerfs": [
+    {
+     "date": "2025-01-02",
+     "patch": "0.1.0e HF5",
+     "what": "Instance manager can no longer create multiple Trial instances."
+    },
+    {
+     "date": "2025-05-01",
+     "patch": "0.2.0g",
+     "what": "Buff: Sekhemas currency chests."
+    }
+   ],
+   "confidence": "low",
+   "caveat": null
+  },
+  {
+   "name": "Vaal temple + Atziri farming",
+   "mechanic": "Vaal temple (Incursion-like)",
+   "kind": "claim",
+   "number_label": "community claim ranges (no counts), discounted for pace",
+   "source_session": {
+    "who": "Maxroll 0.5.5 guide (no rates); aoeah 0.5 [seller]; YouTube titles",
+    "url": "https://maxroll.gg/poe2/currency/vaal-temple-atziri-farming",
+    "patch": "0.5-0.5.5",
+    "sample": "none stated"
+   },
+   "pace": {},
+   "outputs": [
+    {
+     "item": "Kamasa's Orb of Sacrifice",
+     "per_map_or_hour": "0.3 per hour",
+     "per_map": null,
+     "per_run": null,
+     "source": "https://maxroll.gg/poe2/currency/vaal-temple-atziri-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Kopec's Orb of Sacrifice",
+     "per_map_or_hour": "0.3 per hour",
+     "per_map": null,
+     "per_run": null,
+     "source": "https://maxroll.gg/poe2/currency/vaal-temple-atziri-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "Architect's Orb",
+     "per_map_or_hour": "0.3 per hour",
+     "per_map": null,
+     "per_run": null,
+     "source": "https://maxroll.gg/poe2/currency/vaal-temple-atziri-farming",
+     "label": "community claim",
+     "priced_by": "GGG Currency Exchange"
+    },
+    {
+     "item": "mixed currency (Divine-equivalent)",
+     "per_map_or_hour": "3-15 div per hour",
+     "source": "https://maxroll.gg/poe2/currency/vaal-temple-atziri-farming",
+     "label": "community claim",
+     "priced_by": "as claimed; flat across phases"
+    }
+   ],
+   "inputs_per_hour": [],
+   "investment": "3 Temple tablets, T15 waystones exalted to 6 mods for Energised Crystals, Jado; ~80 runs to build a good layout (0.5). Fixed costs: 0-2 div/h",
+   "requirements": {
+    "dps_min": 600000,
+    "ehp_min": 20000,
+    "notes": "Architect at area level 75+; 100-150% rarity gear. No numeric thresholds published.",
+    "label": "estimate (rules of thumb from guides and creator Path of Building snapshots)"
+   },
+   "earliest_phase": "week1",
+   "leagues_used": [
+    "Fate of the Vaal",
+    "Runes of Aldur",
+    "Forbidden Rites"
+   ],
+   "leagues_note": null,
+   "div_per_hour": {
+    "d0-2": null,
+    "week1": {
+     "low": 1.5,
+     "mid": 6.5,
+     "high": 15.3,
+     "source_pace_median": 9.3,
+     "leagues_priced": [
+      "Forbidden"
+     ]
+    },
+    "wk2-3": {
+     "low": 1.7,
+     "mid": 6.8,
+     "high": 15.7,
+     "source_pace_median": 9.7,
+     "leagues_priced": [
+      "Forbidden"
+     ]
+    },
+    "wk4-8": {
+     "low": 0.9,
+     "mid": 6.6,
+     "high": 16.9,
+     "source_pace_median": 9.4,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    },
+    "late": {
+     "low": 1.0,
+     "mid": 7.4,
+     "high": 18.8,
+     "source_pace_median": 10.5,
+     "leagues_priced": [
+      "Runes",
+      "Forbidden"
+     ]
+    }
+   },
+   "div_per_hour_label": "estimate: community drop counts x GGG exchange prices (data-backed) x pace factor; net of inputs",
+   "div_per_hour_by_league": {
+    "Forbidden Rites": {
+     "week1": {
+      "net_div_h_source_pace": 0.3,
+      "gross": 0.3,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 0.72,
+      "gross": 0.72,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 1.92,
+      "gross": 1.92,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 3.82,
+      "gross": 3.82,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Runes of Aldur": {
+     "wk4-8": {
+      "net_div_h_source_pace": 0.96,
+      "gross": 0.96,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 1.24,
+      "gross": 1.24,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    }
+   },
+   "unpriced_upside": null,
+   "community_claims": [
+    {
+     "value": "400-800 div/h (SnooBAE85), 100+ (Fubgun)",
+     "who": "YouTube titles",
+     "patch": "0.4 before 2026-01-02",
+     "label": "claim"
+    },
+    {
+     "value": "\"hundreds\" per run before 0.4.0c HF13, ~20 per run after",
+     "who": "PCGamesN / finalboss.io",
+     "patch": "0.4",
+     "label": "claim"
+    },
+    {
+     "value": "10-15 div per temple",
+     "who": "Gamepressure",
+     "patch": "0.4",
+     "label": "claim"
+    },
+    {
+     "value": "4-5 div per Atziri, a kill every 2nd run; 5-10 div per snake run (pre-0.5.0)",
+     "who": "aoeah [seller], josiahyeet title",
+     "patch": "0.5",
+     "label": "claim"
+    },
+    {
+     "value": "3-8 div/h",
+     "who": "timesaver [seller]",
+     "patch": "0.5.4",
+     "label": "claim"
+    },
+    {
+     "value": "100-120 div/h juiced temple (LilBotQ), 100+ (OnesInTheChat)",
+     "who": "YouTube titles",
+     "patch": "0.5.5",
+     "label": "claim"
+    }
+   ],
+   "meta_history": [
+    {
+     "league": "0.4 Fate of the Vaal",
+     "period": "2025-12-12 to 2026-01-02",
+     "note": "The biggest money farm PoE 2 has had: snake layouts, \"hundreds\" of div per run, 400-800 div/h titles; gear doubled in price overnight. Main nerf 0.4.0c HF13 (diminishing returns at 4+ rooms of a type)."
+    },
+    {
+     "league": "0.5 Runes of Aldur",
+     "period": "2026-05-29 to 2026-06-02",
+     "note": "Snake removed at launch; room stacking (every pack rare) nerfed 0.5.0b HF13 within 4 days; Medallion removed from maps 0.5.1 HF8."
+    },
+    {
+     "league": "0.5.5",
+     "period": "Sep-Nov 2026",
+     "note": "Juiced temple runs 100-120 div/h titles; no new nerf found in 0.5.5 notes."
+    }
+   ],
+   "nerfs": [
+    {
+     "date": "2025-12-18",
+     "patch": "0.4.0c",
+     "what": "Buff: half the rooms destabilised after the Architect; room modifiers ~doubled."
+    },
+    {
+     "date": "2025-12-30",
+     "patch": "0.4.0c HF12",
+     "what": "Holten Vaal Beacon crystal exploit disabled; more crystals from maps."
+    },
+    {
+     "date": "2026-01-02",
+     "patch": "0.4.0c HF13",
+     "what": "Diminishing returns at 4+ rooms of a type; Medallion Tier III only (reverted HF15 01-04)."
+    },
+    {
+     "date": "2026-05-21",
+     "patch": "0.5.0",
+     "what": "Rooms can no longer be kept from deletion (snake strategy gone); monster effectiveness quantity bonus halved."
+    },
+    {
+     "date": "2026-06-02",
+     "patch": "0.5.0b HF13",
+     "what": "Hidden magic/rare chance modifier removed (every pack rare); tier 3/4 bonuses cut."
+    },
+    {
+     "date": "2026-06-08",
+     "patch": "0.5.1 HF8",
+     "what": "Juatalotli's Medallion removed from everywhere but the Architect and Atziri."
+    },
+    {
+     "date": "2026-06-18",
+     "patch": "0.5.3",
+     "what": "Offerings to the Queen lost extra Temple currency in maps."
+    }
+   ],
+   "confidence": "low",
+   "caveat": "GGG has nerfed the temple within days every time it out-earned the rest (0.4.0c HF13, 0.5.0 snake removal, 0.5.0b HF13)."
+  },
+  {
+   "name": "Strongbox farming (Azmeri spirit strongbox stacking)",
+   "mechanic": "Strongboxes",
+   "kind": "claim",
+   "number_label": "community claim ranges (no counts), discounted for pace",
+   "source_session": {
+    "who": "mmoexp [seller]; KingPinUwU \"(Nerfed)\" title",
+    "url": "https://www.poebuilds.cc/poe2/farming",
+    "patch": "0.5.5",
+    "sample": "none"
+   },
+   "pace": {},
+   "outputs": [
+    {
+     "item": "mixed currency (Divine-equivalent)",
+     "per_map_or_hour": "5-25 div per hour",
+     "source": "https://www.poebuilds.cc/poe2/farming",
+     "label": "community claim",
+     "priced_by": "as claimed; flat across phases"
+    }
+   ],
+   "inputs_per_hour": [],
+   "investment": "3 Expedition tablets + Overseer, city/grass biome, Otus nodes; ~10 div prep per map (seller). Fixed costs: 3-10 div/h (Expedition + Overseer tablets (~10 div prep per map pre-nerf per seller). Gross range is my post-nerf guess.",
+   "requirements": {
+    "dps_min": 1500000,
+    "ehp_min": 45000,
+    "notes": "Creator snapshots: 1.5M DPS / 45k EHP (KingPinUwU), 3M / 65k (AlanStriker).",
+    "label": "estimate (rules of thumb from guides and creator Path of Building snapshots)"
+   },
+   "earliest_phase": "week1",
+   "leagues_used": [
+    "Fate of the Vaal",
+    "Runes of Aldur",
+    "Forbidden Rites"
+   ],
+   "leagues_note": null,
+   "div_per_hour": {
+    "d0-2": null,
+    "week1": {
+     "low": 0.6,
+     "mid": 8.3,
+     "high": 22.6,
+     "source_pace_median": 11.9,
+     "leagues_priced": []
+    },
+    "wk2-3": {
+     "low": 0.6,
+     "mid": 8.3,
+     "high": 22.6,
+     "source_pace_median": 11.9,
+     "leagues_priced": []
+    },
+    "wk4-8": {
+     "low": -2.2,
+     "mid": 5.9,
+     "high": 22.0,
+     "source_pace_median": 8.5,
+     "leagues_priced": []
+    },
+    "late": {
+     "low": -2.2,
+     "mid": 5.9,
+     "high": 22.0,
+     "source_pace_median": 8.5,
+     "leagues_priced": []
+    }
+   },
+   "div_per_hour_label": "estimate: community drop counts x GGG exchange prices (data-backed) x pace factor; net of inputs",
+   "div_per_hour_by_league": {
+    "Fate of the Vaal": {
+     "week1": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Runes of Aldur": {
+     "week1": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Forbidden Rites": {
+     "week1": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    }
+   },
+   "unpriced_upside": null,
+   "community_claims": [
+    {
+     "value": "\"50+ raw div\" test maps, \"200 currency per map\"",
+     "who": "mmoexp [seller]",
+     "patch": "0.5.5 before the ~2026-09-20 nerf",
+     "label": "claim"
+    }
+   ],
+   "meta_history": [
+    {
+     "league": "0.5.5",
+     "period": "2026-09-04 to ~09-20",
+     "note": "Azmeri spirit strongbox stacking (\"most broken strat\", Phalanx title); nerfed ~Sep 20 (KingPinUwU \"(Nerfed)\")."
+    }
+   ],
+   "nerfs": [
+    {
+     "date": "2025-01-16",
+     "patch": "0.1.1",
+     "what": "Buff: Research strongboxes much more common."
+    },
+    {
+     "date": "2026-09-27",
+     "patch": "0.5.5d",
+     "what": "Cryptic Keys on Buried Strongboxes in Expeditions: fixed."
+    },
+    {
+     "date": "~2026-09-20",
+     "patch": "0.5.5 hotfix (not identified)",
+     "what": "Azmeri spirit strongbox farm reported nerfed (creator title); line not found in notes."
+    }
+   ],
+   "confidence": "low",
+   "caveat": null
+  },
+  {
+   "name": "Rogue exile farming",
+   "mechanic": "Rogue exiles",
+   "kind": "estimate",
+   "number_label": "estimate (no measured source)",
+   "source_session": {
+    "who": "no measured source; tablet prices from seller snippets",
+    "url": "https://www.mtmmo.com/news/2324--poe-2-055-forbidden-rites-best-currency-farm-strats-atlas--offatlas",
+    "patch": "0.5-0.5.5",
+    "sample": "none"
+   },
+   "pace": {},
+   "outputs": [
+    {
+     "item": "mixed currency (Divine-equivalent)",
+     "per_map_or_hour": "2-8 div per hour",
+     "source": "https://www.mtmmo.com/news/2324--poe-2-055-forbidden-rites-best-currency-farm-strats-atlas--offatlas",
+     "label": "estimate",
+     "priced_by": "as claimed; flat across phases"
+    }
+   ],
+   "inputs_per_hour": [],
+   "investment": "Rogue Exile tablets (2-3 div each), Chosen Path, Hilda (45% extra exile per territory). Fixed costs: 1-4 div/h (Rogue Exile tablets 2-3 div each, a few uses.",
+   "requirements": {
+    "dps_min": 500000,
+    "ehp_min": 20000,
+    "notes": "Exiles hit hard; 0.5.3 removed their corrupted-item drops.",
+    "label": "estimate (rules of thumb from guides and creator Path of Building snapshots)"
+   },
+   "earliest_phase": "week1",
+   "leagues_used": [
+    "Fate of the Vaal",
+    "Runes of Aldur",
+    "Forbidden Rites"
+   ],
+   "leagues_note": null,
+   "div_per_hour": {
+    "d0-2": null,
+    "week1": {
+     "low": 0.3,
+     "mid": 2.8,
+     "high": 7.2,
+     "source_pace_median": 4.0,
+     "leagues_priced": []
+    },
+    "wk2-3": {
+     "low": 0.3,
+     "mid": 2.8,
+     "high": 7.2,
+     "source_pace_median": 4.0,
+     "leagues_priced": []
+    },
+    "wk4-8": {
+     "low": -0.9,
+     "mid": 1.8,
+     "high": 7.0,
+     "source_pace_median": 2.5,
+     "leagues_priced": []
+    },
+    "late": {
+     "low": -0.9,
+     "mid": 1.8,
+     "high": 7.0,
+     "source_pace_median": 2.5,
+     "leagues_priced": []
+    }
+   },
+   "div_per_hour_label": "estimate: community drop counts x GGG exchange prices (data-backed) x pace factor; net of inputs",
+   "div_per_hour_by_league": {
+    "Fate of the Vaal": {
+     "week1": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Runes of Aldur": {
+     "week1": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Forbidden Rites": {
+     "week1": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    }
+   },
+   "unpriced_upside": null,
+   "community_claims": [
+    {
+     "value": "6-9 div/h Lichborne exiles (SnooBAE85)",
+     "who": "YouTube title",
+     "patch": "0.4",
+     "label": "claim"
+    }
+   ],
+   "meta_history": [],
+   "nerfs": [
+    {
+     "date": "2026-06-18",
+     "patch": "0.5.3",
+     "what": "Rogue Exiles no longer drop corrupted items."
+    }
+   ],
+   "confidence": "low",
+   "caveat": null
+  },
+  {
+   "name": "Crafting for profit",
+   "mechanic": "Crafting",
+   "kind": "estimate",
+   "number_label": "estimate (no measured source)",
+   "source_session": {
+    "who": "seller guides only (no measured margins)",
+    "url": "https://www.mtmmo.com/news/2324--poe-2-055-forbidden-rites-best-currency-farm-strats-atlas--offatlas",
+    "patch": "0.5-0.5.5",
+    "sample": "none"
+   },
+   "pace": {},
+   "outputs": [
+    {
+     "item": "mixed currency (Divine-equivalent)",
+     "per_map_or_hour": "0-15 div per hour",
+     "source": "https://www.mtmmo.com/news/2324--poe-2-055-forbidden-rites-best-currency-farm-strats-atlas--offatlas",
+     "label": "estimate",
+     "priced_by": "as claimed; flat across phases"
+    }
+   ],
+   "inputs_per_hour": [],
+   "investment": "20-75 div working capital; knowledge of the current craft meta.",
+   "requirements": {
+    "dps_min": 0,
+    "ehp_min": 0,
+    "notes": "No character needed; needs trade knowledge and the overlay for price checks.",
+    "label": "estimate (rules of thumb from guides and creator Path of Building snapshots)"
+   },
+   "earliest_phase": "week1",
+   "leagues_used": [
+    "Fate of the Vaal",
+    "Runes of Aldur",
+    "Forbidden Rites"
+   ],
+   "leagues_note": null,
+   "div_per_hour": {
+    "d0-2": null,
+    "week1": {
+     "low": 0.0,
+     "mid": 5.2,
+     "high": 15.0,
+     "source_pace_median": 7.5,
+     "leagues_priced": []
+    },
+    "wk2-3": {
+     "low": 0.0,
+     "mid": 5.2,
+     "high": 15.0,
+     "source_pace_median": 7.5,
+     "leagues_priced": []
+    },
+    "wk4-8": {
+     "low": 0.0,
+     "mid": 5.2,
+     "high": 15.0,
+     "source_pace_median": 7.5,
+     "leagues_priced": []
+    },
+    "late": {
+     "low": 0.0,
+     "mid": 5.2,
+     "high": 15.0,
+     "source_pace_median": 7.5,
+     "leagues_priced": []
+    }
+   },
+   "div_per_hour_label": "estimate: community drop counts x GGG exchange prices (data-backed) x pace factor; net of inputs",
+   "div_per_hour_by_league": {
+    "Fate of the Vaal": {
+     "week1": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Runes of Aldur": {
+     "week1": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Forbidden Rites": {
+     "week1": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    }
+   },
+   "unpriced_upside": null,
+   "community_claims": [
+    {
+     "value": "100-300 div daily (Heart of the Well)",
+     "who": "mmoexp / poecurrency [seller]",
+     "patch": "0.5-0.5.5",
+     "label": "claim"
+    },
+    {
+     "value": "~5 div per 3-ring Taming craft",
+     "who": "mtmmo [seller]",
+     "patch": "0.5.5",
+     "label": "claim"
+    },
+    {
+     "value": "500+ div a day crafting tablets",
+     "who": "Empyriangaming title",
+     "patch": "0.5",
+     "label": "claim"
+    }
+   ],
+   "meta_history": [],
+   "nerfs": [],
+   "confidence": "low",
+   "caveat": null
+  },
+  {
+   "name": "Currency Exchange flipping (gold-fee arbitrage)",
+   "mechanic": "Trading",
+   "kind": "estimate",
+   "number_label": "estimate (no measured source)",
+   "source_session": {
+    "who": "Maxroll flipping guide (0.2 worked examples); exchange hourly low/high spread from GGG data",
+    "url": "https://maxroll.gg/poe2/resources/flipping-with-the-currency-exchange",
+    "patch": "0.2-0.5.5",
+    "sample": "worked examples"
+   },
+   "pace": {},
+   "outputs": [
+    {
+     "item": "mixed currency (Divine-equivalent)",
+     "per_map_or_hour": "0.2-4 div per hour",
+     "source": "https://maxroll.gg/poe2/resources/flipping-with-the-currency-exchange",
+     "label": "estimate",
+     "priced_by": "as claimed; flat across phases"
+    }
+   ],
+   "inputs_per_hour": [],
+   "investment": "Working capital + gold for fees (~800 gold per Divine requested, 120 per Ex: poe2wiki snippet).",
+   "requirements": {
+    "dps_min": 0,
+    "ehp_min": 0,
+    "notes": "Can run alongside farming; best in weeks 1-4 when the exchange is most liquid.",
+    "label": "estimate (rules of thumb from guides and creator Path of Building snapshots)"
+   },
+   "earliest_phase": "d0-2",
+   "leagues_used": [
+    "Fate of the Vaal",
+    "Runes of Aldur",
+    "Forbidden Rites"
+   ],
+   "leagues_note": null,
+   "div_per_hour": {
+    "d0-2": {
+     "low": 0.1,
+     "mid": 1.5,
+     "high": 4.0,
+     "source_pace_median": 2.1,
+     "leagues_priced": []
+    },
+    "week1": {
+     "low": 0.1,
+     "mid": 1.5,
+     "high": 4.0,
+     "source_pace_median": 2.1,
+     "leagues_priced": []
+    },
+    "wk2-3": {
+     "low": 0.1,
+     "mid": 1.5,
+     "high": 4.0,
+     "source_pace_median": 2.1,
+     "leagues_priced": []
+    },
+    "wk4-8": {
+     "low": 0.1,
+     "mid": 1.5,
+     "high": 4.0,
+     "source_pace_median": 2.1,
+     "leagues_priced": []
+    },
+    "late": {
+     "low": 0.1,
+     "mid": 1.5,
+     "high": 4.0,
+     "source_pace_median": 2.1,
+     "leagues_priced": []
+    }
+   },
+   "div_per_hour_label": "estimate: community drop counts x GGG exchange prices (data-backed) x pace factor; net of inputs",
+   "div_per_hour_by_league": {
+    "Fate of the Vaal": {
+     "d0-2": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "week1": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Runes of Aldur": {
+     "d0-2": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "week1": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    },
+    "Forbidden Rites": {
+     "d0-2": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "week1": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk2-3": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "wk4-8": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     },
+     "late": {
+      "net_div_h_source_pace": 0.0,
+      "gross": 0.0,
+      "exchange_inputs": 0.0,
+      "coverage": 1.0,
+      "unpriced": []
+     }
+    }
+   },
+   "unpriced_upside": null,
+   "community_claims": [
+    {
+     "value": "~1 Ex profit per 6 Ex traded per catalyst flip; 3-currency loops ~2x",
+     "who": "Maxroll",
+     "patch": "0.2",
+     "label": "claim"
+    },
+    {
+     "value": "\"only marginally profitable, mainly at league start\"",
+     "who": "switchbladegaming",
+     "patch": "0.5.4",
+     "label": "claim"
+    }
+   ],
+   "meta_history": [],
+   "nerfs": [],
+   "confidence": "low",
+   "caveat": null
+  }
+ ],
+ "sources": [
+  {
+   "id": "GGG-EX",
+   "title": "GGG public Currency Exchange history (hourly digests)",
+   "url": "https://web.poecdn.com/api/currency-exchange/poe2/<unix hour>",
+   "kind": "official data",
+   "note": "54 hours fetched 2026-11-21 at 2.5 s spacing; cache in scripts/cache"
+  },
+  {
+   "id": "DB",
+   "title": "Exile Oracle DB (read-only): ls_price, ex_price, patch_notes",
+   "url": "<data folder>/data/poe2kit.db",
+   "kind": "official data (derived)"
+  },
+  {
+   "id": "FOE",
+   "title": "farmofexile.com PoE 2 strategy pages (creator sessions + boss models, methodology)",
+   "url": "https://farmofexile.com/poe2",
+   "kind": "community (creator videos parsed, then checked)"
+  },
+  {
+   "id": "FOE-M",
+   "title": "farmofexile methodology",
+   "url": "https://farmofexile.com/poe2/news/methodology",
+   "kind": "community"
+  },
+  {
+   "id": "PN",
+   "title": "Official patch notes, pathofexile.com forum (0.1.0 to 0.5.5h)",
+   "url": "https://www.pathofexile.com/forum/view-forum/2212",
+   "kind": "official"
+  },
+  {
+   "id": "PN-055",
+   "title": "0.5.5 patch notes",
+   "url": "https://www.pathofexile.com/forum/view-thread/4000864",
+   "kind": "official"
+  },
+  {
+   "id": "PN-055c",
+   "title": "0.5.5c patch notes",
+   "url": "https://www.pathofexile.com/forum/view-thread/4006357",
+   "kind": "official"
+  },
+  {
+   "id": "PN-055d",
+   "title": "0.5.5d patch notes",
+   "url": "https://www.pathofexile.com/forum/view-thread/4008534",
+   "kind": "official"
+  },
+  {
+   "id": "PN-050",
+   "title": "0.5.0 content update notes",
+   "url": "https://www.pathofexile.com/forum/view-thread/3932540",
+   "kind": "official"
+  },
+  {
+   "id": "PN-050bHF13",
+   "title": "0.5.0b hotfix 13 (temple)",
+   "url": "https://www.pathofexile.com/forum/view-thread/3945385",
+   "kind": "official"
+  },
+  {
+   "id": "PN-053",
+   "title": "0.5.3 patch notes",
+   "url": "https://www.pathofexile.com/forum/view-thread/3968601",
+   "kind": "official"
+  },
+  {
+   "id": "PN-054b",
+   "title": "0.5.4b patch notes",
+   "url": "https://www.pathofexile.com/forum/view-thread/3980516",
+   "kind": "official"
+  },
+  {
+   "id": "PN-040cHF13",
+   "title": "0.4.0c hotfix 13 (temple diminishing returns)",
+   "url": "https://www.pathofexile.com/forum/view-thread/3901755",
+   "kind": "official"
+  },
+  {
+   "id": "PN-040eHF2",
+   "title": "0.4.0e hotfix 2 (Amanamu's Void omens)",
+   "url": "https://www.pathofexile.com/forum/view-thread/3912620",
+   "kind": "official"
+  },
+  {
+   "id": "PN-020g",
+   "title": "0.2.0g loot changes",
+   "url": "https://www.pathofexile.com/forum/view-thread/3774660",
+   "kind": "official"
+  },
+  {
+   "id": "PN-011",
+   "title": "0.1.1 patch notes",
+   "url": "https://www.pathofexile.com/forum/view-thread/3696353",
+   "kind": "official"
+  },
+  {
+   "id": "PCGN-T",
+   "title": "PCGamesN: temple diminishing-returns patch (Jan 3 2026)",
+   "url": "https://www.pcgamesn.com/path-of-exile-2/patch-notes-temple-diminishing-returns",
+   "kind": "news"
+  },
+  {
+   "id": "FB-T",
+   "title": "finalboss.io: Vaal Temple nerf cuts huge drops",
+   "url": "https://finalboss.io/poe-2s-vaal-temple-nerf-cuts-huge-drops",
+   "kind": "news"
+  },
+  {
+   "id": "GP-T",
+   "title": "Gamepressure: players complain about the death of the season (Dec 29 2025)",
+   "url": "https://www.gamepressure.com/newsroom/poe-2-players-complain-about-the-death-of-the-new-season-all-beca/z78b67",
+   "kind": "news"
+  },
+  {
+   "id": "MMO-T",
+   "title": "Mein-MMO: GGG turns off the loot tap (temple hotfix, Jun 3 2026)",
+   "url": "https://mein-mmo.de/en/developers-of-path-of-exile-2-have-overdone-it-now-turning-off-the-loot-tap-for-players,1570848/",
+   "kind": "news"
+  },
+  {
+   "id": "PCGN-DIV",
+   "title": "PCGamesN: Return of the Ancients makes Divines more common",
+   "url": "https://www.pcgamesn.com/path-of-exile-2/return-of-the-ancients-divine-orbs",
+   "kind": "news"
+  },
+  {
+   "id": "PB",
+   "title": "poebuilds.cc farming index (YouTube farming video titles per league, with Path of Building snapshots)",
+   "url": "https://www.poebuilds.cc/poe2/farming",
+   "kind": "community (YouTube titles = creator claims)"
+  },
+  {
+   "id": "MAX-FLIP",
+   "title": "Maxroll: flipping with the Currency Exchange",
+   "url": "https://maxroll.gg/poe2/resources/flipping-with-the-currency-exchange",
+   "kind": "guide"
+  },
+  {
+   "id": "MAX-TEMPLE",
+   "title": "Maxroll: Vaal Temple / Atziri farming (0.5.5)",
+   "url": "https://maxroll.gg/poe2/currency/vaal-temple-atziri-farming",
+   "kind": "guide"
+  },
+  {
+   "id": "MAX-SEK",
+   "title": "Maxroll: Trial of the Sekhemas",
+   "url": "https://maxroll.gg/poe2/resources/trial-of-the-sekhemas",
+   "kind": "guide"
+  },
+  {
+   "id": "TS-054",
+   "title": "timesaver.gg 0.5.4 currency farming tier list [seller]",
+   "url": "https://timesaver.gg/blog/poe2-0-5-4-currency-farming-tier-list",
+   "kind": "seller"
+  },
+  {
+   "id": "TS-DPS",
+   "title": "timesaver.gg T15 DPS requirement 0.5.5 [seller]",
+   "url": "https://timesaver.gg/blog/poe2-t15-dps-requirement-0-5-5",
+   "kind": "seller"
+  },
+  {
+   "id": "AOE-TOC",
+   "title": "aoeah 0.5.5 Trial of Chaos guide [seller]",
+   "url": "https://www.aoeah.com/news/4783--poe-2-055-trial-of-chaos-guide-best-mods-drops--farm-strategy",
+   "kind": "seller"
+  },
+  {
+   "id": "AOE-ESS",
+   "title": "aoeah 0.5 essence farming [seller]",
+   "url": "https://www.aoeah.com/news/4627",
+   "kind": "seller"
+  },
+  {
+   "id": "AOE-TEMPLE",
+   "title": "aoeah 0.5 temple guide [seller]",
+   "url": "https://www.aoeah.com/news/4609",
+   "kind": "seller"
+  },
+  {
+   "id": "MTMMO",
+   "title": "mtmmo 0.5.5 currency farm strats [seller]",
+   "url": "https://www.mtmmo.com/news/2324--poe-2-055-forbidden-rites-best-currency-farm-strats-atlas--offatlas",
+   "kind": "seller"
+  },
+  {
+   "id": "MMOEXP-TOC",
+   "title": "mmoexp: 1000 divines in 50 Trial of Chaos runs [seller]",
+   "url": "https://www.mmoexp.com/",
+   "kind": "seller"
+  },
+  {
+   "id": "POEVAULT-R",
+   "title": "poe-vault: is Ritual farming the best currency strategy",
+   "url": "https://www.poe-vault.com/poe2/news/is-ritual-farming-the-best-currency-strategy-in-poe2-right-now",
+   "kind": "news/guide"
+  },
+  {
+   "id": "DR",
+   "title": "research/drop-rates.md/.json (repo)",
+   "url": "research/drop-rates.md",
+   "kind": "repo research"
+  },
+  {
+   "id": "MT",
+   "title": "research/market/market-trends.md (repo)",
+   "url": "research/market/market-trends.md",
+   "kind": "repo research"
+  }
+ ],
+ "caveats": [
+  "Drop counts come from one creator session or a community boss table per strategy. Creators are fast, well-geared and pick their best videos; the 0.45/0.70 pace factors are my estimate, not measured.",
+  "Prices are real (GGG exchange), but they are past leagues' prices: 1.0 (2026-12-11) will have its own patch changes. Re-run build.py with 1.0 prices from day 1 (the app syncs the same endpoint).",
+  "Uniques (Prism of Belief, Morior Invictus, Rakiata's Flow, The Adorned, Ritual chase uniques) are not on the exchange: valued only at the two farmofexile price points, which are late-Forbidden-Rites values.",
+  "Tablets, sagas and waystones are not on the exchange either: their cost is a fixed range per hour from the source pages; tablet prices rose 2-10x during Forbidden Rites.",
+  "Market impact is ignored: a farm that floods one item (Kulemak bones, catalysts, Simulacrums) pushes that item down; 0.5.3 crashed Ancient Collarbone 88% in a week.",
+  "Claim-only strategies (Trial of Chaos, Sekhemas, temple, strongboxes, rogue exiles, crafting, flipping) have no counts: their div/hour is a discounted claim range and is flat across phases.",
+  "Day 0-2 values are high in Divines because Divines are cheap then, but almost nobody has the atlas for these strategies before day 3: most are null for day 0-2 on purpose.",
+  "Forbidden Rites late prices (day 63-77) come from the app's own sync; Fate of the Vaal and Runes of Aldur late = day 70 only.",
+  "Fate of the Vaal week 4-8 prices for omens, bones and Fates are 3-5x the other leagues (the temple Divine flood devalued Divines); they drive many \"high\" values.",
+  "Community div/hour claims (YouTube titles, seller guides) run 2-5x above what the counts are worth at typical prices; see the md for the check."
+ ]
+}

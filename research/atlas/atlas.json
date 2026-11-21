@@ -1,0 +1,3668 @@
+{
+ "generated": "2026-11-21",
+ "game_version": "0.5.5 (client build 26744644, tables + repoe export of 2026-11-20)",
+ "tree_build_notes": {
+  "files": {
+   "graph": "metadata/atlasskillgraphs/atlasskillgraph.psg (inside the game bundles; extract with poe2x: poe2x extract <PoE2>\\Bundles2\\_.index.bin <out> metadata/atlasskillgraphs). Not in the tables folder.",
+   "nodes": "tables/passiveskills.json rows with SkillType == 1 (1734 rows; only the ~575 present in the .psg are live).",
+   "stats": "tables/stats.json (Stats indices) + data/statdescriptions/atlas_stat_descriptions.csd, endgame_map_stat_descriptions.csd, map_stat_descriptions.csd and atlas_variant_stat_descriptions.csd for the English text (UTF-16 .csd, extract with poe2x).",
+   "subtrees": "tables/atlaspassiveskillsubtrees.json: index used by PassiveSkills.AtlasSubTree (0 Breach, 1 Expedition, 2 Delirium, 3 Ritual, 4 Abyss, 5 Incursion/Temple); each has a UI background and \"Grants X Atlas passive points on completion\".",
+   "choices": "tables/passiveskillvarianttypes.json (Id == the keystone Id) + passiveskillvariants.json (Type -> Variant = PassiveSkills row) give the options of \"Select a bonus\" keystones; PassiveSkills.VariantType points at the variant type.",
+   "masters": "tables/atlasclasspassives.json (36 rows: Jado/Doryani/Hilda x 12 keystones, Stats + StatValues) and atlasclasspassiveclasses.json.",
+   "tree_type": "tables/passiveskilltrees.json row \"Atlas\" -> Metadata/AtlasSkillGraphs/AtlasSkillGraph; \"EndgameMap\" -> the Fortress layout graph."
+  },
+  "psg_format": "v3: u8 version, u8 ?, u8 orbit_count, u8[orbit_count] skills_per_orbit (1,12,24,24,72,72,72,24,72,144); u32 root_count + (u32 graph_id, u32 0) each; u32 group_count; per group f32 x, f32 y, u32 flags, u32 ?, u8 ?, u32 node_count; per node u32 graph_id, u32 orbit, u32 orbit_index, u32 conn_count + (u32 graph_id, i32 curvature) each. graph_id = PassiveSkills.PassiveSkillGraphId.",
+  "positions": "node = group (x,y) + orbit radius at angle 2*pi*index/skills_per_orbit (x += r*sin, y -= r*cos). Radii assumed equal to the character tree (0,82,162,335,493,662,846,251,1080,1322); a test render looks right (symmetric main tree, 6 separate subtrees).",
+  "links": "connections are stored once (directed in the file); treat as undirected. curvature != 0 means an arc (orbit link).",
+  "roots": "AtlasGenericStart (main tree, centre) + 6 subtree roots (AtlasRitualStart, AtlasBreachStart, AtlasDeliriumStart, AtlasAbyssStart, AtlasIncursionStart_, AtlasExpeditionStart). Allocation must connect to a root of the same tree.",
+  "gates": "PassiveSkills.Requirement = a PassiveSkills row of a Fortress map node (AtlasInsideFortress..., from the EndgameMap graph): the node needs that Fortress map done. PassiveSkills._unk67 = area level gate (70 or 75): 307 nodes ungated, 141 need AL70, 127 need AL75.",
+  "decor": "38 AtlasGenericMastery* nodes are isolated art only; skip them for allocation.",
+  "counts_0_5_5": {
+   "nodes": 575,
+   "links": 586,
+   "groups": 255,
+   "main": 375,
+   "Ritual": 37,
+   "Incursion": 37,
+   "Abyss": 36,
+   "Breach": 33,
+   "Delirium": 32,
+   "Expedition": 25,
+   "notables": 224,
+   "keystones_incl_choice": 44,
+   "choice_keystones": 44
+  },
+  "points": "Main tree: points from Fortress maps (1+ each, official 0.5.0), +4 per Precursor Tower and 6+ per pinnacle (guides); killing the Arbiter of Divinity 5x completes Fortress maps (official). Enough points exist to allocate the whole tree, so respec is gone (only choice nodes can be switched). Subtrees: points from that mechanic's questline/boss (Expedition: Grand Expedition bosses, 0.5.4).",
+  "output": "scripts/atlas_tree.py writes atlas-tree-26744644.json (nodes with x/y, text, choices, gates; links; groups).",
+  "version": "0.5.5 build 26744644",
+  "confidence": "high (parsed from the client; area-level meaning of _unk67 inferred from 70/75 values + guide)"
+ },
+ "strategies": [
+  {
+   "name": "Juiced generic (rarity + monster density)",
+   "mechanics": [
+    "rare/magic monsters",
+    "waystone mods",
+    "tablets"
+   ],
+   "key_nodes": [
+    {
+     "name": "The Journey Ahead",
+     "why": "choice: 6% pack size / 15% effectiveness / 10% rarity"
+    },
+    {
+     "name": "Rising Danger",
+     "why": "20% increased rare monsters"
+    },
+    {
+     "name": "Bountiful Bloodlines",
+     "why": "20% increased magic monsters"
+    },
+    {
+     "name": "Expanding Hordes",
+     "why": "magic pack size +10%"
+    },
+    {
+     "name": "Multiplying Monstrosities",
+     "why": "magic pack size +10%"
+    },
+    {
+     "name": "Twin Threats",
+     "why": "1 rare per area duplicated"
+    },
+    {
+     "name": "Adaptive Biology",
+     "why": "+1 max rare monster mods; each mod >=100% rarity"
+    },
+    {
+     "name": "Mutating Monsters",
+     "why": "+1 max rare monster mods; each mod >=100% rarity"
+    },
+    {
+     "name": "No Simple Battles",
+     "why": "rares have at least 3 mods, each >=100% rarity"
+    },
+    {
+     "name": "Nemesis Rising",
+     "why": "choice: rare effectiveness / mods / extra rare / 10% rare rarity"
+    },
+    {
+     "name": "To the Strong Go the Spoils",
+     "why": "2% rarity per monster modifier"
+    },
+    {
+     "name": "Risk and Reward",
+     "why": "2% rarity per explicit map modifier"
+    },
+    {
+     "name": "Enigmatic Intensification",
+     "why": "3% more waystone explicit effect per tablet"
+    },
+    {
+     "name": "Controlled Climates",
+     "why": "5% tablet explicit effect per tablet"
+    },
+    {
+     "name": "Industrial Improvements",
+     "why": "4th tablet slot on City maps"
+    },
+    {
+     "name": "Grass Mastery",
+     "why": "choice: 10% basic->greater or 5% greater->perfect currency"
+    },
+    {
+     "name": "Swamp Mastery",
+     "why": "choice: 25% Chaos drop as Exalted (or pack size)"
+    }
+   ],
+   "tablets": [
+    "3x same-mechanic tablet or generic tablets with Collector's (rarity), Brimming (rares), Breeding (pack size), Abounding (monster rarity)"
+   ],
+   "waystone_setup": "Rare, 6 mods (Alchemy + Exalts), instilled Liquid Paranoia/Greed, avoid the deadly list; masters: Doryani Evolutionary Pressure + Improved Calibration, Hilda Breeding Season + Ancient Inscriptions.",
+   "source": "node picks: Claude from 0.5.5 node texts; direction: Boostmatch 0.5.0 guide (2026-05-28, used 0.4 names), Timesaver atlas guide (2026-08-09)",
+   "version": "0.5.5",
+   "confidence": "medium (node effects = data; ranking = estimate)"
+  },
+  {
+   "name": "Breach",
+   "mechanics": [
+    "Breach",
+    "Hives",
+    "Genesis Tree (Wombgifts, Hiveblood)",
+    "Vruun"
+   ],
+   "key_nodes": [
+    {
+     "name": "Shape the Chains",
+     "why": "choice: Grow Quantity = Breaches +15% pack size"
+    },
+    {
+     "name": "Swelling Hives",
+     "why": "extra Hive wave"
+    },
+    {
+     "name": "Moment of Risk",
+     "why": "2 extra rares when stabilised; wombgift level-up per map mod"
+    },
+    {
+     "name": "Frantic Invasion",
+     "why": "100% more chance of Vruun"
+    },
+    {
+     "name": "Study the Chains",
+     "why": "Vruun 50% more Lineage Supports"
+    },
+    {
+     "name": "Breeding Program",
+     "why": "choice: target Wombgift type"
+    },
+    {
+     "name": "Growing Wealth",
+     "why": "+5 Genesis points (Currency Womb)"
+    },
+    {
+     "name": "Reactive Hiveseeding",
+     "why": "10% chance to add a Hive nearby"
+    },
+    {
+     "name": "Tear Open the Rift",
+     "why": "choice: Breach stronghold adds map mods"
+    },
+    {
+     "name": "Reality Wound",
+     "why": "+10 s before unstable breaches collapse"
+    }
+   ],
+   "tablets": [
+    "Breach Tablet: of the Horde (5-15% pack size), of the Form (wombgift qty 30-60%), of the Flesh (wombgift level), of the Invasion (+1-2 rares), of the Commander (Vruun)"
+   ],
+   "waystone_setup": "Pack-size + monster-rarity mods; 2-3 Breach tablets; 0.5.5 tier list puts Breach in B tier (3-7 div/h).",
+   "source": "node texts: game data 0.5.5; tier: Timesaver 0.5.4 tier list (2026-06-28/08-07)",
+   "version": "0.5.5",
+   "confidence": "medium"
+  },
+  {
+   "name": "Ritual",
+   "mechanics": [
+    "Ritual altars",
+    "Tribute",
+    "Favours (omens, uniques)",
+    "Audience with the King",
+    "Rite of the Nameless"
+   ],
+   "key_nodes": [
+    {
+     "name": "Tempting Offers",
+     "why": "+1 favour reroll"
+    },
+    {
+     "name": "Magnanimous Offerings",
+     "why": "20% free rerolls"
+    },
+    {
+     "name": "Patient Devotion",
+     "why": "deferred favours 50% sooner, 50% cheaper"
+    },
+    {
+     "name": "From the Mists",
+     "why": "extra Wildwood pack per Ritual"
+    },
+    {
+     "name": "Reborn in Shadow",
+     "why": "revived monsters more often magic/rare = more tribute"
+    },
+    {
+     "name": "Mysterious Rites",
+     "why": "8% Queen's Ritual: +10 omens in first favour set"
+    },
+    {
+     "name": "Traveller's Woe",
+     "why": "choice: ritual type"
+    },
+    {
+     "name": "Invigorated Sacrifices",
+     "why": "choice: tribute/favour tweaks"
+    },
+    {
+     "name": "Spreading Darkness",
+     "why": "unique item slot type by ritual type"
+    },
+    {
+     "name": "Royal Tithe",
+     "why": "King progress"
+    },
+    {
+     "name": "Prayer and Pledge",
+     "why": "King progress from spent tribute"
+    },
+    {
+     "name": "Hour of the Nameless",
+     "why": "Rite of the Nameless can offer valuable uniques"
+    }
+   ],
+   "tablets": [
+    "Ritual Tablet: of Sacrifice (18-30% tribute), of Omens (35-70% omen chance), of Prayers (+1-3 rerolls), of the Dogma/Occult/Devotion/Appeal (cheaper/free rerolls & defers). 0.5.5: >1 Ritual tablet adds an extra altar."
+   ],
+   "waystone_setup": "Pack size and magic/rare monster mods (more tribute); item rarity does not affect favours. A-tier in 0.5.4 (4-12 div/h, omen-driven).",
+   "source": "node texts: game data; tribute logic: AOEAH 0.5 Ritual guide (2026-06-01, several node names wrong); tier: Timesaver 0.5.4",
+   "version": "0.5.5",
+   "confidence": "medium"
+  },
+  {
+   "name": "Delirium",
+   "mechanics": [
+    "Delirium fog",
+    "Fracturing / Grand mirrors",
+    "Simulacrum",
+    "Liquid emotions"
+   ],
+   "key_nodes": [
+    {
+     "name": "The mirrors... the mirrors!",
+     "why": "50% more fracturing mirrors"
+    },
+    {
+     "name": "Is that the best you've got?!",
+     "why": "more escalation shards"
+    },
+    {
+     "name": "Come on! Face me!",
+     "why": "more unique boss shards; kills pause timer"
+    },
+    {
+     "name": "Get out of my head!",
+     "why": "magic monsters extra delirium mod"
+    },
+    {
+     "name": "These demons are all your own...",
+     "why": "rares always manifest demons"
+    },
+    {
+     "name": "I know your childhood fears...",
+     "why": "more liquid emotions, 20% ancient"
+    },
+    {
+     "name": "You can't scare me anymore!",
+     "why": "uniques drop potent emotions"
+    },
+    {
+     "name": "Is this about me... or you?",
+     "why": "Simulacrum splinters in 75+ maps"
+    },
+    {
+     "name": "Recurring Nightmares",
+     "why": "choice: +30% deliriousness or fog spreads to +4 maps"
+    }
+   ],
+   "tablets": [
+    "Delirium Tablet: of Mirrors, of Shattering, of Phobia (unique bosses), of the Simulacrum (splinter stack), of Persecution (pack size), of Eternity/of the Unending (longer fog), of Freeze Time"
+   ],
+   "waystone_setup": "High-rarity rares; build must handle deliriousness. C-tier/spiky (3-9 div/h) in 0.5.4; highest ceiling, build-gated.",
+   "source": "node texts: game data; tier: Timesaver 0.5.4",
+   "version": "0.5.5",
+   "confidence": "medium"
+  },
+  {
+   "name": "Expedition / Grand Expedition",
+   "mechanics": [
+    "Expedition",
+    "Verisium Remnants",
+    "Logbooks",
+    "Grand Expedition bosses"
+   ],
+   "key_nodes": [
+    {
+     "name": "Calculated Investment",
+     "why": "choice: 1% item quantity per runic modifier"
+    },
+    {
+     "name": "Double or Nothing",
+     "why": "choice: 25% chance extra runic mod"
+    },
+    {
+     "name": "Expanding Territory",
+     "why": "choice: +remnant or +25% expedition chance"
+    },
+    {
+     "name": "Steady Development",
+     "why": "choice: extra remnant or explosive"
+    },
+    {
+     "name": "Strategic Advantage",
+     "why": "choice: faster or stronger explosives"
+    },
+    {
+     "name": "Sown Seeds",
+     "why": "logbooks per runic mod"
+    },
+    {
+     "name": "Gaining Traction",
+     "why": "remnant monster rarity stacking"
+    },
+    {
+     "name": "Feeling Lucky?",
+     "why": "Farrow sells Liquid Verisium"
+    },
+    {
+     "name": "The Quest Continues",
+     "why": "Grand Expeditions up to 3 mods, +1 area level"
+    }
+   ],
+   "tablets": [
+    "Expedition Tablet: of Runes (more runic markers), of Knowledge (logbooks), of Power (rarity), of Twins, of Remnants, of Ancient Evil, of Verisium, of Treasure (buried strongboxes)"
+   ],
+   "waystone_setup": "Any layout; rarity/monster-rarity mods. S-tier in 0.5.4 (10-20 div/h claimed; 50 = optimized ceiling). Subtree points from Grand Expedition bosses (0.5.4). Hilda Scarred Lands, Jado Eastern Knowledge.",
+   "source": "node texts: game data; tier & points: Timesaver 0.5.4, PCGamesN/allthings 0.5.4 notes coverage",
+   "version": "0.5.5",
+   "confidence": "medium"
+  },
+  {
+   "name": "Abyss",
+   "mechanics": [
+    "Abysses, pits, Abyssal Depths",
+    "Desecrated currency",
+    "Abyssal factions"
+   ],
+   "key_nodes": [
+    {
+     "name": "Balance of Power",
+     "why": "choice: faction (Ulaman recommended for currency)"
+    },
+    {
+     "name": "Strange Aversions",
+     "why": "Ulaman may have currency chests"
+    },
+    {
+     "name": "From Below",
+     "why": "+1 pit"
+    },
+    {
+     "name": "Dark Depths",
+     "why": "chance for 2-4 extra pits"
+    },
+    {
+     "name": "Sprawling Rupture",
+     "why": "25% more abyss monsters"
+    },
+    {
+     "name": "Lord of the Pit",
+     "why": "choice: scatter pits / effectiveness per pit / extra abyss"
+    },
+    {
+     "name": "Vile Treasures",
+     "why": "choice: eyes / omens / lineage"
+    },
+    {
+     "name": "Rotting Bones",
+     "why": "ancient desecrated currency"
+    },
+    {
+     "name": "Close to the Surface",
+     "why": "waystone mods apply in Depths"
+    },
+    {
+     "name": "Shadow of Undeath",
+     "why": "abyss-influenced essences and rogue exiles"
+    },
+    {
+     "name": "Abyssal Ire",
+     "why": "bosses in 78+ Depths"
+    }
+   ],
+   "tablets": [
+    "Abyss Tablet (0.5.0: only enables Abyss): of Hollows (+1 abyss), of Schisms (20-40% chance +4), of Treasures (pits twice as likely rewards), of the Horde, of Champions (+2-3 rares), of Dark Power, of Ossification (desecrated currency)"
+   ],
+   "waystone_setup": "Desecrated Abyssal prefixes (e.g. Abysses lead to Depths / overrun) if available; keep revives. A-tier (4-10 div/h) in 0.5.4; most consistent floor in 0.5.3.",
+   "source": "node texts: game data; AOEAH Abyss guide (2026-06-03, unverified claims); Timesaver 0.5.3/0.5.4",
+   "version": "0.5.5",
+   "confidence": "medium"
+  },
+  {
+   "name": "Essence",
+   "mechanics": [
+    "Essence monsters",
+    "Essence corruption"
+   ],
+   "key_nodes": [
+    {
+     "name": "The Chosen Path",
+     "why": "choice: Essences = 100% more essences"
+    },
+    {
+     "name": "Essence Dowsing",
+     "why": "choice: target Greater/Perfect essence types"
+    },
+    {
+     "name": "Crystalline Patterns",
+     "why": "choice: second essence-type pick"
+    },
+    {
+     "name": "Inexplicable Alchemy",
+     "why": "Exalted Orb adds an essence to an essence monster"
+    },
+    {
+     "name": "Crystalline Overgrowth",
+     "why": "15% extra essence"
+    },
+    {
+     "name": "Intensifying Energies",
+     "why": "extra essence chance per map mod"
+    },
+    {
+     "name": "Flawless Patterns",
+     "why": "30% more Perfect essences"
+    },
+    {
+     "name": "Corrupted Lattices",
+     "why": "choice: corruption behaviour"
+    },
+    {
+     "name": "Harmonic Corruption",
+     "why": "37% double corruption"
+    },
+    {
+     "name": "Overlord's Domain",
+     "why": "choice: extra essence with powerful bosses"
+    }
+   ],
+   "tablets": [
+    "Overseer Tablet (+ of Crystals: 1-2 essences); any tablet with the Crystallised prefix (+1 essence) or of the Essence suffix"
+   ],
+   "waystone_setup": "Desert/Vaal-city biomes (Arid Stability, Monuments in Time); Doryani Archaic Corruption, Stitch the Flesh.",
+   "source": "node texts: game data; AOEAH Essence guide (2026-06-08, seller site)",
+   "version": "0.5.5",
+   "confidence": "medium-low"
+  },
+  {
+   "name": "Boss / Citadel",
+   "mechanics": [
+    "Map bosses",
+    "Powerful Map Bosses",
+    "Citadels",
+    "Pinnacles"
+   ],
+   "key_nodes": [
+    {
+     "name": "Fit for a King",
+     "why": "20% boss rarity"
+    },
+    {
+     "name": "Hard-Won Treasures",
+     "why": "15% boss quantity"
+    },
+    {
+     "name": "Pathkeepers",
+     "why": "15% boss waystone quantity"
+    },
+    {
+     "name": "Overlord's Domain",
+     "why": "choice: extra content with powerful bosses"
+    },
+    {
+     "name": "Overlord's Influence",
+     "why": "choice: extra content with powerful bosses"
+    },
+    {
+     "name": "Fabled Showdown",
+     "why": "choice: Favour the Villain = shrine on boss for extra reward"
+    },
+    {
+     "name": "Eons of Domination",
+     "why": "Overseer tablets drop from powerful bosses"
+    },
+    {
+     "name": "Runic Flare",
+     "why": "summoning circles upgrade nearby bosses"
+    },
+    {
+     "name": "Memories of the Vaal",
+     "why": "anomaly bosses extra lineage support (also Maraketh/Ezomytes/Karui)"
+    },
+    {
+     "name": "Warlord's Vendetta",
+     "why": "invaded cities: citadel boss"
+    },
+    {
+     "name": "Bring Me Your Leader",
+     "why": "city summoning circles: citadel boss"
+    }
+   ],
+   "tablets": [
+    "Overseer Tablet: of Hoards (13-20% boss quantity), of Treasure (35-60% boss rarity), of Pathways (18-30% boss waystones), of Conquering (xp)"
+   ],
+   "waystone_setup": "Masters: Hilda Mighty Prey + Patient Battue + Claimed Territories, Jado In The Wrong Hands, Doryani Head of the Snake.",
+   "source": "node + master texts: game data 0.5.5",
+   "version": "0.5.5",
+   "confidence": "medium"
+  },
+  {
+   "name": "Strongbox",
+   "mechanics": [
+    "Strongboxes",
+    "Unique strongboxes"
+   ],
+   "key_nodes": [
+    {
+     "name": "The Chosen Path",
+     "why": "choice: Strongboxes"
+    },
+    {
+     "name": "Intriguing Designs",
+     "why": "no Basic strongboxes"
+    },
+    {
+     "name": "Specialised Containers",
+     "why": "extra item-type prefixes on Arcane/Cartographer/Jeweller/Researcher"
+    },
+    {
+     "name": "Enchanted Locks",
+     "why": "+1 prefix"
+    },
+    {
+     "name": "Inlaid Inscriptions",
+     "why": "+1 suffix"
+    },
+    {
+     "name": "Bardiyan Craftsmanship",
+     "why": "+1 suffix"
+    },
+    {
+     "name": "Royal Craftsmanship",
+     "why": "greater suffixes"
+    },
+    {
+     "name": "An Appropriate Vault",
+     "why": "2% quantity per mod"
+    },
+    {
+     "name": "Hidden Compartments",
+     "why": "15% openable twice"
+    },
+    {
+     "name": "Craftsman's Creed",
+     "why": "choice: attribute prefixes"
+    },
+    {
+     "name": "Overlord's Influence",
+     "why": "choice: extra strongbox"
+    }
+   ],
+   "tablets": [
+    "any tablet with of the Antiquarian (+1 strongbox) / of Strongboxes; Overseer of Compartments (1-2)"
+   ],
+   "waystone_setup": "Jado Trove Seekers (100% more unique strongboxes), Mysterious Gifts, Stolen Relics; Doryani Mechanical Guardians; Mountain biome Favoured Treasures.",
+   "source": "node + master texts: game data 0.5.5",
+   "version": "0.5.5",
+   "confidence": "medium-low (no 0.5 guide found)"
+  },
+  {
+   "name": "Rogue Exile",
+   "mechanics": [
+    "Rogue Exiles (gear, uniques, waystones, tablets)"
+   ],
+   "key_nodes": [
+    {
+     "name": "The Chosen Path",
+     "why": "choice: Rogue Exiles"
+    },
+    {
+     "name": "Wealthy Exiles",
+     "why": "25% rarity"
+    },
+    {
+     "name": "Here for the Same Reason",
+     "why": "6% rarity per map mod"
+    },
+    {
+     "name": "Uncommon Alliances",
+     "why": "10% pairs"
+    },
+    {
+     "name": "Famous Locals",
+     "why": "city pairs"
+    },
+    {
+     "name": "The Deadliest Hunt",
+     "why": "more equipped uniques"
+    },
+    {
+     "name": "Legendary Duels",
+     "why": "choice: unique slot type"
+    },
+    {
+     "name": "Competing Explorers",
+     "why": "+waystone drop"
+    },
+    {
+     "name": "Competitive Archaeology",
+     "why": "+tablet drop"
+    },
+    {
+     "name": "Dressed in Fineries",
+     "why": "exceptional items"
+    },
+    {
+     "name": "Man Trap",
+     "why": "essence monsters become exiles"
+    },
+    {
+     "name": "Overlord's Domain",
+     "why": "choice: extra exile"
+    }
+   ],
+   "tablets": [
+    "Exiled prefix (+1 exile), of the Exile suffix (70-100% chance)"
+   ],
+   "waystone_setup": "Hilda Dangerous Game (exiles flee and upgrade). Pairs with Abyss (Shadow of Undeath).",
+   "source": "node texts: game data; AOEAH Abyss guide mentions exile synergy",
+   "version": "0.5.5",
+   "confidence": "medium-low"
+  },
+  {
+   "name": "Temple (Atziri / Fate of the Vaal)",
+   "mechanics": [
+    "Vaal Beacons",
+    "Temple rooms",
+    "Atziri's Vault"
+   ],
+   "key_nodes": [
+    {
+     "name": "Atziri's Assets",
+     "why": "choice: extra vault reward type"
+    },
+    {
+     "name": "Training and Preparation",
+     "why": "+1 temple area level"
+    },
+    {
+     "name": "Transcendent Progress",
+     "why": "tier 4 rooms"
+    },
+    {
+     "name": "Power Relays",
+     "why": "10% room modifier effect"
+    },
+    {
+     "name": "Efficient Arteries",
+     "why": "15% effect from 4-adjacent rooms"
+    },
+    {
+     "name": "Xipocado's Machinations",
+     "why": "1% effect per different room"
+    },
+    {
+     "name": "Expanded Designs",
+     "why": "extra restricted room"
+    },
+    {
+     "name": "Protected Treasures",
+     "why": "restricted rooms extra chests"
+    },
+    {
+     "name": "Riches of the Empire",
+     "why": "15% temple currency duplicated"
+    },
+    {
+     "name": "Stolen Authority",
+     "why": "35% more medallions"
+    }
+   ],
+   "tablets": [
+    "Temple Tablet (guarantees Vaal Beacons; suffixes: extra packs, beacon uniques, crystal chance)"
+   ],
+   "waystone_setup": "Area level 75+ required to be worthwhile; S-tier steady (3-8 div/h) in 0.5.4.",
+   "source": "node texts: game data; tier: Timesaver 0.5.4",
+   "version": "0.5.5",
+   "confidence": "medium"
+  }
+ ],
+ "strategy_node_check": {
+  "all_names_in_live_tree": true,
+  "missing": []
+ },
+ "guide_names_not_in_0_5_5_tree": [
+  "Constant Crossroads (legacy row AtlasGenericNotable16, not in graph)",
+  "Deadly Evolution",
+  "Crystalline Growth",
+  "Ominous Portents",
+  "Promised Devotion",
+  "Wandering Path",
+  "Interdimensional Assault",
+  "Rising Pyre"
+ ],
+ "waystone_mods": [
+  {
+   "mod_text": "Monsters have (40-50)% increased Accuracy Rating",
+   "mod_id_or_group": "MapMonsterAccuracy",
+   "mod_ids": [
+    "MapMonsterAccuracy1",
+    "MapMonsterAccuracy2",
+    "MapMonsterAccuracy3",
+    "MapMonsterAccuracy4"
+   ],
+   "affix_name": "Precise",
+   "kind": "prefix",
+   "generation_types_in_data": [
+    "prefix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 10,
+    "pack_size_more_pct": 7
+   },
+   "danger": {
+    "archetypes": [
+     "evasion",
+     "deflection"
+    ],
+    "answered_by_stat": "Evasion / Deflection chance vs monster accuracy",
+    "level": "fine",
+    "note": "Only lowers evasion/deflect chance; armour/ES builds ignore it."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapMonsterAccuracy1",
+     "effect": "Monsters have (10-20)% increased Accuracy Rating"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapMonsterAccuracy2",
+     "effect": "Monsters have (20-30)% increased Accuracy Rating"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapMonsterAccuracy3",
+     "effect": "Monsters have (30-40)% increased Accuracy Rating"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapMonsterAccuracy4",
+     "effect": "Monsters have (40-50)% increased Accuracy Rating"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "Monsters Break Armour equal to (30-45)% of Physical Damage dealt",
+   "mod_id_or_group": "MapMonsterArmourBreak",
+   "mod_ids": [
+    "MapMonsterArmourBreak1",
+    "MapMonsterArmourBreak2",
+    "MapMonsterArmourBreak3",
+    "MapMonsterArmourBreak4"
+   ],
+   "affix_name": "Shattering",
+   "kind": "prefix",
+   "generation_types_in_data": [
+    "prefix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 10,
+    "monster_rarity_more_pct": 19,
+    "note": "Monster Rarity = more magic and rare monsters AND the same % more chance of rare monster modifiers"
+   },
+   "danger": {
+    "archetypes": [
+     "armour stackers",
+     "melee"
+    ],
+    "answered_by_stat": "Armour (after break), physical max hit",
+    "level": "risky",
+    "note": "Fully broken armour turns physical hits into raw damage; also +19% magic/rare monsters."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapMonsterArmourBreak1",
+     "effect": "Monsters Break Armour equal to (15-20)% of Physical Damage dealt"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapMonsterArmourBreak2",
+     "effect": "Monsters Break Armour equal to (20-25)% of Physical Damage dealt"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapMonsterArmourBreak3",
+     "effect": "Monsters Break Armour equal to (25-30)% of Physical Damage dealt"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapMonsterArmourBreak4",
+     "effect": "Monsters Break Armour equal to (30-45)% of Physical Damage dealt"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "Monsters have (20-25)% chance to inflict Bleeding on Hit",
+   "mod_id_or_group": "MapMonsterBleeding",
+   "mod_ids": [
+    "MapMonsterBleeding1",
+    "MapMonsterBleeding2",
+    "MapMonsterBleeding3",
+    "MapMonsterBleeding4"
+   ],
+   "affix_name": "Puncturing",
+   "kind": "prefix",
+   "generation_types_in_data": [
+    "prefix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 10,
+    "monster_effectiveness_more_pct": 13
+   },
+   "danger": {
+    "archetypes": [
+     "low regen",
+     "no bleed immunity"
+    ],
+    "answered_by_stat": "Bleed immunity / Thawing-type charm, life regen",
+    "level": "fine",
+    "note": "Harmless with bleed immunity; annoying for life builds that kite."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapMonsterBleeding1",
+     "effect": "Monsters have (5-10)% chance to inflict Bleeding on Hit"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapMonsterBleeding2",
+     "effect": "Monsters have (10-15)% chance to inflict Bleeding on Hit"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapMonsterBleeding3",
+     "effect": "Monsters have (15-20)% chance to inflict Bleeding on Hit"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapMonsterBleeding4",
+     "effect": "Monsters have (20-25)% chance to inflict Bleeding on Hit"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "Monsters have (260-300)% increased Critical Hit Chance",
+   "mod_id_or_group": "MapMonsterCritIncrease",
+   "mod_ids": [
+    "MapMonsterCritIncrease1",
+    "MapMonsterCritIncrease2",
+    "MapMonsterCritIncrease3",
+    "MapMonsterCritIncrease4"
+   ],
+   "affix_name": "Destructive",
+   "kind": "prefix",
+   "generation_types_in_data": [
+    "prefix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 15,
+    "pack_size_more_pct": 9
+   },
+   "danger": {
+    "archetypes": [
+     "everyone",
+     "low max hit",
+     "ES/CI casters"
+    ],
+    "answered_by_stat": "Physical/elemental max hit incl. crits; reduced extra damage from crits",
+    "level": "risky",
+    "note": "T4 (260-300% crit chance, +26-30% crit damage) makes rares one-shot glass builds; deadly with Painful + Exposure."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapMonsterCritIncrease1",
+     "effect": "Monsters have (80-120)% increased Critical Hit Chance"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapMonsterCritIncrease2",
+     "effect": "Monsters have (140-180)% increased Critical Hit Chance"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapMonsterCritIncrease3",
+     "effect": "Monsters have (200-240)% increased Critical Hit Chance"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapMonsterCritIncrease4",
+     "effect": "Monsters have (260-300)% increased Critical Hit Chance"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "Monsters deal (20-24)% of Damage as Extra Chaos",
+   "mod_id_or_group": "MapMonsterDamageAsChaos",
+   "mod_ids": [
+    "MapMonsterDamageAsChaos1",
+    "MapMonsterDamageAsChaos2",
+    "MapMonsterDamageAsChaos3",
+    "MapMonsterDamageAsChaos4"
+   ],
+   "affix_name": "Profane",
+   "kind": "prefix",
+   "generation_types_in_data": [
+    "prefix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 15,
+    "item_rarity_more_pct": 15
+   },
+   "danger": {
+    "archetypes": [
+     "low chaos res",
+     "ES/CI"
+    ],
+    "answered_by_stat": "Chaos resistance, chaos max hit",
+    "level": "risky",
+    "note": "20-24% extra chaos on every hit at T4; check chaos res before running."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapMonsterDamageAsChaos1",
+     "effect": "Monsters deal (5-9)% of Damage as Extra Chaos"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapMonsterDamageAsChaos2",
+     "effect": "Monsters deal (10-14)% of Damage as Extra Chaos"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapMonsterDamageAsChaos3",
+     "effect": "Monsters deal (15-19)% of Damage as Extra Chaos"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapMonsterDamageAsChaos4",
+     "effect": "Monsters deal (20-24)% of Damage as Extra Chaos"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "Monsters deal (20-24)% of Damage as Extra Cold",
+   "mod_id_or_group": "MapMonsterDamageAsCold",
+   "mod_ids": [
+    "MapMonsterDamageAsCold1",
+    "MapMonsterDamageAsCold2",
+    "MapMonsterDamageAsCold3",
+    "MapMonsterDamageAsCold4"
+   ],
+   "affix_name": "Frostbitten",
+   "kind": "prefix",
+   "generation_types_in_data": [
+    "prefix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 15,
+    "item_rarity_more_pct": 14
+   },
+   "danger": {
+    "archetypes": [
+     "low cold res",
+     "low ailment threshold"
+    ],
+    "answered_by_stat": "Cold resistance (incl. max), cold max hit, freeze threshold",
+    "level": "risky",
+    "note": "Extra cold also builds freeze."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapMonsterDamageAsCold1",
+     "effect": "Monsters deal (5-9)% of Damage as Extra Cold"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapMonsterDamageAsCold2",
+     "effect": "Monsters deal (10-14)% of Damage as Extra Cold"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapMonsterDamageAsCold3",
+     "effect": "Monsters deal (15-19)% of Damage as Extra Cold"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapMonsterDamageAsCold4",
+     "effect": "Monsters deal (20-24)% of Damage as Extra Cold"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "Monsters deal (20-24)% of Damage as Extra Fire",
+   "mod_id_or_group": "MapMonsterDamageAsFire",
+   "mod_ids": [
+    "MapMonsterDamageAsFire1",
+    "MapMonsterDamageAsFire2",
+    "MapMonsterDamageAsFire3",
+    "MapMonsterDamageAsFire4"
+   ],
+   "affix_name": "Infernal",
+   "kind": "prefix",
+   "generation_types_in_data": [
+    "prefix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 15,
+    "monster_effectiveness_more_pct": 16
+   },
+   "danger": {
+    "archetypes": [
+     "low fire res"
+    ],
+    "answered_by_stat": "Fire resistance (incl. max), fire max hit, ignite threshold",
+    "level": "risky",
+    "note": "Also +16% monster effectiveness."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapMonsterDamageAsFire1",
+     "effect": "Monsters deal (5-9)% of Damage as Extra Fire"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapMonsterDamageAsFire2",
+     "effect": "Monsters deal (10-14)% of Damage as Extra Fire"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapMonsterDamageAsFire3",
+     "effect": "Monsters deal (15-19)% of Damage as Extra Fire"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapMonsterDamageAsFire4",
+     "effect": "Monsters deal (20-24)% of Damage as Extra Fire"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "Monsters deal (20-24)% of Damage as Extra Lightning",
+   "mod_id_or_group": "MapMonsterDamageAsLightning",
+   "mod_ids": [
+    "MapMonsterDamageAsLightning1",
+    "MapMonsterDamageAsLightning2",
+    "MapMonsterDamageAsLightning3",
+    "MapMonsterDamageAsLightning4"
+   ],
+   "affix_name": "Thunderous",
+   "kind": "prefix",
+   "generation_types_in_data": [
+    "prefix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 15,
+    "pack_size_more_pct": 8
+   },
+   "danger": {
+    "archetypes": [
+     "low lightning res"
+    ],
+    "answered_by_stat": "Lightning resistance (incl. max), lightning max hit, shock threshold",
+    "level": "risky",
+    "note": "Shock = more damage taken; stacks badly with Penetrating/Exposure."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapMonsterDamageAsLightning1",
+     "effect": "Monsters deal (5-9)% of Damage as Extra Lightning"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapMonsterDamageAsLightning2",
+     "effect": "Monsters deal (10-14)% of Damage as Extra Lightning"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapMonsterDamageAsLightning3",
+     "effect": "Monsters deal (15-19)% of Damage as Extra Lightning"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapMonsterDamageAsLightning4",
+     "effect": "Monsters deal (20-24)% of Damage as Extra Lightning"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "(20-24)% increased Monster Damage",
+   "mod_id_or_group": "MapMonsterDamageIncrease",
+   "mod_ids": [
+    "MapMonsterDamageIncrease1",
+    "MapMonsterDamageIncrease2",
+    "MapMonsterDamageIncrease3",
+    "MapMonsterDamageIncrease4"
+   ],
+   "affix_name": "Painful",
+   "kind": "prefix",
+   "generation_types_in_data": [
+    "prefix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 20,
+    "monster_rarity_more_pct": 25,
+    "note": "Monster Rarity = more magic and rare monsters AND the same % more chance of rare monster modifiers"
+   },
+   "danger": {
+    "archetypes": [
+     "everyone",
+     "low max hit"
+    ],
+    "answered_by_stat": "All max-hit values (EHP)",
+    "level": "risky",
+    "note": "Flat damage up for all monsters; values cut in the 0.5.0 pre-launch patch."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapMonsterDamageIncrease1",
+     "effect": "(5-9)% increased Monster Damage"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapMonsterDamageIncrease2",
+     "effect": "(10-14)% increased Monster Damage"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapMonsterDamageIncrease3",
+     "effect": "(15-19)% increased Monster Damage"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapMonsterDamageIncrease4",
+     "effect": "(20-24)% increased Monster Damage"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "Monster have (120-130)% increased Elemental Ailment Application",
+   "mod_id_or_group": "MapMonsterElementAilmentChance",
+   "mod_ids": [
+    "MapMonsterElementAilmentChance1",
+    "MapMonsterElementAilmentChance2",
+    "MapMonsterElementAilmentChance3",
+    "MapMonsterElementAilmentChance4"
+   ],
+   "affix_name": "of Overpowering",
+   "kind": "suffix",
+   "generation_types_in_data": [
+    "suffix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 15,
+    "item_rarity_more_pct": 11
+   },
+   "danger": {
+    "archetypes": [
+     "low ailment threshold",
+     "no freeze immunity"
+    ],
+    "answered_by_stat": "Ailment threshold, freeze/shock/ignite immunity",
+    "level": "risky",
+    "note": "0.5.0 changed it to Elemental Ailment Application (was freeze buildup/shock chance/flammability)."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapMonsterElementAilmentChance1",
+     "effect": "Monster have (60-79)% increased Elemental Ailment Application"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapMonsterElementAilmentChance2",
+     "effect": "Monster have (80-99)% increased Elemental Ailment Application"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapMonsterElementAilmentChance3",
+     "effect": "Monster have (100-119)% increased Elemental Ailment Application"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapMonsterElementAilmentChance4",
+     "effect": "Monster have (120-130)% increased Elemental Ailment Application"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "+(35-40)% Monster Elemental Resistances",
+   "mod_id_or_group": "MapMonsterElementalResistances",
+   "mod_ids": [
+    "MapMonsterElementalResistances1",
+    "MapMonsterElementalResistances2",
+    "MapMonsterElementalResistances3",
+    "MapMonsterElementalResistances4"
+   ],
+   "affix_name": "of the Prism",
+   "kind": "suffix",
+   "generation_types_in_data": [
+    "suffix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 10,
+    "item_rarity_more_pct": 14
+   },
+   "danger": {
+    "archetypes": [
+     "elemental damage builds"
+    ],
+    "answered_by_stat": "Elemental penetration / exposure / damage (time cost)",
+    "level": "fine",
+    "note": "35-40% more monster ele res at T4: a DPS tax on elemental builds, not a death risk."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapMonsterElementalResistances1",
+     "effect": "+(20-24)% Monster Elemental Resistances"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapMonsterElementalResistances2",
+     "effect": "+(25-29)% Monster Elemental Resistances"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapMonsterElementalResistances3",
+     "effect": "+(30-34)% Monster Elemental Resistances"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapMonsterElementalResistances4",
+     "effect": "+(35-40)% Monster Elemental Resistances"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "(26-30)% more Monster Life",
+   "mod_id_or_group": "MapMonsterLifeIncrease",
+   "mod_ids": [
+    "MapMonsterLifeIncrease1",
+    "MapMonsterLifeIncrease2",
+    "MapMonsterLifeIncrease3",
+    "MapMonsterLifeIncrease4"
+   ],
+   "affix_name": "Tough",
+   "kind": "prefix",
+   "generation_types_in_data": [
+    "prefix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 15,
+    "monster_rarity_more_pct": 23,
+    "note": "Monster Rarity = more magic and rare monsters AND the same % more chance of rare monster modifiers"
+   },
+   "danger": {
+    "archetypes": [
+     "low DPS",
+     "slow clear"
+    ],
+    "answered_by_stat": "DPS / clear speed (time cost, not death)",
+    "level": "fine",
+    "note": "26-30% more life at T4; costs time, not lives. Gives +23% magic/rare monsters."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapMonsterLifeIncrease1",
+     "effect": "(10-14)% more Monster Life"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapMonsterLifeIncrease2",
+     "effect": "(15-19)% more Monster Life"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapMonsterLifeIncrease3",
+     "effect": "(20-25)% more Monster Life"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapMonsterLifeIncrease4",
+     "effect": "(26-30)% more Monster Life"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "Monsters have (34-40)% chance to Poison on Hit",
+   "mod_id_or_group": "MapMonsterPoisoning",
+   "mod_ids": [
+    "MapMonsterPoisoning1",
+    "MapMonsterPoisoning2",
+    "MapMonsterPoisoning3",
+    "MapMonsterPoisoning4"
+   ],
+   "affix_name": "Venomous",
+   "kind": "prefix",
+   "generation_types_in_data": [
+    "prefix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 10,
+    "pack_size_more_pct": 7
+   },
+   "danger": {
+    "archetypes": [
+     "low chaos res",
+     "no poison immunity"
+    ],
+    "answered_by_stat": "Poison immunity / chaos res / regen",
+    "level": "fine",
+    "note": "Up to 40% poison chance; dangerous only stacked with Profane."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapMonsterPoisoning1",
+     "effect": "Monsters have (13-19)% chance to Poison on Hit"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapMonsterPoisoning2",
+     "effect": "Monsters have (20-26)% chance to Poison on Hit"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapMonsterPoisoning3",
+     "effect": "Monsters have (27-33)% chance to Poison on Hit"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapMonsterPoisoning4",
+     "effect": "Monsters have (34-40)% chance to Poison on Hit"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "Monsters have (10-15)% increased Attack, Cast and Movement Speed",
+   "mod_id_or_group": "MapMonsterSpeedIncrease",
+   "mod_ids": [
+    "MapMonsterSpeedIncrease1",
+    "MapMonsterSpeedIncrease2",
+    "MapMonsterSpeedIncrease3",
+    "MapMonsterSpeedIncrease4"
+   ],
+   "affix_name": "Fleeting",
+   "kind": "prefix",
+   "generation_types_in_data": [
+    "prefix",
+    "unique"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 25,
+    "pack_size_more_pct": 9
+   },
+   "danger": {
+    "archetypes": [
+     "slow melee",
+     "low max hit",
+     "hardcore"
+    ],
+    "answered_by_stat": "Max hit + movement speed / dodge-roll safety",
+    "level": "risky",
+    "note": "10-15% faster monsters at every tier; T1/T2 versions are generation type \"unique\" in the data."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapMonsterSpeedIncrease1",
+     "effect": "Monsters have (10-15)% increased Attack, Cast and Movement Speed"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapMonsterSpeedIncrease2",
+     "effect": "Monsters have (10-15)% increased Attack, Cast and Movement Speed"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapMonsterSpeedIncrease3",
+     "effect": "Monsters have (10-15)% increased Attack, Cast and Movement Speed"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapMonsterSpeedIncrease4",
+     "effect": "Monsters have (10-15)% increased Attack, Cast and Movement Speed"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "Monsters have (70-79)% increased Stun Threshold",
+   "mod_id_or_group": "MapMonsterStunAilmentThreshold",
+   "mod_ids": [
+    "MapMonsterStunAilmentThreshold1",
+    "MapMonsterStunAilmentThreshold2",
+    "MapMonsterStunAilmentThreshold3",
+    "MapMonsterStunAilmentThreshold4"
+   ],
+   "affix_name": "of the Unwavering",
+   "kind": "suffix",
+   "generation_types_in_data": [
+    "suffix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 10,
+    "monster_effectiveness_more_pct": 13
+   },
+   "danger": {
+    "archetypes": [
+     "ailment builds (freeze, shock, ignite, bleed)",
+     "stun-lock melee"
+    ],
+    "answered_by_stat": "Ailment magnitude / stun buildup",
+    "level": "fine",
+    "note": "Cuts freeze/shock lock and heavy-stun uptime; build-dependent DPS loss."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapMonsterStunAilmentThreshold1",
+     "effect": "Monsters have (30-39)% increased Stun Threshold"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapMonsterStunAilmentThreshold2",
+     "effect": "Monsters have (40-49)% increased Stun Threshold"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapMonsterStunAilmentThreshold3",
+     "effect": "Monsters have (60-69)% increased Stun Threshold"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapMonsterStunAilmentThreshold4",
+     "effect": "Monsters have (70-79)% increased Stun Threshold"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "Monsters have (100-110)% increased Stun Buildup",
+   "mod_id_or_group": "MapMonsterStunBuildup",
+   "mod_ids": [
+    "MapMonsterStunBuildup1",
+    "MapMonsterStunBuildup2",
+    "MapMonsterStunBuildup3",
+    "MapMonsterStunBuildup4"
+   ],
+   "affix_name": "Impacting",
+   "kind": "prefix",
+   "generation_types_in_data": [
+    "prefix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 15,
+    "monster_effectiveness_more_pct": 13
+   },
+   "danger": {
+    "archetypes": [
+     "casters",
+     "ES/CI",
+     "low life"
+    ],
+    "answered_by_stat": "Stun threshold / heavy-stun immunity",
+    "level": "risky",
+    "note": "100-110% more stun buildup at T4; low-life ES casters get heavy-stunned."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapMonsterStunBuildup1",
+     "effect": "Monsters have (50-60)% increased Stun Buildup"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapMonsterStunBuildup2",
+     "effect": "Monsters have (70-80)% increased Stun Buildup"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapMonsterStunBuildup3",
+     "effect": "Monsters have (90-100)% increased Stun Buildup"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapMonsterStunBuildup4",
+     "effect": "Monsters have (100-110)% increased Stun Buildup"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "Monsters take (26-30)% reduced Extra Damage from Critical Hits",
+   "mod_id_or_group": "MapMonstersBaseSelfCriticalMultiplier",
+   "mod_ids": [
+    "MapMonstersBaseSelfCriticalMultiplier1",
+    "MapMonstersBaseSelfCriticalMultiplier2",
+    "MapMonstersBaseSelfCriticalMultiplier3",
+    "MapMonstersBaseSelfCriticalMultiplier4"
+   ],
+   "affix_name": "of Obstruction",
+   "kind": "suffix",
+   "generation_types_in_data": [
+    "suffix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 10,
+    "monster_rarity_more_pct": 18,
+    "note": "Monster Rarity = more magic and rare monsters AND the same % more chance of rare monster modifiers"
+   },
+   "danger": {
+    "archetypes": [
+     "crit builds"
+    ],
+    "answered_by_stat": "Crit damage share of DPS",
+    "level": "fine",
+    "note": "26-30% less extra crit damage: DPS loss only."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapMonstersBaseSelfCriticalMultiplier1",
+     "effect": "Monsters take (15-19)% reduced Extra Damage from Critical Hits"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapMonstersBaseSelfCriticalMultiplier2",
+     "effect": "Monsters take (20-25)% reduced Extra Damage from Critical Hits"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapMonstersBaseSelfCriticalMultiplier3",
+     "effect": "Monsters take (26-30)% reduced Extra Damage from Critical Hits"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapMonstersBaseSelfCriticalMultiplier4",
+     "effect": "Monsters take (26-30)% reduced Extra Damage from Critical Hits"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "(50-40)% less effect of Curses on Monsters",
+   "mod_id_or_group": "MapMonstersCurseEffectOnSelf",
+   "mod_ids": [
+    "MapMonstersCurseEffectOnSelf1",
+    "MapMonstersCurseEffectOnSelf2",
+    "MapMonstersCurseEffectOnSelf3",
+    "MapMonstersCurseEffectOnSelf4"
+   ],
+   "affix_name": "of Hexwarding",
+   "kind": "suffix",
+   "generation_types_in_data": [
+    "suffix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 10,
+    "item_rarity_more_pct": 10
+   },
+   "danger": {
+    "archetypes": [
+     "curse builds (Blood Mage, Hexblast, curse-on-hit)"
+    ],
+    "answered_by_stat": "Curse effect / damage from curses",
+    "level": "fine",
+    "note": "40-50% less curse effect at T3/T4: DPS and defence loss if curses are core."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapMonstersCurseEffectOnSelf1",
+     "effect": "(30-20)% less effect of Curses on Monsters"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapMonstersCurseEffectOnSelf2",
+     "effect": "(40-30)% less effect of Curses on Monsters"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapMonstersCurseEffectOnSelf3",
+     "effect": "(50-40)% less effect of Curses on Monsters"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapMonstersCurseEffectOnSelf4",
+     "effect": "(50-40)% less effect of Curses on Monsters"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "Monster Damage Penetrates (14-16)% Elemental Resistances",
+   "mod_id_or_group": "MapMonstersElementalPenetration",
+   "mod_ids": [
+    "MapMonstersElementalPenetration1",
+    "MapMonstersElementalPenetration2",
+    "MapMonstersElementalPenetration3",
+    "MapMonstersElementalPenetration4"
+   ],
+   "affix_name": "Penetrating",
+   "kind": "prefix",
+   "generation_types_in_data": [
+    "prefix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 20,
+    "item_rarity_more_pct": 16
+   },
+   "danger": {
+    "archetypes": [
+     "everyone (elemental hits)"
+    ],
+    "answered_by_stat": "Max elemental resistances / elemental damage reduction / ele max hit",
+    "level": "deadly",
+    "note": "14-16% pen at T4 ignores capped res; with Exposure + an extra-element prefix it is the classic one-shot stack. Values cut 2026-05-25 but still top-danger."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapMonstersElementalPenetration1",
+     "effect": "Monster Damage Penetrates (6-8)% Elemental Resistances"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapMonstersElementalPenetration2",
+     "effect": "Monster Damage Penetrates (9-11)% Elemental Resistances"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapMonstersElementalPenetration3",
+     "effect": "Monster Damage Penetrates (12-14)% Elemental Resistances"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapMonstersElementalPenetration4",
+     "effect": "Monster Damage Penetrates (14-16)% Elemental Resistances"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "Monsters have (20-25)% chance to steal Power, Frenzy and Endurance charges on Hit",
+   "mod_id_or_group": "MapMonstersStealCharges",
+   "mod_ids": [
+    "MapMonstersStealCharges1",
+    "MapMonstersStealCharges2",
+    "MapMonstersStealCharges3",
+    "MapMonstersStealCharges4"
+   ],
+   "affix_name": "Enervating",
+   "kind": "unique",
+   "generation_types_in_data": [
+    "unique"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 10,
+    "pack_size_more_pct": 7
+   },
+   "danger": {
+    "archetypes": [
+     "charge builds"
+    ],
+    "answered_by_stat": "Reliance on Power/Frenzy/Endurance charges",
+    "level": "fine",
+    "note": "Generation type \"unique\" in 0.5.5 data, and 0.5.0 listed Enervating among mods that can no longer roll on waystones: treat as legacy."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapMonstersStealCharges1",
+     "effect": "Monsters have (10-15)% chance to steal Power, Frenzy and Endurance charges on Hit"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapMonstersStealCharges2",
+     "effect": "Monsters have (15-20)% chance to steal Power, Frenzy and Endurance charges on Hit"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapMonstersStealCharges3",
+     "effect": "Monsters have (20-25)% chance to steal Power, Frenzy and Endurance charges on Hit"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapMonstersStealCharges4",
+     "effect": "Monsters have (20-25)% chance to steal Power, Frenzy and Endurance charges on Hit"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "Players have (30-25)% less Cooldown Recovery Rate",
+   "mod_id_or_group": "MapPlayerCooldownRecovery",
+   "mod_ids": [
+    "MapPlayerCooldownRecovery1",
+    "MapPlayerCooldownRecovery2",
+    "MapPlayerCooldownRecovery3",
+    "MapPlayerCooldownRecovery4"
+   ],
+   "affix_name": "of Fatigue",
+   "kind": "suffix",
+   "generation_types_in_data": [
+    "suffix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 15,
+    "item_rarity_more_pct": 12
+   },
+   "danger": {
+    "archetypes": [
+     "cooldown builds (warcries, invocations, triggers, travel skills)"
+    ],
+    "answered_by_stat": "Cooldown recovery rate / reliance on cooldown skills",
+    "level": "risky",
+    "note": "25-30% less cooldown recovery; defensive cooldowns come back slower."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapPlayerCooldownRecovery1",
+     "effect": "Players have (20-15)% less Cooldown Recovery Rate"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapPlayerCooldownRecovery2",
+     "effect": "Players have (25-20)% less Cooldown Recovery Rate"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapPlayerCooldownRecovery3",
+     "effect": "Players have (30-25)% less Cooldown Recovery Rate"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapPlayerCooldownRecovery4",
+     "effect": "Players have (30-25)% less Cooldown Recovery Rate"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "Players gain (35-30)% reduced Flask Charges",
+   "mod_id_or_group": "MapPlayerFlaskChargeGain",
+   "mod_ids": [
+    "MapPlayerFlaskChargeGain1",
+    "MapPlayerFlaskChargeGain2",
+    "MapPlayerFlaskChargeGain3",
+    "MapPlayerFlaskChargeGain4"
+   ],
+   "affix_name": "of Drought",
+   "kind": "suffix",
+   "generation_types_in_data": [
+    "suffix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 15,
+    "pack_size_more_pct": 7
+   },
+   "danger": {
+    "archetypes": [
+     "life-flask sustain",
+     "charm users"
+    ],
+    "answered_by_stat": "Flask charge generation / non-flask recovery",
+    "level": "fine",
+    "note": "30-35% reduced flask charges."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapPlayerFlaskChargeGain1",
+     "effect": "Players gain (24-20)% reduced Flask Charges"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapPlayerFlaskChargeGain2",
+     "effect": "Players gain (29-25)% reduced Flask Charges"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapPlayerFlaskChargeGain3",
+     "effect": "Players gain (35-30)% reduced Flask Charges"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapPlayerFlaskChargeGain4",
+     "effect": "Players gain (35-30)% reduced Flask Charges"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "-(10-8)% maximum Player Resistances",
+   "mod_id_or_group": "MapPlayerMaximumResists",
+   "mod_ids": [
+    "MapPlayerMaximumResists1",
+    "MapPlayerMaximumResists2",
+    "MapPlayerMaximumResists3",
+    "MapPlayerMaximumResists4"
+   ],
+   "affix_name": "of Exposure",
+   "kind": "suffix",
+   "generation_types_in_data": [
+    "suffix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 25,
+    "pack_size_more_pct": 10
+   },
+   "danger": {
+    "archetypes": [
+     "everyone"
+    ],
+    "answered_by_stat": "Maximum resistances (elemental + chaos) and ele max hit",
+    "level": "deadly",
+    "note": "-8 to -10% max res at T4 (cut 2026-05-25). Every point of max res is ~10% more ele damage taken near cap."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapPlayerMaximumResists1",
+     "effect": "-(4-3)% maximum Player Resistances"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapPlayerMaximumResists2",
+     "effect": "-(6-4)% maximum Player Resistances"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapPlayerMaximumResists3",
+     "effect": "-(8-6)% maximum Player Resistances"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapPlayerMaximumResists4",
+     "effect": "-(10-8)% maximum Player Resistances"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "Players have (40-36)% less Recovery Rate of Life and Energy Shield",
+   "mod_id_or_group": "MapPlayerRecoveryRate",
+   "mod_ids": [
+    "MapPlayerRecoveryRate1",
+    "MapPlayerRecoveryRate2",
+    "MapPlayerRecoveryRate3",
+    "MapPlayerRecoveryRate4"
+   ],
+   "affix_name": "of Smothering",
+   "kind": "suffix",
+   "generation_types_in_data": [
+    "suffix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 20,
+    "item_rarity_more_pct": 15
+   },
+   "danger": {
+    "archetypes": [
+     "leech / regen / recoup / ES-recharge sustain (e.g. Blood Mage)"
+    ],
+    "answered_by_stat": "Life/ES recovery per second vs incoming DPS",
+    "level": "deadly",
+    "note": "36-40% less life and ES recovery rate at T3/T4. Sustain builds lose most of their defence."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapPlayerRecoveryRate1",
+     "effect": "Players have (29-20)% less Recovery Rate of Life and Energy Shield"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapPlayerRecoveryRate2",
+     "effect": "Players have (35-30)% less Recovery Rate of Life and Energy Shield"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapPlayerRecoveryRate3",
+     "effect": "Players have (40-36)% less Recovery Rate of Life and Energy Shield"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapPlayerRecoveryRate4",
+     "effect": "Players have (40-36)% less Recovery Rate of Life and Energy Shield"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "Area has patches of Ignited Ground",
+   "mod_id_or_group": "MapSpreadBurningGround",
+   "mod_ids": [
+    "MapSpreadBurningGround1",
+    "MapSpreadBurningGround2",
+    "MapSpreadBurningGround3",
+    "MapSpreadBurningGround4"
+   ],
+   "affix_name": "Flaming",
+   "kind": "suffix",
+   "generation_types_in_data": [
+    "suffix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 15,
+    "monster_effectiveness_more_pct": 15
+   },
+   "danger": {
+    "archetypes": [
+     "melee",
+     "low fire res"
+    ],
+    "answered_by_stat": "Fire res / ignite immunity / movement",
+    "level": "fine",
+    "note": "Ground patches; +15% monster effectiveness."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapSpreadBurningGround1",
+     "effect": "Area has patches of Ignited Ground"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapSpreadBurningGround2",
+     "effect": "Area has patches of Ignited Ground"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapSpreadBurningGround3",
+     "effect": "Area has patches of Ignited Ground"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapSpreadBurningGround4",
+     "effect": "Area has patches of Ignited Ground"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "Area has patches of Chilled Ground",
+   "mod_id_or_group": "MapSpreadChilledGround",
+   "mod_ids": [
+    "MapSpreadChilledGround1",
+    "MapSpreadChilledGround2",
+    "MapSpreadChilledGround3",
+    "MapSpreadChilledGround4"
+   ],
+   "affix_name": "Sleet",
+   "kind": "suffix",
+   "generation_types_in_data": [
+    "suffix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 15,
+    "item_rarity_more_pct": 12
+   },
+   "danger": {
+    "archetypes": [
+     "melee",
+     "slow builds"
+    ],
+    "answered_by_stat": "Chill/freeze immunity, movement speed",
+    "level": "fine",
+    "note": "Slows you; worse with Frostbitten."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapSpreadChilledGround1",
+     "effect": "Area has patches of Chilled Ground"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapSpreadChilledGround2",
+     "effect": "Area has patches of Chilled Ground"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapSpreadChilledGround3",
+     "effect": "Area has patches of Chilled Ground"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapSpreadChilledGround4",
+     "effect": "Area has patches of Chilled Ground"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  },
+  {
+   "mod_text": "Area has patches of Shocked Ground",
+   "mod_id_or_group": "MapSpreadShockedGround",
+   "mod_ids": [
+    "MapSpreadShockedGround1",
+    "MapSpreadShockedGround2",
+    "MapSpreadShockedGround3",
+    "MapSpreadShockedGround4"
+   ],
+   "affix_name": "Shocking",
+   "kind": "suffix",
+   "generation_types_in_data": [
+    "suffix"
+   ],
+   "reward": {
+    "waystone_chance_more_pct": 15,
+    "pack_size_more_pct": 7
+   },
+   "danger": {
+    "archetypes": [
+     "melee",
+     "low lightning res"
+    ],
+    "answered_by_stat": "Shock immunity / lightning res",
+    "level": "risky",
+    "note": "Shocked = more damage taken; stacks with Thunderous."
+   },
+   "tiers": [
+    {
+     "tier_band": "Waystone T1-5",
+     "mod_id": "MapSpreadShockedGround1",
+     "effect": "Area has patches of Shocked Ground"
+    },
+    {
+     "tier_band": "T6-10",
+     "mod_id": "MapSpreadShockedGround2",
+     "effect": "Area has patches of Shocked Ground"
+    },
+    {
+     "tier_band": "T11-15",
+     "mod_id": "MapSpreadShockedGround3",
+     "effect": "Area has patches of Shocked Ground"
+    },
+    {
+     "tier_band": "T16",
+     "mod_id": "MapSpreadShockedGround4",
+     "effect": "Area has patches of Shocked Ground"
+    }
+   ],
+   "source": "game data: repoe mods.min.json domain=area, spawn tags map_key_low/medium/high/highest; cross-checked 108/108 against client Mods.datc64 build 26744644. Danger = Claude analysis.",
+   "confidence": {
+    "text_tiers_reward": "high (game data)",
+    "danger": "medium (estimated from mechanics)"
+   }
+  }
+ ],
+ "waystone_expected_per_mod_T16": {
+  "prefix": {
+   "families": 14,
+   "waystone_chance_more_pct": 15.0,
+   "pack_size_more_pct": 2.9,
+   "item_rarity_more_pct": 3.2,
+   "monster_rarity_more_pct": 4.8,
+   "monster_effectiveness_more_pct": 3.0
+  },
+  "suffix": {
+   "families": 12,
+   "waystone_chance_more_pct": 14.6,
+   "pack_size_more_pct": 2.0,
+   "item_rarity_more_pct": 6.2,
+   "monster_rarity_more_pct": 1.5,
+   "monster_effectiveness_more_pct": 2.3
+  },
+  "families_by_reward_type": {
+   "pack_size_more_pct": {
+    "excluded_by": "Omen of Chaotic Quantity (inferred)",
+    "mods": [
+     "Precise (7%)",
+     "Destructive (9%)",
+     "Thunderous (8%)",
+     "Venomous (7%)",
+     "Fleeting (9%)",
+     "Enervating (7%)",
+     "of Drought (7%)",
+     "of Exposure (10%)",
+     "Shocking (7%)"
+    ]
+   },
+   "monster_rarity_more_pct": {
+    "excluded_by": "Omen of Chaotic Monsters",
+    "mods": [
+     "Shattering (19%)",
+     "Painful (25%)",
+     "Tough (23%)",
+     "of Obstruction (18%)"
+    ]
+   },
+   "monster_effectiveness_more_pct": {
+    "excluded_by": "Omen of Chaotic Effectiveness",
+    "mods": [
+     "Puncturing (13%)",
+     "Infernal (16%)",
+     "of the Unwavering (13%)",
+     "Impacting (13%)",
+     "Flaming (15%)"
+    ]
+   },
+   "item_rarity_more_pct": {
+    "excluded_by": "Omen of Chaotic Rarity",
+    "mods": [
+     "Profane (15%)",
+     "Frostbitten (14%)",
+     "of Overpowering (11%)",
+     "of the Prism (14%)",
+     "of Hexwarding (10%)",
+     "Penetrating (16%)",
+     "of Fatigue (12%)",
+     "of Smothering (15%)",
+     "Sleet (12%)"
+    ]
+   }
+  },
+  "note": "Equal spawn weight (1) per tier in the data. A 6-mod rare averages ~6x these, summed. Waystone chance is on every mod (10-25%). Effectiveness also adds quantity/xp at half rate (0.5.0)."
+ },
+ "deadly_for_most_builds": {
+  "list": [
+   "of Exposure (-max res)",
+   "Penetrating (ele pen)",
+   "of Smothering (less recovery)"
+  ],
+  "combos": [
+   "Exposure + Penetrating + any \"extra <element>\" prefix",
+   "Destructive (T4 crit) + Painful",
+   "Smothering on leech/regen builds",
+   "Impacting on low-life ES casters",
+   "desecrated of Cycling (no damage 3 of 10 s) for bossing"
+  ],
+  "source": "Claude analysis of 0.5.5 values; GGG cut damage/pen/max-res values on 2026-05-25 because they were too strong",
+  "confidence": "medium"
+ },
+ "waystone_desecrated_mods": [
+  {
+   "mod_id": "MapAbyssalOverrun",
+   "kind": "prefix",
+   "affix_name": "Abyssal",
+   "mod_text": "Area contains (14-18) additional Abysses / Area is overrun by the Abyssal / 3 additional Rare Monsters are spawned from Abysses"
+  },
+  {
+   "mod_id": "MapAbyssalAdditionalPits",
+   "kind": "prefix",
+   "affix_name": "Abyssal",
+   "mod_text": "Area contains (2-3) additional Abysses"
+  },
+  {
+   "mod_id": "MapAbyssalIncreasedAbyssMonsters",
+   "kind": "prefix",
+   "affix_name": "Abyssal",
+   "mod_text": "Abysses spawn (50-100)% increased Monsters"
+  },
+  {
+   "mod_id": "MapAbyssalAbyssMonsterExperience",
+   "kind": "prefix",
+   "affix_name": "Abyssal",
+   "mod_text": "Abyssal Monsters grant (50-100)% increased Experience"
+  },
+  {
+   "mod_id": "MapAbyssCracksAlwaysLeadToDepths",
+   "kind": "prefix",
+   "affix_name": "Abyssal",
+   "mod_text": "Abysses lead to an Abyssal Depths"
+  },
+  {
+   "mod_id": "MapAbyssAlwaysContainsBoss",
+   "kind": "prefix",
+   "affix_name": "Abyssal",
+   "mod_text": "Abysses lead to an Abyssal Boss"
+  },
+  {
+   "mod_id": "MapAbyssCracksAllMagicMonsterChance",
+   "kind": "prefix",
+   "affix_name": "Abyssal",
+   "mod_text": "Abyss Cracks have (40-60)% chance to spawn all Monsters as at least Magic / Abyss Pits have (50-80)% chance to spawn all Monsters as at least Magic"
+  },
+  {
+   "mod_id": "MapAbyssDifficultyRewardIncreasePerPit",
+   "kind": "prefix",
+   "affix_name": "Abyssal",
+   "mod_text": "Abyssal Monsters have increased Difficulty and Reward for each closed Pit"
+  },
+  {
+   "mod_id": "MapAbyssContainsHarvester",
+   "kind": "prefix",
+   "affix_name": "Abyssal",
+   "mod_text": "Area contains an additional Incubator Queen"
+  },
+  {
+   "mod_id": "MapAbyssModManaSiphonGround",
+   "kind": "suffix",
+   "affix_name": "of Siphoning",
+   "mod_text": "Area has patches of Mana Siphoning Ground"
+  },
+  {
+   "mod_id": "MapAbyssRareMonstersAbyssalModifier",
+   "kind": "prefix",
+   "affix_name": "Abyssal",
+   "mod_text": "Natural Rare Monsters in Area have 1 extra Abyssal Modifier"
+  },
+  {
+   "mod_id": "MapAbyssRareMonstersSoulEater",
+   "kind": "suffix",
+   "affix_name": "of Consumption",
+   "mod_text": "Natural Rare Monsters in Area Eat the Souls of slain Monsters in their Presence / Players steal the Eaten Souls of Slain Rare Monsters in Area"
+  },
+  {
+   "mod_id": "MapAbyssGuaranteeRewards",
+   "kind": "prefix",
+   "affix_name": "Abyssal",
+   "mod_text": "Abyss Pits in Area always have Rewards"
+  },
+  {
+   "mod_id": "MapAbyssVines",
+   "kind": "suffix",
+   "affix_name": "of Grasping",
+   "mod_text": "Monsters inflict 1 Grasping Vine on Hit"
+  },
+  {
+   "mod_id": "MapAbyssActionSpeed",
+   "kind": "suffix",
+   "affix_name": "of Deceleration",
+   "mod_text": "Players have 3% less Movement and Skill Speed for each time they've used a Skill Recently"
+  },
+  {
+   "mod_id": "MapAbyssDamageRotation",
+   "kind": "suffix",
+   "affix_name": "of Cycling",
+   "mod_text": "Players and their Minions deal no damage for 3 out of every 10 seconds"
+  },
+  {
+   "mod_id": "MapAbyssMarkedForDeath",
+   "kind": "suffix",
+   "affix_name": "of Retribution",
+   "mod_text": "Players are Marked for Death for 10 seconds / after killing a Rare or Unique monster"
+  }
+ ],
+ "waystone_instilled_emotions": [
+  {
+   "emotion": "Ire",
+   "mod_id": "InstilledMapDelirium1",
+   "effect": "Players in Area are 7% Delirious / 20% increased number of Magic Monsters"
+  },
+  {
+   "emotion": "Guilt",
+   "mod_id": "InstilledMapDelirium2",
+   "effect": "Players in Area are 9% Delirious / 8% increased Pack size"
+  },
+  {
+   "emotion": "Greed",
+   "mod_id": "InstilledMapDelirium3",
+   "effect": "Players in Area are 10% Delirious / 8% increased Rarity of Items found in this Area"
+  },
+  {
+   "emotion": "Paranoia",
+   "mod_id": "InstilledMapDelirium4",
+   "effect": "Players in Area are 12% Delirious / 15% increased number of Rare Monsters"
+  },
+  {
+   "emotion": "Envy",
+   "mod_id": "InstilledMapDelirium5",
+   "effect": "Players in Area are 15% Delirious / 30% increased Waystones found in Area"
+  },
+  {
+   "emotion": "Disgust",
+   "mod_id": "InstilledMapDelirium6",
+   "effect": "Players in Area are 18% Delirious / 30% increased Tablets found in Area"
+  },
+  {
+   "emotion": "Despair",
+   "mod_id": "InstilledMapDelirium7",
+   "effect": "Players in Area are 20% Delirious / 30% increased Stack size of Simulacrum Splinters found in Area"
+  },
+  {
+   "emotion": "Fear",
+   "mod_id": "InstilledMapDelirium8",
+   "effect": "Players in Area are 22% Delirious / Rare Monsters have a 25% Surpassing chance to have an additional Modifier"
+  },
+  {
+   "emotion": "Suffering",
+   "mod_id": "InstilledMapDelirium9",
+   "effect": "Players in Area are 25% Delirious / Unique Monsters have 1 additional Rare Modifier"
+  },
+  {
+   "emotion": "Isolation (also Melancholy, Ferocity, Contempt)",
+   "mod_id": "InstilledMapDelirium10",
+   "effect": "Players in Area are 50% Delirious"
+  }
+ ],
+ "waystone_facts": {
+  "tiers": "T1-5 low (area 65-69), T6-10 medium (70-74), T11-15 high (75-79), T16 highest (80). Source: maptiers + mod spawn tags.",
+  "identify": "must be identified to open (0.5.0)",
+  "reward_rules": "mod bonuses add up between waystone mods and multiply with atlas passives (0.5.0); prefixes = monster offence, suffixes = player/monster defences (0.5.0)",
+  "removed_in_0_5_0": [
+   "Baron's",
+   "Beastly",
+   "Brambled",
+   "Doryani's",
+   "Enervating",
+   "Faridun's",
+   "Hallowed",
+   "of Nemeses",
+   "Perennial's",
+   "Rusted",
+   "Sacrificial",
+   "extra projectiles (disabled 2026-05-25)"
+  ],
+  "revivals": "more mods = fewer revivals (poe2db); Doryani Stitch the Flesh +1 revival up to 6; forum regex guide used \"revives 0\" to find 6+ mod stones. Exact formula unverified.",
+  "tablet_slots": "up to 3 tablets per map (0.5.5d fix mentions 3-slot maps); +1 on City maps with Industrial Improvements; empty slots add random league content (0.5.0)",
+  "area_corruption_mods": "EndgameCorruption* (corrupted areas, +1 monster level, xp/quantity trades) and EndgameCleansed* (cleansed areas: e.g. waystones 20-30% more prefix effect / less suffix effect) live in endgamecorruptionmods/endgamecleansedmods"
+ },
+ "tablets": {
+  "types": [
+   {
+    "name": "Breach Tablet",
+    "base_id": "Metadata/Items/TowerAugment/BreachAugment",
+    "tag": "tower_augment_breach",
+    "implicit": "Adds an Otherworldy Breach to a Map  / 10 uses remaining",
+    "own_suffixes": [
+     {
+      "mod_id": "TowerBreachHivebloodQuantity",
+      "kind": "suffix",
+      "affix_name": "of the Flow",
+      "text": "(30-60)% increased Quantity of Hiveblood found in Map"
+     },
+     {
+      "mod_id": "TowerBreachWombgiftQuantity",
+      "kind": "suffix",
+      "affix_name": "of the Form",
+      "text": "(30-60)% increased Quantity of Wombgifts found in Map"
+     },
+     {
+      "mod_id": "TowerBreachWombgiftLevelChance",
+      "kind": "suffix",
+      "affix_name": "of the Flesh",
+      "text": "Wombgifts have (10-30)% chance to drop one Level higher in Map"
+     },
+     {
+      "mod_id": "TowerBreachBossChance",
+      "kind": "suffix",
+      "affix_name": "of the Commander",
+      "text": "Unstable Breaches in Map have (20-50)% increased chance to contain Vruun, Marshal of Xesht"
+     },
+     {
+      "mod_id": "TowerBreachAdditionalRares",
+      "kind": "suffix",
+      "affix_name": "of the Invasion",
+      "text": "Unstable Breaches in Map spawn (1-2) additional Rare Monsters when Stabilised"
+     },
+     {
+      "mod_id": "TowerBreachRareMonsterPotency",
+      "kind": "suffix",
+      "affix_name": "of the Hand",
+      "text": "(5-20)% increased Effectiveness of Rare Breach Monsters in Map"
+     },
+     {
+      "mod_id": "TowerBreachMonsterQuantity",
+      "kind": "suffix",
+      "affix_name": "of the Horde",
+      "text": "Breaches in Map have (5-15)% increased Pack Size"
+     }
+    ]
+   },
+   {
+    "name": "Expedition Tablet",
+    "base_id": "Metadata/Items/TowerAugment/ExpeditionAugment",
+    "tag": "tower_augment_expedition",
+    "implicit": "Adds a Kalguuran Expedition to a Map  / 10 uses remaining",
+    "own_suffixes": [
+     {
+      "mod_id": "TowerExpeditionExplosionRadius",
+      "kind": "suffix",
+      "affix_name": "of the Demolition",
+      "text": "(5-10)% increased Expedition Explosive Area of Effect in Map"
+     },
+     {
+      "mod_id": "TowerExpeditionLogbookIncrease",
+      "kind": "suffix",
+      "affix_name": "of Knowledge",
+      "text": "(15-25)% increased Quantity of Expedition Logbooks dropped by Runic Monsters in Map"
+     },
+     {
+      "mod_id": "TowerExpeditionRunicMonsters",
+      "kind": "suffix",
+      "affix_name": "of Runes",
+      "text": "Map contains (15-25)% increased number of Runic Monster Markers"
+     },
+     {
+      "mod_id": "TowerExpeditionIncreasedVerisium",
+      "kind": "suffix",
+      "affix_name": "of Verisium",
+      "text": "Monsters from Verisium Remnants drop (15-25)% increased Verisium"
+     },
+     {
+      "mod_id": "TowerExpeditionUnearthedRares",
+      "kind": "suffix",
+      "affix_name": "of Ancient Evil",
+      "text": "The first (1-2) unearthed Runic Monsters will be Rare Monsters in Map"
+     },
+     {
+      "mod_id": "TowerExpeditionAdditionalSentinels",
+      "kind": "suffix",
+      "affix_name": "of Sentinels",
+      "text": "Expeditions contain (1-2) Additional Verisium Sentries in Map"
+     },
+     {
+      "mod_id": "TowerExpeditionIncreasedMonsterRarity",
+      "kind": "suffix",
+      "affix_name": "of Power",
+      "text": "(15-25)% increased Expedition Monster Rarity in Map"
+     },
+     {
+      "mod_id": "TowerExpeditionFrozenBosses",
+      "kind": "suffix",
+      "affix_name": "of Preservation",
+      "text": "Expeditions contain (1-2) Additional Bosses encased in ice in Map"
+     },
+     {
+      "mod_id": "TowerExpeditionBuriedStrongboxes",
+      "kind": "suffix",
+      "affix_name": "of Treasure",
+      "text": "Expeditions contain (1-2) buried Strongboxes in Map"
+     },
+     {
+      "mod_id": "TowerExpeditionVaalRemnants",
+      "kind": "suffix",
+      "affix_name": "of the Past",
+      "text": "Expeditions contain (1-2) Vaal Relics in Map"
+     },
+     {
+      "mod_id": "TowerExpeditionChanceForVerisiumRemnant",
+      "kind": "suffix",
+      "affix_name": "of Remnants",
+      "text": "Expeditions have +(30-40)% Surpassing chance to contain an additional Verisium Remnant"
+     },
+     {
+      "mod_id": "TowerExpeditionChanceForTwinnedElites",
+      "kind": "suffix",
+      "affix_name": "of Twins",
+      "text": "Expeditions have +(30-40)% Surpassing chance to Duplicate Runic Monsters in Map"
+     },
+     {
+      "mod_id": "TowerExpedition2RunicModPassoverChance",
+      "kind": "suffix",
+      "affix_name": "of Ancient Fiends",
+      "text": "Verisium Remnants have +(25-35)% chance to add an additional Runic Modifier in Map"
+     }
+    ]
+   },
+   {
+    "name": "Delirium Tablet",
+    "base_id": "Metadata/Items/TowerAugment/DeliriumAugment",
+    "tag": "tower_augment_delirium",
+    "implicit": "Adds a Mirror of Delirium to a Map  / 10 uses remaining",
+    "own_suffixes": [
+     {
+      "mod_id": "TowerDeliriumMonsterSplinterIncrease",
+      "kind": "suffix",
+      "affix_name": "of the Simulacrum",
+      "text": "(15-30)% increased Stack size of Simulacrum Splinters found in Map"
+     },
+     {
+      "mod_id": "TowerDeliriumFogDissipationDelayNew",
+      "kind": "suffix",
+      "affix_name": "of Eternity",
+      "text": "Delirium Fog in Map lasts (6-12) additional seconds before dissipating"
+     },
+     {
+      "mod_id": "TowerDeliriumFogPersistence",
+      "kind": "suffix",
+      "affix_name": "of the Unending",
+      "text": "Delirium Fog in Map dissipates (30-20)% slower"
+     },
+     {
+      "mod_id": "TowerDeliriumDifficultyIncrease",
+      "kind": "suffix",
+      "affix_name": "of Madness",
+      "text": "Delirium Fog in Map applies (15-30)% increased Deliriousness to Players"
+     },
+     {
+      "mod_id": "TowerDeliriumPackSizeIncrease",
+      "kind": "suffix",
+      "affix_name": "of Persecution",
+      "text": "Delirium Monsters in Map have (15-30)% increased Pack Size"
+     },
+     {
+      "mod_id": "TowerDeliriumDoodadsIncrease",
+      "kind": "suffix",
+      "affix_name": "of Mirrors",
+      "text": "Delirium Fog in Map spawns (15-30)% increased Fracturing Mirrors"
+     },
+     {
+      "mod_id": "TowerDeliriumRareMonsterPause",
+      "kind": "suffix",
+      "affix_name": "of Freeze Time",
+      "text": "Slaying Rare Monsters in Map pauses the Delirium Mirror Timer for (3-5) seconds"
+     },
+     {
+      "mod_id": "TowerDeliriumBossChance",
+      "kind": "suffix",
+      "affix_name": "of Phobia",
+      "text": "Delirium Encounters in Map are (15-30)% more likely to spawn Unique Bosses"
+     },
+     {
+      "mod_id": "TowerDeliriumAdditionalShardsChance",
+      "kind": "suffix",
+      "affix_name": "of Shattering",
+      "text": "Delirium Fog in Map spawns (12-26)% increased Mirror Shards"
+     }
+    ]
+   },
+   {
+    "name": "Ritual Tablet",
+    "base_id": "Metadata/Items/TowerAugment/RitualAugment",
+    "tag": "tower_augment_ritual",
+    "implicit": "Adds Ritual Altars to a Map  / 10 uses remaining",
+    "own_suffixes": [
+     {
+      "mod_id": "TowerRitualTributeIncrease",
+      "kind": "suffix",
+      "affix_name": "of Sacrifice",
+      "text": "Monsters Sacrificed at Ritual Altars in Map grant (18-30)% increased Tribute"
+     },
+     {
+      "mod_id": "TowerRitualRerollCostIncrease",
+      "kind": "suffix",
+      "affix_name": "of the Dogma",
+      "text": "Rerolling Favours at Ritual Altars in Map costs (30-20)% reduced Tribute"
+     },
+     {
+      "mod_id": "TowerRitualDeferCostIncrease",
+      "kind": "suffix",
+      "affix_name": "of Devotion",
+      "text": "Deferring Favours at Ritual Altars in Map costs (30-20)% reduced Tribute"
+     },
+     {
+      "mod_id": "TowerRitualDeferSpeed",
+      "kind": "suffix",
+      "affix_name": "of the Appeal",
+      "text": "Favours Deferred at Ritual Altars in Map reappear (25-40)% sooner"
+     },
+     {
+      "mod_id": "TowerRitualAdditionalReroll",
+      "kind": "suffix",
+      "affix_name": "of Prayers",
+      "text": "Ritual Altars in Map allow rerolling Favours (1-3) additional times"
+     },
+     {
+      "mod_id": "TowerRitualChanceForNoCost",
+      "kind": "suffix",
+      "affix_name": "of the Occult",
+      "text": "Favours Rerolled at Ritual Altars in Map have (3-6)% chance to cost no Tribute"
+     },
+     {
+      "mod_id": "TowerRitualRareMonsters",
+      "kind": "suffix",
+      "affix_name": "of the Foundling",
+      "text": "Revived Monsters from Ritual Altars in Map have (35-70)% increased chance to be Magic"
+     },
+     {
+      "mod_id": "TowerRitualMagicMonsters",
+      "kind": "suffix",
+      "affix_name": "of the Cult",
+      "text": "Revived Monsters from Ritual Altars in Map have (25-40)% increased chance to be Rare"
+     },
+     {
+      "mod_id": "TowerRitualOmenChance",
+      "kind": "suffix",
+      "affix_name": "of Omens",
+      "text": "Ritual Favours in Map have (35-70)% increased chance to be Omens"
+     }
+    ]
+   },
+   {
+    "name": "Irradiated Tablet",
+    "base_id": "Metadata/Items/TowerAugment/GenericAugment",
+    "tag": "tower_augment_generic",
+    "implicit": "Adds Irradiated to a Map  / 10 uses remaining",
+    "own_suffixes": []
+   },
+   {
+    "name": "Overseer Tablet",
+    "base_id": "Metadata/Items/TowerAugment/MapBossAugment",
+    "tag": "tower_augment_map_boss",
+    "implicit": "Empowers the Map Boss of a Map  / 10 uses remaining",
+    "own_suffixes": [
+     {
+      "mod_id": "TowerMapBossAdditionalStrongbox",
+      "kind": "suffix",
+      "affix_name": "of Compartments",
+      "text": "Map contains (1-2) additional Strongboxes"
+     },
+     {
+      "mod_id": "TowerMapBossAdditionalShrine",
+      "kind": "suffix",
+      "affix_name": "of Worship",
+      "text": "Map contains (1-2) additional Shrines"
+     },
+     {
+      "mod_id": "TowerMapBossAdditionalEssence",
+      "kind": "suffix",
+      "affix_name": "of Crystals",
+      "text": "Map contains (1-2) additional Essences"
+     },
+     {
+      "mod_id": "TowerMapBossAdditionalSpirit",
+      "kind": "suffix",
+      "affix_name": "of Wisps",
+      "text": "Map contains (1-2) additional Azmeri Spirits"
+     },
+     {
+      "mod_id": "TowerMapBossWaystoneChance",
+      "kind": "suffix",
+      "affix_name": "of Pathways",
+      "text": "(18-30)% increased Quantity of Waystones dropped by Map Bosses"
+     },
+     {
+      "mod_id": "TowerMapBossExperience",
+      "kind": "suffix",
+      "affix_name": "of Conquering",
+      "text": "Map Bosses grant (40-80)% increased Experience"
+     },
+     {
+      "mod_id": "TowerMapBossRarity",
+      "kind": "suffix",
+      "affix_name": "of Treasure",
+      "text": "(35-60)% increased Rarity of Items dropped by Map Bosses"
+     },
+     {
+      "mod_id": "TowerMapBossQuantity",
+      "kind": "suffix",
+      "affix_name": "of Hoards",
+      "text": "(13-20)% increased Quantity of Items dropped by Map Bosses"
+     }
+    ]
+   },
+   {
+    "name": "Abyss Tablet",
+    "base_id": "Metadata/Items/TowerAugment/AbyssAugment",
+    "tag": "tower_augment_abyss",
+    "implicit": "Adds Abysses to a Map  / 10 uses remaining",
+    "own_suffixes": [
+     {
+      "mod_id": "TowerAbyssMonsterIncrease",
+      "kind": "suffix",
+      "affix_name": "of the Horde",
+      "text": "Abysses in Map spawn (20-30)% increased Monsters"
+     },
+     {
+      "mod_id": "TowerAbyssRareMonsterIncrease",
+      "kind": "suffix",
+      "affix_name": "of Champions",
+      "text": "(2-3) additional Rare Monsters are spawned from Abysses in Map"
+     },
+     {
+      "mod_id": "TowerAbyssEffectivenessPerChasm",
+      "kind": "suffix",
+      "affix_name": "of Escalation",
+      "text": "Abyssal Monsters have (8-12)% increased Effectiveness for each closed Pit, up to 100%"
+     },
+     {
+      "mod_id": "TowerAbyssDepthsChance",
+      "kind": "suffix",
+      "affix_name": "of the Depths",
+      "text": "Abysses in Map have (10-20)% increased chance to lead to an Abyssal Depths"
+     },
+     {
+      "mod_id": "TowerAbyssAdditionalChance",
+      "kind": "suffix",
+      "affix_name": "of Hollows",
+      "text": "Map contains an additional Abyss"
+     },
+     {
+      "mod_id": "TowerAbyssIncreasedRewards",
+      "kind": "suffix",
+      "affix_name": "of Treasures",
+      "text": "Abyss Pits in Map are twice as likely to have Rewards"
+     },
+     {
+      "mod_id": "TowerAbyss4AdditionalChance",
+      "kind": "suffix",
+      "affix_name": "of Schisms",
+      "text": "Map has (20-40)% chance to contain four additional Abysses"
+     },
+     {
+      "mod_id": "TowerAbyssExtraModifiers",
+      "kind": "suffix",
+      "affix_name": "of Dark Power",
+      "text": "(20-30)% increased chance for Abyssal monsters in Map to have Abyssal Modifiers"
+     },
+     {
+      "mod_id": "TowerAbyssExtraTickets",
+      "kind": "suffix",
+      "affix_name": "of Ossification",
+      "text": "(20-30)% increased chance for Desecrated Currency from Abysses in Map"
+     }
+    ]
+   },
+   {
+    "name": "Temple Tablet",
+    "base_id": "Metadata/Items/TowerAugment/IncursionAugment",
+    "tag": "tower_augment_incursion",
+    "implicit": "Adds Vaal Beacons to a Map  / 10 uses remaining",
+    "own_suffixes": [
+     {
+      "mod_id": "TowerIncursionPackSize",
+      "kind": "suffix",
+      "affix_name": "",
+      "text": "(10-30)% increased Pack Size for Monsters around Vaal Beacons in Map"
+     },
+     {
+      "mod_id": "TowerIncursionExtraPacks",
+      "kind": "suffix",
+      "affix_name": "",
+      "text": "1 extra pack of Monsters around Vaal Beacons in Map"
+     },
+     {
+      "mod_id": "TowerIncursionExtraPacksChance",
+      "kind": "suffix",
+      "affix_name": "",
+      "text": "(30-60)% chance for an extra packs of Monsters around Vaal Beacons in Map"
+     },
+     {
+      "mod_id": "TowerIncursionSecondaryEncounters",
+      "kind": "suffix",
+      "affix_name": "",
+      "text": "(25-50)% increased chance Vaal Beacons summon additional Monsters in Map"
+     },
+     {
+      "mod_id": "TowerIncursionTokenChance",
+      "kind": "suffix",
+      "affix_name": "",
+      "text": "(5-10)% chance to gain an additional Crystal from Vaal Beacons in Map"
+     },
+     {
+      "mod_id": "TowerIncursionBossChance",
+      "kind": "suffix",
+      "affix_name": "",
+      "text": "(10-25)% chance to add a Vaal Beacon Unique Monster to the Map"
+     },
+     {
+      "mod_id": "TowerIncursionRareChestChance",
+      "kind": "suffix",
+      "affix_name": "",
+      "text": "(30-60)% increased chance Vaal Beacon Chests are Rare in Map"
+     }
+    ]
+   }
+  ],
+  "generic_mods_all_types": [
+   {
+    "mod_id": "TowerDroppedItemQuantityIncrease1",
+    "kind": "unique",
+    "affix_name": "Plundering",
+    "text": "(4-10)% increased Quantity of Items found in Map"
+   },
+   {
+    "mod_id": "TowerMonsterEffectiveness1",
+    "kind": "prefix",
+    "affix_name": "Challenger's",
+    "text": "Monsters have (10-15)% increased Effectiveness"
+   },
+   {
+    "mod_id": "TowerDroppedItemRarityIncrease1",
+    "kind": "prefix",
+    "affix_name": "Collector's",
+    "text": "(8-12)% increased Rarity of Items found in Map"
+   },
+   {
+    "mod_id": "TowerPackSizeIncrease1",
+    "kind": "prefix",
+    "affix_name": "Breeding",
+    "text": "(5-7)% increased Pack Size in Map"
+   },
+   {
+    "mod_id": "TowerMagicPackIncrease1",
+    "kind": "prefix",
+    "affix_name": "Teeming",
+    "text": "Map has (30-40)% increased Magic Monsters"
+   },
+   {
+    "mod_id": "TowerRarePackIncrease1",
+    "kind": "prefix",
+    "affix_name": "Brimming",
+    "text": "Map has (25-35)% increased number of Rare Monsters"
+   },
+   {
+    "mod_id": "TowerMonsterRarityIncrease1",
+    "kind": "prefix",
+    "affix_name": "Abounding",
+    "text": "Map has (15-20)% increased Monster Rarity"
+   },
+   {
+    "mod_id": "TowerDroppedGoldIncrease1",
+    "kind": "prefix",
+    "affix_name": "Bountiful",
+    "text": "(25-35)% increased Gold found in Map"
+   },
+   {
+    "mod_id": "TowerExperienceGainIncrease1",
+    "kind": "prefix",
+    "affix_name": "Elevated",
+    "text": "(12-18)% increased Experience gain in Map"
+   },
+   {
+    "mod_id": "TowerRareChestCount1",
+    "kind": "prefix",
+    "affix_name": "Treasurer's",
+    "text": "Map contains (2-3) additional Rare Chests"
+   },
+   {
+    "mod_id": "TowerMapDroppedMapsIncrease",
+    "kind": "suffix",
+    "affix_name": "of the Cartographer",
+    "text": "(30-40)% increased Quantity of Waystones found in Map"
+   },
+   {
+    "mod_id": "TowerAdditionalShrineChance",
+    "kind": "suffix",
+    "affix_name": "of Shrines",
+    "text": "Map has (70-100)% increased chance to contain Shrines"
+   },
+   {
+    "mod_id": "TowerAdditionalShrine1",
+    "kind": "suffix",
+    "affix_name": "of the Devoted",
+    "text": "Map contains an additional Shrine"
+   },
+   {
+    "mod_id": "TowerAdditionalStrongboxChance",
+    "kind": "suffix",
+    "affix_name": "of Strongboxes",
+    "text": "Map has (70-100)% increased chance to contain Strongboxes"
+   },
+   {
+    "mod_id": "TowerAdditionalStrongbox1",
+    "kind": "suffix",
+    "affix_name": "of the Antiquarian",
+    "text": "Map contains an additional Strongbox"
+   },
+   {
+    "mod_id": "TowerAdditionalEssenceChance",
+    "kind": "suffix",
+    "affix_name": "of the Essence",
+    "text": "Map has (70-100)% increased chance to contain Essences"
+   },
+   {
+    "mod_id": "TowerAdditionalEssence1",
+    "kind": "prefix",
+    "affix_name": "Crystallised",
+    "text": "Map contains an additional Essence"
+   },
+   {
+    "mod_id": "TowerAdditionalSpiritChance",
+    "kind": "suffix",
+    "affix_name": "of Spirits",
+    "text": "Map has (70-100)% increased chance to contain Azmeri Spirits"
+   },
+   {
+    "mod_id": "TowerAdditionalAzmeriWisp1",
+    "kind": "prefix",
+    "affix_name": "Azmeri's",
+    "text": "Map contains 1 additional Azmeri Spirit"
+   },
+   {
+    "mod_id": "TowerAdditionalExileChance",
+    "kind": "suffix",
+    "affix_name": "of the Exile",
+    "text": "Map has (70-100)% increased chance to contain Rogue Exiles"
+   },
+   {
+    "mod_id": "TowerAdditionalExile1",
+    "kind": "prefix",
+    "affix_name": "Exiled",
+    "text": "Map is inhabited by 1 additional Rogue Exile"
+   },
+   {
+    "mod_id": "TowerAdditionalStoneCircle",
+    "kind": "prefix",
+    "affix_name": "Summoner's",
+    "text": "Map contains an additional Summoning Circle"
+   },
+   {
+    "mod_id": "TowerStoneCircleChance",
+    "kind": "suffix",
+    "affix_name": "of the Summoning",
+    "text": "Map has (70-100)% increased chance to contain a Summoning Circle"
+   },
+   {
+    "mod_id": "TowerMapAdditionalModifier",
+    "kind": "suffix",
+    "affix_name": "of Undertaking",
+    "text": "Map has (1-2) additional random Modifiers"
+   },
+   {
+    "mod_id": "TowerMapAdditionalUniqueMonsterModifier",
+    "kind": "suffix",
+    "affix_name": "of Contest",
+    "text": "Unique Monsters have 1 additional Rare Modifier"
+   }
+  ],
+  "unique_implicit_or_disabled_mods": [
+   {
+    "mod_id": "TowerAddIrradiatedToMapsImplicit",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Adds Irradiated to a Map  / 10 uses remaining"
+   },
+   {
+    "mod_id": "TowerAddBreachToMapsImplicit",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Adds an Otherworldy Breach to a Map  / 10 uses remaining"
+   },
+   {
+    "mod_id": "TowerAddExpeditionToMapsImplicit",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Adds a Kalguuran Expedition to a Map  / 10 uses remaining"
+   },
+   {
+    "mod_id": "TowerAddDeliriumToMapsImplicit",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Adds a Mirror of Delirium to a Map  / 10 uses remaining"
+   },
+   {
+    "mod_id": "TowerAddRitualToMapsImplicit",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Adds Ritual Altars to a Map  / 10 uses remaining"
+   },
+   {
+    "mod_id": "TowerAddMapBossesToMapsImplicit",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Empowers the Map Boss of a Map  / 10 uses remaining"
+   },
+   {
+    "mod_id": "TowerAddAbyssToMapsImplicit",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Adds Abysses to a Map  / 10 uses remaining"
+   },
+   {
+    "mod_id": "TowerAddIncursionToMapsImplicit",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Adds Vaal Beacons to a Map  / 10 uses remaining"
+   },
+   {
+    "mod_id": "TowerAddIrradiatedToMapsImplicitUnique",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Adds Irradiated to a Map  / 1 use remaining"
+   },
+   {
+    "mod_id": "TowerAddBreachToMapsImplicitUnique",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Adds an Otherworldy Breach to a Map  / 5 uses remaining"
+   },
+   {
+    "mod_id": "TowerAddExpeditionToMapsImplicitUnique",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Adds a Kalguuran Expedition to a Map  / 5 uses remaining"
+   },
+   {
+    "mod_id": "TowerAddDeliriumToMapsImplicitUnique",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Adds a Mirror of Delirium to a Map  / 5 uses remaining"
+   },
+   {
+    "mod_id": "TowerAddRitualToMapsImplicitUnique",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Adds Ritual Altars to a Map  / 5 uses remaining"
+   },
+   {
+    "mod_id": "TowerAddMapBossesToMapsImplicitUnique",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Empowers the Map Boss of a Map  / 5 uses remaining"
+   },
+   {
+    "mod_id": "TowerAddAbyssToMapsImplicitUnique",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Adds Abysses to a Map  / 1 use remaining"
+   },
+   {
+    "mod_id": "TowerRareAdditionalModChance",
+    "kind": "suffix",
+    "affix_name": "of the Nemesis",
+    "text": "Rare Monsters in Map have a (50-80)% Surpassing chance to have an additional Modifier"
+   },
+   {
+    "mod_id": "TowerBreachMagicMonsterIncrease",
+    "kind": "unique",
+    "affix_name": "of the Horde",
+    "text": "Breaches in Map spawn (40-70)% increased Magic Monsters"
+   },
+   {
+    "mod_id": "TowerBreachRareMonsterIncrease",
+    "kind": "unique",
+    "affix_name": "of the Commander",
+    "text": "Breaches in Map spawn (1-2) additional Rare Monsters"
+   },
+   {
+    "mod_id": "TowerBreachDensityIncrease",
+    "kind": "unique",
+    "affix_name": "of the Invasion",
+    "text": "Breaches in Map have (5-10)% increased Pack Size"
+   },
+   {
+    "mod_id": "TowerBreachSpeedIncrease",
+    "kind": "unique",
+    "affix_name": "of the Flash",
+    "text": "Breaches in Map open and close (10-30)% faster / Breaches in Map have (3-8)% increased Pack Size"
+   },
+   {
+    "mod_id": "TowerBreachChestAdditional",
+    "kind": "unique",
+    "affix_name": "of the Hand",
+    "text": ""
+   },
+   {
+    "mod_id": "TowerBreachMonsterSplinterIncrease",
+    "kind": "unique",
+    "affix_name": "of the Domain",
+    "text": "(15-30)% increased Quantity of Breach Splinters dropped by Breach Monsters in Map"
+   },
+   {
+    "mod_id": "TowerBreach3AdditionalChance",
+    "kind": "unique",
+    "affix_name": "of Rupturing",
+    "text": "Map has (6-10)% chance to contain three additional Breaches"
+   },
+   {
+    "mod_id": "TowerBreachAdditionalChance",
+    "kind": "unique",
+    "affix_name": "of Fissuring",
+    "text": "Map has (15-30)% chance to contain an additional Breach"
+   },
+   {
+    "mod_id": "TowerExpeditionExplosionPlacement",
+    "kind": "suffix",
+    "affix_name": "of the Detonator",
+    "text": "(10-20)% increased Expedition Explosive Placement Range in Map"
+   },
+   {
+    "mod_id": "TowerExpeditionRareMonsters",
+    "kind": "suffix",
+    "affix_name": "of Ancient Fiends",
+    "text": "(25-35)% increased number of Rare Expedition Monsters in Map"
+   },
+   {
+    "mod_id": "TowerExpeditionArtifactIncrease",
+    "kind": "unique",
+    "affix_name": "of Verisium",
+    "text": "(15-30)% increased quantity of Expedition Artifacts dropped by Monsters in Map"
+   },
+   {
+    "mod_id": "TowerExpeditionRelicIncrease",
+    "kind": "unique",
+    "affix_name": "of the Writings",
+    "text": "Expeditions in Map have +(1-2) Remnants"
+   },
+   {
+    "mod_id": "TowerExpeditionRelicModEffect",
+    "kind": "unique",
+    "affix_name": "of Relics",
+    "text": "(12-18)% increased Effect of Expedition Remnants in Map"
+   },
+   {
+    "mod_id": "TowerDeliriumRewardProgressIncrease",
+    "kind": "unique",
+    "affix_name": "of the Pursuit",
+    "text": ""
+   },
+   {
+    "mod_id": "TowerDeliriumFogDissipationDelay",
+    "kind": "unique",
+    "affix_name": "of Eternity",
+    "text": ""
+   },
+   {
+    "mod_id": "TowerDeliriumAdditionalRewardType",
+    "kind": "unique",
+    "affix_name": "of Envy",
+    "text": ""
+   },
+   {
+    "mod_id": "UniqueBreachMinimumRadius",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Unstable Breaches in Map take 120 additional seconds to collapse after timer is filled"
+   },
+   {
+    "mod_id": "UniqueBreachHiveAdditionalWaves",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Breach Hives in Map have (2-5) additional waves of Hiveborn Monsters"
+   },
+   {
+    "mod_id": "UniqueBreachUnstableAdditionalRares",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Unstable Breaches in Map spawn (2-5) additional Rare Monsters when Stabilised"
+   },
+   {
+    "mod_id": "UniqueExpeditionExplosionRemovesLife",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Expedition Monsters in your Maps spawn with half of their Life missing"
+   },
+   {
+    "mod_id": "UniqueExpeditionTwinnedElites",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Runic Monsters in your Maps are Duplicated"
+   },
+   {
+    "mod_id": "UniqueRitualUnlimitedRerolls",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Can Reroll Favours at Ritual Altars in your Maps twice as many times"
+   },
+   {
+    "mod_id": "UniqueRitualTributeCostIncrease",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Favours at Ritual Altars in Area costs (10-15)% increased Tribute"
+   },
+   {
+    "mod_id": "UniqueDeliriumEndlessFog",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Delirium Fog in your Maps never dissipates"
+   },
+   {
+    "mod_id": "UniqueTowerBreachDensityIncrease",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Breaches in Map have (-20-10)% increased Pack Size"
+   },
+   {
+    "mod_id": "UniqueDeliriumDifficultyIncrease",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Delirium Fog in Map applies (-10-10)% increased Deliriousness to Players"
+   },
+   {
+    "mod_id": "UniqueMapBossPossession",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Map Bosses are Hunted by Azmeri Spirits"
+   },
+   {
+    "mod_id": "UniqueMapBossAdditionalModifier",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Map Bosses have 1 additional Modifier"
+   },
+   {
+    "mod_id": "UniqueMapsAccessedWithoutConnection",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Can only be applied to Precursor Tower Maps / Completing the Tower makes all nearby Maps accessible"
+   },
+   {
+    "mod_id": "UniqueMapsAddIrridiationWhenCompleting",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "If Map was not previously Irradiated, completing Map adds Irradiation instead"
+   },
+   {
+    "mod_id": "UniqueMapAbyssOverrun",
+    "kind": "unique",
+    "affix_name": "",
+    "text": "Map contains (14-18) additional Abysses / Map is overrun by the Abyssal"
+   },
+   {
+    "mod_id": "TowerAbyssEnhancedMonstersPerChasm",
+    "kind": "suffix",
+    "affix_name": "of Escalation",
+    "text": "Abyssal Monsters in Map have increased Difficulty and Reward for each closed Pit"
+   }
+  ],
+  "rules": {
+   "uses": "normal tablets: 10 uses; unique tablets 1-5 (implicit text)",
+   "rarity": "magic normally; rare (+1 max modifier) only with atlas nodes Reverse Transcription / Partial Translation (game data)",
+   "crafting": "Orb of Chance allowed (0.5.0); Ancient Infuser corruption (Maxroll 2026-05-24): extra mod / +10 uses / new type / destroyed",
+   "gating": "Basic (Irradiated) and Overseer tablets need atlas specialisation: Eons of Contamination / Eons of Domination (0.5.0 + data)",
+   "stacking": "same-type tablets stack (0.5.0); 0.5.5: >1 Ritual tablet adds an extra altar; Hilda Ancient Inscriptions rewards DIFFERENT types (+8% per type)",
+   "temple": "Temple tablets guarantee Vaal Beacons (0.5.0)",
+   "abyss": "Abyss tablets only enable Abyss since 2026-05-25 (no longer +1 abyss each)"
+  },
+  "pairing": {
+   "Breach": "Breach Tablet x2-3 (Horde / Form / Invasion)",
+   "Ritual": "Ritual Tablet x2+ (Sacrifice / Omens / Prayers)",
+   "Delirium": "Delirium Tablet (Mirrors / Phobia / Simulacrum)",
+   "Expedition": "Expedition Tablet (Runes / Knowledge / Power)",
+   "Abyss": "Abyss Tablet (Hollows / Schisms / Treasures) + Irradiated",
+   "Essence": "Overseer (of Crystals) + Crystallised prefix",
+   "Boss": "Overseer (Hoards / Treasure / Pathways)",
+   "Strongbox": "any + of the Antiquarian / of Compartments",
+   "Rogue Exile": "any + Exiled prefix / of the Exile",
+   "Temple": "Temple Tablet",
+   "Generic juice": "Irradiated (area level) + any with Collector's / Brimming / Breeding / Abounding / of Undertaking (+1-2 map mods)"
+  },
+  "value_note": "Tablets are items, not exchange currency: no price in the toolkit DB. Value = per-use reward x uses; price via the overlay/trade link only.",
+  "source": "game data (base_items TowerAugmentation, tablet mod domain) + 0.5.0 / 0.5.5d notes",
+  "confidence": "high (mods), medium (pairing)"
+ },
+ "rolling": [
+  {
+   "method": "White (normal) waystone",
+   "cost_note": "0",
+   "expected_reward": "no mod rewards; most revives; safest",
+   "when": "build not yet able to take mods, or sustain is fine without mods",
+   "source": "mechanics",
+   "confidence": "high"
+  },
+  {
+   "method": "Magic (Transmute + Augment)",
+   "cost_note": "~2 ex at 2026-11-21 prices (Transmute 1.15 ex, Aug 1.0 ex)",
+   "expected_reward": "1 prefix + 1 suffix at T16, average: ~30% more waystones, ~5% pack size, ~9% item rarity, ~6% monster rarity, ~5% effectiveness",
+   "when": "early maps, Waystone sustain",
+   "source": "computed from game data (equal weights)",
+   "confidence": "medium"
+  },
+  {
+   "method": "Rare: Alchemy (4 mods) + Exalted to 6",
+   "cost_note": "~6 ex (Alchemy 4.2 ex + 2 Exalted 1 ex each); Regal on magic 0.9 ex",
+   "expected_reward": "3P+3S at T16, average: ~89% more waystones, ~15% pack size, ~28% item rarity, ~19% monster rarity, ~16% effectiveness (additive between waystone mods, multiplicative with atlas bonuses); 4-mod Alchemy alone ~2/3 of that",
+   "when": "default for any build that survives 6 mods; costs revives",
+   "source": "0.5.0 patch notes (reward/multiplicative); prices: poe.ninja via toolkit DB",
+   "confidence": "medium"
+  },
+  {
+   "method": "Chaos Orb (swap one random mod)",
+   "cost_note": "~41 ex",
+   "expected_reward": "replaces 1 mod; only to remove a deadly mod on an otherwise good stone",
+   "when": "rarely worth it vs a fresh Alchemy (4.2 ex) unless the stone is corrupted/instilled",
+   "source": "PoE 2 Chaos Orb behaviour",
+   "confidence": "medium"
+  },
+  {
+   "method": "Chaos + Omens of Chaotic X (up to 3 active)",
+   "cost_note": "Omens: Rarity ~251 ex, Quantity ~350 ex, Monsters ~37 ex, Effectiveness ~120 ex (+41 ex Chaos)",
+   "expected_reward": "rerolls ALL mods excluding the omen's reward type; 3 omens force every mod into the 4th type (e.g. all rarity mods)",
+   "when": "only for top juicers whose map yield is several divines; never at league start",
+   "source": "0.5.0 patch notes (omen rework); prices snapshot",
+   "confidence": "medium (Quantity = pack size is inferred)"
+  },
+  {
+   "method": "Vaal Orb (corrupt)",
+   "cost_note": "~9 ex",
+   "expected_reward": "community: 4 outcomes ~25% each: nothing / tier +-1 with rerolled mods / one side locked + other reforged / both locked + 0-4 extra mods (up to 10). Jado \"Unexpected Missions\": corrupted waystones open maps with +1 random modifier.",
+   "when": "on finished 6-mod T15/T16 rares when you can afford to lose the tier; corrupted stones cannot be changed after",
+   "source": "U4N (2025-07-28, updated 2026-11-21), Maxroll corruption page (2026-05-24); odds not confirmed for 0.5",
+   "confidence": "low-medium"
+  },
+  {
+   "method": "Instill Liquid Emotions",
+   "cost_note": "Diluted Greed ~1 ex, Liquid Paranoia ~2.2 ex, Envy ~0.3 ex, Disgust ~2.8 ex, Despair ~11 ex",
+   "expected_reward": "see instilled list: Greed 8% rarity, Paranoia 15% rare monsters, Envy 30% waystones, Disgust 30% tablets; each adds deliriousness",
+   "when": "cheap: almost always worth it on rares you keep",
+   "source": "game data (BlightCraftingItems -> InstilledMapDelirium mods); prices snapshot",
+   "confidence": "high (effects), low (how many per waystone in 0.5)"
+  },
+  {
+   "method": "Desecrate (Abyssal bone) a rare waystone",
+   "cost_note": "bone prices vary (Gnawed Jawbone ~1.6 ex ... Ancient ones are thousands)",
+   "expected_reward": "adds an Abyssal prefix (more abysses, depths, magic packs) or a nasty suffix (of Cycling / Deceleration / Retribution)",
+   "when": "Abyss farming",
+   "source": "game data desecrated domain + poe2db (Preserved Vertebrae desecrates rare waystones)",
+   "confidence": "medium"
+  },
+  {
+   "method": "Orb of Chance on tablets",
+   "cost_note": "~27 ex",
+   "expected_reward": "chance at a unique tablet",
+   "when": "cheap normal tablets only",
+   "source": "0.5.0 patch notes",
+   "confidence": "high (allowed), low (value)"
+  },
+  {
+   "method": "When re-rolling beats running",
+   "cost_note": "-",
+   "expected_reward": "Rule of thumb (estimate): fill every kept T15/T16 to 6 mods (cost ~6 ex is small vs map yield) unless a mod is deadly for the build; Chaos/Annul only when the waystone already carries > ~1 div of investment (instills, corruption). Below T15, run, do not reroll.",
+   "when": "see text",
+   "source": "Claude estimate from snapshot prices",
+   "confidence": "low"
+  }
+ ],
+ "search_box": {
+  "max_len": 250,
+  "max_len_note": "Official 0.5.0 patch notes: \"Search textbox maximum length increased to 250 characters\" (was 50; several mid-2026 guides still say 50). Verify in client.",
+  "syntax": {
+   "terms": "space-separated terms must all match (AND); a quoted string is one term and may contain spaces",
+   "negation": "a leading ! excludes items matching that term (e.g. \"!term\" or \"!a|b\" excludes either)",
+   "alternation": "| inside a term = OR; parentheses group alternatives",
+   "regex": "regular expressions are supported inside a term: . .+ * [a-z] [0-9] \\ escape, ^ $ anchors (anchor support assumed from PoE 1)",
+   "case": "case-insensitive (PoE 1 behaviour, widely reported; verify)",
+   "matched_text": "since 0.5.0 searching by item text matches the ADVANCED description format (the Ctrl+Alt+C text), which includes affix names/tiers; patterns written against the plain text may need adjusting"
+  },
+  "quirks": [
+   "quotes, spaces and ! count toward the 250 characters",
+   "numbers are text: ranges must be built from digit classes (e.g. a 2-digit value 40-99 needs [4-9]. )",
+   "short fragments can hit other mods: test each fragment against the full waystone mod list (the generator should check uniqueness)",
+   "the same search box exists in stash and vendor windows; the Atlas screen has its own live search (names, biomes, bosses, content words)",
+   "property lines (e.g. revives available, monster pack size, item rarity totals) can be matched on 0.4-era waystones; confirm the 0.5 line names from a copied waystone before relying on them"
+  ],
+  "common_patterns_described": [
+   "avoid-list: one negated alternation of short unique fragments of the deadly mod texts (Exposure, Smothering/Recovery Rate, Penetrates, crit chance)",
+   "want-list: positive fragments for pack size / rarity / rare monsters, or value thresholds on the summary lines",
+   "six-mod finder: match \"revives available: 0\" style lines (forum guide, 2025-09/2026-01)"
+  ],
+  "sources": [
+   "https://www.pathofexile.com/forum/view-thread/3932540 (0.5.0 patch notes, 250 chars, advanced format)",
+   "https://www.pathofexile.com/forum/view-thread/3858429 (player regex guide, 2025-09-22, edited 2026-01-06)",
+   "https://maxroll.gg/poe2/resources/rolling-waystones-and-precursor-tablets (quoted terms with |)"
+  ],
+  "licence_note": "poe.re / poe2.re are AGPL-3.0: describe syntax only, never copy their patterns or code."
+ },
+ "v1_watchlist": [
+  {
+   "date": "2026-11-06",
+   "item": "1.0 launches Dec 11 PST; full patch notes about a week before (~Dec 4). Re-export the atlas tree, waystone and tablet mods then.",
+   "source": "GGG Steam announcement 2026-11-06",
+   "confidence": "high"
+  },
+  {
+   "date": "2026-11-06",
+   "item": "Conquerors of Wraeclast league: castles, factions, \"delegate Atlas progression to your own commanders\" (real-time endgame system); hunting-ground maps around a castle reset when it changes hands.",
+   "source": "GGG Steam announcement; Maxroll ExileCon recap (2026-11-09)",
+   "confidence": "high"
+  },
+  {
+   "date": "2026-11-09",
+   "item": "\"No plans for major difficulty increase in the endgame for 1.0\"; Mark Roberts likes fewer deaths per area and more waystone modifiers (current revive/mod system likely stays).",
+   "source": "Maxroll ExileCon 2026 recap",
+   "confidence": "medium"
+  },
+  {
+   "date": "2026-11-09",
+   "item": "Multichoice nodes still exist on the Atlas Passive Skill Tree in 1.0; questline locations teleportable once unlocked; league mechanics keep fixed Atlas locations; mechanic unlocks slowed.",
+   "source": "Maxroll ExileCon 2026 recap",
+   "confidence": "medium"
+  },
+  {
+   "date": "2026-11-09",
+   "item": "Champion Rares (campaign) \"might be added to the endgame\"; Trial of the Ancestors and Sekhemas rework come after 1.0.",
+   "source": "Maxroll ExileCon 2026 recap",
+   "confidence": "medium"
+  },
+  {
+   "date": "2026-11-15",
+   "item": "Rogers: late endgame was \"getting stale\" (same builds, jewel sockets); passive tree rework moves sockets into clusters. No statement found on waystone/tablet mod changes.",
+   "source": "UnGeek interview 2026-11-15",
+   "confidence": "medium"
+  },
+  {
+   "date": "expect",
+   "item": "Things to re-check on 1.0 data: waystone mod list + reward values, tablet types (new league tablet?), Atlas tree node ids/positions, master keystones, search box limit.",
+   "source": "Claude",
+   "confidence": "n/a"
+  }
+ ],
+ "sources": [
+  {
+   "id": "game",
+   "what": "PoE 2 client build 26744644 (0.5.5): passiveskills, atlas tables, Mods, atlasskillgraph.psg, stat descriptions",
+   "date": "2026-11-20 extract"
+  },
+  {
+   "id": "repoe",
+   "what": "repoe-fork poe2 export (mods.min.json, base_items.min.json)",
+   "date": "2026-11-20"
+  },
+  {
+   "id": "ggg-050",
+   "url": "https://www.pathofexile.com/forum/view-thread/3932540",
+   "what": "Content Update 0.5.0 patch notes",
+   "date": "2026-05-21/25"
+  },
+  {
+   "id": "ggg-1.0",
+   "url": "https://store.steampowered.com/news/app/2694490/view/698779962638862661",
+   "what": "Full release announcement",
+   "date": "2026-11-06"
+  },
+  {
+   "id": "poe2db-055d",
+   "url": "https://poe2db.tw/Version_0.5.5d",
+   "what": "0.5.5d notes (3 tablet slots fix)",
+   "date": "2026-09"
+  },
+  {
+   "id": "poe2db-waystones",
+   "url": "https://poe2db.tw/us/Waystones",
+   "what": "waystone mods, desecrated mods, revivals rule",
+   "date": "n/d (0.5)"
+  },
+  {
+   "id": "maxroll-exilecon",
+   "url": "https://maxroll.gg/poe2/news/exilecon-2026-recap",
+   "what": "ExileCon 2026 recap",
+   "date": "2026-11-09"
+  },
+  {
+   "id": "ungeek",
+   "url": "https://www.ungeek.ph/2026/11/interview-path-of-exile-2-director-jonathan-rogers-on-version-1-0s-big-changes-and-what-reworks-didnt-make-the-cut/",
+   "what": "Rogers interview",
+   "date": "2026-11-15"
+  },
+  {
+   "id": "timesaver-tier",
+   "url": "https://timesaver.gg/blog/poe2-0-5-4-currency-farming-tier-list",
+   "what": "0.5.4 currency tier list",
+   "date": "2026-06-28 / 08-07"
+  },
+  {
+   "id": "timesaver-atlas",
+   "url": "https://timesaver.gg/blog/poe2-atlas-tree-currency-farming-guide",
+   "what": "atlas tree farming guide",
+   "date": "2026-08-09"
+  },
+  {
+   "id": "boostmatch",
+   "url": "https://boostmatch.gg/blog/poe-2/articles/poe2-atlas-tree-guide-0-5-0-return-of-the-ancients",
+   "what": "pre-launch atlas guide (uses 0.4 / invented node names)",
+   "date": "2026-05-28"
+  },
+  {
+   "id": "domistae",
+   "url": "https://domistae.github.io/poe2-leveling/poe2_endgame_guide.html",
+   "what": "endgame summary (points, tree sections AL70/75)",
+   "date": "0.5.5"
+  },
+  {
+   "id": "aoeah-abyss",
+   "url": "https://www.aoeah.com/news/4616--poe-2-05-abyss-farming-guide-best-faction-tablets--atlas-tree",
+   "what": "seller-site Abyss guide",
+   "date": "2026-06-03"
+  },
+  {
+   "id": "aoeah-essence",
+   "url": "https://www.aoeah.com/news/4627--poe-2-05-best-essence-farming-strategy-atlas-tablet-master-skills-and-more",
+   "what": "seller-site Essence guide",
+   "date": "2026-06-08"
+  },
+  {
+   "id": "aoeah-ritual",
+   "url": "https://www.aoeah.com/news/4608--best-poe-2-05-ritual-farming-strategy--guide",
+   "what": "seller-site Ritual guide (wrong node names)",
+   "date": "2026-06-01"
+  },
+  {
+   "id": "u4n-vaal",
+   "url": "https://www.u4n.com/news/poe-2-vaal-orb-waystones-outcome-chances-explained.html",
+   "what": "Vaal outcomes on waystones",
+   "date": "2025-07-28, upd. 2026-11-21"
+  },
+  {
+   "id": "maxroll-corrupt",
+   "url": "https://maxroll.gg/poe2/resources/corruption-outcomes",
+   "what": "corruption outcomes",
+   "date": "2026-05-24"
+  },
+  {
+   "id": "maxroll-rolling",
+   "url": "https://maxroll.gg/poe2/resources/rolling-waystones-and-precursor-tablets",
+   "what": "rolling guide (0.2 era, history only)",
+   "date": "2025"
+  },
+  {
+   "id": "forum-regex",
+   "url": "https://www.pathofexile.com/forum/view-thread/3858429",
+   "what": "player regex guide",
+   "date": "2025-09-22 / 2026-01-06"
+  },
+  {
+   "id": "pcgamesn-031",
+   "url": "https://www.pcgamesn.com/path-of-exile-2/update-endgame-changes-towers-removed",
+   "what": "0.3.1 tablet charges/tower change history",
+   "date": "2025-09-26"
+  },
+  {
+   "id": "prices",
+   "what": "poe.ninja economy snapshot in the toolkit DB (Forbidden Rites, late league)",
+   "date": "2026-11-21 08:40 UTC, 1 div = 473 ex"
+  }
+ ],
+ "farming_research_overlap": "research/farming/ had only fetch scripts + cache on 2026-11-21 (no report yet); divines/hour here are quoted guide claims only."
+}

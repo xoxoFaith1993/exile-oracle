@@ -145,6 +145,28 @@ gameart/
 '''
 
 
+def research_to_repo():
+    """The research behind the Oracle, for people to read and re-run: each topic's report (.md), its data (.json)
+    and its scripts. Left out: cache/ folders (raw downloads: big, and other people's content) and run logs."""
+    src, dst = os.path.join(HERE, 'research'), os.path.join(REPO_DIR, 'research')
+    skip = shutil.ignore_patterns('cache', 'derived', '__pycache__', '*.pyc', '*_log*.txt', '*_out.txt', 'to_datapack.py',
+                                  'add_browser_rates.py', 'series.json', 'analysis.json')
+    shutil.copytree(src, dst, dirs_exist_ok=True, ignore=skip)
+    # the researchers noted where they saved things on this PC: make those paths relative / generic
+    local = re.compile(r'(?:file:)?[A-Za-z]:(?:\\\\|\\|/)+Home network(?:\\\\|\\|/)+poe2-toolkit(?:\\\\|\\|/)+', re.I)
+    data = re.compile(r'[A-Za-z]:(?:\\\\|\\|/)+PoE2Toolkit', re.I)
+    user = re.compile(r'[A-Za-z]:(?:\\\\|\\|/)+Users(?:\\\\|\\|/)+[^\\/"\'\s]+', re.I)
+    for root, _, files in os.walk(dst):
+        for f in files:
+            if not f.endswith(('.md', '.json', '.py', '.txt')):
+                continue
+            fp = os.path.join(root, f)
+            text = open(fp, encoding='utf-8', errors='replace').read()
+            new_text = user.sub('<home>', data.sub('<data folder>', local.sub('', text)))
+            if new_text != text:
+                open(fp, 'w', encoding='utf-8', newline='\n').write(new_text)
+
+
 def repo():
     """Refresh the GitHub working tree from the staged app + build files (keeps its .git folder)."""
     os.makedirs(REPO_DIR, exist_ok=True)
@@ -160,6 +182,7 @@ def repo():
     for f in RELEASE_FILES:
         if os.path.exists(os.path.join(HERE, 'release', f)):
             shutil.copy2(os.path.join(HERE, 'release', f), os.path.join(REPO_DIR, 'release', f))
+    research_to_repo()
     gh = os.path.join(HERE, 'release', 'github')
     if os.path.isdir(gh):   # README.md + docs/ for GitHub
         shutil.copytree(gh, REPO_DIR, dirs_exist_ok=True)

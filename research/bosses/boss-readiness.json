@@ -1,0 +1,1919 @@
+{
+  "version_note": "Researched 2026-11-21 for PoE 2 patch 0.5.5 (Forbidden Rites event league, live 2026-09-04, alongside Runes of Aldur). Sources say 1.0 launches 2026-12-11 (not 12-04) and GGG is holding big balance changes for 1.0, so re-check everything after 1.0. GGG has not added true 'Uber' pinnacle bosses in 0.5.x; 'uber' entries here are the harder repeat/empowered versions. No source publishes per-hit damage for 0.5.x bosses, so every max_hit check is an estimate (confidence low). Check meaning: value >= min = ready; risky_below <= value < min = risky; value < risky_below = not yet.",
+  "general": [
+    {
+      "check": "fire_res / cold_res / lightning_res",
+      "threshold": ">= 75 (capped)",
+      "unit": "%",
+      "why": "Default max resistance is 75%; maps and bosses are balanced around capped elemental resistance.",
+      "source": "Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>; Timesaver: T15 map DPS requirement (0.5.5, 2026-09-08) <https://timesaver.gg/blog/poe2-t15-dps-requirement-0-5-5>"
+    },
+    {
+      "check": "max resistance hard cap",
+      "threshold": "90",
+      "unit": "%",
+      "why": "Max-res modifiers can raise the cap to at most 90%. Overcapping max fire/lightning helps for the Arbiters.",
+      "source": "Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>"
+    },
+    {
+      "check": "campaign resistance penalty",
+      "threshold": "-10% per act step: Act 2 -10, Act 3 -20, Act 4 -30, interludes -40 / -50, endgame (area level 65+) -60",
+      "unit": "% to all elemental res",
+      "why": "PoB already includes the penalty for the chosen act/endgame setting; check PoB is set to endgame. (0.4/0.5 campaign layout; 1.0 adds campaign content, so re-check after 1.0.)",
+      "source": "PoE2 Wiki: Maximum Resistances (act penalty table; read via search snippet, site blocks bots) <https://www.poe2wiki.net/wiki/Maximum_Resistances>"
+    },
+    {
+      "check": "chaos_res",
+      "threshold": ">= 0 always; 20-30% for mixed or chaos fights",
+      "unit": "%",
+      "why": "The wiki says campaign negative resistance is not applied to chaos res, and chaos res is consistent across the endgame. Chaos damage removes twice as much ES, so ES builds need it more. 20-30% figure is an estimate.",
+      "source": "PoE2 Wiki: Chaos resistance <https://www.poe2wiki.net/wiki/Chaos_resistance>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>; 20-30% is estimated"
+    },
+    {
+      "check": "campaign resistances",
+      "threshold": ">= 30",
+      "unit": "%",
+      "why": "Maxroll: stay above at least 30% elemental res during the campaign.",
+      "source": "Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>"
+    },
+    {
+      "check": "dps for T15 maps",
+      "threshold": "100K barely / 200K-500K comfortable / 1M+ juiced and pinnacle prep",
+      "unit": "PoB DPS (single target)",
+      "why": "Timesaver's own estimates; GGG publishes no figure.",
+      "source": "Timesaver: T15 map DPS requirement (0.5.5, 2026-09-08) <https://timesaver.gg/blog/poe2-t15-dps-requirement-0-5-5>"
+    },
+    {
+      "check": "dps for pinnacle bosses",
+      "threshold": "200K entry / 500K mid / 1M+ hard and apex",
+      "unit": "PoB DPS",
+      "why": "Community heuristics (Switchblade tiers, verified vs 0.5.2).",
+      "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>"
+    },
+    {
+      "check": "life_es for pinnacle bosses",
+      "threshold": "3,000 entry / 4,000 mid / 5,000 hard / 6,000 apex (life); about double as ES",
+      "unit": "life (+ES)",
+      "why": "Switchblade tiers; Switchblade itself calls them heuristics.",
+      "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>"
+    },
+    {
+      "check": "life_es for red maps (T15-16)",
+      "threshold": ">= 4,000 (risky below 3,000)",
+      "unit": "life+ES",
+      "why": "Timesaver gives ~3,000+ EHP as a bare minimum; raised to 4,000 to be conservative. Players report juiced T15-16 trash hitting for 3-5k.",
+      "source": "Timesaver: T15 map DPS requirement (0.5.5, 2026-09-08) <https://timesaver.gg/blog/poe2-t15-dps-requirement-0-5-5>; Steam community discussion: juiced T15-16 hits (anecdotes) <https://steamcommunity.com/app/2694490/discussions/0/598514944991864195>; 4,000 is estimated"
+    },
+    {
+      "check": "max hit per type for red maps",
+      "threshold": ">= 5,000 each (risky below 3,500)",
+      "unit": "damage",
+      "why": "Estimated from player reports of 3-5k hits from juiced trash; no published guideline exists.",
+      "source": "estimated"
+    },
+    {
+      "check": "armour vs physical hits",
+      "threshold": "armour = 12x the hit for 50% reduction (6x: 33%, 36x: 75%; max 90%)",
+      "unit": "ratio",
+      "why": "Damage Reduction = Armour / (Armour + 12 x hit). Use PoB's max physical hit, which already includes this.",
+      "source": "Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>"
+    }
+  ],
+  "bosses": [
+    {
+      "name": "Zarokh, the Temporal (Trial of the Sekhemas)",
+      "tier": "normal",
+      "unlock": "Clear the final floor of the endgame Trial of the Sekhemas. Hardest clear uses the 'Last Flame' relic with Honour at 1 (Timesaver 0.5.4).",
+      "game_version": "0.5.4",
+      "dangerous_hits": [
+        {
+          "name": "Hourglass / time mechanics",
+          "type": "unknown",
+          "note": "Telegraphed arena mechanics (Timesaver). Damage types not verified. Sekhemas damage also drains Honour, which PoB does not model."
+        }
+      ],
+      "checks": [
+        {
+          "stat": "fire_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "cold_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "lightning_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "life_es",
+          "min": 3000,
+          "risky_below": 2500,
+          "unit": "life+ES",
+          "why": "Entry-tier pinnacle (Switchblade tier 'Entry': 3,000+ life). ES-only builds: the source suggests roughly double the number in ES (chaos hits remove double ES).",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "dps",
+          "min": 200000,
+          "risky_below": 100000,
+          "unit": "PoB combined DPS",
+          "why": "Switchblade 'Entry' tier: 200K+ sustained DPS. Risky band = T15 'barely clears' figure.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Timesaver: T15 map DPS requirement (0.5.5, 2026-09-08) <https://timesaver.gg/blog/poe2-t15-dps-requirement-0-5-5>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "chaos_res",
+          "min": 0,
+          "risky_below": -20,
+          "unit": "%",
+          "why": "Never go into a boss with negative chaos res; there is no campaign penalty on chaos res in PoE2, so 0% is the floor.",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_physical",
+          "min": 4000,
+          "risky_below": 3000,
+          "unit": "damage",
+          "why": "Entry-tier boss (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "name": "The Trialmaster (Trial of Chaos)",
+      "tier": "normal",
+      "unlock": "Clear the endgame Trial of Chaos. In 0.5.5 Trials can run to 30 rooms and later rooms can drop all three Trialmaster Fragments in one run (GGG 0.5.5).",
+      "game_version": "0.5.5",
+      "dangerous_hits": [
+        {
+          "name": "Sunder",
+          "type": "physical",
+          "note": "Big telegraphed physical hit (Timesaver Trialmaster guide, search snippet)."
+        },
+        {
+          "name": "Mortar",
+          "type": "elemental",
+          "note": "Elemental bombardment (same source)."
+        },
+        {
+          "name": "Room afflictions / Wager modifiers",
+          "type": "varies",
+          "note": "0.5.5 Wager Modifiers can 'substantially increase a Trial's danger' (GGG)."
+        }
+      ],
+      "checks": [
+        {
+          "stat": "fire_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "cold_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "lightning_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "life_es",
+          "min": 3000,
+          "risky_below": 2500,
+          "unit": "life+ES",
+          "why": "Entry-tier pinnacle (Switchblade tier 'Entry': 3,000+ life). ES-only builds: the source suggests roughly double the number in ES (chaos hits remove double ES).",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "dps",
+          "min": 200000,
+          "risky_below": 100000,
+          "unit": "PoB combined DPS",
+          "why": "Switchblade 'Entry' tier: 200K+ sustained DPS. Risky band = T15 'barely clears' figure.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Timesaver: T15 map DPS requirement (0.5.5, 2026-09-08) <https://timesaver.gg/blog/poe2-t15-dps-requirement-0-5-5>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "chaos_res",
+          "min": 0,
+          "risky_below": -20,
+          "unit": "%",
+          "why": "Never go into a boss with negative chaos res; there is no campaign penalty on chaos res in PoE2, so 0% is the floor.",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_physical",
+          "min": 4000,
+          "risky_below": 3000,
+          "unit": "damage",
+          "why": "Sunder is the big physical hit (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "name": "Olroth (Expedition)",
+      "tier": "normal",
+      "unlock": "Excavate the Kalguuran Tomb in an Expedition Logbook of area level 79+. In 0.5 Olroth drops the Shattered Triskelion that leads to The Aberration.",
+      "game_version": "0.5.2",
+      "dangerous_hits": [
+        {
+          "name": "Cold attacks",
+          "type": "cold",
+          "note": "Switchblade: 75%+ cold res mandatory; 80-82% if under 5,000 life."
+        }
+      ],
+      "checks": [
+        {
+          "stat": "fire_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "lightning_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "life_es",
+          "min": 4000,
+          "risky_below": 3000,
+          "unit": "life+ES",
+          "why": "Mid-tier pinnacle (Switchblade tier 'Mid': 4,000+ life). ES-only builds: the source suggests roughly double the number in ES (chaos hits remove double ES).",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "dps",
+          "min": 500000,
+          "risky_below": 200000,
+          "unit": "PoB combined DPS",
+          "why": "Switchblade 'Mid' tier: 500K+ sustained. Risky band = the T15 'comfortable farming' floor.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Timesaver: T15 map DPS requirement (0.5.5, 2026-09-08) <https://timesaver.gg/blog/poe2-t15-dps-requirement-0-5-5>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "chaos_res",
+          "min": 0,
+          "risky_below": -20,
+          "unit": "%",
+          "why": "Mixed-damage fight; keep chaos res at least non-negative (estimated).",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "effective_hp",
+          "min": 15000,
+          "risky_below": 10000,
+          "unit": "PoB total EHP",
+          "why": "Mid-tier pool (Estimated: example T15 build in search results had 7.2k ES / 16.6k EHP; scaled up per tier.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "cold_res",
+          "min": 80,
+          "risky_below": 75,
+          "unit": "%",
+          "why": "Switchblade: cold 75% mandatory, 80-82% suggested below 5,000 life. Conservative: 80% = ready.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "max_hit_cold",
+          "min": 6000,
+          "risky_below": 4500,
+          "unit": "damage",
+          "why": "Cold is the main threat (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "name": "Omniphobia, Fear Manifest (Simulacrum / Delirium)",
+      "tier": "normal",
+      "unlock": "Simulacrum (Delirium) waves; Omniphobia appears from around wave 3 (Timesaver). 0.5.5 removed its all-elemental resistance (GGG notes).",
+      "game_version": "0.5.5",
+      "dangerous_hits": [
+        {
+          "name": "Wave pressure + boss hits",
+          "type": "unknown",
+          "note": "Specific hits and damage types not verified for 0.5.x."
+        }
+      ],
+      "checks": [
+        {
+          "stat": "fire_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "cold_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "lightning_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "life_es",
+          "min": 4000,
+          "risky_below": 3000,
+          "unit": "life+ES",
+          "why": "Mid-tier pinnacle (Switchblade tier 'Mid': 4,000+ life). ES-only builds: the source suggests roughly double the number in ES (chaos hits remove double ES).",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "dps",
+          "min": 500000,
+          "risky_below": 200000,
+          "unit": "PoB combined DPS",
+          "why": "Switchblade 'Mid' tier: 500K+ sustained. Risky band = the T15 'comfortable farming' floor.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Timesaver: T15 map DPS requirement (0.5.5, 2026-09-08) <https://timesaver.gg/blog/poe2-t15-dps-requirement-0-5-5>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "chaos_res",
+          "min": 0,
+          "risky_below": -20,
+          "unit": "%",
+          "why": "Mixed-damage fight; keep chaos res at least non-negative (estimated).",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "effective_hp",
+          "min": 15000,
+          "risky_below": 10000,
+          "unit": "PoB total EHP",
+          "why": "Mid-tier pool (Estimated: example T15 build in search results had 7.2k ES / 16.6k EHP; scaled up per tier.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_physical",
+          "min": 6000,
+          "risky_below": 4500,
+          "unit": "damage",
+          "why": "Mid-tier boss, damage types unverified; physical used as the generic check (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "name": "Vessel of Kulemak (Abyss)",
+      "tier": "normal",
+      "unlock": "Kulemak's Invitation (from Tasgul/Vandroth per Timesaver) used at the Well of Souls, leading to the Black Cathedral (ExpCarry).",
+      "game_version": "0.5.4",
+      "dangerous_hits": [
+        {
+          "name": "Physical attacks / teleport slams",
+          "type": "physical",
+          "note": "ExpCarry 0.5.4f."
+        },
+        {
+          "name": "Lightning beams",
+          "type": "lightning",
+          "note": "ExpCarry."
+        },
+        {
+          "name": "Cold damage + mines",
+          "type": "cold",
+          "note": "ExpCarry."
+        },
+        {
+          "name": "Lightless Serpent Burning Ground",
+          "type": "fire",
+          "note": "Damage reduced in 0.5.4 (patch-note summary)."
+        }
+      ],
+      "checks": [
+        {
+          "stat": "fire_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "cold_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "lightning_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "life_es",
+          "min": 4000,
+          "risky_below": 3000,
+          "unit": "life+ES",
+          "why": "Mid-tier pinnacle (Switchblade tier 'Mid': 4,000+ life). ES-only builds: the source suggests roughly double the number in ES (chaos hits remove double ES).",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "dps",
+          "min": 500000,
+          "risky_below": 200000,
+          "unit": "PoB combined DPS",
+          "why": "Switchblade 'Mid' tier: 500K+ sustained. Risky band = the T15 'comfortable farming' floor.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Timesaver: T15 map DPS requirement (0.5.5, 2026-09-08) <https://timesaver.gg/blog/poe2-t15-dps-requirement-0-5-5>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "chaos_res",
+          "min": 0,
+          "risky_below": -20,
+          "unit": "%",
+          "why": "Mixed-damage fight; keep chaos res at least non-negative (estimated).",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "effective_hp",
+          "min": 15000,
+          "risky_below": 10000,
+          "unit": "PoB total EHP",
+          "why": "Mid-tier pool (Estimated: example T15 build in search results had 7.2k ES / 16.6k EHP; scaled up per tier.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_physical",
+          "min": 6000,
+          "risky_below": 4500,
+          "unit": "damage",
+          "why": "Slams (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_lightning",
+          "min": 6000,
+          "risky_below": 4500,
+          "unit": "damage",
+          "why": "Beams (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "name": "Vessel of Kulemak - empowered",
+      "tier": "uber",
+      "unlock": "Same fight after empowering via Kurgal, Ulaman and Amanamu / Lich power (Timesaver, ExpCarry). GGG has not added true Uber bosses in 0.5.5.",
+      "game_version": "0.5.4",
+      "dangerous_hits": [
+        {
+          "name": "Same kit, more damage and life",
+          "type": "physical/lightning/cold",
+          "note": "No numbers published."
+        }
+      ],
+      "checks": [
+        {
+          "stat": "fire_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "cold_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "lightning_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "life_es",
+          "min": 5000,
+          "risky_below": 4000,
+          "unit": "life+ES",
+          "why": "Hard-tier pinnacle (Switchblade tier 'Hard': 5,000+ life; poe2path also says 5,000+ for Arbiter of Ash). ES-only builds: the source suggests roughly double the number in ES (chaos hits remove double ES).",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; poe2path: Endgame bosses guide (0.5, June 2026) <https://poe2path.com/guides/poe2-endgame-bosses-guide/>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "dps",
+          "min": 1000000,
+          "risky_below": 500000,
+          "unit": "PoB combined DPS",
+          "why": "Switchblade 'Hard' tier and Timesaver: pinnacle bosses usually want 1M+ single-target with good uptime.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Timesaver: T15 map DPS requirement (0.5.5, 2026-09-08) <https://timesaver.gg/blog/poe2-t15-dps-requirement-0-5-5>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "chaos_res",
+          "min": 0,
+          "risky_below": -20,
+          "unit": "%",
+          "why": "Keep chaos res at least non-negative (estimated).",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "effective_hp",
+          "min": 20000,
+          "risky_below": 14000,
+          "unit": "PoB total EHP",
+          "why": "Hard-tier pool (Estimated: example T15 build in search results had 7.2k ES / 16.6k EHP; scaled up per tier.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_physical",
+          "min": 8000,
+          "risky_below": 6000,
+          "unit": "damage",
+          "why": "Empowered slams (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_lightning",
+          "min": 8000,
+          "risky_below": 6000,
+          "unit": "damage",
+          "why": "Empowered beams (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "name": "Xesht, We That Are One (Breach) - 50/100 splinters",
+      "tier": "normal",
+      "unlock": "0.5 'Waking the Dreamer': Breach Splinters -> Wombgift -> Breachstone; clear the Hive ladder, beat It That Was Tul and It That Was Esh for the Breachlord key, then the Twisted Domain (Timesaver, ExpCarry). HP ~2.9M (50 splinters) / ~6.5M (100).",
+      "game_version": "0.5.4c",
+      "dangerous_hits": [
+        {
+          "name": "Summon Tul: ice cones",
+          "type": "cold",
+          "note": "Freeze risk; bring freeze mitigation (Timesaver)."
+        },
+        {
+          "name": "Summon Esh: expanding explosion",
+          "type": "lightning",
+          "note": "Timesaver."
+        },
+        {
+          "name": "Hand Smash / Burrow / Arm Slams",
+          "type": "physical",
+          "note": "Tracking slams, below ~60% HP the arm combo (Timesaver)."
+        },
+        {
+          "name": "Sun Orb",
+          "type": "fire",
+          "note": "Slow fire projectile (Timesaver)."
+        },
+        {
+          "name": "Mixed chaos threats",
+          "type": "chaos",
+          "note": "ExpCarry lists chaos among his damage."
+        }
+      ],
+      "checks": [
+        {
+          "stat": "fire_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "cold_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "lightning_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "life_es",
+          "min": 4000,
+          "risky_below": 3000,
+          "unit": "life+ES",
+          "why": "Mid-tier pinnacle (Switchblade tier 'Mid': 4,000+ life). ES-only builds: the source suggests roughly double the number in ES (chaos hits remove double ES).",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "dps",
+          "min": 500000,
+          "risky_below": 200000,
+          "unit": "PoB combined DPS",
+          "why": "Switchblade 'Mid' tier: 500K+ sustained. Risky band = the T15 'comfortable farming' floor.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Timesaver: T15 map DPS requirement (0.5.5, 2026-09-08) <https://timesaver.gg/blog/poe2-t15-dps-requirement-0-5-5>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "effective_hp",
+          "min": 15000,
+          "risky_below": 10000,
+          "unit": "PoB total EHP",
+          "why": "Mid-tier pool (Estimated: example T15 build in search results had 7.2k ES / 16.6k EHP; scaled up per tier.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "chaos_res",
+          "min": 20,
+          "risky_below": 0,
+          "unit": "%",
+          "why": "ExpCarry lists chaos among Xesht's damage; 20%+ is a conservative estimate.",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_cold",
+          "min": 6000,
+          "risky_below": 4500,
+          "unit": "damage",
+          "why": "Tul cones (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_lightning",
+          "min": 6000,
+          "risky_below": 4500,
+          "unit": "damage",
+          "why": "Esh explosion (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_physical",
+          "min": 6000,
+          "risky_below": 4500,
+          "unit": "damage",
+          "why": "Slams (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "name": "Xesht, We That Are One (Breach) - 150 splinters",
+      "tier": "uber",
+      "unlock": "Same entry with 150 splinters; ~14.5M HP, the 'toughest pure DPS check' of the three tiers (Timesaver 0.5.4).",
+      "game_version": "0.5.4c",
+      "dangerous_hits": [
+        {
+          "name": "Same kit as above",
+          "type": "cold/lightning/physical/chaos",
+          "note": "Higher HP; damage scaling not published."
+        }
+      ],
+      "checks": [
+        {
+          "stat": "fire_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "cold_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "lightning_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "life_es",
+          "min": 5000,
+          "risky_below": 4000,
+          "unit": "life+ES",
+          "why": "Estimated one tier above the 50/100 version. ES-only builds: the source suggests roughly double the number in ES (chaos hits remove double ES).",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "dps",
+          "min": 1500000,
+          "risky_below": 700000,
+          "unit": "PoB combined DPS",
+          "why": "Estimated: HP is ~5x the 50-splinter fight (14.5M vs 2.9M, Timesaver); scaled from the mid-tier 500K guideline and capped at 3x because DPS checks are not linear.",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "chaos_res",
+          "min": 30,
+          "risky_below": 0,
+          "unit": "%",
+          "why": "Estimated.",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "effective_hp",
+          "min": 20000,
+          "risky_below": 14000,
+          "unit": "PoB total EHP",
+          "why": "Hard-tier pool (Estimated: example T15 build in search results had 7.2k ES / 16.6k EHP; scaled up per tier.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_cold",
+          "min": 8000,
+          "risky_below": 6000,
+          "unit": "damage",
+          "why": "Tul cones (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_lightning",
+          "min": 8000,
+          "risky_below": 6000,
+          "unit": "damage",
+          "why": "Esh explosion (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_physical",
+          "min": 8000,
+          "risky_below": 6000,
+          "unit": "damage",
+          "why": "Slams (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "name": "Atziri, the Red Queen (Vaal Temple)",
+      "tier": "normal",
+      "unlock": "Build Atziri's Temple, kill the Royal Architect, reach the Royal Access Chamber (area level 75+) (Timesaver, ExpCarry).",
+      "game_version": "0.5.4",
+      "dangerous_hits": [
+        {
+          "name": "Flesh Bubble",
+          "type": "physical",
+          "note": "Lethal physical spell explosion in the second arena (ExpCarry)."
+        },
+        {
+          "name": "Fire rings / Fire runes",
+          "type": "fire",
+          "note": "ExpCarry."
+        },
+        {
+          "name": "Lightning runes / storm markers",
+          "type": "lightning",
+          "note": "ExpCarry."
+        },
+        {
+          "name": "Blood projectiles",
+          "type": "physical",
+          "note": "ExpCarry."
+        }
+      ],
+      "checks": [
+        {
+          "stat": "fire_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "cold_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "lightning_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "life_es",
+          "min": 4000,
+          "risky_below": 3000,
+          "unit": "life+ES",
+          "why": "Mid-tier pinnacle (Switchblade tier 'Mid': 4,000+ life). ES-only builds: the source suggests roughly double the number in ES (chaos hits remove double ES).",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "chaos_res",
+          "min": 0,
+          "risky_below": -20,
+          "unit": "%",
+          "why": "Mixed-damage fight; keep chaos res at least non-negative (estimated).",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "effective_hp",
+          "min": 15000,
+          "risky_below": 10000,
+          "unit": "PoB total EHP",
+          "why": "Mid-tier pool (Estimated: example T15 build in search results had 7.2k ES / 16.6k EHP; scaled up per tier.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "dps",
+          "min": 1000000,
+          "risky_below": 500000,
+          "unit": "PoB combined DPS",
+          "why": "A guide quoted in search results says 1.5M+ DPS for kills under 3 minutes (older Fate of the Vaal numbers); 1M used as 'ready'. Expcarry ranks her 2nd easiest.",
+          "source": "Search-result summary of Atziri guides (game8 / mmojugg), Fate of the Vaal era <https://game8.co/games/Path-of-Exile-2/archives/574807>; ExpCarry: PoE2 pinnacle boss difficulty ranking (0.5.4f, rechecked 2026-08-13) <https://expcarry.com/poe-2-pinnacle-boss-difficulty-ranking>",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_physical",
+          "min": 7000,
+          "risky_below": 5000,
+          "unit": "damage",
+          "why": "Flesh Bubble is the lethal hit (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_fire",
+          "min": 6000,
+          "risky_below": 4500,
+          "unit": "damage",
+          "why": "Fire rings (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "name": "The Aberration (Expedition / Verisium)",
+      "tier": "normal",
+      "unlock": "The Triskelion Reforged, made from Olroth's Shattered Triskelion through Expedition + Runeforging (ExpCarry 0.5.4f).",
+      "game_version": "0.5.4f",
+      "dangerous_hits": [
+        {
+          "name": "Mortar impacts / leg stomps",
+          "type": "physical",
+          "note": "ExpCarry."
+        },
+        {
+          "name": "Verisium storm",
+          "type": "unknown",
+          "note": "ExpCarry."
+        },
+        {
+          "name": "Cold and lightning beams",
+          "type": "cold/lightning",
+          "note": "ExpCarry."
+        },
+        {
+          "name": "Web sequence",
+          "type": "mechanic",
+          "note": "Large web mechanic (ExpCarry)."
+        }
+      ],
+      "checks": [
+        {
+          "stat": "fire_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "cold_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "lightning_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "life_es",
+          "min": 4000,
+          "risky_below": 3000,
+          "unit": "life+ES",
+          "why": "Mid-tier pinnacle (Switchblade tier 'Mid': 4,000+ life). ES-only builds: the source suggests roughly double the number in ES (chaos hits remove double ES).",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "dps",
+          "min": 500000,
+          "risky_below": 200000,
+          "unit": "PoB combined DPS",
+          "why": "Switchblade 'Mid' tier: 500K+ sustained. Risky band = the T15 'comfortable farming' floor.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Timesaver: T15 map DPS requirement (0.5.5, 2026-09-08) <https://timesaver.gg/blog/poe2-t15-dps-requirement-0-5-5>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "chaos_res",
+          "min": 0,
+          "risky_below": -20,
+          "unit": "%",
+          "why": "Mixed-damage fight; keep chaos res at least non-negative (estimated).",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "effective_hp",
+          "min": 15000,
+          "risky_below": 10000,
+          "unit": "PoB total EHP",
+          "why": "Mid-tier pool (Estimated: example T15 build in search results had 7.2k ES / 16.6k EHP; scaled up per tier.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_physical",
+          "min": 6000,
+          "risky_below": 4500,
+          "unit": "damage",
+          "why": "Mortars/stomps (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_cold",
+          "min": 6000,
+          "risky_below": 4500,
+          "unit": "damage",
+          "why": "Beams (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_lightning",
+          "min": 6000,
+          "risky_below": 4500,
+          "unit": "damage",
+          "why": "Beams (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "name": "The Raven Trickster, Tangmazu (Delirium)",
+      "tier": "normal",
+      "unlock": "Grand Mirror -> Trial of Madness fog banks; full Deliriousness opens the quest Simulacrum, which gives Raven's Reflection; repeat with Raven's Reflections at the broken mirror in the Withered Willow (ExpCarry). 0.5.5 removed its all-elemental resistance (GGG notes).",
+      "game_version": "0.5.5",
+      "dangerous_hits": [
+        {
+          "name": "Cold shards and walls",
+          "type": "cold",
+          "note": "ExpCarry."
+        },
+        {
+          "name": "Lightning strikes",
+          "type": "lightning",
+          "note": "ExpCarry."
+        },
+        {
+          "name": "Fire projectiles",
+          "type": "fire",
+          "note": "ExpCarry."
+        },
+        {
+          "name": "Pillar attacks",
+          "type": "physical",
+          "note": "ExpCarry."
+        },
+        {
+          "name": "Refraction beams",
+          "type": "unknown",
+          "note": "ExpCarry."
+        }
+      ],
+      "checks": [
+        {
+          "stat": "fire_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "cold_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "lightning_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "life_es",
+          "min": 5000,
+          "risky_below": 4000,
+          "unit": "life+ES",
+          "why": "Hard-tier pinnacle (Switchblade tier 'Hard': 5,000+ life; poe2path also says 5,000+ for Arbiter of Ash). ES-only builds: the source suggests roughly double the number in ES (chaos hits remove double ES).",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; poe2path: Endgame bosses guide (0.5, June 2026) <https://poe2path.com/guides/poe2-endgame-bosses-guide/>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "dps",
+          "min": 1000000,
+          "risky_below": 500000,
+          "unit": "PoB combined DPS",
+          "why": "Switchblade 'Hard' tier and Timesaver: pinnacle bosses usually want 1M+ single-target with good uptime.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Timesaver: T15 map DPS requirement (0.5.5, 2026-09-08) <https://timesaver.gg/blog/poe2-t15-dps-requirement-0-5-5>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "chaos_res",
+          "min": 0,
+          "risky_below": -20,
+          "unit": "%",
+          "why": "Keep chaos res at least non-negative (estimated).",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "effective_hp",
+          "min": 20000,
+          "risky_below": 14000,
+          "unit": "PoB total EHP",
+          "why": "Hard-tier pool (Estimated: example T15 build in search results had 7.2k ES / 16.6k EHP; scaled up per tier.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_cold",
+          "min": 7000,
+          "risky_below": 5000,
+          "unit": "damage",
+          "why": "Ranked 5th of 8 by ExpCarry; between mid and hard (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_lightning",
+          "min": 7000,
+          "risky_below": 5000,
+          "unit": "damage",
+          "why": "Lightning strikes (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_fire",
+          "min": 7000,
+          "risky_below": 5000,
+          "unit": "damage",
+          "why": "Fire projectiles (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "name": "The King in the Mists (Ritual)",
+      "tier": "normal",
+      "unlock": "Offer Tribute until the Audience bar fills, then 'An Audience with the King' (Timesaver). In 0.5 his head (Head of the King) starts the Rite of the Nameless chain to The Bodach.",
+      "game_version": "0.5.2",
+      "dangerous_hits": [
+        {
+          "name": "Boss kit",
+          "type": "unknown",
+          "note": "Damage types for 0.5.x not verified. Switchblade puts him in the 'Hard' tier with the Arbiter of Ash."
+        }
+      ],
+      "checks": [
+        {
+          "stat": "fire_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "cold_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "lightning_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "life_es",
+          "min": 5000,
+          "risky_below": 4000,
+          "unit": "life+ES",
+          "why": "Hard-tier pinnacle (Switchblade tier 'Hard': 5,000+ life; poe2path also says 5,000+ for Arbiter of Ash). ES-only builds: the source suggests roughly double the number in ES (chaos hits remove double ES).",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; poe2path: Endgame bosses guide (0.5, June 2026) <https://poe2path.com/guides/poe2-endgame-bosses-guide/>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "dps",
+          "min": 1000000,
+          "risky_below": 500000,
+          "unit": "PoB combined DPS",
+          "why": "Switchblade 'Hard' tier and Timesaver: pinnacle bosses usually want 1M+ single-target with good uptime.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Timesaver: T15 map DPS requirement (0.5.5, 2026-09-08) <https://timesaver.gg/blog/poe2-t15-dps-requirement-0-5-5>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "chaos_res",
+          "min": 0,
+          "risky_below": -20,
+          "unit": "%",
+          "why": "Keep chaos res at least non-negative (estimated).",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "effective_hp",
+          "min": 20000,
+          "risky_below": 14000,
+          "unit": "PoB total EHP",
+          "why": "Hard-tier pool (Estimated: example T15 build in search results had 7.2k ES / 16.6k EHP; scaled up per tier.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_physical",
+          "min": 7000,
+          "risky_below": 5000,
+          "unit": "damage",
+          "why": "Hard tier, damage types unverified (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "name": "The Bodach (Ritual) - quest",
+      "tier": "normal",
+      "unlock": "Head of the King on the Effigy -> Rite of the Nameless (5 maps) -> 5 Call of the Shadows at Caer Tarth (Timesaver). Quest kill during 'Legacy of the Maji' has unlimited revivals (ExpCarry).",
+      "game_version": "0.5",
+      "dangerous_hits": [
+        {
+          "name": "Fireball Drop / Rain of Fireballs / Flame Barrage",
+          "type": "fire",
+          "note": "Phase 1 (Timesaver)."
+        },
+        {
+          "name": "Shadow Beam / darkness corridor ground",
+          "type": "chaos (likely)",
+          "note": "'Shadow' damage; the darkness ground damages and slows (ExpCarry). Chaos type is an assumption."
+        },
+        {
+          "name": "Body Slam / teleporting hand / meteor slams",
+          "type": "physical",
+          "note": "Phase 3 (Timesaver, ExpCarry)."
+        }
+      ],
+      "checks": [
+        {
+          "stat": "fire_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "cold_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "lightning_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "life_es",
+          "min": 5000,
+          "risky_below": 4000,
+          "unit": "life+ES",
+          "why": "Hard-tier pinnacle (Switchblade tier 'Hard': 5,000+ life; poe2path also says 5,000+ for Arbiter of Ash). ES-only builds: the source suggests roughly double the number in ES (chaos hits remove double ES).",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; poe2path: Endgame bosses guide (0.5, June 2026) <https://poe2path.com/guides/poe2-endgame-bosses-guide/>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "dps",
+          "min": 1000000,
+          "risky_below": 500000,
+          "unit": "PoB combined DPS",
+          "why": "Switchblade 'Hard' tier and Timesaver: pinnacle bosses usually want 1M+ single-target with good uptime.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Timesaver: T15 map DPS requirement (0.5.5, 2026-09-08) <https://timesaver.gg/blog/poe2-t15-dps-requirement-0-5-5>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "effective_hp",
+          "min": 20000,
+          "risky_below": 14000,
+          "unit": "PoB total EHP",
+          "why": "Hard-tier pool (Estimated: example T15 build in search results had 7.2k ES / 16.6k EHP; scaled up per tier.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "chaos_res",
+          "min": 20,
+          "risky_below": 0,
+          "unit": "%",
+          "why": "Estimated: 'shadow' damage is probably chaos.",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_fire",
+          "min": 7000,
+          "risky_below": 5000,
+          "unit": "damage",
+          "why": "Fireball rain (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_physical",
+          "min": 7000,
+          "risky_below": 5000,
+          "unit": "damage",
+          "why": "Meteor-style slams (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "name": "The Bodach (Ritual) - repeat",
+      "tier": "uber",
+      "unlock": "Repeat fights after the quest via 5 Call of the Shadows; later kills are at higher difficulty (Timesaver).",
+      "game_version": "0.5",
+      "dangerous_hits": [
+        {
+          "name": "Same kit as the quest version",
+          "type": "fire/chaos/physical",
+          "note": "Harder; numbers not published."
+        }
+      ],
+      "checks": [
+        {
+          "stat": "fire_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "cold_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "lightning_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "life_es",
+          "min": 5500,
+          "risky_below": 4500,
+          "unit": "life+ES",
+          "why": "Estimated one step above the quest version. ES-only builds: the source suggests roughly double the number in ES (chaos hits remove double ES).",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "dps",
+          "min": 1500000,
+          "risky_below": 700000,
+          "unit": "PoB combined DPS",
+          "why": "Estimated.",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "chaos_res",
+          "min": 30,
+          "risky_below": 0,
+          "unit": "%",
+          "why": "Estimated.",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "effective_hp",
+          "min": 22000,
+          "risky_below": 16000,
+          "unit": "PoB total EHP",
+          "why": "Hard-tier pool (Estimated: example T15 build in search results had 7.2k ES / 16.6k EHP; scaled up per tier.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_fire",
+          "min": 8000,
+          "risky_below": 6000,
+          "unit": "damage",
+          "why": "Fireball rain (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_physical",
+          "min": 8000,
+          "risky_below": 6000,
+          "unit": "damage",
+          "why": "Slams (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "name": "The Arbiter of Ash",
+      "tier": "normal",
+      "unlock": "Burning Monolith inside the Precursor Fortress (Tier 6+ Waystones; Enigma Chambers Tier 10+). Quest: Crisis Fragments from the Enigma Chambers. Repeat: Ancient, Faded and Weathered Crisis Fragments from three different Citadels (Timesaver, ExpCarry). Old Calamity (uber) fragments can no longer be obtained in 0.5 (patch 0.5.0 notes).",
+      "game_version": "0.5.5",
+      "dangerous_hits": [
+        {
+          "name": "Hallways (flame blasts with one gap)",
+          "type": "fire",
+          "note": "'The killer' (Timesaver)."
+        },
+        {
+          "name": "Flame Seeds / Cascading Seeds",
+          "type": "fire",
+          "note": "Explode everywhere outside the safe circle (Timesaver)."
+        },
+        {
+          "name": "Baiting Flame Seeds + Ground Sunder",
+          "type": "fire + physical",
+          "note": "'Either hit usually kills' (Timesaver)."
+        },
+        {
+          "name": "Phase 2 sword combo",
+          "type": "physical",
+          "note": "'Deletes squishy characters'; combos and Diving Slam can 'chunk 50%+' (Timesaver)."
+        },
+        {
+          "name": "Blackflame",
+          "type": "fire",
+          "note": "Can block life and ES recovery (ExpCarry)."
+        }
+      ],
+      "checks": [
+        {
+          "stat": "cold_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "lightning_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Maxroll: PoE2 Defence guide (updated 2026-09-18) <https://maxroll.gg/poe2/getting-started/defence-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "life_es",
+          "min": 5000,
+          "risky_below": 4000,
+          "unit": "life+ES",
+          "why": "Hard-tier pinnacle (Switchblade tier 'Hard': 5,000+ life; poe2path also says 5,000+ for Arbiter of Ash). ES-only builds: the source suggests roughly double the number in ES (chaos hits remove double ES).",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; poe2path: Endgame bosses guide (0.5, June 2026) <https://poe2path.com/guides/poe2-endgame-bosses-guide/>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "dps",
+          "min": 1000000,
+          "risky_below": 500000,
+          "unit": "PoB combined DPS",
+          "why": "Switchblade 'Hard' tier and Timesaver: pinnacle bosses usually want 1M+ single-target with good uptime.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Timesaver: T15 map DPS requirement (0.5.5, 2026-09-08) <https://timesaver.gg/blog/poe2-t15-dps-requirement-0-5-5>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "chaos_res",
+          "min": 0,
+          "risky_below": -20,
+          "unit": "%",
+          "why": "Keep chaos res at least non-negative (estimated).",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "effective_hp",
+          "min": 20000,
+          "risky_below": 14000,
+          "unit": "PoB total EHP",
+          "why": "Hard-tier pool (Estimated: example T15 build in search results had 7.2k ES / 16.6k EHP; scaled up per tier.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "fire_res",
+          "min": 80,
+          "risky_below": 75,
+          "unit": "%",
+          "why": "Switchblade: fire 75% mandatory, 80-85% recommended; Timesaver: overcap if possible. 0.5.5: boss now has fire resistance and cold vulnerability (GGG notes).",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Timesaver: Arbiter of Ash guide (0.5) <https://timesaver.gg/blog/poe2-arbiter-of-ash-guide>; Kami-Labs: PoE2 patch notes 0.5.5 (2026-09-03, mirrors GGG notes) <https://kami-labs.fr/en/path-of-exile-2/patch-notes-0-5-5-path-of-exile-2-forbidden-rites/>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "max_hit_fire",
+          "min": 8000,
+          "risky_below": 6000,
+          "unit": "damage",
+          "why": "Most one-shots are fire (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_physical",
+          "min": 7000,
+          "risky_below": 5000,
+          "unit": "damage",
+          "why": "Phase 2 sword combo (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "name": "The Arbiter of Divinity - quest",
+      "tier": "normal",
+      "unlock": "After the Arbiter of Ash: Patriarch Hall (Phya drops the Origin Spark) and Matriarch Hall (Phyx drops the Origin Cradle), both Tier 15 Waystones with limited attempts; combine into an Origin Core at the Origin Tower (Timesaver). Added in 0.5.0 (patch notes).",
+      "game_version": "0.5.5",
+      "dangerous_hits": [
+        {
+          "name": "Divine Electrical Orbs / Chest Beam",
+          "type": "lightning",
+          "note": "Phase 1 (Timesaver, poe2path)."
+        },
+        {
+          "name": "Rain of Divine Lightning",
+          "type": "lightning",
+          "note": "Phase 2 AoE from ~40% HP; boss becomes much faster (Timesaver)."
+        },
+        {
+          "name": "Spear combos / Super Dash Thrust / Triple Spinning Slash",
+          "type": "physical",
+          "note": "ExpCarry: 'physical spear combinations'."
+        },
+        {
+          "name": "Aspects of Divinity clones",
+          "type": "mechanic",
+          "note": "Collect Divine Power orbs for temporary immunity (Timesaver)."
+        }
+      ],
+      "checks": [
+        {
+          "stat": "fire_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Timesaver: Arbiter of Divinity guide (0.5) <https://timesaver.gg/blog/poe2-arbiter-of-divinity-guide>; poe2path: Endgame bosses guide (0.5, June 2026) <https://poe2path.com/guides/poe2-endgame-bosses-guide/>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "cold_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Timesaver: Arbiter of Divinity guide (0.5) <https://timesaver.gg/blog/poe2-arbiter-of-divinity-guide>; poe2path: Endgame bosses guide (0.5, June 2026) <https://poe2path.com/guides/poe2-endgame-bosses-guide/>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "lightning_res",
+          "min": 80,
+          "risky_below": 75,
+          "unit": "%",
+          "why": "Lightning is most of the damage (Timesaver, poe2path). Switchblade asks for 87%+ lightning (low confidence, unexplained); conservative compromise: 80% = ready for the quest fight, 85% for the harder version; under 75% = not yet.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Timesaver: Arbiter of Divinity guide (0.5) <https://timesaver.gg/blog/poe2-arbiter-of-divinity-guide>; poe2path: Endgame bosses guide (0.5, June 2026) <https://poe2path.com/guides/poe2-endgame-bosses-guide/>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "life_es",
+          "min": 6000,
+          "risky_below": 5000,
+          "unit": "life+ES",
+          "why": "Switchblade 'Apex' tier: 6,000+ life or ~12,000 ES, plus 2+ defensive layers. ES-only builds: the source suggests roughly double the number in ES (chaos hits remove double ES).",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "dps",
+          "min": 1000000,
+          "risky_below": 600000,
+          "unit": "PoB combined DPS",
+          "why": "Switchblade 'Apex': 1M+ sustained. Phase 2 speeds up, so a short phase 2 matters.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; Timesaver: Arbiter of Divinity guide (0.5) <https://timesaver.gg/blog/poe2-arbiter-of-divinity-guide>",
+          "confidence": "medium"
+        },
+        {
+          "stat": "chaos_res",
+          "min": 0,
+          "risky_below": -20,
+          "unit": "%",
+          "why": "No chaos threat documented; keep it non-negative (estimated).",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "effective_hp",
+          "min": 25000,
+          "risky_below": 18000,
+          "unit": "PoB total EHP",
+          "why": "Apex pool (Estimated: example T15 build in search results had 7.2k ES / 16.6k EHP; scaled up per tier.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_lightning",
+          "min": 9000,
+          "risky_below": 7000,
+          "unit": "damage",
+          "why": "Most damage is lightning (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_physical",
+          "min": 8000,
+          "risky_below": 6000,
+          "unit": "damage",
+          "why": "Spear combos (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "name": "The Arbiter of Divinity - harder version",
+      "tier": "uber",
+      "unlock": "0.5.5: after the main Arbiter questline you can farm another set of Matriarch and Patriarch Halls for keys to 'an even more formidable version' (GGG 0.5.5 announcement). 0.5.5 gave the boss lightning resistance and fire vulnerability (patch notes).",
+      "game_version": "0.5.5",
+      "dangerous_hits": [
+        {
+          "name": "Same kit, stronger",
+          "type": "lightning/physical",
+          "note": "No numbers published."
+        }
+      ],
+      "checks": [
+        {
+          "stat": "fire_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; GGG forum: Forbidden Rites & 0.5.5 announcement (2026-08-27) <https://www.pathofexile.com/forum/view-thread/3999865>",
+          "confidence": "low"
+        },
+        {
+          "stat": "cold_res",
+          "min": 75,
+          "risky_below": 65,
+          "unit": "%",
+          "why": "Endgame content is balanced around capped (75%) elemental resistance; every 1% under cap is ~4% more damage taken at the cap.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; GGG forum: Forbidden Rites & 0.5.5 announcement (2026-08-27) <https://www.pathofexile.com/forum/view-thread/3999865>",
+          "confidence": "low"
+        },
+        {
+          "stat": "lightning_res",
+          "min": 85,
+          "risky_below": 75,
+          "unit": "%",
+          "why": "Lightning is most of the damage (Timesaver, poe2path). Switchblade asks for 87%+ lightning (low confidence, unexplained); conservative compromise: 80% = ready for the quest fight, 85% for the harder version; under 75% = not yet.",
+          "source": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2) <https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/>; GGG forum: Forbidden Rites & 0.5.5 announcement (2026-08-27) <https://www.pathofexile.com/forum/view-thread/3999865>",
+          "confidence": "low"
+        },
+        {
+          "stat": "life_es",
+          "min": 7000,
+          "risky_below": 6000,
+          "unit": "life+ES",
+          "why": "Estimated one step above the Apex tier (Switchblade gives 6,000+ for the base fight). ES-only builds: the source suggests roughly double the number in ES (chaos hits remove double ES).",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "dps",
+          "min": 2000000,
+          "risky_below": 1000000,
+          "unit": "PoB combined DPS",
+          "why": "Estimated: 2x the base Apex guideline.",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "chaos_res",
+          "min": 0,
+          "risky_below": -20,
+          "unit": "%",
+          "why": "Estimated.",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "effective_hp",
+          "min": 30000,
+          "risky_below": 22000,
+          "unit": "PoB total EHP",
+          "why": "Above-apex pool (Estimated: example T15 build in search results had 7.2k ES / 16.6k EHP; scaled up per tier.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_lightning",
+          "min": 10000,
+          "risky_below": 8000,
+          "unit": "damage",
+          "why": "Most damage is lightning (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        },
+        {
+          "stat": "max_hit_physical",
+          "min": 9000,
+          "risky_below": 7000,
+          "unit": "damage",
+          "why": "Spear combos (Estimated: no public per-hit numbers for 0.5.x; derived from the tier's life guideline and guide notes that big hits 'chunk 50%+' of a ~5k pool, so a max hit near 1.5x the life guideline survives one heavy hit.)",
+          "source": "estimated",
+          "confidence": "low"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "GGG forum: Forbidden Rites & 0.5.5 announcement (2026-08-27)",
+      "url": "https://www.pathofexile.com/forum/view-thread/3999865"
+    },
+    {
+      "title": "Kami-Labs: PoE2 patch notes 0.5.5 (2026-09-03, mirrors GGG notes)",
+      "url": "https://kami-labs.fr/en/path-of-exile-2/patch-notes-0-5-5-path-of-exile-2-forbidden-rites/"
+    },
+    {
+      "title": "Kami-Labs: PoE2 patch notes 0.5.0 Return of the Ancients (full notes, 2026-05-22)",
+      "url": "https://kami-labs.fr/en/path-of-exile-2/poe2-patch-0-5-return-of-the-ancients-notes-complet-en/"
+    },
+    {
+      "title": "IGGM: 0.5.5 patch notes summary (Arbiter resist/vulnerability)",
+      "url": "https://www.iggm.com/news/poe-2-0-5-5-patch-notes-how-ritual-expedition-reshape-forbidden-rites-farming"
+    },
+    {
+      "title": "PoE2 Wiki: Maximum Resistances (act penalty table; read via search snippet, site blocks bots)",
+      "url": "https://www.poe2wiki.net/wiki/Maximum_Resistances"
+    },
+    {
+      "title": "PoE2 Wiki: Chaos resistance",
+      "url": "https://www.poe2wiki.net/wiki/Chaos_resistance"
+    },
+    {
+      "title": "Maxroll: PoE2 Defence guide (updated 2026-09-18)",
+      "url": "https://maxroll.gg/poe2/getting-started/defence-guide"
+    },
+    {
+      "title": "Maxroll: PoE2 Pinnacle bosses (Early Access, updated 2025-09-11; older roster)",
+      "url": "https://maxroll.gg/poe2/resources/pinnacle-bosses"
+    },
+    {
+      "title": "ExpCarry: PoE2 pinnacle boss difficulty ranking (0.5.4f, rechecked 2026-08-13)",
+      "url": "https://expcarry.com/poe-2-pinnacle-boss-difficulty-ranking"
+    },
+    {
+      "title": "Timesaver: Arbiter of Divinity guide (0.5)",
+      "url": "https://timesaver.gg/blog/poe2-arbiter-of-divinity-guide"
+    },
+    {
+      "title": "Timesaver: Arbiter of Ash guide (0.5)",
+      "url": "https://timesaver.gg/blog/poe2-arbiter-of-ash-guide"
+    },
+    {
+      "title": "Timesaver: Xesht guide (0.5.4c)",
+      "url": "https://timesaver.gg/blog/poe2-xesht-guide"
+    },
+    {
+      "title": "Timesaver: The Bodach guide (0.5)",
+      "url": "https://timesaver.gg/blog/poe2-bodach-guide"
+    },
+    {
+      "title": "Timesaver: PoE2 pinnacle bosses guide (0.5.4 roster)",
+      "url": "https://timesaver.gg/blog/poe2-pinnacle-bosses-guide"
+    },
+    {
+      "title": "Timesaver: T15 map DPS requirement (0.5.5, 2026-09-08)",
+      "url": "https://timesaver.gg/blog/poe2-t15-dps-requirement-0-5-5"
+    },
+    {
+      "title": "Timesaver: Trialmaster guide (0.5) - search-result snippet only",
+      "url": "https://timesaver.gg/blog/poe2-trialmaster-guide"
+    },
+    {
+      "title": "Switchblade Gaming: Pinnacle boss minimum HP and DPS thresholds (verified vs 0.5.2)",
+      "url": "https://www.switchbladegaming.com/path-of-exile-2/endgame-boss-guide/"
+    },
+    {
+      "title": "poe2path: Endgame bosses guide (0.5, June 2026)",
+      "url": "https://poe2path.com/guides/poe2-endgame-bosses-guide/"
+    },
+    {
+      "title": "Search-result summary of Atziri guides (game8 / mmojugg), Fate of the Vaal era",
+      "url": "https://game8.co/games/Path-of-Exile-2/archives/574807"
+    },
+    {
+      "title": "Steam community discussion: juiced T15-16 hits (anecdotes)",
+      "url": "https://steamcommunity.com/app/2694490/discussions/0/598514944991864195"
+    },
+    {
+      "title": "MassivelyOP: Forbidden Rites (Sept 4) and 1.0 preview (2026-08-28)",
+      "url": "https://massivelyop.com/2026/08/28/path-of-exile-2-previews-september-4s-forbidden-rites-league-and-1-0s-new-duelist-class/"
+    },
+    {
+      "title": "PCGamesN: Forbidden Rites league update",
+      "url": "https://www.pcgamesn.com/path-of-exile-2/update-forbidden-rites-league"
+    }
+  ]
+}

@@ -1,0 +1,1659 @@
+{
+ "meta": {
+  "title": "Campaign rush: PoE 2",
+  "researched": "2026-11-21",
+  "game_version": "0.5.x (0.5.0 Return of the Ancients / 0.5.5 Forbidden Rites); Acts 1-4 + Interludes 1-3, no Cruel since 0.3",
+  "next_version": "1.0 on 2026-12-11 (Acts 5-6; Interludes removed)",
+  "status_key": {
+   "sourced": "from a cited source",
+   "estimated": "Claude estimate or general game knowledge not checked against a 0.5 source"
+  },
+  "companion": "campaign.md",
+  "required_means": "permanent_rewards.required = needed for the 24 points / 100 spirit / campaign ascendancy cap; every reward is optional in game"
+ },
+ "acts": [
+  {
+   "act": "Act 1",
+   "levels": "1-15",
+   "rush_route": [
+    "Riverbank",
+    "Clearfell (Beira)",
+    "Grelwood (witch-hut cauldron: free Medium flask)",
+    "Grim Tangle / Cemetery / Tomb (Asinia)",
+    "Hunting Grounds (Crowbell first at the branch)",
+    "Freythorn (King in the Mists, Ritual)",
+    "Ogham Farmlands (Una's Lute)",
+    "Ogham Village (Executioner, Salvage Bench)",
+    "Manor Ramparts",
+    "Ogham Manor (Candlemass, Count Geonor)"
+   ],
+   "skip": [
+    {
+     "text": "Brambleghast unless you want its uncut gem",
+     "status": "sourced",
+     "confidence": "M",
+     "sources": [
+      "C2"
+     ]
+    },
+    {
+     "text": "Mud Burrow Devourer and optional caches",
+     "status": "sourced",
+     "confidence": "M",
+     "sources": [
+      "C2"
+     ]
+    },
+    {
+     "text": "white packs; most rares unless they die fast",
+     "status": "sourced",
+     "confidence": "M",
+     "sources": [
+      "C4"
+     ]
+    }
+   ],
+   "do_not_skip": [
+    {
+     "text": "Crowbell +2 passives",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1",
+      "C2"
+     ]
+    },
+    {
+     "text": "Una's Lute +2 passives",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1",
+      "C2"
+     ]
+    },
+    {
+     "text": "King in the Mists +30 spirit",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1",
+      "C2"
+     ]
+    },
+    {
+     "text": "Candlemass +20 life",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1"
+     ]
+    },
+    {
+     "text": "Beira +10% cold res",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1"
+     ]
+    },
+    {
+     "text": "Greater life flask by level 10",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C2",
+      "C4"
+     ]
+    },
+    {
+     "text": "Sapphire Charm reward for the Geonor fight",
+     "status": "sourced",
+     "confidence": "M",
+     "sources": [
+      "C2"
+     ]
+    }
+   ],
+   "tips": [
+    {
+     "text": "30-40% cold res before Count Geonor",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C2"
+     ]
+    },
+    {
+     "text": "Delwyn moved closer to the Hunting Grounds entrance in 0.5.2",
+     "status": "sourced",
+     "confidence": "L",
+     "sources": [
+      "C7"
+     ]
+    },
+    {
+     "text": "Warrior: Executioner gives a Perfect Strike gem",
+     "status": "sourced",
+     "confidence": "M",
+     "sources": [
+      "C7"
+     ]
+    }
+   ],
+   "typical_minutes": {
+    "racer": 25,
+    "good": 45,
+    "average": 180,
+    "status": "estimated",
+    "confidence": "L",
+    "note": "a guide claims all Act 1 bonuses in under 30 min (C23)"
+   },
+   "sources": [
+    "C1",
+    "C2",
+    "C4",
+    "C7",
+    "C23"
+   ]
+  },
+  {
+   "act": "Act 2",
+   "levels": "15-30",
+   "rush_route": [
+    "Vastiri Outskirts",
+    "Traitor's Passage (Balbala: Barya, unless delaying the trial)",
+    "Halani Gates",
+    "Mawdun Quarry / Mine",
+    "Keth first (Kabala)",
+    "Lost City / Buried Shrines",
+    "Mastodon Badlands -> Bone Pits",
+    "Valley of the Titans (relic altar)",
+    "Deshar (Final Letter; Watchful Twins Barya)",
+    "Spires of Deshar (Sisters of Garukhan)",
+    "Trial of the Sekhemas",
+    "The Dreadnought (Jamanra)"
+   ],
+   "skip": [
+    {
+     "text": "Lost City optional bosses",
+     "status": "estimated",
+     "confidence": "M",
+     "sources": [
+      "C7"
+     ]
+    },
+    {
+     "text": "full clears of the Mastodon Badlands",
+     "status": "estimated",
+     "confidence": "M"
+    },
+    {
+     "text": "Balbala, if using the Watchful Twins Barya and running the trial at about 28",
+     "status": "sourced",
+     "confidence": "M",
+     "sources": [
+      "C4",
+      "C6"
+     ]
+    }
+   ],
+   "do_not_skip": [
+    {
+     "text": "Kabala +2 passives (Keth)",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1"
+     ]
+    },
+    {
+     "text": "The Final Letter +2 passives (Deshar)",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1"
+     ]
+    },
+    {
+     "text": "Sisters of Garukhan +10% lightning res",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1"
+     ]
+    },
+    {
+     "text": "Valley of the Titans relic altar (charm choice, swappable)",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1",
+      "C2"
+     ]
+    },
+    {
+     "text": "first ascendancy (Sekhemas)",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C3"
+     ]
+    },
+    {
+     "text": "Grand flask at 16 (Act 1 vendors cap at ilvl 15)",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C2"
+     ]
+    }
+   ],
+   "tips": [
+    {
+     "text": "fire res before the Mawdun mines; lightning (+ some fire) for Jamanra",
+     "status": "sourced",
+     "confidence": "M",
+     "sources": [
+      "C4"
+     ]
+    },
+    {
+     "text": "Dreadnought Vanguard removed in 0.5; Jamanra is in The Dreadnought",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C8"
+     ]
+    },
+    {
+     "text": "Dreadnought checkpoint has blue packs for a quick level",
+     "status": "sourced",
+     "confidence": "M",
+     "sources": [
+      "C2"
+     ]
+    },
+    {
+     "text": "Zarka: Colossal flasks and an uncut support; Spires vendors: 20% boots, Solar Amulet",
+     "status": "sourced",
+     "confidence": "M",
+     "sources": [
+      "C2"
+     ]
+    }
+   ],
+   "typical_minutes": {
+    "racer": 35,
+    "good": 60,
+    "average": 240,
+    "status": "estimated",
+    "confidence": "L"
+   },
+   "sources": [
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "C6",
+    "C8"
+   ]
+  },
+  {
+   "act": "Act 3",
+   "levels": "30-42 (0.5 routes)",
+   "rush_route": [
+    "Sandswept Marsh (Lesser Jeweller's basket)",
+    "Jungle Ruins (Silverfist)",
+    "Venom Crypts (Servi)",
+    "Infested Barrens",
+    "Chimeral Wetlands (Xyclucian) -> Trial of Chaos",
+    "Jiquani's Machinarium (Blackjaw)",
+    "Azak Bog (Ignagduk)",
+    "Matlan Waterways",
+    "Drowned City",
+    "Molten Vault (if DPS allows)",
+    "Apex of Filth",
+    "Temple of Kopec / Utzaal",
+    "Aggorat (Sacrificial Heart)",
+    "Black Chambers (Doryani)"
+   ],
+   "skip": [
+    {
+     "text": "optional elite hunts and redundant side dungeons",
+     "status": "sourced",
+     "confidence": "M",
+     "sources": [
+      "C5"
+     ]
+    },
+    {
+     "text": "Molten Vault until your DPS can beat the timer",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C2"
+     ]
+    },
+    {
+     "text": "Fate of the Vaal beacons, for a pure rush",
+     "status": "estimated",
+     "confidence": "M"
+    }
+   ],
+   "do_not_skip": [
+    {
+     "text": "Mighty Silverfist +2 passives",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1"
+     ]
+    },
+    {
+     "text": "Ignagduk +30 spirit (needs the Matlan Waterways waypoint)",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1",
+      "C2"
+     ]
+    },
+    {
+     "text": "Blackjaw +10% fire res",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1"
+     ]
+    },
+    {
+     "text": "Aggorat altar +2 passives",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1"
+     ]
+    },
+    {
+     "text": "Venom Crypts draught (locked choice)",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1",
+      "C2"
+     ]
+    },
+    {
+     "text": "Trial of Chaos after Xyclucian (ascendancy 3-4)",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C2",
+      "C3"
+     ]
+    }
+   ],
+   "tips": [
+    {
+     "text": "Act 3 zone order changed in 0.5; follow the in-game hints",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C8"
+     ]
+    },
+    {
+     "text": "Waterways levers are pressure pads and the canal starts drained (0.5)",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C8"
+     ]
+    },
+    {
+     "text": "Viper Napuatzi: chaos + fire res; Doryani: lightning",
+     "status": "sourced",
+     "confidence": "M",
+     "sources": [
+      "C4"
+     ]
+    },
+    {
+     "text": "Ziggurat vendors and the Infested Barrens chest for 20% boots at 33",
+     "status": "sourced",
+     "confidence": "M",
+     "sources": [
+      "C2"
+     ]
+    },
+    {
+     "text": "Oswald pays 3k/4k/6k gold for the Priceless Idols (0.5)",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C8"
+     ]
+    }
+   ],
+   "typical_minutes": {
+    "racer": 40,
+    "good": 70,
+    "average": 300,
+    "status": "estimated",
+    "confidence": "L"
+   },
+   "sources": [
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "C5",
+    "C8"
+   ]
+  },
+  {
+   "act": "Act 4",
+   "levels": "42-52",
+   "rush_route": [
+    "Kingsmarch",
+    "Whakapanu Island / Singing Caverns -> hideout quest (unlocks trade + Currency Exchange)",
+    "Journey's End (Dark Mists -> Omniphobia)",
+    "Eye of Hinekora / Halls of the Dead / Trial of the Ancestors",
+    "Abandoned Prison",
+    "other islands in any order",
+    "Ngakanu and Arastas last (Tavakai)"
+   ],
+   "skip": [
+    {
+     "text": "optional treasure-map / Expedition islands",
+     "status": "sourced",
+     "confidence": "M",
+     "sources": [
+      "C10"
+     ]
+    },
+    {
+     "text": "Isle of Kin Blind Beast, which no longer gives the points (changed in 0.4)",
+     "status": "sourced",
+     "confidence": "M",
+     "sources": [
+      "C1",
+      "C22"
+     ]
+    },
+    {
+     "text": "excess Ritual rerolls",
+     "status": "sourced",
+     "confidence": "L",
+     "sources": [
+      "C5"
+     ]
+    }
+   ],
+   "do_not_skip": [
+    {
+     "text": "Omniphobia +2 passives (Dark Mists via Tujen)",
+     "status": "sourced",
+     "confidence": "M",
+     "sources": [
+      "C1",
+      "C22"
+     ]
+    },
+    {
+     "text": "Hinekora +2 passives (Trial of the Ancestors)",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1"
+     ]
+    },
+    {
+     "text": "Silent Hall +5% mana",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1"
+     ]
+    },
+    {
+     "text": "three Halls of the Dead tattoos (locked)",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1"
+     ]
+    },
+    {
+     "text": "Goddess of Justice flask choice",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1"
+     ]
+    },
+    {
+     "text": "Whakapanu hideout quest: exchange unlock",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C2"
+     ]
+    }
+   ],
+   "tips": [
+    {
+     "text": "save artificers, runes and whetstones for a weapon at the end of the act",
+     "status": "sourced",
+     "confidence": "M",
+     "sources": [
+      "C6"
+     ]
+    },
+    {
+     "text": "Holten ferryman: Greater Runes once for about 20k gold",
+     "status": "sourced",
+     "confidence": "M",
+     "sources": [
+      "C2"
+     ]
+    },
+    {
+     "text": "Great White One shark fin -> Tribal Medicine defence choice",
+     "status": "sourced",
+     "confidence": "M",
+     "sources": [
+      "C1",
+      "C24"
+     ]
+    },
+    {
+     "text": "fire res for Act 4",
+     "status": "sourced",
+     "confidence": "M",
+     "sources": [
+      "C4"
+     ]
+    }
+   ],
+   "typical_minutes": {
+    "racer": 40,
+    "good": 60,
+    "average": 300,
+    "status": "estimated",
+    "confidence": "L"
+   },
+   "sources": [
+    "C1",
+    "C2",
+    "C4",
+    "C6",
+    "C10",
+    "C22",
+    "C24"
+   ]
+  },
+  {
+   "act": "Interludes 1-3 + Kingsmarch finale",
+   "levels": "52-60 (0.5 routes; zones are 61-64)",
+   "rush_route": [
+    "any order (0.5)",
+    "I1: Wolvenhold (Oswin)",
+    "I2: east first (Clearing the Way), Khari Crossing (Molten Shrine), Qimah (Seven Pillars)",
+    "I3: Kriar Village (Lythara), Kriar Peaks (Elder Madox), Howling Caves (Yeti)",
+    "Kingsmarch: the Hooded One (Siege of Oriath) -> maps"
+   ],
+   "skip": [
+    {
+     "text": "white packs; density is lower in 0.5 anyway",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C8"
+     ]
+    },
+    {
+     "text": "second Fate of the Vaal beacon set, for a pure rush",
+     "status": "estimated",
+     "confidence": "M"
+    }
+   ],
+   "do_not_skip": [
+    {
+     "text": "Oswin +2",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1"
+     ]
+    },
+    {
+     "text": "Clearing the Way +2",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1"
+     ]
+    },
+    {
+     "text": "Molten One's Gift +5% life",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1"
+     ]
+    },
+    {
+     "text": "Seven Pillars boon (swappable)",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1"
+     ]
+    },
+    {
+     "text": "Lythara +40 spirit",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1"
+     ]
+    },
+    {
+     "text": "Abominable Yeti +2",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1"
+     ]
+    },
+    {
+     "text": "Elder Madox free unique",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1"
+     ]
+    },
+    {
+     "text": "Hooded One +2 after all Interludes",
+     "status": "sourced",
+     "confidence": "H",
+     "sources": [
+      "C1"
+     ]
+    }
+   ],
+   "tips": [
+    {
+     "text": "settle your ascendancy before the final +2 turn-in",
+     "status": "sourced",
+     "confidence": "L",
+     "sources": [
+      "C6"
+     ]
+    },
+    {
+     "text": "Interlude 2: go east first; the passive-point bosses take under 10 min",
+     "status": "sourced",
+     "confidence": "M",
+     "sources": [
+      "C4",
+      "C7"
+     ]
+    }
+   ],
+   "typical_minutes": {
+    "racer": 50,
+    "good": 75,
+    "average": 300,
+    "status": "estimated",
+    "confidence": "L"
+   },
+   "sources": [
+    "C1",
+    "C4",
+    "C6",
+    "C7",
+    "C8"
+   ]
+  }
+ ],
+ "totals_minutes": {
+  "sourced": [
+   {
+    "who": "Angormus (AGDQ), Act 1 to the Act 4 boss",
+    "time": "2:55",
+    "version": "0.4",
+    "date": "2026-01",
+    "source": "C12",
+    "confidence": "M"
+   },
+   {
+    "who": "Spear Twister run, level 1 to maps (\"world record\")",
+    "time": "3:31",
+    "version": "0.4",
+    "date": "2026-05",
+    "source": "C14",
+    "confidence": "L"
+   },
+   {
+    "who": "arko_, speedrun.com full campaign",
+    "time": "4:02:25",
+    "version": "0.3",
+    "source": "C13",
+    "confidence": "M"
+   },
+   {
+    "who": "xthefarmerx, Witch ED/C guide run",
+    "time": "4:32:08",
+    "version": "0.5",
+    "source": "C16",
+    "confidence": "M"
+   },
+   {
+    "who": "speed-guide target",
+    "time": "about 5 h",
+    "version": "0.5/0.5.5",
+    "source": "C4, C6",
+    "confidence": "M"
+   },
+   {
+    "who": "Acts 1-4: league starter / casual / completionist",
+    "time": "5-7 h / 7-10 h / 12-15 h",
+    "version": "0.5.2",
+    "source": "C7",
+    "confidence": "L"
+   },
+   {
+    "who": "first playthrough / veterans to Interludes",
+    "time": "20-25 h / 13-17 h",
+    "version": "0.3",
+    "date": "2025-09",
+    "source": "C15",
+    "confidence": "M"
+   },
+   {
+    "who": "Angormus, official Act 3 boss race",
+    "time": "1:53:50",
+    "version": "0.1",
+    "source": "C11",
+    "confidence": "H"
+   }
+  ],
+  "estimated_full_campaign": {
+   "racer": 190,
+   "good": 310,
+   "average": 1320,
+   "status": "estimated",
+   "confidence": "L"
+  }
+ },
+ "ascendancy_trials": [
+  {
+   "points": "1-2",
+   "trial": "Trial of the Sekhemas (Act 2)",
+   "key": "Balbala's Barya (Traitor's Passage), about level 22",
+   "timing": "22-24; racers about 28 with the Watchful Twins Barya",
+   "source": [
+    "C3",
+    "C4",
+    "C6"
+   ],
+   "confidence": "H"
+  },
+  {
+   "points": "3-4",
+   "trial": "Trial of Chaos (Act 3)",
+   "key": "Chimeral Inscribed Ultimatum (Xyclucian)",
+   "timing": "right after Xyclucian, about 38-40",
+   "source": [
+    "C2",
+    "C3"
+   ],
+   "confidence": "H"
+  },
+  {
+   "points": "5-6",
+   "trial": "Sekhemas level 60+ Djinn Barya (3 trials) OR Chaos level 65+ Ultimatum (10 rounds)",
+   "key": "random drop",
+   "timing": "early maps, 60-65",
+   "source": [
+    "C3"
+   ],
+   "confidence": "H"
+  },
+  {
+   "points": "7-8",
+   "trial": "Sekhemas 75+ Barya (4 trials + boss) OR Chaos 65+ Ultimatum + pinnacle + 3 Fates",
+   "key": "drop / trade",
+   "timing": "endgame",
+   "source": [
+    "C3"
+   ],
+   "confidence": "H"
+  }
+ ],
+ "route_py_check": {
+  "TRIAL_LEVELS": [
+   22,
+   38,
+   55,
+   70
+  ],
+  "finding": "3rd at 55 is below the level 60 (Sekhemas) / 65 (Chaos) key minimum; suggest [22, 38, 62, 72]. A 4th at 70 works only via Chaos 65+.",
+  "confidence": "M"
+ },
+ "permanent_rewards": [
+  {
+   "reward": "+10% cold resistance",
+   "where": "Clearfell: Beira of the Rotten Pack",
+   "act": "Act 1",
+   "quest": "Beira",
+   "required": false,
+   "source": "C1"
+  },
+  {
+   "reward": "+2 passive skill points",
+   "where": "Hunting Grounds: Crowbell",
+   "act": "Act 1",
+   "quest": "Crowbell",
+   "required": true,
+   "source": "C1"
+  },
+  {
+   "reward": "+30 spirit",
+   "where": "Freythorn: the King in the Mists (Ritual)",
+   "act": "Act 1",
+   "quest": "King In The Mists",
+   "required": true,
+   "source": "C1"
+  },
+  {
+   "reward": "+2 passive skill points",
+   "where": "Ogham Farmlands: deliver Una's Lute",
+   "act": "Act 1",
+   "quest": "Una's Lute",
+   "required": true,
+   "source": "C1"
+  },
+  {
+   "reward": "+20 maximum life",
+   "where": "Ogham Manor: Candlemass",
+   "act": "Act 1",
+   "quest": "Candlemass",
+   "required": false,
+   "source": "C1"
+  },
+  {
+   "reward": "+2 passive skill points",
+   "where": "Keth: Kabala, Constrictor Queen",
+   "act": "Act 2",
+   "quest": "Kabala",
+   "required": true,
+   "source": "C1"
+  },
+  {
+   "reward": "+1 charm slot + charm charges or duration (swappable)",
+   "where": "Valley of the Titans: relic altar",
+   "act": "Act 2",
+   "quest": "Medallion",
+   "required": false,
+   "source": "C1"
+  },
+  {
+   "reward": "+2 passive skill points",
+   "where": "Deshar: deliver the Final Letter to Shambrin",
+   "act": "Act 2",
+   "quest": "The Final Letter",
+   "required": true,
+   "source": "C1"
+  },
+  {
+   "reward": "+10% lightning resistance",
+   "where": "Spires of Deshar: Sisters of Garukhan shrine",
+   "act": "Act 2",
+   "quest": "Sisters of Garukhan Shrine",
+   "required": false,
+   "source": "C1"
+  },
+  {
+   "reward": "Ascendancy points 1-2",
+   "where": "Trial of the Sekhemas",
+   "act": "Act 2",
+   "quest": "Balbala's / Djinn Barya",
+   "required": true,
+   "source": "C1, C3"
+  },
+  {
+   "reward": "+2 passive skill points",
+   "where": "Jungle Ruins: Mighty Silverfist",
+   "act": "Act 3",
+   "quest": "Mighty Silverfist",
+   "required": true,
+   "source": "C1"
+  },
+  {
+   "reward": "+30 spirit",
+   "where": "Azak Bog: Ignagduk, the Bog Witch",
+   "act": "Act 3",
+   "quest": "Ignagduk",
+   "required": true,
+   "source": "C1"
+  },
+  {
+   "reward": "Draught choice: stun / ailment threshold / mana regen (locked)",
+   "where": "Venom Crypts: deliver the Venom Vial to Servi",
+   "act": "Act 3",
+   "quest": "Venom Draught",
+   "required": false,
+   "source": "C1"
+  },
+  {
+   "reward": "+10% fire resistance",
+   "where": "Jiquani's Machinarium: Blackjaw",
+   "act": "Act 3",
+   "quest": "Blackjaw",
+   "required": false,
+   "source": "C1"
+  },
+  {
+   "reward": "+2 passive skill points",
+   "where": "Aggorat: Sacrificial Heart altar",
+   "act": "Act 3",
+   "quest": "Blood Sacrifice",
+   "required": true,
+   "source": "C1"
+  },
+  {
+   "reward": "Ascendancy points 3-4",
+   "where": "Trial of Chaos (Chimeral Inscribed Ultimatum from Xyclucian)",
+   "act": "Act 3",
+   "quest": "Trial of Chaos",
+   "required": true,
+   "source": "C1, C3"
+  },
+  {
+   "reward": "+2 passive skill points",
+   "where": "Journey's End: Omniphobia (Dark Mists, Tujen) -> Mist-shrouded Tome",
+   "act": "Act 4",
+   "quest": "Dark Mists",
+   "required": true,
+   "source": "C1, C22"
+  },
+  {
+   "reward": "+5% maximum mana",
+   "where": "Eye of Hinekora: Silent Hall",
+   "act": "Act 4",
+   "quest": "Silent Hall",
+   "required": false,
+   "source": "C1"
+  },
+  {
+   "reward": "3 tattoos: +5 attribute or +5% resistance each (locked)",
+   "where": "Halls of the Dead",
+   "act": "Act 4",
+   "quest": "Tawhoa's / Tasalio's / Ngamahu's Test",
+   "required": false,
+   "source": "C1"
+  },
+  {
+   "reward": "+2 passive skill points",
+   "where": "Trial of the Ancestors: Hinekora",
+   "act": "Act 4",
+   "quest": "Hinekora",
+   "required": true,
+   "source": "C1"
+  },
+  {
+   "reward": "Flask life or mana recovery choice (swappable)",
+   "where": "Abandoned Prison: Goddess of Justice",
+   "act": "Act 4",
+   "quest": "Goddess of Justice",
+   "required": false,
+   "source": "C1"
+  },
+  {
+   "reward": "Defence choice (30% defences, or the armour/deflection/ES set)",
+   "where": "Whakapanu Island: Great White One fin -> Kaimana",
+   "act": "Act 4",
+   "quest": "Tribal Medicine",
+   "required": false,
+   "source": "C1"
+  },
+  {
+   "reward": "+2 passive skill points",
+   "where": "Wolvenhold: Oswin, the Dread Warden",
+   "act": "Interlude 1",
+   "quest": "Oswin",
+   "required": true,
+   "source": "C1"
+  },
+  {
+   "reward": "+2 passive skill points",
+   "where": "Khari Bazaar region: Clearing the Way (scorpion and worm bosses)",
+   "act": "Interlude 2",
+   "quest": "Clearing The Way",
+   "required": true,
+   "source": "C1"
+  },
+  {
+   "reward": "+5% maximum life",
+   "where": "Khari Crossing: Molten One's Gift",
+   "act": "Interlude 2",
+   "quest": "Molten Shrine",
+   "required": false,
+   "source": "C1"
+  },
+  {
+   "reward": "1 of 7 boons (swappable)",
+   "where": "Qimah: the Seven Pillars",
+   "act": "Interlude 2",
+   "quest": "Seven Pillars",
+   "required": false,
+   "source": "C1"
+  },
+  {
+   "reward": "+40 spirit",
+   "where": "Kriar Village: Lythara, the Wayward Spear",
+   "act": "Interlude 3",
+   "quest": "Lythara",
+   "required": true,
+   "source": "C1"
+  },
+  {
+   "reward": "Free unique item (one pick)",
+   "where": "Kriar Peaks: Elder Madox",
+   "act": "Interlude 3",
+   "quest": "Elder Madox",
+   "required": false,
+   "source": "C1"
+  },
+  {
+   "reward": "+2 passive skill points",
+   "where": "Howling Caves: the Abominable Yeti",
+   "act": "Interlude 3",
+   "quest": "Abominable Yeti",
+   "required": true,
+   "source": "C1"
+  },
+  {
+   "reward": "+2 passive skill points",
+   "where": "Kingsmarch: the Hooded One, after all Interludes",
+   "act": "Finale",
+   "quest": "Siege Of Oriath",
+   "required": true,
+   "source": "C1"
+  },
+  {
+   "reward": "+1 passive skill point",
+   "where": "Endgame: Martyr of the First Edict",
+   "act": "Endgame",
+   "quest": "Martyr of the First Edict",
+   "required": false,
+   "source": "C1"
+  },
+  {
+   "reward": "Choice: +1 passive / +5% all res / +10 spirit / 5% life and mana",
+   "where": "Endgame: Expedition 10-slot remnant",
+   "act": "Endgame",
+   "quest": "Aldur's Legacy remnant",
+   "required": false,
+   "source": "C1"
+  }
+ ],
+ "permanent_reward_totals": {
+  "passive_points": 24,
+  "spirit": 100,
+  "resistances": "+10% cold, +10% lightning, +10% fire (plus choice rewards)",
+  "life": "+20 flat, +5%",
+  "mana": "+5%",
+  "ascendancy_points_campaign": 4,
+  "source": "C1",
+  "confidence": "H"
+ },
+ "datapack_diff": [
+  {
+   "item": "Act 4 passive source",
+   "datapack": "Isle Of Kin / Blind Beast +2",
+   "current": "Journey's End / Omniphobia (Dark Mists, Mist-shrouded Tome) +2",
+   "action": "replace row",
+   "source": [
+    "C1",
+    "C22"
+   ],
+   "confidence": "M-H"
+  },
+  {
+   "item": "Act numbering",
+   "datapack": "Interludes tagged Act 5; the Hooded One tagged Act 6 Epilog",
+   "current": "Interlude 1-3 / Kingsmarch finale; 1.0 adds real Acts 5-6 and removes the Interludes",
+   "action": "rename now; rebuild for 1.0",
+   "source": [
+    "C1",
+    "C17"
+   ],
+   "confidence": "H"
+  },
+  {
+   "item": "Missing rows",
+   "datapack": "none",
+   "current": "Elder Madox free unique (I3); endgame Martyr of the First Edict +1 passive; Expedition remnant choice",
+   "action": "add (endgame rows optional)",
+   "source": [
+    "C1"
+   ],
+   "confidence": "H"
+  },
+  {
+   "item": "Tribal Medicine location",
+   "datapack": "Eye of Hinekora",
+   "current": "fin from the Great White One (Whakapanu Island), turned in to Kaimana",
+   "action": "note only",
+   "source": [
+    "C1",
+    "C24"
+   ],
+   "confidence": "M"
+  },
+  {
+   "item": "Everything else",
+   "datapack": "12 point quests, spirit 30/30/40, resistances, Candlemass, Silent Hall, tattoos, Goddess of Justice, Molten Shrine, Seven Pillars",
+   "current": "matches Maxroll 2026-09-18",
+   "action": "none",
+   "source": [
+    "C1"
+   ],
+   "confidence": "H"
+  }
+ ],
+ "mistakes": [
+  {
+   "text": "Full clearing every zone; use the plus-skull map icons (U) to find the buffs instead",
+   "status": "sourced",
+   "confidence": "M",
+   "sources": [
+    "C4"
+   ]
+  },
+  {
+   "text": "Skipping permanent buff quests, then hitting a resistance or spirit wall",
+   "status": "sourced",
+   "confidence": "M",
+   "sources": [
+    "C4"
+   ]
+  },
+  {
+   "text": "Count Geonor under 30% cold; Napuatzi without chaos/fire; Jamanra or Doryani without lightning",
+   "status": "sourced",
+   "confidence": "H",
+   "sources": [
+    "C2",
+    "C4"
+   ]
+  },
+  {
+   "text": "Old flasks and late flask use; no charge-gain suffix",
+   "status": "sourced",
+   "confidence": "H",
+   "sources": [
+    "C2"
+   ]
+  },
+  {
+   "text": "No movement-speed boots by about level 16",
+   "status": "sourced",
+   "confidence": "H",
+   "sources": [
+    "C2",
+    "C7"
+   ]
+  },
+  {
+   "text": "Keeping rares or uniques over better magic items; spending Exalts in the campaign",
+   "status": "sourced",
+   "confidence": "H",
+   "sources": [
+    "C2"
+   ]
+  },
+  {
+   "text": "Standing still, running in lines, not hugging bosses",
+   "status": "sourced",
+   "confidence": "M",
+   "sources": [
+    "C2"
+   ]
+  },
+  {
+   "text": "Vendoring after every upgrade; town trips mid-act; muling",
+   "status": "sourced",
+   "confidence": "M",
+   "sources": [
+    "C4",
+    "C6"
+   ]
+  },
+  {
+   "text": "Forcing the Molten Vault DPS check too early",
+   "status": "sourced",
+   "confidence": "H",
+   "sources": [
+    "C2"
+   ]
+  },
+  {
+   "text": "Locking the Venom Crypts draught or the tattoos without a plan",
+   "status": "sourced",
+   "confidence": "H",
+   "sources": [
+    "C1",
+    "C2"
+   ]
+  },
+  {
+   "text": "Final Interlude +2 turn-in before the ascendancy choice is settled",
+   "status": "sourced",
+   "confidence": "L",
+   "sources": [
+    "C6"
+   ]
+  },
+  {
+   "text": "No loot filter",
+   "status": "sourced",
+   "confidence": "H",
+   "sources": [
+    "C2"
+   ]
+  },
+  {
+   "text": "Following pre-0.5 layout routes",
+   "status": "sourced",
+   "confidence": "M",
+   "sources": [
+    "C8"
+   ]
+  }
+ ],
+ "general_tips": [
+  {
+   "text": "Kill magic packs (about 3.5x white-pack XP); skip white packs and slow rares",
+   "status": "sourced",
+   "confidence": "M",
+   "sources": [
+    "C4",
+    "C6"
+   ]
+  },
+  {
+   "text": "Movement speed 10% at level 1, 15% about 16, 20% at 33, 25% at 46",
+   "status": "sourced",
+   "confidence": "H",
+   "sources": [
+    "C2"
+   ]
+  },
+  {
+   "text": "Flasks at 4, 10, 16, 23, 30, 40, 50, 60",
+   "status": "sourced",
+   "confidence": "H",
+   "sources": [
+    "C2",
+    "C4"
+   ]
+  },
+  {
+   "text": "Life (+ES) targets: about 300 end of Act 1, 600 Act 2, 900 Act 3",
+   "status": "sourced",
+   "confidence": "M",
+   "sources": [
+    "C4"
+   ]
+  },
+  {
+   "text": "Pour uncut skill gems into the main damage skill; drop mana-hungry supports; Gemcutter's Prisms are safe on a kept skill",
+   "status": "sourced",
+   "confidence": "H",
+   "sources": [
+    "C2"
+   ]
+  },
+  {
+   "text": "Transmutes and augments freely; 1-2 regals per act",
+   "status": "sourced",
+   "confidence": "M",
+   "sources": [
+    "C4",
+    "C6"
+   ]
+  },
+  {
+   "text": "Stay within about 3 + level/16 of the area level for full XP",
+   "status": "sourced",
+   "confidence": "M",
+   "sources": [
+    "C6"
+   ]
+  },
+  {
+   "text": "Escape skips NPC dialogue (0.5)",
+   "status": "sourced",
+   "confidence": "H",
+   "sources": [
+    "C8"
+   ]
+  },
+  {
+   "text": "Vendor once per act",
+   "status": "sourced",
+   "confidence": "M",
+   "sources": [
+    "C4"
+   ]
+  },
+  {
+   "text": "Rush to the Whakapanu Island exchange unlock: early exchange access pays most (see league-start-deep)",
+   "status": "sourced",
+   "confidence": "H",
+   "sources": [
+    "C2"
+   ]
+  },
+  {
+   "text": "Middle ground beats both extremes: every permanent reward + the league mechanic, nothing else",
+   "status": "estimated",
+   "confidence": "M"
+  },
+  {
+   "text": "Minion and aura builds: do the spirit bosses as early as the route allows",
+   "status": "sourced",
+   "confidence": "M",
+   "sources": [
+    "C4"
+   ]
+  }
+ ],
+ "rush_vs_full_clear": {
+  "full_clear_costs": "hours; campaign gear is replaced within an act; white-pack XP is low; skipped levels catch up by maps",
+  "pure_rush_costs": "-10% res per skipped buff; 30-40 spirit gaps; 2 points per skipped quest; the final +2 needs all Interludes anyway",
+  "recommended": "every permanent reward + the league mechanic (Ritual in each zone in 0.5.5); skip white packs and optional bosses",
+  "status": "estimated",
+  "confidence": "M",
+  "sources": [
+   "C2",
+   "C4",
+   "C9"
+  ]
+ },
+ "v1_watchlist": [
+  {
+   "item": "Acts 5-6",
+   "known": "Back to Oriath; 24 areas, 18 bosses, 20+ Champion Rares; Act 5 in ruined Oriath",
+   "date": "2026-11-07/09",
+   "sources": [
+    "C18",
+    "C19",
+    "C20"
+   ],
+   "confidence": "H"
+  },
+  {
+   "item": "Interludes removed",
+   "known": "Their bosses, monsters and unique content move to endgame or a quest; finale is \"more than one act\"",
+   "date": "2026-08-31",
+   "sources": [
+    "C17"
+   ],
+   "confidence": "H"
+  },
+  {
+   "item": "Where the Interlude rewards go",
+   "known": "Unknown: 8 points, 40 spirit, 5% life, Seven Pillars. Likely moved into Acts 5-6",
+   "status": "estimated",
+   "confidence": "L"
+  },
+  {
+   "item": "Campaign length and levels",
+   "known": "Not announced",
+   "status": "estimated",
+   "confidence": "L"
+  },
+  {
+   "item": "Endgame entry",
+   "known": "Not stated; likely after Act 6",
+   "status": "estimated",
+   "confidence": "L-M"
+  },
+  {
+   "item": "Exchange unlock",
+   "known": "Not stated; now Act 4 Whakapanu Island -> hideout",
+   "status": "estimated",
+   "confidence": "L"
+  },
+  {
+   "item": "Act 4 ascendancy trial",
+   "known": "Maxroll lists an Act 4 trial as not yet implemented; possible in 1.0",
+   "date": "2026-06-21",
+   "sources": [
+    "C3"
+   ],
+   "confidence": "L"
+  },
+  {
+   "item": "New classes",
+   "known": "Duelist (Knight, Master-at-Arms) and Shadow",
+   "date": "2026-11-07/08",
+   "sources": [
+    "C18",
+    "C20"
+   ],
+   "confidence": "H"
+  },
+  {
+   "item": "League",
+   "known": "Conquerors of Wraeclast: fort sieges, an army, a Stronghold, a new crafting material",
+   "date": "2026-11-08/09",
+   "sources": [
+    "C19",
+    "C20"
+   ],
+   "confidence": "H"
+  },
+  {
+   "item": "Tree / items / Atlas",
+   "known": "Passive tree overhaul (crit nodes removed), 40+ new uniques, 70+ reworked, about 70 Atlas node upgrades",
+   "date": "2026-11-07/09",
+   "sources": [
+    "C18",
+    "C19"
+   ],
+   "confidence": "M-H"
+  },
+  {
+   "item": "Patch notes",
+   "known": "Expected about a week before launch (about 2026-12-04)",
+   "date": "2026-11-08",
+   "sources": [
+    "C20"
+   ],
+   "confidence": "M"
+  },
+  {
+   "item": "Launch hour",
+   "known": "Not announced; past launches 19:00-20:00 UTC Fridays",
+   "sources": [
+    "C21"
+   ],
+   "confidence": "M"
+  },
+  {
+   "item": "Early-access characters, campaign skip",
+   "known": "Nothing said",
+   "date": "2026-11-08",
+   "sources": [
+    "C20"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "C1",
+   "title": "Maxroll: Permanent Stats from Campaign",
+   "url": "https://maxroll.gg/poe2/getting-started/permanent-stats-from-campaign",
+   "date": "2026-09-18 (updated)"
+  },
+  {
+   "id": "C2",
+   "title": "Maxroll (ZiggyD): Comprehensive League Start Leveling Guide",
+   "url": "https://maxroll.gg/poe2/getting-started/comprehensive-league-start-leveling-guide",
+   "date": "2026-09-08",
+   "version": "0.5.5"
+  },
+  {
+   "id": "C3",
+   "title": "Maxroll: Trials of Ascendancy",
+   "url": "https://maxroll.gg/poe2/getting-started/trials-of-ascendancy",
+   "date": "2026-06-21",
+   "version": "0.5.3"
+  },
+  {
+   "id": "C4",
+   "title": "AOEAH: PoE 2 0.5 campaign speedrun guide",
+   "url": "https://www.aoeah.com/news/4581--poe-2-05-campaign-speedrun--fast-leveling-route-guide",
+   "date": "2026-05-22",
+   "version": "0.5",
+   "note": "currency seller"
+  },
+  {
+   "id": "C5",
+   "title": "AOEAH: 0.5.5 Forbidden Rites campaign speedrun",
+   "url": "https://www.aoeah.com/news/4799--poe-2-055-forbidden-rites-campaign-speedrun-guide",
+   "date": "2026-09-07",
+   "version": "0.5.5",
+   "note": "currency seller, generic"
+  },
+  {
+   "id": "C6",
+   "title": "domistae PoE 2 Leveling Guide",
+   "url": "https://domistae.github.io/poe2-leveling/poe2_leveling_guide.html",
+   "version": "0.5.5"
+  },
+  {
+   "id": "C7",
+   "title": "Switchblade Gaming: Fastest PoE2 Leveling Route",
+   "url": "https://www.switchbladegaming.com/path-of-exile-2/leveling-guide-2/",
+   "date": "2026-06-14",
+   "version": "0.5.2",
+   "note": "low confidence; contains errors"
+  },
+  {
+   "id": "C8",
+   "title": "Kami-labs: 0.5.0 full patch notes",
+   "url": "https://kami-labs.fr/en/path-of-exile-2/poe2-patch-0-5-return-of-the-ancients-notes-complet-en/",
+   "date": "2026-05-22"
+  },
+  {
+   "id": "C9",
+   "title": "Kami-labs: Forbidden Rites first night plan",
+   "url": "https://kami-labs.fr/en/path-of-exile-2/forbidden-rites-league-start-plan-jour-1/",
+   "date": "2026-09-04",
+   "version": "0.5.5"
+  },
+  {
+   "id": "C10",
+   "title": "Poe-vault: The Fastest Path Through PoE2's Campaign",
+   "url": "https://www.poe-vault.com/poe2/news/the-fastest-path-through-poe2s-campaign-players-think-so",
+   "date": "2025-09"
+  },
+  {
+   "id": "C11",
+   "title": "Poe-vault: Angormus wins again (Act 3 race)",
+   "url": "https://www.poe-vault.com/poe2/news/angormus-wins-again-fastest-poe2-race-run-so-far",
+   "version": "0.1"
+  },
+  {
+   "id": "C12",
+   "title": "Mein-MMO: AGDQ run in 2 h 55 m",
+   "url": "https://mein-mmo.de/en/player-proves-how-easy-path-of-exile-2-really-is-finishes-it-in-just-3-hours,1544872",
+   "date": "2026-01"
+  },
+  {
+   "id": "C13",
+   "title": "speedrun.com: arko_ profile",
+   "url": "https://www.speedrun.com/ru-RU/users/arko_",
+   "version": "0.3"
+  },
+  {
+   "id": "C14",
+   "title": "Gistly summary: Spear Twister 3 h 31 m to maps",
+   "url": "https://gist.ly/youtube-summarizer/path-of-exile-2-fastest-spear-twister-leveling-guide",
+   "date": "2026-05-20",
+   "note": "AI summary of a YouTube video"
+  },
+  {
+   "id": "C15",
+   "title": "Poe-vault: campaign may be 20+ hours",
+   "url": "https://www.poe-vault.com/poe2/news/poe2s-campaign-may-be-20-hours-long-and-players-already-want-a-skip",
+   "date": "2025-09",
+   "note": "via search snippet"
+  },
+  {
+   "id": "C16",
+   "title": "Mobalytics: xthefarmerx 4.5-hour ED/C campaign guide",
+   "url": "https://mobalytics.gg/poe-2/profile/xthefarmerx/builds/xthefarmerx-4-5-hour-ed-c-campaign-guide",
+   "version": "0.5",
+   "note": "403; from a search snippet"
+  },
+  {
+   "id": "C17",
+   "title": "PCGamesN: Rogers on the final acts (Gamescom interview)",
+   "url": "https://www.pcgamesn.com/path-of-exile-2/campaign-final-acts-interview-gamescom",
+   "date": "2026-08-31"
+  },
+  {
+   "id": "C18",
+   "title": "Guided.news: Acts 5 and 6 complete the campaign",
+   "url": "https://guided.news/en/news/path-of-exile-2-acts-5-6-oriath-campaign-finale/",
+   "date": "2026-11-07"
+  },
+  {
+   "id": "C19",
+   "title": "GamingBolt: 1.0 final two acts",
+   "url": "https://gamingbolt.com/?p=656634",
+   "date": "2026-11-09"
+  },
+  {
+   "id": "C20",
+   "title": "Kami-labs: ExileCon 2026 recap",
+   "url": "https://kami-labs.fr/en/path-of-exile-2/exilecon-2026-path-of-exile-2-annonces-1-0/",
+   "date": "2026-11-08"
+  },
+  {
+   "id": "C21",
+   "title": "Steam: Full Release on December 11",
+   "url": "https://store.steampowered.com/news/app/2694490/view/1848664643347683",
+   "note": "S46 in league-start-deep"
+  },
+  {
+   "id": "C22",
+   "title": "Mobalytics Act 4 buffs + poe2wiki Weapon Set / Dark Mists",
+   "url": "https://mobalytics.gg/poe-2/guides/act-4-buffs",
+   "version": "0.4",
+   "note": "via search snippets (403 / Anubis-blocked)"
+  },
+  {
+   "id": "C23",
+   "title": "Mobalytics: Act 1 guide (guythatdies)",
+   "url": "https://mobalytics.gg/poe-2/guides/act-1-guide-guythatdies",
+   "note": "snippet"
+  },
+  {
+   "id": "C24",
+   "title": "PC Gamer: Shark Fin / Tribal Medicine",
+   "url": "https://www.pcgamer.com/games/rpg/path-of-exile-2-shark-fin-tribal-medicine"
+  }
+ ]
+}

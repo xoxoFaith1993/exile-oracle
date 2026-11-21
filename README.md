@@ -180,6 +180,15 @@ Exchange 2 and similar tools do, which is not a documented public API. The toolk
 
 The overlay only reads what you copy. It never presses keys in the game.
 
+## The research behind the Oracle
+
+Every prediction in the app comes from research you can read and re-run in [research/](research/README.md):
+market trends over three launches, the first 72 hours hour by hour, a price forecast tested on six launches, 276
+patches matched to the price moves after them, divines per hour for 22 farming strategies, chase uniques over five
+leagues, 20+ PoE 1 leagues as labelled analogy, the atlas, the campaign and boss requirements. Each topic has a report,
+its data and the scripts that measured it; findings are tagged by how sure they are, and community claims are checked
+against the data.
+
 ## What it uses (and what it never does)
 - **Public data only:** poe.ninja's economy data, GGG's public Currency Exchange history, Steam news, the community
   game-data export (RePoE), Path of Building (downloaded on first run), and the game's own log file on your PC.
