@@ -350,6 +350,8 @@ def api(path, q):
             bid = q.get('id')
             if not bid:
                 r = con.execute("SELECT id FROM build WHERE owner='me' ORDER BY id DESC LIMIT 1").fetchone()
+                if not r:
+                    return {'error': 'No character yet. Import one on the Character tab, then come back here.'}
                 bid = r['id']
             return topcheck.check(con, int(bid))
         if path == '/api/playbook':
