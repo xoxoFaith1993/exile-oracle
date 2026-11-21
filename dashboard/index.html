@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Exile Oracle</title>
+<meta name="theme-color" content="#15110e">
+<link rel="icon" href="/static/poe2kit.png">
+<link rel="stylesheet" href="/static/theme.css">
 <style>
 :root {
   color-scheme: dark;
@@ -177,6 +180,116 @@ footer { color: var(--text-muted); font-size: 11.5px; text-align: center; paddin
 .mh-cats button.on { border-color:#C8283C; color:var(--text-primary); }
 .mh-table td { padding:6px 6px; vertical-align:middle; }
 @media (max-width: 640px) { .mh-table .hide-s { display:none; } }
+/* ================= Exile Oracle theme layer (R3): every older rule above takes these colours ================= */
+:root, :root:where(:not([data-theme="dark"])) {
+  color-scheme: dark;
+  --bg: var(--eo-bg); --surface-1: var(--eo-panel); --surface-2: var(--eo-panel-2); --border: var(--eo-line);
+  --text-primary: var(--eo-text); --text-secondary: var(--eo-text-2); --text-muted: var(--eo-muted);
+  --accent: var(--eo-blood-hi); --accent-soft: var(--eo-blood-dim);
+  --series-1: var(--eo-gold); --up: var(--eo-up); --down: var(--eo-down); --mid: var(--eo-panel-3);
+  --good: var(--eo-good); --warning: var(--eo-warn); --critical: var(--eo-blood-hi); --grid: #ffffff0a;
+}
+body {
+  font: 15px/1.45 var(--eo-body); color: var(--eo-text);
+  background: radial-gradient(ellipse at 60% -10%, #24190f 0%, var(--eo-stone) 40%, var(--eo-bg) 100%) fixed,
+              var(--eo-grain), var(--eo-bg);
+  display: grid; grid-template-columns: 228px minmax(0, 1fr); grid-template-rows: auto 1fr auto; min-height: 100vh;
+}
+/* header across the content column */
+header { grid-column: 2; grid-row: 1; background: linear-gradient(180deg, #1d1611ee, #15110ee6); backdrop-filter: blur(4px);
+  border-bottom: 1px solid var(--eo-gold-dim); box-shadow: 0 1px 0 #000, 0 6px 18px #0008; }
+header h1 { display: none; }
+.chip { background: var(--eo-panel-2); border-color: var(--eo-line); color: var(--eo-text-2); font-size: 13px; }
+.chip b { color: var(--eo-gold-hi); }
+header select { background: #100d0a !important; color: var(--eo-text) !important; border-color: var(--eo-line) !important; }
+/* side menu */
+nav#nav { grid-column: 1; grid-row: 1 / span 3; position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  display: flex; flex-direction: column; flex-wrap: nowrap; gap: 0; padding: 0 0 18px;
+  background: linear-gradient(180deg, #1b1510, #100c09), var(--eo-grain); border-right: 1px solid var(--eo-gold-dim);
+  box-shadow: inset -8px 0 18px #0006; }
+nav .brand { display: flex; align-items: center; gap: 10px; padding: 16px 14px 14px; border-bottom: 1px solid var(--eo-line);
+  margin-bottom: 6px; text-decoration: none; }
+nav .brand img { width: 40px; height: 40px; filter: drop-shadow(0 0 8px #c8283c55); }
+nav .brand b { font: 700 17px var(--eo-display); letter-spacing: .12em; color: var(--eo-gold); line-height: 1.05; }
+nav .brand span { display: block; font: 11px var(--eo-body); letter-spacing: .08em; color: var(--eo-muted); }
+nav .ng { font: 600 10.5px var(--eo-display); letter-spacing: .2em; text-transform: uppercase; color: var(--eo-gold-dim);
+  padding: 14px 16px 4px; }
+nav button { text-align: left; border: 0; border-left: 2px solid transparent; border-bottom: 0; padding: 7px 16px 7px 18px;
+  font: 600 12.5px var(--eo-display); letter-spacing: .09em; text-transform: uppercase; color: var(--eo-text-2); }
+nav button::before { content: "◈"; color: var(--eo-gold-dim); margin-right: 9px; font-size: 10px; }
+nav button:hover { color: var(--eo-gold-hi); background: #c9a45c0d; }
+nav button.on { color: var(--eo-gold-hi); border-left-color: var(--eo-blood-hi);
+  background: linear-gradient(90deg, #c9a45c1f, transparent); }
+nav button.on::before { color: var(--eo-blood-hi); }
+nav button:focus { outline: none; } nav button:focus-visible { outline: 1px solid var(--eo-gold-dim); outline-offset: -1px; }
+nav .badge { background: var(--eo-blood-hi); }
+main { grid-column: 2; grid-row: 2; max-width: 1240px; width: 100%; padding: 18px 22px 40px; }
+footer { grid-column: 2; grid-row: 3; color: var(--eo-muted); }
+/* panels */
+.card { position: relative; overflow: visible; background: linear-gradient(180deg, var(--eo-panel-2), var(--eo-panel)), var(--eo-grain);
+  border: 1px solid var(--eo-gold-dim); border-radius: 3px; padding: 14px 16px; margin-bottom: 16px;
+  box-shadow: inset 0 0 0 1px #0008, inset 0 0 26px #0009, 0 2px 12px #0008; }
+.card::before, .card::after { content: ""; position: absolute; width: 7px; height: 7px; border: 1px solid var(--eo-gold);
+  background: var(--eo-panel-3); transform: rotate(45deg); top: -4px; pointer-events: none; }
+.card::before { left: -4px; } .card::after { right: -4px; }
+.card > .scroll-x, .card table { overflow-x: auto; }
+.card h2 { font: 600 15px var(--eo-display); letter-spacing: .1em; text-transform: uppercase; color: var(--eo-gold);
+  margin: 0 0 6px; }
+.card .sub { color: var(--eo-muted); font-size: 13px; }
+.card.empty { text-align: center; }
+/* tables */
+th { font: 600 11px var(--eo-display); letter-spacing: .12em; text-transform: uppercase; color: var(--eo-gold);
+  border-bottom: 1px solid var(--eo-gold-dim); }
+td { border-bottom-color: #ffffff09; }
+tbody tr:nth-child(even) td { background: #ffffff04; }
+tr.click:hover td { background: #c9a45c14; }
+/* controls */
+.btn { font: 600 12px var(--eo-display); letter-spacing: .1em; text-transform: uppercase; color: var(--eo-text);
+  background: linear-gradient(180deg, #2c241b, #1d1712); border: 1px solid var(--eo-gold-dim); border-radius: 3px; padding: 7px 14px; }
+.btn:hover { border-color: var(--eo-gold); color: var(--eo-gold-hi); }
+.crin, input[type=search], select, textarea { background: #100d0a !important; color: var(--eo-text) !important;
+  border: 1px solid var(--eo-line) !important; border-radius: 3px !important; font-family: var(--eo-body) !important; }
+.crin:focus, input[type=search]:focus, select:focus, textarea:focus { border-color: var(--eo-gold) !important; outline: none; }
+input[type=checkbox] { accent-color: var(--eo-blood-hi); }
+.pill { background: var(--eo-panel-2); border-color: var(--eo-line); color: var(--eo-text-2); }
+.tip { background: #110d0a; border: 1px solid var(--eo-gold-dim); color: var(--eo-text); }
+/* the many small "surface-2" boxes: tiles, chase items, skills, top 1% axes, craft steps */
+.tile, .ci, .sk, .t1-axis, .crstep, .crmod, .pn-line, .slot { background: #17120e; border-color: var(--eo-line); }
+.tile .v, .t1-val, .t1-score { font-family: var(--eo-display); color: var(--eo-gold-hi); }
+.sk.main, .crstep.rec { border-color: var(--eo-blood-hi); }
+.farm-bar, .t1-meter > div { background: var(--eo-blood-hi); }
+.mh-cats button { background: var(--eo-panel-2); border-color: var(--eo-line); }
+.mh-cats button.on { border-color: var(--eo-gold); color: var(--eo-gold-hi); }
+.treebox { background: #070605; border-color: var(--eo-gold-dim); }
+.stat-sec h3 { font-family: var(--eo-display); color: var(--eo-gold); letter-spacing: .14em; }
+/* home */
+.home-hero { display: flex; align-items: center; gap: 18px; margin: 4px 0 18px; }
+.home-hero img { width: 66px; height: 66px; filter: drop-shadow(0 0 14px #c8283c66); }
+.home-hero h1 { font: 700 30px var(--eo-display); letter-spacing: .16em; color: var(--eo-gold); margin: 0; }
+.home-hero .sub { color: var(--eo-muted); letter-spacing: .05em; }
+.home-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr)); gap: 16px; }
+.cur-row { display: grid; grid-template-columns: 34px 1fr auto 76px; gap: 10px; align-items: center; padding: 6px 0;
+  border-bottom: 1px solid #ffffff09; }
+.cur-row img { width: 30px; height: 30px; object-fit: contain; }
+.cur-row .p { font-variant-numeric: tabular-nums; text-align: right; }
+.cur-row .c { font-size: 12.5px; text-align: right; }
+.big-rate { font: 700 34px var(--eo-display); color: var(--eo-gold-hi); text-shadow: 0 0 16px #c9a45c33; line-height: 1.1; }
+.big-rate small { font: 500 15px var(--eo-body); color: var(--eo-text-2); }
+.quick { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.quick button { text-align: left; padding: 12px; border: 1px solid var(--eo-line); background: #17120e; color: var(--eo-text);
+  border-radius: 3px; cursor: pointer; font: 500 14px var(--eo-body); }
+.quick button b { display: block; font: 600 12px var(--eo-display); letter-spacing: .1em; text-transform: uppercase;
+  color: var(--eo-gold); margin-bottom: 3px; }
+.quick button:hover { border-color: var(--eo-gold); }
+/* narrow windows: the menu becomes a top bar */
+@media (max-width: 900px) {
+  body { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto 1fr auto; }
+  nav#nav { grid-column: 1; grid-row: 1; height: auto; position: static; flex-direction: row; flex-wrap: wrap; padding: 6px; }
+  nav .brand, nav .ng { display: none; }
+  .home-hero img { width: 48px; height: 48px; } .home-hero h1 { font-size: 22px; }
+  header { grid-column: 1; grid-row: 2; } main { grid-column: 1; grid-row: 3; } footer { grid-column: 1; grid-row: 4; }
+}
+
 </style>
 </head>
 <body>
@@ -189,21 +302,45 @@ footer { color: var(--text-muted); font-size: 11.5px; text-align: center; paddin
       <option value="ex">Exalted</option><option value="chaos">Chaos</option></select></label>
 </header>
 <nav id="nav">
-  <button data-tab="claude" class="on">From Claude</button>
+  <a class="brand" href="#home" onclick="document.querySelector('nav [data-tab=home]').click();return false"><img src="/static/emblem.png" alt=""><div><b>EXILE<br>ORACLE</b><span>Path of Exile 2</span></div></a>
+  <div class="ng">Oracle</div>
+  <button data-tab="home" class="on">Home</button>
+  <button data-tab="claude">From Claude</button>
+  <div class="ng">Market</div>
   <button data-tab="economy">Economy</button>
+  <div class="ng">Farming</div>
+  <button data-tab="farm">What to farm</button>
+  <button data-tab="league">League start</button>
+  <div class="ng">Character</div>
   <button data-tab="builds">Builds</button>
   <button data-tab="character">Character</button>
   <button data-tab="top1">Top 1%</button>
   <button data-tab="sessions">Sessions</button>
-  <button data-tab="farm">Farming</button>
-  <button data-tab="league">League start</button>
-  <button data-tab="craft">Craft</button>
+  <div class="ng">Craft</div>
+  <button data-tab="craft">Craft lab</button>
+  <div class="ng">News</div>
   <button data-tab="patches">Patch notes</button>
   <button data-tab="alerts">Alerts <span class="badge" id="badge" hidden></span></button>
-  <button data-tab="status">Status</button>
+  <div class="ng">Settings</div>
+  <button data-tab="status">Settings</button>
 </nav>
 <main>
-  <section id="claude" class="on"><div id="show"><div class="card empty">Ask Claude something in chat (a build cost, upgrades, a compare, a price chart) and it shows up here.</div></div></section>
+  <section id="home" class="on">
+    <div class="home-hero"><img src="/static/emblem.png" alt=""><div><h1>EXILE ORACLE</h1><div class="sub" id="homesub">Your Path of Exile 2 companion</div></div></div>
+    <div class="home-grid">
+      <div class="card"><h2>Currency</h2><div class="sub">Live from GGG's currency exchange · 7-day change</div><div id="homecur"><div class="muted small">loading…</div></div></div>
+      <div class="card"><h2>Alerts</h2><div class="sub">Price moves on your items, news, patch notes</div><div id="homealerts"><div class="muted small">loading…</div></div></div>
+    </div>
+    <div class="card"><h2>Go to</h2><div class="quick">
+      <button data-go="farm"><b>What to farm</b>Mechanics by what they drop right now</button>
+      <button data-go="league"><b>League start</b>Plan a class and ascendancy from level 1</button>
+      <button data-go="builds"><b>Builds</b>Your characters, the in-game Build Planner</button>
+      <button data-go="economy"><b>Market</b>Prices, history, biggest movers</button>
+      <button data-go="craft"><b>Craft lab</b>Plan a craft and what it costs</button>
+      <button data-go="status"><b>Settings</b>Profile, overlay, Claude, updates</button>
+    </div></div>
+  </section>
+  <section id="claude"><div id="show"><div class="card empty">Ask Claude something in chat (a build cost, upgrades, a compare, a price chart) and it shows up here.</div></div></section>
   <section id="economy">
     <div class="card"><h2>Market at a glance</h2><div class="sub" id="ovsub">Key currency and the league's chase items, from poe.ninja.</div>
       <div class="tiles" id="ovtiles"></div>
@@ -337,7 +474,7 @@ const get = async (p) => {
   if (r.status === 503 && j.setup) {   // fresh install still downloading: one banner, stop this view's render
     let b = document.getElementById('setupbar');
     if (!b) { b = document.createElement('div'); b.id = 'setupbar'; b.className = 'card small';
-      b.style.cssText = 'border-color:var(--warning);margin:8px 0'; document.querySelector('nav').after(b); }
+      b.style.cssText = 'border-color:var(--warning);margin:8px 0'; document.querySelector('main').prepend(b); }
     b.textContent = '⏳ ' + j.error;
     throw new Error(j.error);
   }
@@ -373,6 +510,7 @@ function hideTip() { tip.style.display = 'none'; }
 document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   document.querySelectorAll('nav button').forEach(x => x.classList.toggle('on', x === b));
   document.querySelectorAll('section').forEach(s => s.classList.toggle('on', s.id === b.dataset.tab));
+  if (b.dataset.tab === 'home') loadHome();
   if (b.dataset.tab === 'economy') { loadOverview(); loadMovers(); loadMarket(); }
   if (b.dataset.tab === 'builds') loadBuilds();
   if (b.dataset.tab === 'alerts') loadAlerts(true);
@@ -385,6 +523,32 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   try { localStorage.setItem('poe2tab', b.dataset.tab); } catch (e) {}
 });
 try { const t = location.hash.slice(1) || localStorage.getItem('poe2tab'); if (t) document.querySelector(`nav [data-tab="${t.replace(/[^a-z0-9]/gi, '')}"]`)?.click(); } catch (e) {}
+
+// ---------- home ----------
+const HOME_CUR = ['Chaos Orb', 'Exalted Orb', 'Orb of Annulment', 'Vaal Orb', 'Regal Orb', 'Orb of Alchemy', "Artificer's Orb", 'Mirror of Kalandra'];
+async function loadHome() {
+  const [st, mk, al] = await Promise.all([get('/api/status'), get('/api/market?cat=Currency'), get('/api/alerts')]);
+  const rt = (st && st.rates) || {};
+  $('#homesub').textContent = `${st.league || ''} · ${(st.items_tracked || 0).toLocaleString()} items tracked`;
+  const by = Object.fromEntries((mk.items || []).map(i => [i.item, i]));
+  const exl = by['Exalted Orb'];
+  const divChg = exl && exl.change_pct != null ? (1 / (1 + exl.change_pct / 100) - 1) * 100 : null;
+  const arrow = v => v == null ? '<span class="muted">–</span>' : `<span class="${v >= 0 ? 'eo-up' : 'eo-down'}">${v >= 0 ? '▲' : '▼'} ${Math.abs(v).toFixed(1)}%</span>`;
+  let h = `<div style="display:flex;align-items:baseline;gap:12px;margin:4px 0 10px"><div class="big-rate">${rt.ex_per_div ? Math.round(rt.ex_per_div).toLocaleString() : '?'} <small>ex per divine</small></div>${arrow(divChg)}</div>
+    <div class="small muted" style="margin-bottom:6px">1 div = ${rt.chaos_per_div ? rt.chaos_per_div.toFixed(1) : '?'} chaos</div>`;
+  for (const n of HOME_CUR) {
+    const i = by[n];
+    if (!i) continue;
+    h += `<div class="cur-row">${i.icon ? `<img src="/img?u=${encodeURIComponent(i.icon)}" alt="">` : '<span></span>'}<span>${esc(n)}</span>
+      <span class="p">${P(i.price_div, n)}</span><span class="c">${arrow(i.change_pct)}</span></div>`;
+  }
+  $('#homecur').innerHTML = h;
+  const items = (al || []).slice(0, 6);
+  $('#homealerts').innerHTML = items.length ? items.map(a => `<div class="alert"><div class="k small muted">${ago(a.ts)}</div><div><div>${esc(a.title)}</div><div class="small muted">${esc(a.detail || '')}</div></div></div>`).join('')
+    : '<div class="muted small">Nothing yet.</div>';
+}
+document.querySelectorAll('.quick [data-go]').forEach(b => b.onclick = () => document.querySelector(`nav [data-tab="${b.dataset.go}"]`).click());
+if (document.querySelector('#home.on')) loadHome();
 
 // ---------- header ----------
 let STATUS = null;
@@ -1145,7 +1309,7 @@ async function checkUpdate() {
   bar.style.cssText = 'background:#3a0d14;border-bottom:1px solid #C8283C;padding:8px 16px;font-size:13px;display:flex;gap:10px;align-items:center;flex-wrap:wrap';
   bar.innerHTML = `<b>Update available: Exile Oracle ${esc(u.latest)}</b> <span class="muted">(you have ${esc(u.current)})</span>
     <button class="btn" id="updgo">Download &amp; install</button> <a class="small" href="${esc(u.page)}" target="_blank" rel="noopener">what's new ↗</a> <span class="small muted" id="updmsg"></span>`;
-  document.body.prepend(bar);
+  document.querySelector('main').prepend(bar);
   $('#updgo').onclick = async () => { $('#updmsg').textContent = 'Downloading… the installer opens when it is ready.'; const r = await post('/api/update/install', {}); $('#updmsg').textContent = r.ok ? 'Installer started: follow it, the toolkit restarts after.' : ('Could not update: ' + (r.why || '')); };
 }
 checkUpdate();
@@ -1216,12 +1380,13 @@ async function pollShow() {
   try {
     const s = await get('/api/show');
     if (s && s.ts && s.ts !== lastShow) {
+      const fresh = lastShow !== 0;
       lastShow = s.ts;
       LASTSHOW = s;
       const f = VIEWS[s.type];
       $('#show').innerHTML = `<div class="muted small" style="margin:0 0 8px">${esc(s.caption || '')} · ${ago(s.ts)}</div>` +
         (f ? f(s.data || {}) : `<div class="card"><pre>${esc(JSON.stringify(s.data, null, 1))}</pre></div>`);
-      if (document.visibilityState === 'visible' && !location.hash) document.querySelector('nav [data-tab="claude"]').click();
+      if (fresh && document.visibilityState === 'visible') document.querySelector('nav [data-tab="claude"]').click();
     }
   } catch (e) {}
 }
