@@ -65,19 +65,18 @@ def check(con, text, league=None, progress=None, filters=None):
     if n:
         res['ninja'] = n
         res['headline'] = {'div': n['div'], 'qty': it.get('stack') or 1, 'label': 'poe.ninja price'}
-    wants_trade = it['rarity'] in TRADE_KINDS and not (n and it['rarity'] == 'UNIQUE' and not n.get('roll_dependent')
-                                                       and not it.get('has_rolls'))
     from . import trade
     f = filters or trade.default_filters(it)
     res['filters'] = f
     res['url'] = trade.search_url(league, trade.build_query(it, league, f))
-    if filters:
-        wants_trade = True
-    if it['rarity'] == 'RARE' and it.get('base') and not it.get('unidentified'):
+    # every item the trade site can search (rares, uniques, magic, white bases, gems, waystones) is searched as soon
+    # as it's copied (the author, 2026-11-20); stackable currency keeps its poe.ninja price
+    wants_trade = f is not None
+    if it['rarity'] == 'RARE' and it.get('base') and not it.get('unidentified') and not it.get('waystone_tier')             and it.get('cls') not in ('Waystones', 'Tablet', 'Relics', 'Charms', 'Jewels'):
         try:
             from . import crafting
             e = crafting.estimate_rare(con, it['base'], [m['text'] for m in it['explicits']], it.get('ilvl'), league)
-            if e and e.get('est_div') is not None:
+            if e and (e.get('est_div') or 0) >= 0.05:   # near-zero means our crafting data didn't really cover it
                 res['estimate'] = {'est_div': e['est_div'], 'kind': e.get('kind'), 'note': e.get('note')}
         except Exception as ex:   # bases our crafting data doesn't know
             res['notes'].append(f'No craft estimate: {ex}')
@@ -96,7 +95,7 @@ def check(con, text, league=None, progress=None, filters=None):
                 return c[0]['value'] if c else None
             res['trade'] = trade.price(it, league, rt, value_of, f)
             t = res['trade']
-            if t.get('state') == 'done' and t.get('low_div') is not None and not res.get('headline'):
+            if t.get('state') == 'done' and t.get('low_div') is not None and (not res.get('headline') or it['rarity'] == 'GEM'):
                 res['headline'] = {'div': t['median_div'] if len(t['prices']) >= 3 else t['low_div'], 'qty': 1,
                                    'label': f"trade site, {'middle of ' + str(len(t['prices'])) + ' cheapest' if len(t['prices']) >= 3 else 'lowest listing'}"}
     t = res.get('trade') or {}

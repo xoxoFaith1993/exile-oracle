@@ -75,6 +75,23 @@ def wait(after, timeout=25):
         return {k: v for k, v in _state.items() if k != 'text'}
 
 
+# ---------------- popup size (the page measures itself; overlay.pyw fits the window to it) ----------------
+
+_size = {'ver': 0}
+
+
+def set_size(b):
+    keep = {k: float(b[k]) for k in ('need', 'outerH', 'outerW', 'innerH', 'innerW', 'dpr') if isinstance(b.get(k), (int, float))}
+    if keep and any(_size.get(k) != v for k, v in keep.items()):
+        _size.update(keep)
+        _size['ver'] += 1
+    return {'ok': True}
+
+
+def size():
+    return dict(_size)
+
+
 # ---------------- switching the overlay on and off ----------------
 
 def _flag():

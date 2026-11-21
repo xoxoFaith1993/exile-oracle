@@ -383,7 +383,10 @@ def _listing(r, rt, value_of):
     return {'amount': p.get('amount'), 'currency': p.get('currency'),
             'div': _to_div(p.get('amount') or 0, p.get('currency'), rt, value_of),
             'name': currency_names().get(p.get('currency')), 'icon': currency_icon(p.get('currency')),
-            'ilvl': it.get('ilvl'), 'listed': r['listing'].get('indexed'), 'corrupted': bool(it.get('corrupted')),
+            'ilvl': it.get('ilvl'), 'gem_level': next((int(re.sub(r'\D', '', str(pr['values'][0][0])) or 0)
+                                                       for pr in it.get('properties') or [] if pr.get('name') == 'Level'
+                                                       and pr.get('values')), None),
+            'listed': r['listing'].get('indexed'), 'corrupted': bool(it.get('corrupted')),
             'online': acc.get('online') is not None, 'afk': (acc.get('online') or {}).get('status') == 'afk'}
 
 

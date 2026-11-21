@@ -517,6 +517,9 @@ class Handler(http.server.BaseHTTPRequestHandler):
             elif u.path == '/api/overlay/options':
                 from poe2kit import overlaysrv
                 data = overlaysrv.set_options(body)
+            elif u.path == '/api/overlay/size':
+                from poe2kit import overlaysrv
+                data = overlaysrv.set_size(body)
             elif u.path == '/api/planner':   # character page: send this build to the game's Build Planner
                 import server as tools
                 data = tools.t_build_planner({'build_id': body.get('build_id'), 'write': True,
@@ -546,6 +549,9 @@ class Handler(http.server.BaseHTTPRequestHandler):
         if u.path == '/api/overlay/options':
             from poe2kit import overlaysrv
             return self._send(200, json.dumps(overlaysrv.options()).encode(), 'application/json')
+        if u.path == '/api/overlay/size':
+            from poe2kit import overlaysrv
+            return self._send(200, json.dumps(overlaysrv.size()).encode(), 'application/json')
         if u.path == '/api/overlay/latest':
             from poe2kit import overlaysrv
             q = urllib.parse.parse_qs(u.query)

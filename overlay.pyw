@@ -2,7 +2,7 @@
 
 Press Ctrl+C on an item in Path of Exile 2 (the game copies the item's text). This program sees PoE item text on the
 clipboard while the game is the window in front, sends it to the toolkit's monitor to be priced, and shows a small
-always-on-top popup by the mouse. Move the mouse away from the popup, or press Esc, and it hides.
+always-on-top popup in the middle of the screen. Click back into the game, or press Esc, and it hides.
 
 It never sends keys or clicks to the game and never reads the game's memory: it only reads the clipboard.
 The popup is a borderless Edge app window showing http://127.0.0.1:47830/overlay. The game must run in windowed
@@ -31,7 +31,6 @@ LOCK = os.path.join(config.HOME, 'overlay.lock')
 QUIT = os.path.join(config.HOME, 'overlay.quit')
 TITLE = 'PoE2 price check'
 W, H = 460, 720          # popup size at 100% Windows scaling
-AWAY = 160               # hide when the mouse is this far (px at 100%) outside the popup
 EDGE = [r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe',
         r'C:\Program Files\Microsoft\Edge\Application\msedge.exe']
 
@@ -60,6 +59,10 @@ u32.GetWindowLongPtrW.argtypes = [wt.HWND, ctypes.c_int]
 u32.SetWindowLongPtrW.argtypes = [wt.HWND, ctypes.c_int, ctypes.c_ssize_t]
 u32.SetWindowPos.argtypes = [wt.HWND, wt.HWND, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, wt.UINT]
 u32.MonitorFromPoint.restype = wt.HANDLE
+u32.MonitorFromWindow.restype = wt.HANDLE
+u32.MonitorFromWindow.argtypes = [wt.HWND, wt.DWORD]
+u32.SetWindowRgn.argtypes = [wt.HWND, wt.HANDLE, wt.BOOL]
+ctypes.windll.gdi32.CreateRectRgn.restype = wt.HANDLE
 
 
 class WNDCLASS(ctypes.Structure):
@@ -164,7 +167,8 @@ class Popup:
             edge, f'--app={URL}overlay', f'--user-data-dir={prof}', '--no-first-run', '--no-default-browser-check',
             f'--window-size={W},{H}', '--window-position=-32000,-32000',
             '--disable-background-timer-throttling', '--disable-renderer-backgrounding',
-            '--disable-backgrounding-occluded-windows'])
+            '--disable-backgrounding-occluded-windows',
+            '--disable-direct-composition'])   # DirectComposition ignores window regions: the title bar would stay
         for _ in range(100):   # wait up to ~10 s for the window
             time.sleep(0.1)
             self.hwnd = self._find()
@@ -196,38 +200,83 @@ class Popup:
     def alive(self):
         return bool(self.hwnd and u32.IsWindow(self.hwnd))
 
-    def show_at_cursor(self):
+    def show(self):
+        """Centred on the screen the game is on, above it, without taking the keyboard from the game."""
         if not self.alive():
             self.start()
             if not self.alive():
                 return
-        pt = wt.POINT()
-        u32.GetCursorPos(ctypes.byref(pt))
-        scale = (u32.GetDpiForWindow(self.hwnd) or 96) / 96
-        w, h = int(W * scale), int(H * scale)
-        mi = MONITORINFO(cbSize=ctypes.sizeof(MONITORINFO))
-        u32.GetMonitorInfoW(u32.MonitorFromPoint(pt, 2), ctypes.byref(mi))
-        wa = mi.rcWork
-        gap = int(28 * scale)
-        x = pt.x + gap if pt.x + gap + w <= wa.right else pt.x - gap - w   # right of the mouse, else left
-        y = min(max(pt.y - h // 3, wa.top), wa.bottom - h)
-        x = min(max(x, wa.left), wa.right - w)
-        u32.SetWindowPos(self.hwnd, HWND_TOPMOST, x, y, w, h, SWP_NOACTIVATE | SWP_SHOWWINDOW | SWP_FRAMECHANGED)
+        self.layout()
         self.shown, self.since = True, time.time()
+
+    def _measure(self):
+        """What the page reported about itself: need (panel height), chrome/sides (Edge's frame), dpr, in CSS px."""
+        try:
+            with urllib.request.urlopen(URL + 'api/overlay/size', timeout=1) as r:
+                return json.loads(r.read())
+        except Exception:
+            return {}
+
+    @staticmethod
+    def _bar(dpi):
+        """Fallback before the page has reported: a standard title bar at this scaling."""
+        try:
+            gm = lambda i: u32.GetSystemMetricsForDpi(i, dpi)
+        except AttributeError:
+            gm = u32.GetSystemMetrics
+        return gm(4) + gm(33) + gm(92)   # SM_CYCAPTION, SM_CYSIZEFRAME, SM_CXPADDEDBORDER
+
+    def layout(self, f=None):
+        """Size the window to the panel (no scrolling, up to the screen's height), centre it on the game's screen,
+        and cut away Edge's own title bar and borders with a window region so only the panel shows.
+        Measured from the real window: Edge draws its title bar inside the client area, above the page, so
+        bar = client height - page height (the page reports innerH and its pixel ratio)."""
+        f = f if f is not None else self._measure()
+        self.size_ver = f.get('ver')
+        dpi = u32.GetDpiForWindow(self.hwnd) or 96
+        dip = dpi / 96
+        dpr = f.get('dpr') or dip
+        r, o, c = wt.RECT(), wt.POINT(0, 0), wt.RECT()
+        u32.GetWindowRect(self.hwnd, ctypes.byref(r))
+        u32.ClientToScreen(self.hwnd, ctypes.byref(o))
+        u32.GetClientRect(self.hwnd, ctypes.byref(c))
+        bx, by = o.x - r.left, o.y - r.top                  # invisible resize border, frame above the client area
+        bar = c.bottom - f['innerH'] * dpr if f.get('innerH') else -1
+        if not 0 <= bar <= 120 * dip:
+            bar = getattr(self, 'bar', None) or self._bar(dpi)
+        self.bar = bar
+        mi = MONITORINFO(cbSize=ctypes.sizeof(MONITORINFO))
+        u32.GetMonitorInfoW(u32.MonitorFromWindow(u32.GetForegroundWindow(), 2), ctypes.byref(mi))
+        m = mi.rcMonitor
+        content = int(min((f.get('need') or H) * dpr, (m.bottom - m.top) - 40 * dip))
+        cw = int(W * dip)
+        w, h = cw + 2 * bx, int(by + bar + content + bx)
+        x = m.left + (m.right - m.left - cw) // 2 - bx
+        y = m.top + (m.bottom - m.top - content) // 2 - int(by + bar)
+        u32.SetWindowPos(self.hwnd, HWND_TOPMOST, x, y, w, h, SWP_NOACTIVATE | SWP_SHOWWINDOW | SWP_FRAMECHANGED)
+        rgn = ctypes.windll.gdi32.CreateRectRgn(bx, int(by + bar), bx + cw, int(by + bar) + content)
+        u32.SetWindowRgn(self.hwnd, rgn, True)   # Windows owns the region from here
+
+    def refit(self):
+        """While shown: if the page's size changed (results arrived, rows ticked), fit the window again."""
+        f = self._measure()
+        if f.get('ver') != getattr(self, 'size_ver', None):
+            self.layout(f)
 
     def hide(self):
         if self.alive():
             u32.ShowWindow(self.hwnd, SW_HIDE)
         self.shown = False
 
-    def mouse_far(self):
+    def clicked_outside(self):
+        """A mouse click anywhere that isn't the popup: the player went back to the game."""
+        down = any(u32.GetAsyncKeyState(vk) & 0x8000 for vk in (0x01, 0x02))   # left / right button
+        if not down:
+            return False
         r, pt = wt.RECT(), wt.POINT()
         u32.GetWindowRect(self.hwnd, ctypes.byref(r))
         u32.GetCursorPos(ctypes.byref(pt))
-        scale = (u32.GetDpiForWindow(self.hwnd) or 96) / 96
-        dx = max(r.left - pt.x, 0, pt.x - r.right)
-        dy = max(r.top - pt.y, 0, pt.y - r.bottom)
-        return max(dx, dy) > AWAY * scale
+        return not (r.left <= pt.x < r.right and r.top <= pt.y < r.bottom)
 
     def stop(self):
         if self.proc:
@@ -284,7 +333,7 @@ def main(argv):
         if not looks_like_item(text):
             return
         threading.Thread(target=priced, args=(text,), daemon=True).start()
-        popup.show_at_cursor()
+        popup.show()
         set_esc(True)
 
     def proc(hwnd, msg, wp, lp):
@@ -307,7 +356,12 @@ def main(argv):
                     pass
                 u32.DestroyWindow(hwnd)
                 return 0
-            if popup.shown and popup.alive() and popup.mouse_far() and time.time() - popup.since > 0.4:
+            if popup.shown and popup.alive() and down['tick'] % 3 == 0:
+                try:
+                    popup.refit()
+                except Exception as e:
+                    log(f'refit failed: {e}')
+            if popup.shown and popup.alive() and popup.clicked_outside() and time.time() - popup.since > 0.4:
                 popup.hide()
                 set_esc(False)
             if time.time() - down['last'] > 30:   # quit when the monitor has been gone for ~2 minutes
@@ -331,7 +385,7 @@ def main(argv):
     log(f'overlay started (pid {os.getpid()})')
     if test:
         priced(open(test, encoding='utf-8').read())
-        popup.show_at_cursor()
+        popup.show()
         set_esc(True)
     msg = wt.MSG()
     try:
