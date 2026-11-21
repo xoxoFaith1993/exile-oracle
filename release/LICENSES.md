@@ -12,6 +12,13 @@ fan tool, and will be removed on request. Other item pictures load from GGG's ow
 - **Python 3.15** (embedded distribution), Python Software Foundation License: https://docs.python.org/3/license.html
 - **poblua.exe**: a small launcher that runs Path of Building's Lua runtime headless (source: `toolkit\pobhost\poblua.c`).
 
+Linux download only, built by GitHub Actions:
+- **Python 3.15** from python-build-standalone (Astral), Python Software Foundation License and the licences of
+  its bundled libraries: https://github.com/astral-sh/python-build-standalone
+- **LuaJIT 2.1**: MIT License, https://luajit.org
+- **luautf8**: MIT License, https://github.com/starwing/luautf8
+- **Lua-cURLv3**: MIT License, https://github.com/Lua-cURL/Lua-cURLv3 (uses the system's libcurl)
+
 ## Downloaded on first run (not bundled)
 - **Path of Building Community (PoE 2)**: MIT License, https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2
   (its `LICENSE.md` is downloaded with it).

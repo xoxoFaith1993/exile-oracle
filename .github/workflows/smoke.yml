@@ -6,6 +6,11 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+  release:
+    types: [published]
+
+permissions:
+  contents: write   # the release job attaches the Linux download to the GitHub release
 
 jobs:
   linux-runtime:
@@ -49,3 +54,51 @@ jobs:
         if: always()
         shell: bash
         run: tail -50 "${{ runner.temp }}/poe2kit-home/logs/monitor.log" || true
+
+  linux-package:
+    # The Linux / Steam Deck download: build it, install it into a fresh user folder like a player would, run the
+    # full test against the installed copy, uninstall it. On a published release it gets the game art and is
+    # attached to that release.
+    needs: linux-runtime
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: linux-runtime
+          path: rt/
+      - name: Game art (release builds only)
+        if: github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release download "${{ github.event.release.tag_name }}" -p 'poe2-toolkit-gameart-*.tar.gz' -O art.tar.gz
+      - name: Build the package
+        run: sh tools/build_linux_package.sh rt out ${{ github.event_name == 'release' && 'art.tar.gz' || '' }}
+      - name: Install, test and uninstall it like a player
+        run: |
+          set -eux
+          export HOME="$RUNNER_TEMP/player"
+          mkdir -p "$HOME" pkg
+          tar -xzf out/*.tar.gz -C pkg
+          sh pkg/poe2-toolkit-linux/install.sh --no-start
+          A="$HOME/.local/share/poe2toolkit/app"
+          test -x "$A/python/bin/python3"
+          grep -q "$A/toolkit/launcher.py" "$HOME/.local/share/applications/poe2-toolkit.desktop"
+          "$A/python/bin/python3" "$A/toolkit/smoke_test.py" --installed --pob
+          sh pkg/poe2-toolkit-linux/install.sh --update --no-start
+          test -f "$HOME/.local/share/poe2toolkit/data/poe2kit.db"
+          sh pkg/poe2-toolkit-linux/uninstall.sh --purge
+          test ! -e "$HOME/.local/share/poe2toolkit"
+          test ! -e "$HOME/.local/share/applications/poe2-toolkit.desktop"
+      - uses: actions/upload-artifact@v4
+        if: github.event_name != 'release'
+        with:
+          name: linux-package
+          path: out/*.tar.gz
+          retention-days: 7
+      - name: Attach to the release
+        if: github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ github.event.release.tag_name }}" out/*.tar.gz --clobber

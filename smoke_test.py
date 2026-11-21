@@ -15,7 +15,9 @@ import urllib.error
 import urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-os.environ.setdefault('POE2KIT_HOME', tempfile.mkdtemp(prefix='poe2kit-smoke-'))
+INSTALLED = '--installed' in sys.argv   # testing an installed copy: use its real data folder
+if not INSTALLED:
+    os.environ.setdefault('POE2KIT_HOME', tempfile.mkdtemp(prefix='poe2kit-smoke-'))
 os.environ.setdefault('POE2KIT_PORT', '47899')
 sys.path.insert(0, HERE)
 
@@ -46,7 +48,10 @@ def compile_all():
 
 def detection():
     from poe2kit import config, osutil, claudelink
-    check(config.HOME == os.environ['POE2KIT_HOME'], f'home folder {config.HOME}')
+    want = os.environ.get('POE2KIT_HOME') or (os.path.join(os.environ.get('XDG_DATA_HOME') or
+                                                           os.path.expanduser('~/.local/share'), 'poe2toolkit')
+                                               if os.name != 'nt' else config.HOME)
+    check(os.path.normpath(config.HOME) == os.path.normpath(want), f'home folder {config.HOME}')
     print('     game folder :', config.poe2_dir())
     print('     Client.txt  :', config.client_log())
     print('     PoB folder  :', osutil.find_documents('Path of Building (PoE2)'))
@@ -66,7 +71,7 @@ def monitor(strict=False):
     check(launcher.up(), f'monitor started ({time.time() - t0:.1f} s)')
     if not launcher.up():
         from poe2kit import config
-        log = os.path.join(config.LOG_DIR, 'monitor.log')
+        log = os.path.join(config.LOG_DIR, 'monitor.log')   # noqa
         if os.path.exists(log):
             print(open(log, encoding='utf-8', errors='replace').read()[-3000:])
         return
@@ -197,7 +202,7 @@ def pob_part():
 
 
 if __name__ == '__main__':
-    print('python', sys.version.split()[0], 'on', sys.platform, '| home', os.environ['POE2KIT_HOME'])
+    print('python', sys.version.split()[0], 'on', sys.platform, '| home', os.environ.get('POE2KIT_HOME', '(installed default)'))
     compile_all()
     detection()
     monitor()

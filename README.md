@@ -82,6 +82,22 @@ Set your class once, connect Claude with one click.
 
 Updates: the dashboard shows a banner when a new version is out; one click downloads and installs it.
 
+### Linux and Steam Deck
+1. Download `poe2-toolkit-linux-x86_64-<version>.tar.gz` from **[Releases](../../releases/latest)** and unpack it.
+2. In a terminal in that folder: `sh install.sh` (add `--autostart` to start it when you log in). It installs
+   for your user only, with no sudo and nothing system-wide, and it brings its own Python and Lua, so it works on
+   SteamOS's read-only system too.
+3. Open **PoE 2 Toolkit** from the app menu, or `http://127.0.0.1:47830` in your browser.
+   On a Steam Deck, do this in Desktop Mode. Right-click the menu entry and choose *Add to Steam* to open it from
+   Game Mode.
+
+It finds the game through Steam (including Flatpak Steam and SD cards) and reads its log through Proton. If you
+run Path of Building under Wine or Proton it finds that too, for character import.
+- Your data stays in `~/.local/share/poe2toolkit`.
+- `sh uninstall.sh` removes the app (add `--purge` to remove your data as well).
+- The price-check overlay is Windows-only for now.
+- Connect Claude Code with the command `install.sh` prints.
+
 ## Price-check overlay (Windows)
 Press **Ctrl+C** on an item in game (plain or Ctrl+Alt+C) and a popup appears by your mouse:
 - **poe.ninja** price and 7-day trend for currency, gems, runes, fragments and uniques;

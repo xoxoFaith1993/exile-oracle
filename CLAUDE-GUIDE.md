@@ -20,6 +20,11 @@ claude mcp add poe2 --scope user -- "<your install>\python\python.exe" "<your in
 ```
 then start a new Claude Code session.
 
+**Linux / Steam Deck:** use Claude Code the same way. `install.sh` prints the exact command at the end; it looks like
+```
+claude mcp add poe2 --scope user -- "$HOME/.local/share/poe2toolkit/app/python/bin/python3" "$HOME/.local/share/poe2toolkit/app/toolkit/server.py"
+```
+
 Nothing is sent anywhere by the toolkit itself. Claude reads your toolkit data only when you ask a question, through
 the toolkit's own tools, and those tools are read-only toward the game.
 
