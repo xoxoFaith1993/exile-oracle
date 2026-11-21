@@ -181,10 +181,35 @@ def forecast_item(con, item, league=None, day=None, price=None):
     past = oracle.data().get('curves_div', {}).get(item) or {}
     out = {'item': item, 'league': lg, 'day': round(day, 1) if day is not None else None, 'price_div': price,
            'change_7d_pct': chg7, 'past': {k: {int(d): v for d, v in c.items()} for k, c in past.items()}}
+    if True:   # every exchange item: its DAILY price in the same launches (forecast-paths.json); the Oracle's own
+        try:   # curves (42 key items, a point every few days) stay as the fallback
+            fp = _load('forecast-paths.json')
+            rows = fp['items'].get(item) or next((v for k, v in fp['items'].items() if k.lower() == item.lower()), None)
+            if rows:
+                out['past'] = {lg_: {d: v for d, v in enumerate(r) if v is not None} for lg_, r in zip(fp['leagues'], rows)
+                               if any(v is not None for v in r)}
+        except (FileNotFoundError, KeyError, ValueError):
+            pass
     try:
         out['typical'] = forecast._oracle().typical_path(item)
     except Exception:
         out['typical'] = {}
+    if price and day is not None and out['typical']:   # the usual path from today, scaled to today's price
+        import math
+        g = sorted(out['typical'].items())
+
+        def at(d):   # log-linear between the path's days (1-7, 10, 14, 21, then weekly)
+            if d < g[0][0] or d > g[-1][0]:
+                return None
+            for (a, va), (b, vb) in zip(g, g[1:]):
+                if a <= d <= b:
+                    return math.exp(math.log(va) + (math.log(vb) - math.log(va)) * (d - a) / (b - a)) if b > a else va
+            return g[-1][1] if d == g[-1][0] else None
+        base = at(day)
+        if base:
+            pts = [[d, round(price * at(d) / base, 6)] for d in [day] + list(range(int(day) + 1, int(day) + 15)) if at(d)]
+            if len(pts) > 1:
+                out['usual'] = pts
     if price and day is not None:
         try:
             f = forecast.forecast(item, day, price, chg7)

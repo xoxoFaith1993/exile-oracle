@@ -233,6 +233,14 @@ def prophecy_check():
         return
     check(len(tl['events']) >= 15, f"league timeline ({len(tl['events'])} events)")
     check(set(fc.get('horizons', {})) >= {1, 3, 7, 14} or set(fc.get('horizons', {})) >= {'1', '3', '7', '14'}, 'price forecast (4 horizons)')
+    med = [fc['horizons'][h]['median'] for h in sorted(fc['horizons'], key=int)]
+    steps = [b - a for a, b in zip([0.004] + med, med)]
+    check(all(s <= 1e-12 for s in steps) or all(s >= -1e-12 for s in steps), 'price forecast: one consistent path (no zig-zag)')
+    try:
+        fx = prophecy.forecast_item(__import__('poe2kit.db', fromlist=['x']).connect(), "Xoph's Pyre")
+        check(len(fx.get('past') or {}) >= 2, f"price forecast: past-launch lines for non-key items ({len(fx.get('past') or {})} launches)")
+    except FileNotFoundError as e:
+        check(True, f'forecast paths skipped ({e})')
     check(pp['items'] and pp['items'][0]['calls'][0]['direction'] == 'down', 'patch prophecy: more drops -> price down')
     check(uh.get('leagues'), 'chase unique history')
     check(isinstance(cd, list), 'countdowns')

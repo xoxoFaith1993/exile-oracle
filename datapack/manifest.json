@@ -1,6 +1,6 @@
 {
  "data_version": "2026.11.21.1",
- "built": 1795300986,
+ "built": 1795301333,
  "min_app": "0.6.0",
  "files": {
   "atlas-strategies.json": {
@@ -38,6 +38,10 @@
   "forecast-model.json": {
    "size": 1635923,
    "sha256": "2ae51ca7c3e66d810862f5365af44dab176491d03e0bc5bda573621ce523088e"
+  },
+  "forecast-paths.json": {
+   "size": 1245417,
+   "sha256": "ac72f55e961e3866fa5c6e8c1ea2f904f01892d4cf0f9e0c1a74e3cb22a69ba9"
   },
   "league-start.json": {
    "size": 151016,

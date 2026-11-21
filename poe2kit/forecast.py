@@ -145,8 +145,12 @@ class Oracle:
             mu = w * g + (self._beta(h, day, e, tier) * e if e is not None else 0.0)
             s = self.scale(item, h, category) * (self.shock_mult if patch_shock else 1.0)
             zq = self._zq(h, tier)[_phase(self.zphases, day)]
-            out[h] = {q: _round(math.exp(x0 + mu + s * z)) for q, z in zip(QS, zq)}
-            out[h]['change_pct'] = round((math.exp(mu + s * zq[2]) - 1) * 100, 1)
+            out[h] = {q: math.exp(x0 + mu + s * z) for q, z in zip(QS, zq)}
+        out = smooth(out, current_price_div)   # one consistent path, bands only widen (backtest: slightly better)
+        for h in out:
+            out[h]['change_pct'] = round((out[h]['median'] / current_price_div - 1) * 100, 1)
+            for q in QS:
+                out[h][q] = _round(out[h][q])
         conf = self._confidence(it, day, src_set=srcs, patch_shock=patch_shock)
         basis = []
         if it:
@@ -200,6 +204,58 @@ class Oracle:
         _, it, cat, ce = self._entry(item, category)
         e = it or ce
         return {int(k): v for k, v in (e or {}).get('typical_path', {}).items()}
+
+
+def _pav(y, w):
+    """Isotonic (non-decreasing) least-squares fit: pool adjacent violators."""
+    blocks = [[v, wt, 1] for v, wt in zip(y, w)]
+    i = 0
+    while i < len(blocks) - 1:
+        if blocks[i][0] > blocks[i + 1][0] + 1e-12:
+            a, b = blocks[i], blocks[i + 1]
+            wt = a[1] + b[1]
+            blocks[i] = [(a[0] * a[1] + b[0] * b[1]) / wt, wt, a[2] + b[2]]
+            del blocks[i + 1]
+            i = max(0, i - 1)
+        else:
+            i += 1
+    out = []
+    for v, _, n in blocks:
+        out += [v] * n
+    return out
+
+
+def smooth(out, base=1.0):
+    """One consistent path instead of four separate guesses (the author, 2026-11-21: the fan zig-zagged, e.g. +1 d 88,
+    +3 d 114, +7 d 72, +14 d 92 div). The middle line moves one way (or stays flat) from today's price across the
+    horizons, whichever fits the four guesses best, and the bands only widen further out. Checked on the
+    leave-one-launch-out backtest (research/forecast/scripts/smooth_check.py) before use.
+    out: {horizon: {p10, p25, median, p75, p90 (prices)}}; base: today's price. Returns a new dict."""
+    hs = sorted(out)
+    m = [math.log(out[h]['median'] / base) for h in hs]
+    w = [1e6] + [1.0] * len(m)   # today's price is fixed
+    fits = []
+    for sign in (1, -1):
+        f = _pav([0.0] + [sign * v for v in m], w)[1:]
+        f = [sign * v for v in f]
+        fits.append((sum((a - b) ** 2 for a, b in zip(f, m)), f))
+    mm = min(fits)[1]
+    res = {}
+    widest = {q: 0.0 for q in QS}
+    for h, mid in zip(hs, mm):
+        o = {}
+        for q in QS:
+            if q == 'median':
+                continue
+            off = math.log(out[h][q] / base) - math.log(out[h]['median'] / base)
+            widest[q] = max(widest[q], off) if q in ('p75', 'p90') else min(widest[q], off)
+            o[q] = base * math.exp(mid + widest[q])
+        o['median'] = base * math.exp(mid)
+        res[h] = {q: o[q] for q in QS}
+        for k, v in out[h].items():
+            if k not in QS:
+                res[h][k] = v
+    return res
 
 
 def _round(x):

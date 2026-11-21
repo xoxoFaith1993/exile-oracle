@@ -18,7 +18,10 @@ import gzip, json, os, sqlite3, statistics, sys
 
 ROOT = sys.argv[1]
 RAW = os.path.join(ROOT, 'cache', 'raw')
-OUT = os.path.join(ROOT, 'cache', 'prices.db')
+# 2026-11-21: optional 2nd argument 'value' picks each item's market by VALUE traded (the app's corrected method,
+# poe2kit.leaguestart: 17.8% median error vs poe.ninja instead of 36.6%) and writes cache/prices-value.db
+BY_VALUE = len(sys.argv) > 2 and sys.argv[2] == 'value'
+OUT = os.path.join(ROOT, 'cache', 'prices-value.db' if BY_VALUE else 'prices.db')
 APPDB = 'file:<data folder>/data/poe2kit.db?mode=ro'
 EX = 'Metadata/Items/Currency/CurrencyAddModToRare'
 DIV = 'Metadata/Items/Currency/CurrencyModValues'
@@ -54,10 +57,11 @@ def prices_from_page(mk):
         for base in (EX, DIV, CHAOS):
             if it != base and (it, base) in pair and base in ex_per:
                 rate, units = pair[(it, base)]
-                if best is None or units > best[1]:
-                    best = (rate * ex_per[base], units)
+                key = rate * ex_per[base] * units if BY_VALUE else units
+                if best is None or key > best[2]:
+                    best = (rate * ex_per[base], units, key)
         if best:
-            out[it] = best
+            out[it] = best[:2]
     for base, v in ex_per.items():
         if base != EX:
             out[base] = (v, pair[(base, EX)][1])

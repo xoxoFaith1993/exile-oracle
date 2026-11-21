@@ -78,8 +78,9 @@ The Oracle that tells the future, built from researched league history ([the res
 
 ![Prophecy: omen, countdowns and league timeline](docs/screenshots/prophecy.jpg)
 
-**Price forecasts** for 688 exchange items: past launches as faint lines, and a fan for the next 1, 3, 7 and 14 days.
-Tested on six launches, the range held the real price 79% of the time.
+**Price forecasts** for 688 exchange items: each item's daily price in the last three launches as faint lines, the
+path it usually took from this point of a league, and a fan for the next 14 days that moves one way and only widens.
+Tested on six launches, the range held the real price 80% of the time.
 
 ![Price forecast](docs/screenshots/prophecy-forecast.jpg)
 

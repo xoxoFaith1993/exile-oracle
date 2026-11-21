@@ -56,6 +56,20 @@ Leave-one-launch-out: each launch is predicted by a model fitted on the other fi
 - **Shock days:** the days when many items jumped and stayed are listed in `forecast-model.json` (research.shock_days).
   Most are hotfix and patch days.
 
+## Finishing touches in the app (2026-11-21)
+
+- **One consistent path.** Each horizon (+1, +3, +7, +14 days) was forecast on its own, so the middle line could jump up
+  then down (82.7% of item-days in the backtest zig-zagged). The app now fits one path that moves one way or stays flat
+  from today's price, and bands that only widen further out (`poe2kit/forecast.smooth`). On the same leave-one-launch-out
+  backtest (`scripts/smooth_check.py`) it is slightly better on every measure: median error 46.5% -> 45.8%, the 10-90%
+  band held 79.9% -> 80.3%, direction right on 10%+ calls 61.3% -> 62.1%, zig-zags 0%.
+- **Past-launch lines for every item.** `scripts/paths.py` writes the daily price of all 681 exchange items in the last
+  three launches to `datapack/forecast-paths.json` for the chart's faint lines (before, only the 42 key items had them).
+  Its prices come from `build_dataset.py <dir> value`: each item priced from the market (Ex / Div / Chaos) with the
+  most VALUE traded, the app's corrected method (17.8% median error vs poe.ninja instead of 36.6% for "Exalted first").
+  (On these daily samples the two methods barely differ.) The model itself is still the one trained on the original
+  dataset.
+
 ## Limits
 
 - It is history, not a promise. Patches override it, and 1.0 (2026-12-11) adds new items with no history: those use
