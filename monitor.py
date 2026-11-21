@@ -517,6 +517,11 @@ class Handler(http.server.BaseHTTPRequestHandler):
             elif u.path == '/api/overlay/options':
                 from poe2kit import overlaysrv
                 data = overlaysrv.set_options(body)
+            elif u.path == '/api/planner':   # character page: send this build to the game's Build Planner
+                import server as tools
+                data = tools.t_build_planner({'build_id': body.get('build_id'), 'write': True,
+                                              'confirm': bool(body.get('confirm'))})
+                data.pop('preview', None)
             elif u.path == '/api/open':   # the overlay's "Open on trade" button: only the official trade site
                 url = str(body.get('url', ''))
                 if not url.startswith('https://www.pathofexile.com/trade2/'):

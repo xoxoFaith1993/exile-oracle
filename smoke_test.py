@@ -146,6 +146,14 @@ def overlay_check():
     check(t.get('state') in (None, 'off'), 'live trade stays off unless switched on')
 
 
+def planner_check():
+    from poe2kit import buildplanner
+    ids = buildplanner._ids()
+    check(ids['ascendancies'].get('Blood Mage') == 'Witch2' and len(ids['passives']) > 5000,
+          f"Build Planner id map ({len(ids['passives'])} passives)")
+    check(buildplanner._levels('Level 30') == 30 and buildplanner._levels('Endgame') == 100, 'Build Planner stage titles')
+
+
 def mcp():
     p = subprocess.Popen([sys.executable, os.path.join(HERE, 'server.py')], stdin=subprocess.PIPE,
                          stdout=subprocess.PIPE, text=True, encoding='utf-8')
@@ -205,6 +213,7 @@ if __name__ == '__main__':
     print('python', sys.version.split()[0], 'on', sys.platform, '| home', os.environ.get('POE2KIT_HOME', '(installed default)'))
     compile_all()
     detection()
+    planner_check()
     monitor()
     mcp()
     if '--pob' in sys.argv:

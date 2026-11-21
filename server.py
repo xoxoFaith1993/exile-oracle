@@ -149,6 +149,30 @@ def t_vault_show(a):
         con.close()
 
 
+def t_build_planner(a):
+    """Export a build to the game's own Build Planner (.build file the game reads and watches)."""
+    from poe2kit import buildplanner as bp
+    if a.get('list'):
+        return {'folder': bp.folder(), 'files': bp.files()}
+    if a.get('remove'):
+        return bp.remove(a['remove'])
+    con = db.connect()
+    try:
+        doc, rep = bp.make(con, a.get('build_id'), a.get('pob_code'), a.get('notes'), a.get('name'),
+                           a.get('include_gear', True) is not False)
+    finally:
+        con.close()
+    out = {'report': rep, 'folder': bp.folder()}
+    if a.get('write'):
+        out['write'] = bp.write(doc, bool(a.get('confirm')))
+        if out['write'].get('needs_ok'):
+            out['ask_player'] = ("Ask the player first: this puts a file in their game's BuildPlanner folder. "
+                                 'Then call again with write=true, confirm=true.')
+    else:
+        out['preview'] = doc
+    return out
+
+
 def t_trade_link(a):
     """Build an official trade-site search URL for the user to open (no trade API calls are made)."""
     league = a.get('league') or ninja.current_league()
@@ -509,6 +533,17 @@ TOOLS = [
     ('poe2_read_rare', 'Read a rare item: tier (T1 = best) and roll % of each mod, plus a quality summary. '
      'base = base type (e.g. "Vile Robe"), mods = one mod per line.', S(base=STR, mods=STR) | {'required': ['base', 'mods']},
      t_read_rare),
+    ('poe2_build_planner',
+     "Put a build into Path of Exile 2's in-game Build Planner (GGG's documented .build file; the game shows the "
+     'passive path, skills + supports to cut and gear-slot hints, and reloads the file by itself when it changes). '
+     'Give build_id (vault) or pob_code. notes (optional object) adds hover text in game: {"description": str, '
+     '"passives": {node name: text}, "skills": {gem name: text}, "slots": {"Helmet"|"Ring 1"|...: text}}; text may '
+     'use the game markup e.g. "<green>{take before maps}". Without write it returns a preview; write=true saves '
+     '"PoE2 Toolkit - <name>.build" (the first write ever needs confirm=true after asking the player). '
+     "list=true shows the folder; remove=<file> deletes one of the toolkit's own files. Tip: several PoB trees "
+     'titled "Level 30", "Level 60"... become a levelling route.',
+     S(build_id=NUM, pob_code=STR, name=STR, notes={'type': 'object'}, include_gear=BOOL, write=BOOL, confirm=BOOL,
+       list=BOOL, remove=STR), t_build_planner),
     ('poe2_trade_link', 'Make an official trade-site search link (by unique name and/or base type) to open in a browser.',
      S(name=STR, type=STR, league=STR), t_trade_link),
 ]

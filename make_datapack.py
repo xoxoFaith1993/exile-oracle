@@ -19,8 +19,24 @@ from poe2kit import clientlog, config, crafting, db, leaguestart
 OUT = os.path.join(config.ROOT, 'datapack')
 
 
+def planner_ids():
+    """Game ids the in-game Build Planner needs: PoB passive node numbers -> PassiveSkills Id, and ascendancy
+    names -> Ascendancy Id. From the newest extracted game tables."""
+    ps_path = config.newest_gamefiles(os.path.join('tables', 'passiveskills.json'))
+    asc_path = config.newest_gamefiles(os.path.join('tables', 'ascendancy.json'))
+    if not ps_path or not asc_path:
+        print('planner_ids: no extracted game tables, skipped')
+        return
+    rows = lambda p: (lambda d: d if isinstance(d, list) else d.get('rows'))(json.load(open(p, encoding='utf-8')))
+    out = {'made': time.time(), 'game_build': os.path.basename(os.path.dirname(os.path.dirname(ps_path))),
+           'passives': {str(r['PassiveSkillGraphId']): r['Id'] for r in rows(ps_path) if r.get('PassiveSkillGraphId')},
+           'ascendancies': {r['Name']: r['Id'] for r in rows(asc_path) if not r['Name'].startswith('[')}}
+    json.dump(out, open(os.path.join(OUT, 'planner_ids.json'), 'w', encoding='utf-8'), separators=(',', ':'))
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
+    planner_ids()
     con = db.connect()
     json.dump(crafting.essence_map(), open(os.path.join(OUT, 'essence_map.json'), 'w', encoding='utf-8'))
     areas = {k: {f: v.get(f) for f in ('Id', 'Name', 'Act', 'IsTown', 'AreaLevel', 'IsMapArea')}
