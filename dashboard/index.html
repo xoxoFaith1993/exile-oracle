@@ -315,6 +315,9 @@ input[type=checkbox] { accent-color: var(--eo-blood-hi); }
 .lab-scale { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; font-size: 11px; color: var(--eo-muted); }
 .lab-play { font-size: 22px; width: 52px; height: 52px; border-radius: 50%; }
 .lab-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(320px, 1fr); gap: 16px; }
+.zhint { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: rgba(10,8,6,.85); border: 1px solid var(--eo-gold-dim); color: var(--eo-text, #e8dcc8); padding: 8px 14px; border-radius: 4px; font-size: 13px; pointer-events: none; opacity: 0; transition: opacity .2s; }
+.zhint.on { opacity: 1; }
+.lab-tree svg.engaged { outline: 1px solid var(--eo-gold-dim); }
 .lab-tree { position: relative; height: 620px; background: #070605; border: 1px solid var(--eo-gold-dim); border-radius: 3px; overflow: hidden; }
 .lab-tree svg { width: 100%; height: 100%; cursor: default; }
 .lab-tree svg [data-n] { cursor: pointer; }
@@ -515,7 +518,7 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
     <div class="lab-grid">
       <div class="card"><h2>Passive tree</h2><div class="sub" id="labtreesub"></div>
         <div class="lab-tree" id="labtree"><div class="zbtn"><button data-z="1.4">+</button><button data-z="0.7">−</button><button data-z="fit">⤢</button></div>
-          <div class="legend">gold: taken · dashed: still to come · red: just taken</div></div></div>
+          <div class="legend">gold: taken · dashed: still to come · red: just taken · Ctrl + scroll to zoom</div></div></div>
       <div class="lab-side">
         <div class="card"><h2>At this level</h2><div id="labstats"></div><ul class="lab-new" id="labnew"></ul></div>
         <div class="card"><h2>Skills &amp; supports</h2><div id="labskills"></div></div>
@@ -567,8 +570,8 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
   <section id="atlas">
     <div class="card"><div class="lab-head"><h2 style="margin:0">Atlas</h2><span class="small muted" id="atlassub"></span></div>
       <div class="sub">The atlas passive tree, read from your game files. Pick a strategy below to see its setup drawn here (gold: the points to take).</div>
-      <div class="lab-tree" id="atlastree" style="height:720px;margin-top:10px"><div class="zbtn"><button data-z="1.4">+</button><button data-z="0.7">−</button><button data-z="fit">⤢</button></div>
-        <div class="legend">hover a node for its name · scroll to zoom · drag to move</div></div></div>
+      <div class="lab-tree" id="atlastree" style="height:520px;margin-top:10px"><div class="zbtn"><button data-z="1.4">+</button><button data-z="0.7">−</button><button data-z="fit">⤢</button></div>
+        <div class="legend">hover a node for its name · Ctrl + scroll (or click the tree, then scroll) to zoom · drag to move</div></div></div>
     <div class="card"><div class="lab-head"><h2 style="margin:0">Strategies</h2><span class="small muted" id="asphase"></span></div>
       <div class="sub">Every farming strategy: what it pays per hour now and in the next league phase (our farming research at live exchange prices), how many atlas points its setup takes, and what to run it with. Click one to draw it on the tree.</div>
       <div id="asswitch" class="flag ok" style="margin:8px 0;display:none"></div>
@@ -1915,6 +1918,11 @@ function valueCard(c) {
     <table style="margin-top:8px">${items.map(row).join('')}</table></div>`;
 }
 const TREES = {};
+function treeHint(box) {   // a short "hold Ctrl to zoom" note when someone scrolls over a tree
+  let h = box.querySelector('.zhint');
+  if (!h) { h = document.createElement('div'); h.className = 'zhint'; h.textContent = 'Hold Ctrl and scroll to zoom (or click the tree first)'; box.appendChild(h); }
+  h.classList.add('on'); clearTimeout(h._t); h._t = setTimeout(() => h.classList.remove('on'), 1200);
+}
 async function drawTree(c, box) {
   const t = TREES[c.tree.version] || (TREES[c.tree.version] = await get('/api/tree?v=' + encodeURIComponent(c.tree.version)));
   const alloc = new Set(c.tree.allocated); const jn = new Set(c.tree.jewel_nodes);
@@ -1960,7 +1968,13 @@ async function drawTree(c, box) {
   };
   const zoom = (f, px = .5, py = .5) => { const w = vb[2] / f, h = vb[3] / f; vb = [vb[0] + (vb[2] - w) * px, vb[1] + (vb[3] - h) * py, w, h]; set(); };
   fit();
-  svg.addEventListener('wheel', e => { e.preventDefault(); const r = svg.getBoundingClientRect(); zoom(e.deltaY < 0 ? 1.25 : 0.8, (e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height); }, { passive: false });
+  // the wheel scrolls the PAGE unless you hold Ctrl or clicked into the tree first (like maps on websites): moving up
+  // and down the page never zooms a tree by accident
+  svg.addEventListener('wheel', e => {
+    if (!e.ctrlKey && !svg.classList.contains('engaged')) { treeHint(box); return; }
+    e.preventDefault(); const r = svg.getBoundingClientRect(); zoom(e.deltaY < 0 ? 1.25 : 0.8, (e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height);
+  }, { passive: false });
+  svg.addEventListener('click', () => svg.classList.add('engaged'));
   let drag = null;
   svg.addEventListener('pointerdown', e => { drag = { x: e.clientX, y: e.clientY, vb: [...vb], moved: false, id: e.pointerId }; });
   svg.addEventListener('pointermove', e => {
@@ -1972,7 +1986,7 @@ async function drawTree(c, box) {
     else hideTip();
   });
   svg.addEventListener('pointerup', () => { drag = null; svg.classList.remove('dragging'); });
-  svg.addEventListener('pointerleave', () => { drag = null; svg.classList.remove('dragging'); hideTip(); });
+  svg.addEventListener('pointerleave', () => { drag = null; svg.classList.remove('dragging', 'engaged'); hideTip(); });
   box.querySelectorAll('.zbtn button').forEach(b => b.onclick = () => b.dataset.z === 'fit' ? fit() : zoom(+b.dataset.z));
 }
 async function openCharacter(id) {
