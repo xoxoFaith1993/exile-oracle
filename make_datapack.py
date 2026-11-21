@@ -32,6 +32,11 @@ def planner_ids():
            'passives': {str(r['PassiveSkillGraphId']): r['Id'] for r in rows(ps_path) if r.get('PassiveSkillGraphId')},
            'ascendancies': {r['Name']: r['Id'] for r in rows(asc_path) if not r['Name'].startswith('[')}}
     json.dump(out, open(os.path.join(OUT, 'planner_ids.json'), 'w', encoding='utf-8'), separators=(',', ':'))
+    try:   # the atlas tree, parsed from the game's own layout file, for installs without game files
+        from poe2kit import atlas
+        print('atlas_tree:', atlas.export_datapack(os.path.join(OUT, 'atlas_tree.json')), 'nodes')
+    except Exception as e:
+        print('atlas_tree: skipped,', e)
 
 
 def main():

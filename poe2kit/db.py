@@ -42,6 +42,11 @@ CREATE TABLE IF NOT EXISTS exchange_hour (
 );
 
 CREATE TABLE IF NOT EXISTS kv (k TEXT PRIMARY KEY, v TEXT);
+-- one price per day per unique (the price table keeps only recent snapshots): the league's unique price history,
+-- from day 0, for the Oracle (chase uniques like Mageblood and Temporalis move very differently through a league)
+CREATE TABLE IF NOT EXISTS unique_daily (
+    day TEXT NOT NULL, league TEXT NOT NULL, name TEXT NOT NULL, base TEXT,
+    value_div REAL, listings INTEGER, PRIMARY KEY (day, league, name));
 
 -- Build Vault: every build snapshot, kept forever.
 CREATE TABLE IF NOT EXISTS build (

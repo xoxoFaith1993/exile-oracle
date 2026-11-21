@@ -76,6 +76,12 @@ def job_prices(con):
     out = ninja.snapshot(con)
     changed = sum(v for v in out.values() if isinstance(v, int))
     job_alerts(con)
+    try:   # keep the barometer uniques' daily log going even when nobody opens the Economy page
+        from poe2kit import overview
+        overview.overview(con)
+        overview.log_uniques(con)   # the league's unique price history, one row per unique per day
+    except Exception:
+        pass
     return f'{changed} price rows stored' if changed else 'no new data (poe.ninja not updated yet)'
 
 
@@ -349,7 +355,7 @@ def api(path, q):
             return lab.readiness(con, q['build'])
         if path == '/api/oracle':   # the Oracle's market advice: phase, what to do now, item outlook
             from poe2kit import oracle
-            return oracle.advice(con, day=float(q['day']) if q.get('day') else None)
+            return oracle.advice(con, league=q.get('league') or None, day=float(q['day']) if q.get('day') else None)
         if path == '/api/top1/links':   # R10: character name -> poe.ninja 'account/character' link (from the benchmark read)
             import urllib.parse as _up
             out, league = {}, None
@@ -359,6 +365,13 @@ def api(path, q):
                     out.setdefault(_up.unquote(p).rpartition('/')[2], p)
                 league = league or lg
             return {'league': league, 'links': out}
+        if path == '/api/atlas/mods':   # R15: waystone / tablet mods, search tokens, danger for a build
+            from poe2kit import mapmods
+            return mapmods.overview(con, q.get('build') or None, q.get('kind') or 'waystone')
+        if path == '/api/atlas/search':   # R15: our own in-game search string (?avoid=g1,g2&want=g3&kind=waystone)
+            from poe2kit import mapmods
+            sp = lambda k: [x for x in (q.get(k) or '').split(',') if x]
+            return mapmods.search_string(sp('avoid'), sp('want'), q.get('kind') or 'waystone')
         if path == '/api/pagever':   # the dashboard reloads itself when its files change (after an update or a fix)
             d = os.path.join(HERE, 'dashboard')
             return {'v': max(os.path.getmtime(os.path.join(d, f)) for f in ('index.html', 'theme.css') if os.path.exists(os.path.join(d, f)))}
@@ -437,7 +450,7 @@ def api(path, q):
             return clientlog.sessions(con)
         if path == '/api/market':
             from poe2kit import market
-            return market.history(con, category=q.get('cat') or None, days=int(q.get('days', 7)))
+            return market.history(con, league=q.get('league') or None, category=q.get('cat') or None, days=int(q.get('days', 7)))
         if path == '/api/icons':
             league = ninja.current_league(con)
             rows = con.execute("""SELECT name, MAX(icon) icon FROM price WHERE league=? AND icon IS NOT NULL AND category IN
@@ -462,9 +475,14 @@ def api(path, q):
             asc = [x for x in q.get('asc', ','.join(prof.get('path') or [prof.get('ascendancy') or ''])).split(',') if x]
             tb = q.get('target') or None
             return leagueplan.plan(con, q.get('cls') or prof.get('class') or 'Witch', asc, int(tb) if tb else None, float(q.get('budget', 0.05)))
-        if path == '/api/overview':
+        if path == '/api/overview':   # ?league= to look at another league (prices fetched once if not stored)
             from poe2kit import overview
-            return overview.overview(con)
+            lg = q.get('league') or None
+            if lg and not con.execute('SELECT 1 FROM price WHERE league=? AND ts > ? LIMIT 1', (lg, time.time() - 3 * 3600)).fetchone():
+                ninja.snapshot(con, lg)
+            return overview.overview(con, league=lg)
+        if path == '/api/leagues':   # the leagues poe.ninja lists right now, plus the app's choice
+            return {'leagues': ninja.leagues(con), 'chosen': config.settings().get('league'), 'current': ninja.current_league(con)}
         if path == '/api/mychars':
             from poe2kit import charimport
             return charimport.list_characters(con, fresh=q.get('fresh') == '1')
@@ -475,6 +493,9 @@ def api(path, q):
             from poe2kit import character
             return character.character(con, int(q.get('id', 1)))
         if path == '/api/tree':
+            if q.get('v') == 'atlas':   # the atlas passive tree, from the game files (poe2kit/atlas.py)
+                from poe2kit import atlas
+                return atlas.tree_for_viewer()
             from poe2kit import character
             return character.tree(q.get('v', '0_5'))
         if path == '/api/show':
@@ -539,6 +560,9 @@ def craft_post(path, b):
             bid, _sum = vault.add(con, code, f'{ch} (poe.ninja, {lg})' if lg else f'{ch} (poe.ninja)',
                             owner=f'{acct} (poe.ninja)' if acct else 'poe.ninja', league=lg, source_url=b.get('url'))
             return {'ok': True, 'id': bid, 'message': f'Saved as vault #{bid}: open it in the Build Lab, or ask the Oracle to compare it with yours.'}
+        if path == '/api/league':   # Settings: which league the whole app follows ('' = automatic: the newest)
+            config.save_settings({'league': (b.get('league') or None)})
+            return {'ok': True, 'current': ninja.current_league(con)}
         if path == '/api/window':   # how the tray / shortcut open the dashboard: 'app' window or 'browser' tab
             config.save_settings({'dashboard_window': 'browser' if b.get('mode') == 'browser' else 'app'})
             from poe2kit import appwindow

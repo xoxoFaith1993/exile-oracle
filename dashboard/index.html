@@ -316,7 +316,9 @@ input[type=checkbox] { accent-color: var(--eo-blood-hi); }
 .lab-play { font-size: 22px; width: 52px; height: 52px; border-radius: 50%; }
 .lab-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(320px, 1fr); gap: 16px; }
 .lab-tree { position: relative; height: 620px; background: #070605; border: 1px solid var(--eo-gold-dim); border-radius: 3px; overflow: hidden; }
-.lab-tree svg { width: 100%; height: 100%; cursor: grab; }
+.lab-tree svg { width: 100%; height: 100%; cursor: default; }
+.lab-tree svg [data-n] { cursor: pointer; }
+.lab-tree svg.dragging, .lab-tree svg.dragging [data-n] { cursor: grabbing; }
 .lab-tree .nplan { fill: #2a2216; stroke: #c9a45c; stroke-width: 16; stroke-dasharray: 22 14; opacity: .8; }
 .lab-tree .eplan { stroke: #a08550; stroke-width: 30; fill: none; stroke-dasharray: 50 34; opacity: .7; }
 .lab-tree .eon { stroke: #f0c86a; stroke-width: 38; filter: drop-shadow(0 0 20px #e3b34188); }
@@ -357,6 +359,14 @@ input[type=checkbox] { accent-color: var(--eo-blood-hi); }
 .wi .foot .btn { padding: 3px 9px; font-size: 10px; }
 .wi .eff { margin-left: auto; font: 700 13px var(--eo-display); color: var(--eo-gold); }
 .wi.err { border-color: #7a2a2a; }
+#atlastree .noff { fill: #241c13; stroke: #a08550; stroke-width: 10; }
+#atlastree .eoff { stroke: #6b5733; stroke-width: 12; }
+#atlastree .k-notable.noff { stroke: #c9a45c; stroke-width: 14; } #atlastree .k-keystone.noff { stroke: #e8c987; stroke-width: 16; }
+#atlastree .dimimg { opacity: .85; filter: none; }
+.mmlvl { font: 700 10px var(--eo-display); letter-spacing: .1em; text-transform: uppercase; padding: 1px 7px; border-radius: 999px; border: 1px solid; }
+.mmlvl.deadly { color: #ff7b7b; border-color: #7a2a2a; } .mmlvl.risky { color: #e9c46a; border-color: #6b5a2a; } .mmlvl.fine { color: var(--eo-good); border-color: #3f5f33; }
+#mmtable td { vertical-align: top; } #mmtable .tiers { font-size: 12px; color: var(--eo-muted); }
+#mmout code { font: 600 16px Consolas, monospace; color: var(--eo-gold-hi); background: #0d0a08; padding: 3px 8px; border-radius: 3px; user-select: all; }
 .spin { display: inline-block; width: 12px; height: 12px; border: 2px solid var(--eo-gold-dim); border-top-color: transparent;
   border-radius: 50%; animation: eoSpin .8s linear infinite; vertical-align: -1px; margin-right: 7px; }
 @keyframes eoSpin { to { transform: rotate(360deg); } }
@@ -414,6 +424,7 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
   <div class="ng">Farming</div>
   <button data-tab="farm">What to farm</button>
   <button data-tab="league">League start</button>
+  <button data-tab="atlas">Atlas</button>
   <div class="ng">Character</div>
   <button data-tab="lab">Build Lab</button>
   <button data-tab="builds">Builds</button>
@@ -450,6 +461,8 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
   </section>
   <section id="claude"><div id="show"><div class="card empty">Ask the Oracle something in chat (Claude: a build cost, upgrades, a compare, a price chart) and it shows up here.</div></div></section>
   <section id="economy">
+    <div style="display:flex;gap:10px;align-items:center;margin:0 0 12px;flex-wrap:wrap"><span class="small muted">Looking at</span>
+      <select class="crin" id="econleague" style="min-width:240px"></select><span class="small muted" id="econleaguemsg"></span></div>
     <div class="card"><div class="lab-head"><h2 style="margin:0">League timing: the Oracle</h2><span style="flex:1"></span>
       <label class="small">Show <select class="crin" id="ordaysel"><option value="">today</option><option value="0">1.0 day 0 (launch)</option><option value="2">day 2</option><option value="5">day 5</option><option value="10">day 10</option><option value="21">day 21</option><option value="42">day 42</option></select></label></div>
       <div class="sub">What happened to prices in the last three launches (Fate of the Vaal, Runes of Aldur, Forbidden Rites), from GGG's exchange history, in Divines. History, not a promise: patches move prices.</div>
@@ -536,6 +549,22 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
       <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:8px">
         <label class="small">Your name (optional) <input class="crin rp-name" maxlength="24" style="width:180px"></label></div>
       <div style="margin-top:10px;display:flex;gap:8px;align-items:center"><button class="btn rp-send" style="border-color:var(--eo-blood-hi)">Send suggestion</button><span class="small muted rp-msg"></span></div></div></section>
+  <section id="atlas">
+    <div class="card"><div class="lab-head"><h2 style="margin:0">Atlas</h2><span class="small muted" id="atlassub"></span></div>
+      <div class="sub">The atlas passive tree, read from your game files. Next: strategies, map modifiers rated for your build, map rolling and in-game search strings, all in here.</div>
+      <div class="lab-tree" id="atlastree" style="height:720px;margin-top:10px"><div class="zbtn"><button data-z="1.4">+</button><button data-z="0.7">−</button><button data-z="fit">⤢</button></div>
+        <div class="legend">hover a node for its name · scroll to zoom · drag to move</div></div></div>
+    <div class="card"><div class="lab-head"><h2 style="margin:0">Map modifiers</h2><span style="flex:1"></span>
+      <div class="eo-seg seg" id="mmkind"><button data-k="waystone" class="on">Waystones</button><button data-k="tablet">Tablets</button></div>
+      <label class="small">Rate for <select class="crin" id="mmbuild" style="min-width:260px"></select></label></div>
+      <div class="sub">Every modifier from your game files. Rated for your build by Path of Building's numbers (deadly / risky / fine). Tick what to avoid or want and paste the search into your stash or vendor (Ctrl+F).</div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px">
+        <input type="search" class="crin" id="mmfilter" placeholder="Search modifiers, e.g. chaos, curse, pack size…" style="flex:1;min-width:260px">
+        <span class="small muted" id="mmcount"></span></div>
+      <div class="chips" id="mmquick"></div>
+      <div id="mmout" class="flag ok" style="margin:10px 0;display:none"></div>
+      <table class="up" id="mmtable" style="margin-top:6px"></table></div>
+  </section>
   <section id="character"><div id="charview"><div class="card empty">Pick a build on the Builds tab, or ask the Oracle to show one.</div></div></section>
   <section id="top1">
     <div class="card"><h2>Top 1% check</h2><div class="sub">Your character against the top 1% of your ascendancy on poe.ninja: level, damage, toughness and gear value. Benchmarks are read on request (ask the Oracle to refresh them).</div>
@@ -633,6 +662,8 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
       <label class="small" style="display:block;margin-top:8px">Path of Exile 2 folder <input class="crin" id="pfdir" style="width:100%" placeholder="found automatically"></label>
       <div style="margin-top:8px"><button class="btn" id="pfsave">Save profile</button> <span class="small muted" id="pfmsg"></span></div>
       <div class="small muted" id="pfpaths" style="margin-top:8px"></div></div>
+    <div class="card"><h2>League</h2><div class="sub">The league Exile Oracle follows everywhere: prices, the Oracle, farming, alerts. Automatic picks the newest league.</div>
+      <div style="display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap"><select class="crin" id="leaguesel" style="min-width:280px"></select><span class="small muted" id="leaguemsg"></span></div></div>
     <div class="card"><h2>Dashboard window</h2><div class="sub">How the tray icon and the Exile Oracle shortcut open this dashboard.</div>
       <div style="display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap">
         <label class="small"><input type="radio" name="dwin" value="app"> Its own window (Edge or Chrome app mode)</label>
@@ -714,10 +745,12 @@ function hideTip() { tip.style.display = 'none'; }
 document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   document.querySelectorAll('nav button').forEach(x => x.classList.toggle('on', x === b));
   document.querySelectorAll('section').forEach(s => s.classList.toggle('on', s.id === b.dataset.tab));
+  setTimeout(() => pageAsks(b.dataset.tab));   // after the page's scripts have all loaded
   if (b.dataset.tab === 'home') { loadHome(); loadHomeOracle(); }
-  if (b.dataset.tab === 'status') loadConnectors();
+  if (b.dataset.tab === 'status') { loadConnectors(); loadLeagues(); }
   if (b.dataset.tab === 'lab') initLab();
-  if (b.dataset.tab === 'economy') { loadOverview(); loadMovers(); loadMarket(); loadOracle($('#ordaysel').value); }
+  if (b.dataset.tab === 'atlas') { loadAtlas(); loadMapMods(); }
+  if (b.dataset.tab === 'economy') { loadLeagues(); loadOverview(); loadMovers(); loadMarket(); loadOracle($('#ordaysel').value); }
   if (b.dataset.tab === 'builds') loadBuilds();
   if (b.dataset.tab === 'alerts') loadAlerts(true);
   if (b.dataset.tab === 'patches') loadPatches();
@@ -728,15 +761,16 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   if (b.dataset.tab === 'status') { loadStatus(); loadProfile(); loadClaude(); loadOverlay(); }
   try { localStorage.setItem('poe2tab', b.dataset.tab); } catch (e) {}
 });
-try { const t = location.hash.slice(1) || localStorage.getItem('poe2tab'); if (t) document.querySelector(`nav [data-tab="${t.replace(/[^a-z0-9]/gi, '')}"]`)?.click(); } catch (e) {}
+// reopen the last tab only once every script on the page has loaded (newer pages are defined further down)
+setTimeout(() => { try { const t = location.hash.slice(1) || localStorage.getItem('poe2tab'); if (t) document.querySelector(`nav [data-tab="${t.replace(/[^a-z0-9]/gi, '')}"]`)?.click(); } catch (e) {} });
 
 // ---------- Build Lab (R9) ----------
 let LAB = null, LABL = 1, LABTIMER = null;
-const labAsk = (label, text) => `<span class="chip-ask" data-ask="${esc(text)}" title="Copies the question: paste it in your Claude chat">${esc(label)}</span>`;
+const labAsk = (label, text) => `<span class="chip-ask" data-ask="${esc(text)}" title="Copies the question: paste it in your AI chat">${esc(label)}</span>`;
 document.addEventListener('click', async e => {
   const c = e.target.closest('.chip-ask'); if (!c) return;
   try { await navigator.clipboard.writeText(c.dataset.ask); } catch (er) {}
-  const old = c.textContent; c.textContent = 'copied: paste it in your Claude chat'; setTimeout(() => c.textContent = old, 2200);
+  const old = c.textContent; c.textContent = 'copied: paste it in your AI chat'; setTimeout(() => c.textContent = old, 2200);
 });
 async function initLab() {
   const sel = $('#labbuild');
@@ -1042,7 +1076,8 @@ async function labBosses() {
 // ---------- the Oracle: market timing ----------
 const verdictTag = v => `<span class="verdict ${v === 'sell now' ? 'sell' : v === 'hold / buy' ? 'hold' : 'steady'}">${esc(v)}</span>`;
 async function loadOracle(day) {
-  const r = await get('/api/oracle' + (day !== '' && day != null ? '?day=' + day : ''));
+  const qs = new URLSearchParams(); if (day !== '' && day != null) qs.set('day', day); if (ECON_LEAGUE) qs.set('league', ECON_LEAGUE);
+  const r = await get('/api/oracle?' + qs);
   if (!r || r.error) { $('#oracle').innerHTML = `<div class="muted small">${esc((r && r.error) || '')}</div>`; return; }
   const strat = (xs, hi) => xs.map(x => `<li class="${hi ? 'hi' : ''}">${esc(x.action)}<span class="why">${esc(x.why)} · confidence ${esc(x.confidence)}</span></li>`).join('');
   const rows = (r.items || []).filter(x => x.change_pct != null).slice(0, 18).map(x => `<tr><td>${ic(null, 24, x.item)}<b>${esc(x.item)}</b></td>
@@ -1074,6 +1109,143 @@ document.addEventListener('click', async e => {
   b.textContent = r.ok ? 'opening…' : (r.why || 'could not open'); setTimeout(() => { b.disabled = false; b.textContent = 'View profile'; }, 4000);
 });
 
+// ---------- ready-made questions on every page (click = copy, paste in your AI chat) ----------
+const PAGE_ASKS = {
+  home: [['What should I do today for the most currency?', 'Using the Oracle and my characters, what should I do today to make the most currency?'],
+         ['How close am I to the top 1%?', 'How close is my main character to the top 1% of my ascendancy, and what closes the gap fastest?'],
+         ['What changed in the market this week?', 'What changed in the Path of Exile 2 market this week, and does any of it matter for me?']],
+  economy: [['What should I sell or hold right now?', 'Using the Oracle (poe2_oracle) and my characters, what should I sell, hold or buy right now?'],
+            ['What is rising fastest, and why?', 'Which items are rising fastest right now, why, and will it last according to past leagues?'],
+            ['Best use of 10 divines right now?', 'What is the best thing to do with 10 divines right now: buy an upgrade, invest, or craft?']],
+  farm: [['What should I farm for the most currency per hour?', 'What should I farm right now for the most currency per hour, with my character as it is?'],
+         ['Which farm suits my gear?', 'Which farming strategy suits my character\'s damage and toughness right now, and which ones should I avoid?'],
+         ['How do I set up my atlas for it?', 'How do I set up my atlas and tablets for the best farm right now?']],
+  league: [['Plan my 1.0 league start', 'Plan my Path of Exile 2 1.0 league start for my class: route, skills, gear and money for the first 72 hours.'],
+           ['Which skills should I level with?', 'Which skills and supports should I level with for my class, tested in Path of Building?'],
+           ['What should I buy first?', 'At league start, what should I buy first and what should I sell straight away, according to past launches?']],
+  builds: [['Which of my builds is strongest?', 'Which of the builds in my vault is strongest for endgame, and why? Show the comparison on the Build Lab.'],
+           ['Compare me with a top player', 'Compare my main build with a top-1% player of my ascendancy and show the differences on the dashboard.'],
+           ['What would it cost to finish this build?', 'What would it cost to finish my main build, step by step, cheapest upgrades first?']],
+  character: [['What is the weakest part of this character?', 'What is the weakest part of my character right now (damage, defence, resistances, gear) and how do I fix it cheaply?'],
+              ['What should I upgrade next?', 'What should I upgrade next on my character for the most gain per divine? Put the options on the Build Lab.'],
+              ['Am I ready for pinnacle bosses?', 'Is my character ready for pinnacle bosses? Which one should I do first, and what do I need?']],
+  lab: [],
+  top1: [['What closes my gap fastest?', 'What closes my gap to the top 1% fastest and cheapest?'],
+         ['Compare me with the top player', 'Compare me with the top player of my ascendancy: gear, skills, passives and numbers.'],
+         ['How much currency do I need?', 'How much currency would I need for top-1% gear, and how long would it take with my best farm?']],
+  sessions: [['How did my last session go?', 'How did my last play session go: what earned the most, and where did I lose time?'],
+             ['Am I playing efficiently?', 'Look at my recent sessions: am I playing efficiently, and what should I change?']],
+  craft: [['Help me craft an upgrade', 'Help me craft an upgrade for my weakest gear slot: the cheapest method and what it costs.'],
+          ['Craft or buy?', 'For my next upgrade, is it cheaper to craft it or buy it?']],
+  patches: [['What in the patch affects my build?', 'What in the latest patch notes affects my build, and what should I change?'],
+            ['Which prices will the patch move?', 'Which item prices will the latest patch notes move, and should I buy or sell anything before it lands?']],
+  alerts: [['Explain my alerts', 'Explain my latest Exile Oracle alerts and what I should do about each one.']],
+  claude: [['Show my build cost', 'Show what my main build costs on the Exile Oracle dashboard.'],
+           ['Show a price chart', 'Show a price chart of the Divine Orb against Exalted Orbs on the dashboard.']],
+};
+function pageAsks(tab) {
+  const sec = document.getElementById(tab), qs = PAGE_ASKS[tab];
+  if (!sec || !qs || !qs.length || sec.querySelector('.page-asks')) return;
+  const bar = document.createElement('div');
+  bar.className = 'chips page-asks';
+  bar.style.margin = '0 0 12px';
+  bar.innerHTML = '<span class="small muted" style="align-self:center;margin-right:4px">Ask the Oracle:</span>' + qs.map(([l, q]) => labAsk(l, q)).join('');
+  sec.prepend(bar);
+}
+
+// ---------- Atlas (R15) ----------
+let ATLAS_DRAWN = false;
+async function loadAtlas() {
+  if (ATLAS_DRAWN) return;
+  const t = await get('/api/tree?v=atlas');
+  if (!t || t.error) { $('#atlassub').textContent = (t && t.error) || 'could not read the atlas'; return; }
+  TREES['atlas'] = t; ATLAS_DRAWN = true;
+  $('#atlassub').textContent = `${t.nodes.length} nodes · game files ${t.build}`;
+  await drawTree({ tree: { version: 'atlas', allocated: [], jewel_nodes: [] } }, $('#atlastree'));
+}
+
+// ---------- Atlas: map modifiers + our own search strings (R15) ----------
+let MM = null, MMKIND = 'waystone';
+async function loadMapMods() {
+  const sel = $('#mmbuild');
+  if (!sel.options.length) {
+    const b = await get('/api/builds');
+    sel.innerHTML = '<option value="">(no rating)</option>' + (b || []).map(x => `<option value="${x.id}">#${x.id} ${esc(x.label)}</option>`).join('');
+    const lab = (LAB && LAB.build) ? LAB.build.id : (b && b.length ? b[b.length - 1].id : '');
+    sel.value = lab; sel.onchange = loadMapMods;
+  }
+  $('#mmtable').innerHTML = '<tr><td class="muted small"><span class="spin"></span>Reading the modifiers and rating them for your build…</td></tr>';
+  MM = await get(`/api/atlas/mods?kind=${MMKIND}&build=${sel.value}`);
+  if (!MM || MM.error) { $('#mmtable').innerHTML = `<tr><td>${esc((MM && MM.error) || 'failed')}</td></tr>`; return; }
+  const rank = { deadly: 0, risky: 1, fine: 2 };
+  const gs = MM.groups.slice().sort((a, b) => (rank[(a.rating || {}).level] ?? 3) - (rank[(b.rating || {}).level] ?? 3));
+  $('#mmtable').innerHTML = `<tr><th>Avoid</th><th>Want</th><th>Modifier</th><th>For your build</th><th>Search</th></tr>` + gs.map(g => `<tr>
+    <td><input type="checkbox" class="mmav" data-g="${esc(g.group)}"></td><td><input type="checkbox" class="mmwa" data-g="${esc(g.group)}"></td>
+    <td><b>${esc(g.line)}</b> <span class="small muted">${g.kind}</span><div class="tiers">${g.tiers.map(t => esc(t.text)).join(' · ')}${g.extra && g.extra.length ? '<br>' + g.extra.map(esc).join(' · ') : ''}</div></td>
+    <td>${g.rating ? `<span class="mmlvl ${g.rating.level}">${g.rating.level}</span> <span class="small muted">${esc(g.rating.why || '')}</span>` : '<span class="muted small">–</span>'}</td>
+    <td><code class="small">${esc(g.token || '')}</code></td></tr>`).join('');
+  mmFilter();
+  $('#mmquick').innerHTML = MMKIND === 'waystone' && sel.value ? `<span class="chip-ask" style="border-style:solid" data-mmq="deadly">Avoid everything deadly for my build</span><span class="chip-ask" style="border-style:solid" data-mmq="risky">Avoid deadly + risky</span><span class="chip-ask" style="border-style:solid" data-mmq="clear">Clear</span>` : '';
+  document.querySelectorAll('.mmav, .mmwa').forEach(c => c.onchange = mmBuild);
+  mmBuild();
+}
+function mmFilter() {   // show only the rows whose modifier, tiers, rewards or rating match the typed words
+  const words = ($('#mmfilter').value || '').toLowerCase().split(/\s+/).filter(Boolean);
+  let shown = 0, total = 0;
+  document.querySelectorAll('#mmtable tr').forEach((tr, i) => {
+    if (i === 0) return;
+    total++;
+    const t = tr.textContent.toLowerCase();
+    const ok = words.every(w => t.includes(w));
+    tr.style.display = ok ? '' : 'none';
+    if (ok) shown++;
+  });
+  $('#mmcount').textContent = words.length ? `${shown} of ${total} modifiers` : `${total} modifiers`;
+}
+$('#mmfilter').addEventListener('input', mmFilter);
+async function mmBuild() {
+  const av = [...document.querySelectorAll('.mmav:checked')].map(c => c.dataset.g), wa = [...document.querySelectorAll('.mmwa:checked')].map(c => c.dataset.g);
+  if (!av.length && !wa.length) { $('#mmout').style.display = 'none'; return; }
+  const r = await get(`/api/atlas/search?kind=${MMKIND}&avoid=${encodeURIComponent(av.join(','))}&want=${encodeURIComponent(wa.join(','))}`);
+  $('#mmout').style.display = 'block';
+  $('#mmout').className = 'flag ' + (r.fits ? 'ok' : 'bad');
+  $('#mmout').innerHTML = `Paste into the in-game search: <code>${esc(r.text)}</code> <button class="btn" id="mmcopy" style="padding:3px 10px;font-size:10px">Copy</button>
+    <span class="small muted">${r.length} / ${r.limit} characters${r.fits ? '' : ': too long for the search box, untick some'}</span>`;
+  $('#mmcopy').onclick = async () => { try { await navigator.clipboard.writeText(r.text); $('#mmcopy').textContent = 'copied'; } catch (e) {} };
+}
+document.addEventListener('click', e => {
+  const q = e.target.closest('[data-mmq]'); if (q) {
+    const lv = q.dataset.mmq; const want = lv === 'deadly' ? ['deadly'] : lv === 'risky' ? ['deadly', 'risky'] : [];
+    document.querySelectorAll('.mmav').forEach(c => { const g = MM.groups.find(x => x.group === c.dataset.g); c.checked = !!(g && g.rating && want.includes(g.rating.level)); });
+    if (lv === 'clear') document.querySelectorAll('.mmwa').forEach(c => c.checked = false);
+    mmBuild(); return;
+  }
+  const k = e.target.closest('#mmkind [data-k]'); if (k) {
+    document.querySelectorAll('#mmkind button').forEach(b => b.classList.toggle('on', b === k)); MMKIND = k.dataset.k; loadMapMods();
+  }
+});
+
+// ---------- league choice (Settings) + league picker (Economy) ----------
+let LEAGUES = null, ECON_LEAGUE = '';
+async function loadLeagues() {
+  LEAGUES = await get('/api/leagues');
+  const opts = (LEAGUES.leagues || []).map(l => `<option value="${esc(l.id)}">${esc(l.name)}</option>`).join('');
+  $('#leaguesel').innerHTML = `<option value="">Automatic (newest: ${esc((LEAGUES.leagues[0] || {}).name || '?')})</option>` + opts;
+  $('#leaguesel').value = LEAGUES.chosen || '';
+  $('#econleague').innerHTML = opts;
+  $('#econleague').value = ECON_LEAGUE || LEAGUES.current;
+}
+$('#leaguesel').addEventListener('change', async e => {
+  const r = await post('/api/league', { league: e.target.value });
+  $('#leaguemsg').textContent = r.ok ? `Now following ${r.current}. Prices refresh within half an hour.` : 'could not save';
+  ECON_LEAGUE = ''; loadStatus();
+});
+$('#econleague').addEventListener('change', e => {
+  ECON_LEAGUE = e.target.value === (LEAGUES && LEAGUES.current) ? '' : e.target.value;
+  $('#econleaguemsg').textContent = ECON_LEAGUE ? 'just for this page; Settings → League changes the whole app' : '';
+  loadOverview(); loadMarket(); loadOracle($('#ordaysel').value);
+});
+
 // ---------- home ----------
 const HOME_CUR = ['Chaos Orb', 'Exalted Orb', 'Orb of Annulment', 'Vaal Orb', 'Regal Orb', 'Orb of Alchemy', "Artificer's Orb", 'Mirror of Kalandra'];
 async function loadHome() {
@@ -1100,6 +1272,7 @@ async function loadHome() {
 }
 document.querySelectorAll('.quick [data-go]').forEach(b => b.onclick = () => document.querySelector(`nav [data-tab="${b.dataset.go}"]`).click());
 if (document.querySelector('#home.on')) { loadHome(); loadHomeOracle(); }
+pageAsks('home');
 $('#ordaysel').onchange = () => loadOracle($('#ordaysel').value);
 
 // ---------- header ----------
@@ -1214,7 +1387,7 @@ async function loadMovers() {
 
 // ---------- market at a glance ----------
 async function loadOverview() {
-  const o = await get('/api/overview');
+  const o = await get('/api/overview' + (ECON_LEAGUE ? '?league=' + encodeURIComponent(ECON_LEAGUE) : ''));
   if (!o || !o.rates) return;
   const cur = Object.fromEntries((o.currency || []).map(c => [c.name, c]));
   const tile = (icon, v, l) => `<div class="tile">${icon ? ic(icon, 40) : ''}<div><div class="v">${v}</div><div class="l">${l}</div></div></div>`;
@@ -1287,15 +1460,24 @@ const INV = { 'Weapon 1': [1, 1, 2, 4], 'Helmet': [4, 1, 2, 2], 'Weapon 2': [7, 
   'Body Armour': [4, 3, 2, 3], 'Ring 1': [3, 4, 1, 1], 'Ring 2': [6, 4, 1, 1], 'Gloves': [1, 5, 2, 2],
   'Belt': [4, 6, 2, 1], 'Boots': [7, 5, 2, 2], 'Charm 1': [3, 7, 1, 1], 'Charm 2': [4, 7, 1, 1], 'Charm 3': [5, 7, 1, 1],
   'Flask 1': [1, 7, 1, 2], 'Flask 2': [8, 7, 1, 2] };
+let CHAR_LAST = null;
+document.addEventListener('click', e => {   // weapon set I / II toggle on the Character page
+  const b = e.target.closest('[data-wset]'); if (!b || !CHAR_LAST) return;
+  CHAR_LAST.c._wset = +b.dataset.wset; renderCharacter(CHAR_LAST.c, CHAR_LAST.el);
+});
 function renderCharacter(c, el) {
+  CHAR_LAST = { c, el };
   const items = {}; c.gear.forEach((g, i) => items['g' + i] = g); c.jewels.forEach((j, i) => items['j' + i] = j);
   const bySlot = {}; c.gear.forEach((g, i) => bySlot[g.slot] = 'g' + i);
   const cell = (key, it, label) => `<div class="slot ${it ? RCOL[it.rarity] : ''}" ${it ? `data-tip="${key}"` : ''}>${it && it.art ? `<img src="${artSrc(it.art)}" alt="${esc(it.name)}">` : ''}${!it ? `<span class="lbl">${esc(label)}</span>` : ''}</div>`;
-  const inv = Object.entries(INV).map(([slot, [cx, cy, w, h]]) => {
-    const key = bySlot[slot]; const it = key ? items[key] : null;
-    return `<div style="grid-column:${cx} / span ${w};grid-row:${cy} / span ${h};display:grid">${cell(key, it, slot)}</div>`;
-  }).join('');
   const swap = c.gear.filter(g => g.slot.endsWith('Swap'));
+  // weapon sets: show set II in the weapon slots when asked, or by itself when set I is empty (weapons only on swap)
+  if (c._wset == null) c._wset = (!bySlot['Weapon 1'] && !bySlot['Weapon 2'] && swap.length) ? 2 : 1;
+  const inv = Object.entries(INV).map(([slot, [cx, cy, w, h]]) => {
+    const weapon = /^Weapon [12]$/.test(slot);
+    const key = weapon && c._wset === 2 ? bySlot[slot + ' Swap'] : bySlot[slot]; const it = key ? items[key] : null;
+    return `<div style="grid-column:${cx} / span ${w};grid-row:${cy} / span ${h};display:grid;position:relative">${cell(key, it, weapon && c._wset === 2 ? slot + ' (set II)' : slot)}${weapon && c._wset === 2 && it ? '<span class="pill" style="position:absolute;left:4px;bottom:4px;font-size:10px">set II</span>' : ''}</div>`;
+  }).join('');
   const jew = c.jewels.map((j, i) => cell('j' + i, j, 'Jewel')).join('');
   const statSec = (title, o) => `<div class="stat-sec"><h3>${title}</h3>${Object.entries(o || {}).map(([k, v]) => `<div class="stat-row"><span class="muted">${esc(k)}</span><span>${esc(typeof v === 'number' ? v.toLocaleString() : v)}</span></div>`).join('')}</div>`;
   const skills = c.skills.map(g => {
@@ -1314,7 +1496,9 @@ function renderCharacter(c, el) {
     <div class="char-grid">
       <div>
         <div class="card"><h2>Equipment</h2><div class="inv">${inv}</div>
-          ${swap.length ? `<div class="small muted" style="text-align:center">Weapon swap: ${swap.map(g => `<span data-tip="g${c.gear.indexOf(g)}" style="text-decoration:underline dotted">${esc(g.name)}</span>`).join(', ')}</div>` : ''}
+          ${swap.length ? `<div class="small muted" style="text-align:center;display:flex;gap:8px;justify-content:center;align-items:center">Weapon set
+            <span class="eo-seg" style="display:inline-flex"><button class="${c._wset === 1 ? 'on' : ''}" data-wset="1">I</button><button class="${c._wset === 2 ? 'on' : ''}" data-wset="2">II (swap)</button></span>
+            ${c._wset === 1 ? `swap: ${swap.map(g => `<span data-tip="g${c.gear.indexOf(g)}" style="text-decoration:underline dotted">${esc(g.name)}</span>`).join(', ')}` : (!bySlot['Weapon 1'] && !bySlot['Weapon 2'] ? '<span>(set I is empty)</span>' : '')}</div>` : ''}
           ${c.jewels.length ? `<h2 style="margin-top:12px">Jewels</h2><div class="jrow">${jew}</div>` : ''}</div>
         ${valueCard(c)}
         <div class="card"><h2>Stats</h2>${statSec('Character', c.stats.character)}${statSec('Defensive', c.stats.defensive)}${statSec('Recovery', c.stats.recovery)}</div>
@@ -1377,7 +1561,16 @@ async function drawTree(c, box) {
     <g>${t.edges.map(edge).join('')}</g><g>${nodes.map(nodeSvg).join('')}</g></svg>`);
   const svg = box.querySelector('svg');
   let vb = [x0, y0, x1 - x0, y1 - y0];
-  const set = () => svg.setAttribute('viewBox', vb.join(' '));
+  // keep the tree findable: zoom between a close-up and a bit past the whole tree, and the view's centre inside it
+  const TW = x1 - x0, TH = y1 - y0, MAXS = 1.35, MINW = 700;
+  const clamp = () => {
+    const r = vb[3] / vb[2];
+    let w = Math.min(Math.max(vb[2], MINW), Math.max(TW, TH / r) * MAXS);
+    const cx0 = vb[0] + vb[2] / 2, cy0 = vb[1] + vb[3] / 2;
+    const cx = Math.min(Math.max(cx0, x0), x1), cy = Math.min(Math.max(cy0, y0), y1);
+    vb = [cx - w / 2, cy - w * r / 2, w, w * r];
+  };
+  const set = () => { clamp(); svg.setAttribute('viewBox', vb.join(' ')); };
   const fit = () => {
     let a = 1e9, b = 1e9, cX = -1e9, d = -1e9;
     (on.length ? on : nodes).forEach(n => { a = Math.min(a, n.x); b = Math.min(b, n.y); cX = Math.max(cX, n.x); d = Math.max(d, n.y); });
@@ -1784,7 +1977,7 @@ function spark(vals, up) {
 }
 async function loadMarket(cat) {
   if (cat) MHCAT = cat;
-  MH = await get('/api/market?cat=' + encodeURIComponent(MHCAT));
+  MH = await get('/api/market?cat=' + encodeURIComponent(MHCAT) + (ECON_LEAGUE ? '&league=' + encodeURIComponent(ECON_LEAGUE) : ''));
   const all = await get('/api/market?days=7&cat=__none__');
   const cats = (all.categories || []).filter(([c]) => c !== 'Other');
   $('#mhcats').innerHTML = cats.map(([c, n]) => `<button data-mhc="${esc(c)}" class="${c === MHCAT ? 'on' : ''}">${esc(PRETTYCAT(c))} <span class="muted">${n}</span></button>`).join('');
