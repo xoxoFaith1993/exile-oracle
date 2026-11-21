@@ -42,3 +42,18 @@ def file_for(rel):
         return None
     p = os.path.normpath(os.path.join(d, rel))
     return p if p.startswith(os.path.normpath(d) + os.sep) and os.path.exists(p) else None
+
+
+def for_item(name, base, rarity):
+    """Art for a copied item: the unique by name, else its base; a magic item's base is found inside its name
+    ("Will-o-wisp's Hermit Garb of the Mongoose" -> Hermit Garb)."""
+    idx, _ = _index()
+    if not idx:
+        return None
+    if rarity == 'UNIQUE' and name and find('unique', name):
+        return find('unique', name)
+    if base and find('base', base):
+        return find('base', base)
+    low = (name or '').lower()
+    hits = [k for k in idx.get('base', {}) if k and k in low]
+    return idx['base'][max(hits, key=len)] if hits else None

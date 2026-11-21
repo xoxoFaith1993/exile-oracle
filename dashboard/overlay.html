@@ -208,7 +208,7 @@ function render(st) {
   const it = r.item, col = COL[it.rarity] || 'var(--text)';
   const best = r.headline;
   let h = `<div class="item" style="--tint:${col}">
-    <div class="icon">${it.icon ? `<img src="${img(it.icon)}" alt="">` : ''}</div>
+    <div class="icon">${it.icon ? `<img src="${img(it.icon)}" alt="">` : it.art ? `<img src="/art/${it.art.split('/').map(encodeURIComponent).join('/')}" alt="">` : ''}</div>
     <div style="min-width:0">
       <div class="iname sc" style="color:${col}">${esc(it.name || it.base)}</div>
       <div class="ibase">${esc([it.name && it.base && it.base !== it.name ? it.base : '', it.ilvl ? 'item level ' + it.ilvl : ''].filter(Boolean).join(' · '))}</div>

@@ -156,7 +156,7 @@ def planner_check():
     doc = {'description': 'x', 'passives': ['a', {'id': 'b', 'level_interval': [31, 100]},
                                            {'id': 'c', 'level_interval': [60, 100]}]}
     buildplan._level_notes(doc, 25)
-    check('Next: from level 31' in doc['passives'][1].get('additional_text', '') and
+    check('Next: at level 31' in doc['passives'][1].get('additional_text', '') and
           'additional_text' not in doc['passives'][2] and 'Level 25 now' in doc['description'],
           'living plan: level notes')
 

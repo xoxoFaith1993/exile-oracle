@@ -106,6 +106,12 @@ def check(con, text, league=None, progress=None, filters=None):
                                        'label': f"trade site, {'middle of ' + str(len(t['prices'])) + ' cheapest' if len(t['prices']) >= 3 else 'lowest listing'}"}
     t = res.get('trade') or {}
     res['item']['icon'] = (n or {}).get('icon') or t.get('item_icon')
+    if not res['item']['icon']:   # nothing from poe.ninja or the trade site: the game's own picture
+        try:
+            from . import art
+            res['item']['art'] = art.for_item(it.get('name'), it.get('base'), it.get('rarity'))
+        except Exception:
+            pass
     if res.get('estimate') and t.get('state') == 'done' and t.get('prices'):
         # the market answers it; crafting one is usually far dearer than buying, so keep it as a side note
         e = res.pop('estimate')
