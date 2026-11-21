@@ -250,8 +250,9 @@ Every line of a patch that hits your builds, with buff / nerf tags.
 - Filter tabs, mute an item, mark all read. Dashboard only: nothing pops up in game.
 
 ### Wishlist
-Put chase items on your wishlist with a price: "buy Mageblood at 90 div" or "sell my Omen of Light at 12 div"
-(type the target in div or ex). It has its own page under Market, with each item's live price, how far it is from your
+Put chase items on your wishlist to keep an eye on them. Leave the price empty to just track an item (live price,
+the last 7 days, next week's range), or give it a target: "buy Mageblood at 90 div" or "sell my Omen of Light at
+12 div" (type the target in div, ex or chaos). It has its own page under Market, with each item's live price, how far it is from your
 target and next week's likely range from the price forecast. You get an alert when an item reaches your target,
 when the forecast says it's heading there this week, or when new patch notes call a move for it, and an item at
 your target becomes the omen on Home. Ask the Oracle too: "put Mageblood on my wishlist at 90 div".

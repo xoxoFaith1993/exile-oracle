@@ -789,12 +789,12 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
   </section>
   <section id="wishlist">
     <div class="card"><div class="lab-head"><h2 style="margin:0">Wishlist</h2><span class="small muted" id="wlsub"></span></div>
-      <div class="sub">Chase items you want to buy or sell at a price. You get an alert when one reaches your target, when the price forecast says it's heading there this week, or when new patch notes call a move for it. An item at your target also becomes the omen on Home. The alerts land on the Alerts page (filter: Wishlist).</div>
+      <div class="sub">Chase items you want to keep an eye on. Leave the price empty to just track an item, or set a target to buy or sell at: then you get an alert when it reaches your target, when the price forecast says it's heading there this week, or when new patch notes call a move for it. An item at your target also becomes the omen on Home. The alerts land on the Alerts page (filter: Wishlist).</div>
       <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px">
         <input class="crin" id="wlname" list="wlsugg" placeholder="Item name, e.g. Mageblood or Omen of Light" style="flex:1;min-width:240px" autocomplete="off"><datalist id="wlsugg"></datalist>
         <select class="crin" id="wlside"><option value="buy">buy at or under</option><option value="sell">sell at or over</option></select>
-        <input class="crin" id="wltarget" type="number" min="0" step="any" placeholder="price" style="width:90px">
-        <select class="crin" id="wlunit"><option value="div">div</option><option value="ex">ex</option></select>
+        <input class="crin" id="wltarget" type="number" min="0" step="any" placeholder="price (optional)" title="Leave it empty to just track the price. With a price you also get an alert when it gets there." style="width:130px">
+        <select class="crin" id="wlunit"><option value="div">div</option><option value="ex">ex</option><option value="chaos">chaos</option></select>
         <button class="btn" id="wladd">Add to wishlist</button> <span class="small muted" id="wlmsg"></span></div>
       <div id="wlitems" style="margin-top:10px"></div></div>
   </section>
@@ -2059,17 +2059,17 @@ async function loadWishlist() {
   const r = await get('/api/wishlist');
   const it = r.items || [];
   $('#wlsub').textContent = it.length ? `${it.length} item${it.length === 1 ? '' : 's'}` : '';
-  const state = e => e.hit ? `<span class="pill" style="border-color:var(--eo-good);color:var(--eo-good)">at your target</span>`
+  const state = e => e.tracking ? '<span class="small muted">tracking</span>' : e.hit ? `<span class="pill" style="border-color:var(--eo-good);color:var(--eo-good)">at your target</span>`
     : e.heading === 'likely' ? '<span class="pill" style="border-color:var(--accent)">heading there</span>'
     : e.heading === 'maybe' ? '<span class="pill">could reach it this week</span>' : '<span class="small muted">waiting</span>';
   $('#wlitems').innerHTML = !it.length ? '<div class="empty">Nothing on your wishlist yet. Add a chase item above.</div>' :
     `<table class="up" style="table-layout:fixed"><colgroup><col style="width:30%"><col style="width:13%"><col style="width:13%"><col style="width:19%"><col style="width:15%"><col style="width:10%"></colgroup>
       <tr><th>Item</th><th>Now</th><th>Target</th><th>Next week (likely)</th><th>Status</th><th></th></tr>${it.map(e => `<tr>
       <td><div style="display:flex;gap:8px;align-items:center">${e.icon ? `<img src="${esc(e.icon)}" alt="" style="width:28px;height:28px;object-fit:contain">` : ''}<div style="min-width:0"><b>${esc(e.name)}</b>
-        <div class="small muted">${e.side === 'buy' ? 'buy' : 'sell'}${e.note ? ' · ' + esc(e.note) : ''}</div></div></div>
+        <div class="small muted">${e.tracking ? 'tracking' : e.side === 'buy' ? 'buy' : 'sell'}${e.note ? ' · ' + esc(e.note) : ''}</div></div></div>
         ${(e.patch || []).map(c => `<div class="small" style="margin-top:4px;color:var(--accent)" title="${esc(c.line || '')}">Patch call: ${esc(c.direction)}${c.move_pct != null ? ' ' + (c.move_pct > 0 ? '+' : '') + Math.round(c.move_pct) + '%' : ''} <span class="muted">(${esc(c.group)})</span></div>`).join('')}</td>
-      <td>${e.price ? esc(e.price) : '<span class="muted">no price</span>'}</td>
-      <td>${esc(e.target)}${e.away_pct != null && !e.hit ? `<div class="small muted">${e.away_pct > 0 ? '+' : ''}${e.away_pct}% away</div>` : ''}</td>
+      <td>${e.price ? esc(e.price) : '<span class="muted">no price</span>'}${e.change_7d_pct != null ? `<div class="small" style="color:${e.change_7d_pct >= 0 ? 'var(--eo-good)' : 'var(--accent)'}">${e.change_7d_pct > 0 ? '+' : ''}${e.change_7d_pct}% in 7 days</div>` : ''}</td>
+      <td>${e.target ? esc(e.target) : '<span class="muted">none</span>'}${e.away_pct != null && !e.hit ? `<div class="small muted">${e.away_pct > 0 ? '+' : ''}${e.away_pct}% away</div>` : ''}</td>
       <td class="small">${e.week ? `${esc(e.week.low)} to ${esc(e.week.high)}<div class="muted">middle ${esc(e.week.mid)}</div>` : '<span class="muted">no forecast for this item</span>'}</td>
       <td>${state(e)}</td>
       <td><button class="btn wldel" data-n="${esc(e.name)}" style="padding:1px 8px;font-size:11px">Remove</button></td></tr>`).join('')}</table>

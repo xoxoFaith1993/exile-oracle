@@ -851,12 +851,12 @@ TOOLS = [
     ('poe2_wishlist',
      "The player's chase-item wishlist (its own Wishlist page under Market): items they want to buy (side=buy: tell me when it drops to the "
      'target) or sell (side=sell: when it rises to it) at a target price. action=list (default) shows each wish with '
-     'its live price, how far from the target, next week\'s likely range from the price forecast (heading = likely / '
-     'maybe) and calls from the newest patch notes. action=add needs item (the poe.ninja name), target and unit '
-     '(div or ex); action=remove needs item. The dashboard alerts on a hit, a forecast heading there, or a patch call, '
+     'its live price, the last 7 days, how far from the target, next week\'s likely range from the price forecast (heading = likely / '
+     'maybe) and calls from the newest patch notes. action=add needs item (the poe.ninja name); target + unit '
+     '(div, ex or chaos) are optional: without a target the item is just tracked (no target alerts). action=remove needs item. The dashboard alerts on a hit, a forecast heading there, or a patch call, '
      'and a hit becomes the Home omen. Add only what the player asked for.',
      S(action={'type': 'string', 'enum': ['list', 'add', 'remove']}, item=STR, target=NUM,
-       unit={'type': 'string', 'enum': ['div', 'ex']}, side={'type': 'string', 'enum': ['buy', 'sell']}, note=STR),
+       unit={'type': 'string', 'enum': ['div', 'ex', 'chaos']}, side={'type': 'string', 'enum': ['buy', 'sell']}, note=STR),
      t_wishlist),
     ('poe2_trade_link', 'Make an official trade-site search link (by unique name and/or base type) to open in a browser.',
      S(name=STR, type=STR, league=STR), t_trade_link),

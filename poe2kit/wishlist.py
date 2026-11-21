@@ -1,7 +1,9 @@
 """Chase-item wishlist (R25): items the player wants to buy (or sell) at a target price.
 
-Each wish: an item name as poe.ninja / the Currency Exchange call it, a target price (stored in Divines; the player
-can type it in ex or div) and a side: "buy" (tell me when it drops to the target) or "sell" (when it rises to it).
+Each wish: an item name as poe.ninja / the Currency Exchange call it and, if the player wants alerts, a target
+price (stored in Divines; typed in ex or div) and a side: "buy" (tell me when it drops to the target) or "sell" (when
+it rises to it). Without a target the item is just tracked: live price, last 7 days, next week's range, patch calls
+(the author, 2026-11-21: "What if you just want the Mageblood on your wish list? Doesn't matter the price.").
 
 Three kinds of news, all on the dashboard only (Alerts page + Home omen, never in game):
   hit       the live price reached the target;
@@ -44,36 +46,56 @@ def price_of(con, name, league=None):
     return (exact or rows or [None])[0]
 
 
+UNITS = {'div': None, 'ex': ('ex_per_div', 'Exalted'), 'chaos': ('chaos_per_div', 'Chaos')}
+
+
 def _to_div(con, value, unit, league=None):
     from . import money, ninja
-    if unit == 'ex':
+    if UNITS.get(unit):
+        key, label = UNITS[unit]
         rt = money.rates(con, league or ninja.current_league(con)) or {}
-        if not rt.get('ex_per_div'):
-            raise ValueError('no Exalted price yet: give the target in div')
-        return value / rt['ex_per_div']
+        if not rt.get(key):
+            raise ValueError(f'no {label} Orb price yet: give the target in div')
+        return value / rt[key]
     return value
+
+
+def _target_text(w, rt):
+    """The target as the player typed it (e.g. '300 chaos'), with the Divine value when that differs."""
+    from . import money
+    if not w.get('target_div'):
+        return None
+    v, u = w.get('target_value'), w.get('unit') or 'div'
+    if v is None or u == 'div':
+        return money.fmt(w['target_div'], rt)
+    num = f'{v:,.0f}' if v >= 10 else f'{v:g}'
+    return f'{num} {u}' + (f" (≈ {money.fmt(w['target_div'], rt)})" if w['target_div'] >= 1 else '')
 
 
 def add(con, name, target, unit='div', side='buy', note=''):
     name = (name or '').strip()
     if not name:
         return {'ok': False, 'error': 'Which item?'}
-    try:
-        target = float(target)
-        if target <= 0:
-            raise ValueError
-    except (TypeError, ValueError):
-        return {'ok': False, 'error': 'The target must be a price above 0.'}
+    if target in (None, '') or (isinstance(target, str) and not target.strip()):
+        target = None   # no target: just track it
+    else:
+        try:
+            target = float(target)
+            if target <= 0:
+                raise ValueError
+        except (TypeError, ValueError):
+            return {'ok': False, 'error': 'The target must be a price above 0 (or leave it empty to just track the item).'}
     row = price_of(con, name)
     if row is None:
         return {'ok': False, 'error': f'"{name}" has no price stored. Check the spelling (as on poe.ninja).'}
     try:
-        tdiv = _to_div(con, target, unit)
+        tdiv = _to_div(con, target, unit) if target is not None else None
     except ValueError as e:
         return {'ok': False, 'error': str(e)}
     side = 'sell' if side == 'sell' else 'buy'
     w = [x for x in _load(con) if x['name'].lower() != row['name'].lower()]
-    w.insert(0, {'name': row['name'], 'target_div': tdiv, 'side': side, 'unit': 'ex' if unit == 'ex' else 'div',
+    w.insert(0, {'name': row['name'], 'target_div': tdiv, 'target_value': target, 'side': side,
+                 'unit': unit if unit in UNITS else 'div',
                  'note': (note or '')[:200], 'added': time.time(), 'icon': row['icon']})
     if len(w) > MAX:
         return {'ok': False, 'error': f'The wishlist holds {MAX} items: remove one first.'}
@@ -95,14 +117,27 @@ def _forecast(con, name, now_div):
         from . import prophecy
         f = prophecy.forecast_item(con, name, price=now_div)
         h = f.get('horizons') or {}
-        return h.get(7) or h.get('7')
+        return h.get(7) or h.get('7'), f.get('change_7d_pct')
+    except Exception:
+        return None, None
+
+
+def _change_7d(con, league, name, now):
+    """% change over the last 7 days from the stored prices (None without a week of history)."""
+    try:
+        r = con.execute('SELECT value FROM price WHERE league=? AND name=? AND ts<=? AND value>0 ORDER BY ts DESC LIMIT 1',
+                        (league, name, time.time() - 7 * 86400)).fetchone()
+        if not r:   # uniques: the daily log (poe2kit/overview.py) keeps the whole league
+            r = con.execute('SELECT value_div FROM unique_daily WHERE league=? AND name=? AND day<=? ORDER BY day DESC LIMIT 1',
+                            (league, name, time.strftime('%Y-%m-%d', time.gmtime(time.time() - 7 * 86400)))).fetchone()
+        return round((now / r[0] - 1) * 100, 1) if r and r[0] and now else None
     except Exception:
         return None
 
 
 def _heading(w, h7):
     """Does next week's likely range reach the target? 'likely' (the median does) or 'maybe' (1 in 4 does)."""
-    if not h7:
+    if not h7 or not w.get('target_div'):
         return None
     t = w['target_div']
     if w['side'] == 'buy':
@@ -142,12 +177,16 @@ def status(con, league=None, with_forecast=True):
     for w in _load(con):
         r = price_of(con, w['name'], league)
         now = r['value'] if r else None
-        e = dict(w, price_div=now, price=money.fmt(now, rt) if now else None, target=money.fmt(w['target_div'], rt),
-                 as_of=r['ts'] if r else None)
-        if now:
+        tgt = w.get('target_div')
+        e = dict(w, price_div=now, price=money.fmt(now, rt) if now else None, target=_target_text(w, rt),
+                 as_of=r['ts'] if r else None, tracking=not tgt,
+                 change_7d_pct=_change_7d(con, league, r['name'], now) if r else None)
+        if now and tgt:
             e['away_pct'] = round((w['target_div'] / now - 1) * 100, 1)
             e['hit'] = now <= w['target_div'] if w['side'] == 'buy' else now >= w['target_div']
-        h7 = _forecast(con, w['name'], now) if with_forecast and now else None
+        h7, chg7 = _forecast(con, w['name'], now) if with_forecast and now else (None, None)
+        if e['change_7d_pct'] is None and chg7 is not None:   # the exchange history (the Oracle) goes back further
+            e['change_7d_pct'] = round(chg7, 1)
         if h7:
             e['week'] = {'low': money.fmt(h7['p25'], rt), 'mid': money.fmt(h7['median'], rt), 'high': money.fmt(h7['p75'], rt),
                          'change_pct': h7.get('change_pct')}
@@ -156,8 +195,9 @@ def status(con, league=None, with_forecast=True):
         e['patch_title'] = pp.get('title') if pp and e['patch'] else None
         out.append(e)
     return {'league': league, 'items': out, 'max': MAX,
-            'note': 'Prices from poe.ninja (uniques: the cheapest roll). "Heading there": the price forecast from past '
-                    'launches puts your target inside next week\'s likely range (a range, not a promise).'}
+            'note': 'Prices from poe.ninja (uniques: the cheapest roll). No target = just tracking the price. "Heading '
+                    'there": the price forecast from past launches puts your target inside next week\'s likely range (a '
+                    'range, not a promise).'}
 
 
 def check(con, alert):

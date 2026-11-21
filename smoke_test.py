@@ -293,14 +293,18 @@ def wishlist_check():
     wishlist.check(con, lambda c, kind, title, detail='': got.append((kind, title)))   # no repeat
     om = prophecy.omen(con)
     st = wishlist.status(con, with_forecast=False)['items']
+    tr = wishlist.add(con, 'Smoketest Band', '', 'div', 'buy')   # no target: just tracking
+    st2 = wishlist.status(con, with_forecast=False)['items']
+    ch = wishlist.add(con, 'Smoketest Band', 30, 'chaos', 'sell') if (__import__('poe2kit.money', fromlist=['x']).rates(con, lg) or {}).get('chaos_per_div') else {'ok': True}
     gone = wishlist.remove(con, 'Smoketest Band')
     left = wishlist.status(con, with_forecast=False)['items']
     con.execute("DELETE FROM price WHERE item_key='smoke-wish'")
     con.commit()
     con.close()
     check(not bad['ok'] and a['ok'] and st and st[0]['hit'] and len(got) == 1 and got[0][0] == 'wish'
-          and om.get('kind') == 'wish' and gone['ok'] and not left,
-          'wishlist: target hit alerts once, becomes the omen, remove')
+          and om.get('kind') == 'wish' and gone['ok'] and not left and tr['ok'] and st2[0]['tracking']
+          and st2[0]['target'] is None and not st2[0].get('hit') and ch['ok'],
+          'wishlist: target hit alerts once, becomes the omen, track with no target, chaos targets, remove')
 
 
 def patchwatch_check():
