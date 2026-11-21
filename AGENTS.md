@@ -54,6 +54,7 @@ you assume.
   - Currency Exchange gaps: `spreads.py` (the same item priced differently vs Ex / Div / Chaos, strict filters; R24);
   - data updates: `dataupdate.py` (data-only packs from our GitHub, checked, switched, rolled back; R27);
   - alerts: `alerts.py` (the kinds the player picked, real-move filters, daily market digest, the Oracle's calls);
+  - wishlist: `wishlist.py` (chase items with a target price: hit / forecast heading there / patch call alerts, Home omen; R25);
   - platform differences: `osutil.py`;
   - checks: `doctor.py`.
 - `dashboard/`: `index.html` (dashboard), `overlay.html` (popup) and `route.html` (the campaign route panel).

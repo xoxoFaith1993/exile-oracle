@@ -277,6 +277,32 @@ def alerts_check():
     check(ok and alerts.wanted('news'), 'alert settings: switch kinds off, thresholds, mute')
 
 
+def wishlist_check():
+    """R25: a wish at its target alerts once, becomes the Home omen, and can be removed."""
+    import time as _t
+    from poe2kit import wishlist, ninja, prophecy, db
+    con = db.connect()
+    lg = ninja.current_league(con)
+    con.execute("INSERT INTO price(ts, league, source, category, item_key, name, value, unit) "
+                "VALUES (?,?,'ninja-item','UniqueAccessories','smoke-wish','Smoketest Band',?,'divine')", (_t.time(), lg, 4.0))
+    con.commit()
+    bad = wishlist.add(con, 'No Such Item Xyz', 3)
+    a = wishlist.add(con, 'Smoketest Band', 5, 'div', 'buy')
+    got = []
+    wishlist.check(con, lambda c, kind, title, detail='': got.append((kind, title)))
+    wishlist.check(con, lambda c, kind, title, detail='': got.append((kind, title)))   # no repeat
+    om = prophecy.omen(con)
+    st = wishlist.status(con, with_forecast=False)['items']
+    gone = wishlist.remove(con, 'Smoketest Band')
+    left = wishlist.status(con, with_forecast=False)['items']
+    con.execute("DELETE FROM price WHERE item_key='smoke-wish'")
+    con.commit()
+    con.close()
+    check(not bad['ok'] and a['ok'] and st and st[0]['hit'] and len(got) == 1 and got[0][0] == 'wish'
+          and om.get('kind') == 'wish' and gone['ok'] and not left,
+          'wishlist: target hit alerts once, becomes the omen, remove')
+
+
 def patchwatch_check():
     """R27 step 2: a game update starts patch mode (hourly data checks for 2 days), then it ends."""
     from poe2kit import patchwatch, gamedata, dataupdate, db
@@ -521,6 +547,7 @@ if __name__ == '__main__':
     dataupdate_check()
     alerts_check()
     patchwatch_check()
+    wishlist_check()
     vault_paste_check()
     spreads_check()
     weaponset_check()

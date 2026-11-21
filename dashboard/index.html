@@ -790,8 +790,17 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
     <div class="card"><div class="lab-head"><h2 style="margin:0">Alerts</h2><span style="flex:1"></span>
       <button class="btn" id="alread">Mark all read</button> <button class="btn" id="alclear" title="Delete alerts you've already seen">Clear read</button></div>
       <div class="sub">Only what you asked for (choose below). Shown here and on Home: never in game.</div>
-      <div class="eo-seg seg" id="alfilter" style="margin-top:8px"><button data-f="" class="on">All</button><button data-f="mine">My items</button><button data-f="oracle">Oracle</button><button data-f="market">Market</button><button data-f="patch">Patch notes</button><button data-f="news">News</button><button data-f="updates">Updates</button></div>
+      <div class="eo-seg seg" id="alfilter" style="margin-top:8px"><button data-f="" class="on">All</button><button data-f="mine">My items</button><button data-f="wishlist">Wishlist</button><button data-f="oracle">Oracle</button><button data-f="market">Market</button><button data-f="patch">Patch notes</button><button data-f="news">News</button><button data-f="updates">Updates</button></div>
       <div id="alertlist" style="margin-top:8px"></div></div>
+    <div class="card"><div class="lab-head"><h2 style="margin:0">Wishlist</h2><span class="small muted" id="wlsub"></span></div>
+      <div class="sub">Items you want at a price. You get an alert when one reaches your target, when the price forecast says it's heading there this week, or when new patch notes call a move for it. An item at your target also becomes the omen on Home.</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px">
+        <input class="crin" id="wlname" list="wlsugg" placeholder="Item name, e.g. Mageblood or Omen of Light" style="flex:1;min-width:240px" autocomplete="off"><datalist id="wlsugg"></datalist>
+        <select class="crin" id="wlside"><option value="buy">buy at or under</option><option value="sell">sell at or over</option></select>
+        <input class="crin" id="wltarget" type="number" min="0" step="any" placeholder="price" style="width:90px">
+        <select class="crin" id="wlunit"><option value="div">div</option><option value="ex">ex</option></select>
+        <button class="btn" id="wladd">Add to wishlist</button> <span class="small muted" id="wlmsg"></span></div>
+      <div id="wishlist" style="margin-top:10px"></div></div>
     <div class="card"><h2>What to alert me about</h2><div class="sub">Market moves only count when they're real: the item trades, the move held for 2+ hours (not one spike), and it's worth at least the minimum.</div>
       <div id="alsettings"></div></div>
   </section>
@@ -920,7 +929,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   if (b.dataset.tab === 'compare') loadCompare();
   if (b.dataset.tab === 'economy') { loadLeagues(); loadOverview(); loadMovers(); loadMarket(); loadOracle($('#ordaysel').value); loadSpreads(); }
   if (b.dataset.tab === 'builds') loadBuilds();
-  if (b.dataset.tab === 'alerts') loadAlerts(true);
+  if (b.dataset.tab === 'alerts') { loadAlerts(true); loadWishlist(); }
   if (b.dataset.tab === 'patches') loadPatches();
   if (b.dataset.tab === 'farm') { loadFarm(); loadPlaybook(); }
   if (b.dataset.tab === 'sessions') loadSessions();
@@ -2015,8 +2024,8 @@ async function loadBuilds() {
   };
   $('#vpaste').onkeydown = e => { if (e.key === 'Enter') $('#vadd').click(); };
 }
-const KIND = { patch: 'patch notes', build: 'build', 'price-mine': '★ your item', 'price-market': 'market', digest: 'market digest', oracle: 'Oracle', update: 'update', news: 'news', install: 'install', pob: 'PoB', ggg: 'GGG' };
-const KGROUP = { 'price-mine': 'mine', 'price-market': 'market', digest: 'market', oracle: 'oracle', patch: 'patch', news: 'news' };
+const KIND = { wish: '♦ wishlist', patch: 'patch notes', build: 'build', 'price-mine': '★ your item', 'price-market': 'market', digest: 'market digest', oracle: 'Oracle', update: 'update', news: 'news', install: 'install', pob: 'PoB', ggg: 'GGG' };
+const KGROUP = { wish: 'wishlist', 'price-mine': 'mine', 'price-market': 'market', digest: 'market', oracle: 'oracle', patch: 'patch', news: 'news' };
 let ALF = '';
 async function loadAlerts(markSeen) {
   const all = await get('/api/alerts');
@@ -2039,6 +2048,49 @@ async function loadAlerts(markSeen) {
     loadAlertSettings();
   }
 }
+// ---------- wishlist (R25) ----------
+async function loadWishlist() {
+  const r = await get('/api/wishlist');
+  const it = r.items || [];
+  $('#wlsub').textContent = it.length ? `${it.length} item${it.length === 1 ? '' : 's'}` : '';
+  const state = e => e.hit ? `<span class="pill" style="border-color:var(--eo-good);color:var(--eo-good)">at your target</span>`
+    : e.heading === 'likely' ? '<span class="pill" style="border-color:var(--accent)">heading there</span>'
+    : e.heading === 'maybe' ? '<span class="pill">could reach it this week</span>' : '<span class="small muted">waiting</span>';
+  $('#wishlist').innerHTML = !it.length ? '<div class="empty">Nothing on your wishlist yet. Add a chase item above.</div>' :
+    `<table class="up" style="table-layout:fixed"><colgroup><col style="width:30%"><col style="width:13%"><col style="width:13%"><col style="width:19%"><col style="width:15%"><col style="width:10%"></colgroup>
+      <tr><th>Item</th><th>Now</th><th>Target</th><th>Next week (likely)</th><th>Status</th><th></th></tr>${it.map(e => `<tr>
+      <td><div style="display:flex;gap:8px;align-items:center">${e.icon ? `<img src="${esc(e.icon)}" alt="" style="width:28px;height:28px;object-fit:contain">` : ''}<div style="min-width:0"><b>${esc(e.name)}</b>
+        <div class="small muted">${e.side === 'buy' ? 'buy' : 'sell'}${e.note ? ' · ' + esc(e.note) : ''}</div></div></div>
+        ${(e.patch || []).map(c => `<div class="small" style="margin-top:4px;color:var(--accent)" title="${esc(c.line || '')}">Patch call: ${esc(c.direction)}${c.move_pct != null ? ' ' + (c.move_pct > 0 ? '+' : '') + Math.round(c.move_pct) + '%' : ''} <span class="muted">(${esc(c.group)})</span></div>`).join('')}</td>
+      <td>${e.price ? esc(e.price) : '<span class="muted">no price</span>'}</td>
+      <td>${esc(e.target)}${e.away_pct != null && !e.hit ? `<div class="small muted">${e.away_pct > 0 ? '+' : ''}${e.away_pct}% away</div>` : ''}</td>
+      <td class="small">${e.week ? `${esc(e.week.low)} to ${esc(e.week.high)}<div class="muted">middle ${esc(e.week.mid)}</div>` : '<span class="muted">no forecast for this item</span>'}</td>
+      <td>${state(e)}</td>
+      <td><button class="btn wldel" data-n="${esc(e.name)}" style="padding:1px 8px;font-size:11px">Remove</button></td></tr>`).join('')}</table>
+      <div class="small muted" style="margin-top:6px">${esc(r.note || '')}</div>`;
+  document.querySelectorAll('.wldel').forEach(btn => btn.onclick = async () => {
+    if (!btn.classList.contains('sure')) {
+      btn.classList.add('sure'); btn.textContent = 'Sure? Click again'; btn.style.borderColor = 'var(--accent)';
+      setTimeout(() => { if (btn.isConnected) { btn.classList.remove('sure'); btn.textContent = 'Remove'; btn.style.borderColor = ''; } }, 4000);
+      return;
+    }
+    await post('/api/wishlist/remove', { name: btn.dataset.n }); loadWishlist();
+  });
+  if (!$('#wladd').dataset.wired) {
+    $('#wladd').dataset.wired = 1;
+    let t = null;
+    $('#wlname').oninput = () => { clearTimeout(t); t = setTimeout(async () => {
+      const q = $('#wlname').value.trim(); if (q.length < 2) return;
+      const s = await get('/api/wishlist/search?q=' + encodeURIComponent(q));
+      $('#wlsugg').innerHTML = s.map(x => `<option value="${esc(x.name)}">${esc(x.price)}</option>`).join('');
+    }, 250); };
+    $('#wladd').onclick = async () => {
+      const r = await post('/api/wishlist/add', { name: $('#wlname').value, target: $('#wltarget').value, unit: $('#wlunit').value, side: $('#wlside').value });
+      $('#wlmsg').textContent = r.ok ? `Added ${r.name}.` : r.error;
+      if (r.ok) { $('#wlname').value = ''; $('#wltarget').value = ''; loadWishlist(); }
+    };
+  }
+}
 async function loadAlertSettings() {
   const s = await get('/api/alerts/settings');
   const tog = (k, label, sub) => `<label class="small" style="display:block;margin-top:6px"><input type="checkbox" data-al="${k}"${s[k].on ? ' checked' : ''}> <b>${label}</b> <span class="muted">${sub}</span></label>`;
@@ -2047,6 +2099,7 @@ async function loadAlertSettings() {
     tog('mine', 'My items', '') + `<div class="small" style="margin:2px 0 6px 22px">when an item in my builds or watch list moves ${num('mine', 'pct', s.mine.pct, 60, '%')}</div>` +
     `<div class="small" style="margin-top:6px"><b>Market moves</b> <select class="crin" data-alm="1"><option value="digest"${s.market.mode === 'digest' ? ' selected' : ''}>one daily digest</option><option value="each"${s.market.mode === 'each' ? ' selected' : ''}>each move (up to ${s.market.max_each} a day)</option><option value="off"${s.market.mode === 'off' ? ' selected' : ''}>off</option></select></div>` +
     `<div class="small" style="margin:4px 0 6px 22px">moves of ${num('market', 'pct', s.market.pct, 60, '%')} or more, worth ${num('market', 'min_div', s.market.min_div, 60, 'div')} or more, with ${num('market', 'min_volume', s.market.min_volume, 70, 'traded')} (exchange) or ${num('market', 'min_listings', s.market.min_listings, 60, 'listed')} (items)</div>` +
+    tog('wishlist', 'My wishlist', '(at my target, heading there this week, a patch call)') +
     tog('oracle', 'The Oracle', '(a new omen, a countdown under a day: 1.0, sell windows)') +
     tog('patch', 'Patch notes', 'that hit my builds') + tog('news', 'GGG news', '') + tog('updates', 'Updates', '(app, data, Path of Building, saved builds)') +
     (s.muted.length ? `<div class="small" style="margin-top:10px"><b>Muted:</b> ${s.muted.map(m => `<span class="pill">${esc(m)} <a href="#" class="alun" data-n="${esc(m)}">×</a></span>`).join(' ')}</div>` : '');

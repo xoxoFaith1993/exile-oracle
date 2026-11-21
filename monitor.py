@@ -101,6 +101,11 @@ def _my_item_names(con):
         log.warning('could not read vault items: %s', traceback.format_exc(limit=1))
     for w in json.loads(db.kv_get(con, 'watchlist', '[]') or '[]'):
         names.add(w.lower())
+    try:   # the wishlist (R25) counts as the watch list too
+        from poe2kit import wishlist
+        names |= wishlist.names(con)
+    except Exception:
+        pass
     return names
 
 
@@ -112,6 +117,12 @@ def job_alerts(con):
     rt = money.rates(con, league)
     _al.run(con, alert, league, rt, _my_item_names(con))
     _al.oracle_run(con, alert)
+    if _al.settings()['wishlist']['on']:
+        try:
+            from poe2kit import wishlist
+            wishlist.check(con, alert)
+        except Exception:
+            log.warning('wishlist check failed: %s', traceback.format_exc(limit=1))
 
 
 def job_exchange(con):
@@ -415,6 +426,14 @@ def api(path, q):
         if path == '/api/buildcheck':   # Character page: how this build is measured
             from poe2kit import vault, pob
             return dict(vault.check(con, int(q.get('id') or 0)), pob_version=pob.version())
+        if path == '/api/wishlist':   # R25: chase items with a target price
+            from poe2kit import wishlist
+            return wishlist.status(con)
+        if path == '/api/wishlist/search':
+            rows = ninja.latest(con, (q.get('q') or '').strip(), None, 12) if len((q.get('q') or '').strip()) >= 2 else []
+            rt = money.rates(con, ninja.current_league(con))
+            return [{'name': r['name'], 'price': money.fmt(r['value'], rt), 'icon': r['icon'], 'category': r['category']}
+                    for r in rows]
         if path == '/api/spreads':   # R24: Currency Exchange gaps between an item's Ex / Div / Chaos markets
             from poe2kit import spreads
             return spreads.find(con, q.get('league') or None)
@@ -775,6 +794,15 @@ class Handler(http.server.BaseHTTPRequestHandler):
             elif u.path == '/api/ask/open':   # a question chip: open the AI app with the question typed in
                 from poe2kit import overlaysrv
                 data = overlaysrv.open_question(body.get('text'))
+            elif u.path in ('/api/wishlist/add', '/api/wishlist/remove'):   # R25 wishlist
+                from poe2kit import db as _db, wishlist
+                c = _db.connect()
+                try:
+                    data = wishlist.add(c, body.get('name'), body.get('target'), body.get('unit') or 'div',
+                                        body.get('side') or 'buy', body.get('note') or '') \
+                        if u.path.endswith('add') else wishlist.remove(c, body.get('name'))
+                finally:
+                    c.close()
             elif u.path == '/api/alerts/settings':   # Settings → Alerts (and "mute this item")
                 from poe2kit import alerts as _al
                 data = _al.save(body)

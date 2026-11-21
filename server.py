@@ -658,6 +658,23 @@ def t_compare(a):
         con.close()
 
 
+def t_wishlist(a):
+    from poe2kit import wishlist
+    con = db.connect()
+    try:
+        act = a.get('action') or 'list'
+        if act == 'add':
+            r = wishlist.add(con, a.get('item'), a.get('target'), a.get('unit') or 'div', a.get('side') or 'buy',
+                             a.get('note') or '')
+            if not r.get('ok'):
+                return r
+        elif act == 'remove':
+            r = wishlist.remove(con, a.get('item'))
+        return wishlist.status(con)
+    finally:
+        con.close()
+
+
 def t_read_rare(a):
     return gamedata.read_item(a['base'], [m for m in a['mods'].splitlines() if m.strip()] if isinstance(a['mods'], str)
                               else a['mods'])
@@ -831,6 +848,16 @@ TOOLS = [
      'item text, poe.ninja price, cheapest trade listings, what was searched, craft estimate. Call this when the '
      'player says they sent / just checked an item. limit (default 3), clear=true empties the list.',
      S(limit=NUM, clear=BOOL), t_from_overlay),
+    ('poe2_wishlist',
+     "The player's chase-item wishlist (Alerts page): items they want to buy (side=buy: tell me when it drops to the "
+     'target) or sell (side=sell: when it rises to it) at a target price. action=list (default) shows each wish with '
+     'its live price, how far from the target, next week\'s likely range from the price forecast (heading = likely / '
+     'maybe) and calls from the newest patch notes. action=add needs item (the poe.ninja name), target and unit '
+     '(div or ex); action=remove needs item. The dashboard alerts on a hit, a forecast heading there, or a patch call, '
+     'and a hit becomes the Home omen. Add only what the player asked for.',
+     S(action={'type': 'string', 'enum': ['list', 'add', 'remove']}, item=STR, target=NUM,
+       unit={'type': 'string', 'enum': ['div', 'ex']}, side={'type': 'string', 'enum': ['buy', 'sell']}, note=STR),
+     t_wishlist),
     ('poe2_trade_link', 'Make an official trade-site search link (by unique name and/or base type) to open in a browser.',
      S(name=STR, type=STR, league=STR), t_trade_link),
 ]
@@ -855,7 +882,8 @@ INSTRUCTIONS = (
     '- Characters: poe2_my_characters / poe2_import_character only when asked. Their usual goal: the top 1% '
     '(poe2_top1). Upgrades: poe2_upgrades (DPS per divine). Selling / holding / buying and league timing: '
     'poe2_oracle (patterns from the last three launches; mode omen / timeline / forecast / patch / farm / uniques for '
-    'the prophecy: say how often it held, it is history not a promise).\n'
+    'the prophecy: say how often it held, it is history not a promise; mode spreads for Currency Exchange gaps). '
+    'Chase items with a target price: poe2_wishlist.\n'
     '- Atlas and maps: poe2_atlas (strategies, setups the player draws with Show on tree, rolling costs, earnings per hour as a range). '
     'Campaign: poe2_campaign (rush route, the rewards checklist, the zone the player is in).\n'
     '- Several characters: poe2_status names the ACTIVE character (picked in the dashboard top bar). Answer for it '
@@ -882,7 +910,7 @@ FEED_WORDS = {
     'poe2_compare': 'compared two builds (Compare page)', 'poe2_read_rare': 'read a rare item',
     'poe2_build_planner': 'worked on the in-game Build Planner', 'poe2_levelling': 'checked the levelling route',
     'poe2_lab': 'used the Build Lab', 'poe2_oracle': 'read the market history (the Oracle)', 'poe2_campaign': 'read the campaign guide', 'poe2_atlas': 'planned the atlas', 'poe2_doctor': 'checked the app for problems',
-    'poe2_from_overlay': 'read the items you sent', 'poe2_trade_link': 'made a trade-site link',
+    'poe2_wishlist': 'checked your wishlist', 'poe2_from_overlay': 'read the items you sent', 'poe2_trade_link': 'made a trade-site link',
     'poe2_status': 'checked the app status', 'poe2_refresh': 'refreshed prices', 'poe2_top1': 'ran the Top 1% check',
 }
 CLIENT = {'name': None}

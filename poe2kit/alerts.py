@@ -4,6 +4,7 @@ Dashboard only: no pop-ups in game. Each kind can be switched on / off in Settin
 
   mine      items in your builds (and your watch list) move           on, 15%
   market    real market moves (not thin-market spikes)               digest (one alert a day), or each, or off
+  wishlist  your wishlist: at your target, heading there, a patch call  on
   oracle    the Oracle's calls: a countdown under a day, the omen    on
             changing, a stored patch that hits your items
   patch     patch notes that hit your builds                         on
@@ -23,11 +24,12 @@ DEFAULTS = {
     'mine': {'on': True, 'pct': 15},
     'market': {'mode': 'digest', 'pct': 40, 'min_div': 1, 'min_volume': 50, 'min_listings': 10, 'max_each': 10},
     'oracle': {'on': True},
+    'wishlist': {'on': True},
     'patch': {'on': True},
     'news': {'on': True},
     'updates': {'on': True},
 }
-KIND_GROUP = {'price-mine': 'mine', 'price-market': 'market', 'digest': 'market', 'oracle': 'oracle', 'patch': 'patch',
+KIND_GROUP = {'price-mine': 'mine', 'price-market': 'market', 'digest': 'market', 'oracle': 'oracle', 'wish': 'wishlist', 'patch': 'patch',
               'news': 'news', 'update': 'updates', 'install': 'updates', 'pob': 'updates', 'ggg': 'updates',
               'build': 'updates'}
 

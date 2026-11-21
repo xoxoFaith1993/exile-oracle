@@ -132,6 +132,13 @@ def omen(con, league=None):
     from . import oracle
     lg, day, start = league_day(con, league)
     now = time.time()
+    try:   # the player's own wishlist comes first: an item at their target price (R25)
+        from . import wishlist
+        w = wishlist.omen(con)
+        if w:
+            return dict(w, day=round(day, 1) if day is not None else None, league=lg)
+    except Exception:
+        pass
     if now < LAUNCH_1_0 and (day is None or day > 30):
         days = (LAUNCH_1_0 - now) / 86400
         plan = _load('league-start.json').get('plan_72h', [])
