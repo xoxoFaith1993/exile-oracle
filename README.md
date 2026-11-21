@@ -8,7 +8,15 @@ builds, a Build Lab and an in-game price-check overlay. It runs on your own PC i
 **together with Claude**: connect it once and ask Claude anything about your character, the economy or your next
 craft.
 
-**[⬇ Download the latest installer](../../releases/latest)** · **[Using it with Claude](CLAUDE-GUIDE.md)**
+> **Made for Claude, works with other AI apps too.** Exile Oracle is built and tested mainly with Claude, and that's
+> the way it's meant to be used. Its tools are a standard MCP server, so other apps can connect from Settings →
+> Other AI apps:
+> - **Gemini CLI**: tested (needs a Gemini API key).
+> - **ChatGPT desktop app / Codex**: supported but not yet tested.
+>
+> Every app gets the same built-in instructions.
+
+**[⬇ Download the latest installer](../../releases/latest)** · **[Using it with Claude](CLAUDE-GUIDE.md)** · **[Other AI apps](CLAUDE-GUIDE.md#using-chatgpt-or-gemini-instead)**
 
 > Character screenshots show a public top-player build from poe.ninja. Yours shows your own characters after you import them.
 
