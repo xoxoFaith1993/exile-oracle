@@ -337,7 +337,7 @@ input[type=checkbox] { accent-color: var(--eo-blood-hi); }
       <button data-go="builds"><b>Builds</b>Your characters, the in-game Build Planner</button>
       <button data-go="economy"><b>Market</b>Prices, history, biggest movers</button>
       <button data-go="craft"><b>Craft lab</b>Plan a craft and what it costs</button>
-      <button data-go="status"><b>Settings</b>Profile, overlay, Claude, updates</button>
+      <button data-go="status"><b>Settings</b>Profile, overlay, connectors, updates</button>
     </div></div>
   </section>
   <section id="claude"><div id="show"><div class="card empty">Ask the Oracle something in chat (Claude: a build cost, upgrades, a compare, a price chart) and it shows up here.</div></div></section>
@@ -1414,6 +1414,14 @@ $('#unit').onchange = () => {
   if (LASTSHOW) { const f = VIEWS[LASTSHOW.type]; if (f) $('#show').innerHTML = `<div class="muted small" style="margin:0 0 8px">${esc(LASTSHOW.caption || '')} · ${ago(LASTSHOW.ts)}</div>` + f(LASTSHOW.data || {}); }
   if (document.querySelector('#economy.on')) { loadOverview(); loadMovers(); search(); }
 };
+let PAGEVER = null;   // reload when the dashboard's files change, unless something is being typed
+setInterval(async () => {
+  try {
+    const v = (await get('/api/pagever')).v;
+    if (PAGEVER === null) PAGEVER = v;
+    else if (v && v !== PAGEVER && !document.activeElement.matches('input, textarea, select')) location.reload();
+  } catch (e) {}
+}, 20000);
 setInterval(pollShow, 3000); setInterval(loadStatus, 30000); setInterval(() => loadAlerts(false), 60000);
 </script>
 </body>

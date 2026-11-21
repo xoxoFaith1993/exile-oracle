@@ -312,6 +312,9 @@ def api(path, q):
     import server as tools  # reuse the MCP tool functions
     con = db.connect()
     try:
+        if path == '/api/pagever':   # the dashboard reloads itself when its files change (after an update or a fix)
+            d = os.path.join(HERE, 'dashboard')
+            return {'v': max(os.path.getmtime(os.path.join(d, f)) for f in ('index.html', 'theme.css') if os.path.exists(os.path.join(d, f)))}
         if path == '/api/status':
             s = tools.t_status({})
             s['rates'] = money.rates(con, s['league'])
