@@ -486,8 +486,15 @@ const get = async (p) => {
   return j;
 };
 const ago = ts => { if (!ts) return 'never'; const m = (Date.now()/1000 - ts)/60; return m < 1 ? 'just now' : m < 90 ? Math.round(m)+' min ago' : (m/60).toFixed(1)+' h ago'; };
-const ic = (u, sz = 30) => u ? `<img src="/img?u=${encodeURIComponent(u)}" width="${sz}" height="${sz}" alt="" loading="lazy" style="object-fit:contain;vertical-align:middle;margin-right:8px;flex:none">` : '';
-const pic = (o, sz = 30) => o && o.icon ? ic(o.icon, sz) : o && o.art ? `<img src="/art/${o.art.split('/').map(encodeURIComponent).join('/')}" width="${sz}" height="${sz}" alt="" loading="lazy" style="object-fit:contain;vertical-align:middle;margin-right:8px;flex:none">` : '';
+// item pictures: poe.ninja's (GGG's image CDN) first; with no address, or when one fails to load (say the monitor was
+// restarting), the same item's picture from the game files (/artfind); hidden if neither exists
+const artFind = (n, b, k) => '/artfind?' + new URLSearchParams(Object.entries({ n: n || '', b: b || '', k: k || '' }).filter(([, v]) => v));
+function imgFail(el) {
+  if (el.dataset.n && !el.dataset.tried) { el.dataset.tried = '1'; el.src = artFind(el.dataset.n, el.dataset.b, el.dataset.k); }
+  else el.style.visibility = 'hidden';
+}
+const ic = (u, sz = 30, n = '', b = '', k = '') => (u || n) ? `<img src="${u ? '/img?u=' + encodeURIComponent(u) : artFind(n, b, k)}"${n ? ` data-n="${esc(n)}" data-b="${esc(b)}" data-k="${esc(k)}"${u ? '' : ' data-tried="1"'}` : ''} onerror="imgFail(this)" width="${sz}" height="${sz}" alt="" loading="lazy" style="object-fit:contain;vertical-align:middle;margin-right:8px;flex:none">` : '';
+const pic = (o, sz = 30) => o && o.icon ? ic(o.icon, sz, o.name || o.item, o.base) : o && o.art ? `<img src="/art/${o.art.split('/').map(encodeURIComponent).join('/')}" width="${sz}" height="${sz}" alt="" loading="lazy" style="object-fit:contain;vertical-align:middle;margin-right:8px;flex:none">` : '';
 let UNIT = 'auto';
 try { UNIT = localStorage.getItem('poe2unit') || 'auto'; } catch (e) {}
 const nf = x => x >= 100 ? Math.round(x).toLocaleString() : x >= 1 ? (+x.toFixed(1)).toString()
@@ -641,7 +648,7 @@ async function search() {
   const rows = await get('/api/search?q=' + encodeURIComponent(q));
   if (!Array.isArray(rows) || !rows.length) { $('#results').innerHTML = '<div class="empty">No match in stored prices.</div>'; return; }
   $('#results').innerHTML = `<table><tr><th>Item</th><th>Base</th><th>Category</th><th class="num">Price</th><th class="num">Listings / volume</th></tr>${
-    rows.map(r => `<tr class="click" data-q="${esc(r.name)}"><td>${ic(r.icon)}${esc(r.name)}</td><td class="muted">${esc(r.base||'')}</td><td class="muted">${esc(r.category)}</td>
+    rows.map(r => `<tr class="click" data-q="${esc(r.name)}"><td>${ic(r.icon, 30, r.name, r.base)}${esc(r.name)}</td><td class="muted">${esc(r.base||'')}</td><td class="muted">${esc(r.category)}</td>
       <td class="num"><b>${esc(P(r.value_div, r.name))}</b></td><td class="num muted">${r.listings ?? (r.volume ? Math.round(r.volume)+' traded' : '')}</td></tr>`).join('')}</table>`;
 }
 document.addEventListener('click', e => { const tr = e.target.closest('tr[data-q]'); if (tr) history(tr.dataset.q); });
@@ -676,7 +683,7 @@ async function loadOverview() {
     tile(cur['Chaos Orb']?.icon, P(cur['Chaos Orb']?.value_div, 'Chaos Orb'), `1 Chaos Orb · ${r.chaos_ex ?? '?'} ex`),
     cur["Hinekora's Lock"] ? tile(cur["Hinekora's Lock"].icon, P(cur["Hinekora's Lock"].value_div), "1 Hinekora's Lock") : '',
   ].join('');
-  const item = (c, uniq) => `<div class="ci" data-q="${esc(c.name)}" title="${esc(c.name)}${c.base ? ' · ' + esc(c.base) : ''}">${ic(c.icon, 44)}<div style="min-width:0">
+  const item = (c, uniq) => `<div class="ci" data-q="${esc(c.name)}" title="${esc(c.name)}${c.base ? ' · ' + esc(c.base) : ''}">${ic(c.icon, 44, c.name, c.base)}<div style="min-width:0">
       <div class="n ${uniq ? 'u' : ''}">${esc(c.name)}${c.corrupted ? ' <span class="small" style="color:#d20000">corrupted</span>' : ''}</div>
       <div class="b">${esc(c.base || c.category || '')}${c.listings ? ' · ' + c.listings + ' listed' : ''}</div>
       <div class="p"><b>${esc(P(c.value_div, c.name))}</b>${c.mirrors ? ` <span class="m">≈ ${c.mirrors} mirror${c.mirrors >= 1.5 ? 's' : ''}</span>` : ''}</div></div></div>`;
@@ -751,7 +758,7 @@ function renderCharacter(c, el) {
   const skills = c.skills.map(g => {
     const act = g.gems.filter(x => !x.support); const sup = g.gems.filter(x => x.support);
     const a = act[0] || g.gems[0];
-    return `<div class="sk ${g.index === c.main_group ? 'main' : ''}"><div class="top">${a && a.art ? `<img src="${artSrc(a.art)}" alt="">` : ''}<div><b>${esc(act.map(x => x.name).join(' + ') || a.name)}</b>
+    return `<div class="sk ${g.index === c.main_group ? 'main' : ''}"><div class="top">${a && a.art ? `<img src="${artSrc(a.art)}" alt="">` : a ? `<img src="${artFind(a.name, '', 'skill')}" onerror="this.remove()" alt="">` : ''}<div><b>${esc(act.map(x => x.name).join(' + ') || a.name)}</b>
       <div class="small muted">level ${esc(a.level)}${a.type === 'spirit' ? ' · spirit' : ''}${g.dps ? ' · ' + g.dps.toLocaleString() + ' DPS' : ''}</div></div></div>
       ${sup.length ? `<div class="sup">${sup.map(x => `<span class="${x.lineage ? 'lin' : ''}">${esc(x.name)}</span>`).join(' · ')}</div>` : ''}</div>`;
   }).join('');
@@ -1056,7 +1063,7 @@ async function loadFarm() {
   $('#farmsub').innerHTML = `League mechanics ranked by what their loot is worth and how much of it actually sells (${esc(r.league)}, live poe.ninja). Click a row for its top drops and tablets.`;
   const rar = { common: '#3fa34d', uncommon: '#4b8fd6', rare: '#e3b341', chase: '#C8283C' };
   const tag = x => `<span class="pill" style="border-color:${rar[x.rarity]};color:${rar[x.rarity]}">${x.rarity}</span>`;
-  const itemRow = x => `<div class="ls-node">${ic(x.icon, 26)}<div style="flex:1">${esc(x.name)} ${tag(x)}<div class="small muted">${esc(x.how_often)}</div></div><div class="num">${P(x.value_div, x.name)}</div></div>`;
+  const itemRow = x => `<div class="ls-node">${ic(x.icon, 26, x.name)}<div style="flex:1">${esc(x.name)} ${tag(x)}<div class="small muted">${esc(x.how_often)}</div></div><div class="num">${P(x.value_div, x.name)}</div></div>`;
   $('#farmlist').innerHTML = r.mechanics.map((m, i) => `<div class="farm-row" data-fi="${i}"><div class="farm-rank">${i + 1}</div>
       <div><b>${esc(m.mechanic)}</b> <span class="small muted">${m.farmable_units_day.toLocaleString()} drops/day${m.chase.length ? ` · ${m.chase.length} chase` : ''}${m.also ? ' · + uniques' : ''}</span>${m.est_map ? `<div class="small" style="color:#e3b341">est. ~${P(m.est_map.value_div)} per map <span class="muted">(${esc(m.est_map.confidence)}, ${esc(String(m.est_map.sample || 'n?'))})</span></div>` : ''}<div class="farm-bar" style="width:${Math.max(4, m.score / top * 100)}%"></div></div>
       <div class="num">${P(m.avg_drop_div)}</div><div class="num">${m.best_real ? `${P(m.best_real.value_div, m.best_real.name)}<div class="small muted">${esc(m.best_real.name)}</div>` : '–'}</div><div class="num hide-s">${P(m.liquidity_div_per_day)}</div><div class="num hide-s">${m.trend_6h_pct == null ? '<span class="muted small">–</span>' : pct(m.trend_6h_pct)} · ${m.trend_24h_pct == null ? '<span class="muted small">soon</span>' : pct(m.trend_24h_pct)}</div></div>
@@ -1065,7 +1072,7 @@ async function loadFarm() {
       ${m.estimates.length ? `<div style="grid-column:1/-1"><div class="small muted">Tracked runs people published (anecdotal: only GGG knows real drop rates), priced today</div>${m.estimates.map(e => `<div class="ls-node"><div style="flex:1"><b>${P(e.value_div)}</b> ${esc(e.unit)} <span class="pill">${esc(e.confidence)}</span> <span class="small muted">${esc(String(e.sample || 'sample unknown'))} · ${esc(e.patch || '')}</span>
         <div class="small muted">${esc(e.conditions)}</div><div class="small">${e.items.slice(0, 5).map(i => `${esc(i.item)} ×${+(+i.rate).toPrecision(3)}`).join(' · ')}</div></div>${e.source ? `<a class="small" href="${esc(e.source)}" target="_blank" rel="noopener">source ↗</a>` : ''}</div>`).join('')}</div>` : ''}
       <div><div class="small muted">Chase drops (don't count on these)</div>${m.chase.length ? m.chase.map(itemRow).join('') : '<div class="muted small">None.</div>'}
-      <div class="small muted" style="margin-top:10px">Tablets for it</div>${m.tablets.length ? m.tablets.map(t => `<div class="ls-node">${ic(t.icon, 26)}<div style="flex:1">${esc(t.name)}</div><div class="num">${P(t.value_div)}</div></div>`).join('') : '<div class="muted small">No tablets priced for this one.</div>'}</div></div></div>`).join('');
+      <div class="small muted" style="margin-top:10px">Tablets for it</div>${m.tablets.length ? m.tablets.map(t => `<div class="ls-node">${ic(t.icon, 26, t.name)}<div style="flex:1">${esc(t.name)}</div><div class="num">${P(t.value_div)}</div></div>`).join('') : '<div class="muted small">No tablets priced for this one.</div>'}</div></div></div>`).join('');
   $('#farmnote').innerHTML = r.notes.map(esc).join('<br>') + `<br>Price history so far: ${r.history_hours} h.`;
 }
 document.addEventListener('click', e => { const row = e.target.closest('.farm-row[data-fi]'); if (row) $('#fd' + row.dataset.fi).classList.toggle('on'); });
@@ -1106,7 +1113,7 @@ $('#lsgo').onclick = async () => {
       <div class="card"><h2>Skills to cut</h2><div class="sub">★ = in your target build (cut these as their tier drops). Then the best matches for it. Tier = uncut gem level needed.</div>
         <table>${r.skills.map(g => `<tr><td>${g.yours ? '★ ' : ''}<b>${esc(g.name)}</b> <span class="small muted">${esc(g.type)}</span><div class="small muted">${g.tags.map(esc).join(', ')}</div></td><td class="num small">tier ${g.tier}</td></tr>`).join('')}</table></div>
       <div class="card"><h2>Cheap leveling uniques</h2><div class="sub">Under ${P(+$('#lsbudget').value || 0.05)}, usable by a ${esc(r.class)}, by level.</div>
-        <table>${r.leveling_uniques.map(u => `<tr><td>${ic(u.icon, 26)}<b>${esc(u.name)}</b> <span class="small muted">${esc(u.base || '')}</span><div class="small muted">${u.mods.slice(0, 2).map(esc).join(' · ')}</div></td><td class="num small">${u.level ? 'lvl ' + u.level : 'any lvl'}</td><td class="num">${P(u.value_div)}</td></tr>`).join('')}</table></div>
+        <table>${r.leveling_uniques.map(u => `<tr><td>${ic(u.icon, 26, u.name, u.base, 'unique')}<b>${esc(u.name)}</b> <span class="small muted">${esc(u.base || '')}</span><div class="small muted">${u.mods.slice(0, 2).map(esc).join(' · ')}</div></td><td class="num small">${u.level ? 'lvl ' + u.level : 'any lvl'}</td><td class="num">${P(u.value_div)}</td></tr>`).join('')}</table></div>
     </div>
     <div class="grid2">${ascs}</div>
     <div class="card"><h2>Campaign rewards</h2><div class="sub">Permanent buffs and passive points per act (from Path of Building).</div>${acts}</div>
@@ -1244,7 +1251,7 @@ function drawMarket() {
   const q = ($('#mhq').value || '').toLowerCase();
   const rows = (MH.items || []).filter(x => !q || x.item.toLowerCase().includes(q));
   $('#mhtable').innerHTML = rows.length ? `<table class="mh-table"><tr class="small muted"><td>Item</td><td class="num">Price</td><td class="num hide-s">Stock</td><td class="num hide-s">Traded 24 h</td><td>History</td><td class="num">Change</td></tr>${rows.map(x =>
-    `<tr><td>${ic(x.icon, 26)}<b>${esc(x.item)}</b></td><td class="num">${P(x.price_div, x.item)}</td><td class="num hide-s">${x.stock == null ? '–' : x.stock >= 1000 ? (x.stock / 1000).toFixed(1) + 'K' : Math.round(x.stock)}</td>
+    `<tr><td>${ic(x.icon, 26, x.item)}<b>${esc(x.item)}</b></td><td class="num">${P(x.price_div, x.item)}</td><td class="num hide-s">${x.stock == null ? '–' : x.stock >= 1000 ? (x.stock / 1000).toFixed(1) + 'K' : Math.round(x.stock)}</td>
      <td class="num hide-s">${x.traded_24h >= 1000 ? (x.traded_24h / 1000).toFixed(1) + 'K' : x.traded_24h}</td><td>${spark(x.spark, x.change_pct == null ? null : x.change_pct >= 0)}</td><td class="num">${x.change_pct == null ? '' : pct(x.change_pct)}</td></tr>`).join('')}</table>`
     : '<div class="muted small">Nothing here yet.</div>';
 }
@@ -1337,7 +1344,7 @@ const VIEWS = {
         ${(u.mods||[]).map(m => { const t = /^T(\d+)/.exec(m); return `<div class="small ${tierClass(t ? +t[1] : null)}">${esc(m)}</div>`; }).join('')}</div>`).join('') || '<div class="muted">None</div>'}</div>`;
   },
   upgrades(d) {
-    const row = c => `<tr><td><div style="display:flex;align-items:center">${ic(c.icon)}<div>${esc(c.item)}${c.slot?`<div class="small muted">${esc(c.slot)}${c.replaces?' · replaces '+esc(c.replaces):''}</div>`:''}</div></div></td><td class="num"><b>${esc(P(c.price_div, c.item))}</b></td><td class="num">${pct(c.dps_pct)} DPS</td><td class="num">${c.life_es_change>=0?'+':''}${c.life_es_change} life/ES</td><td class="num">${pct(c.lowest_max_hit_pct)} min hit</td></tr>`;
+    const row = c => `<tr><td><div style="display:flex;align-items:center">${ic(c.icon, 30, c.item)}<div>${esc(c.item)}${c.slot?`<div class="small muted">${esc(c.slot)}${c.replaces?' · replaces '+esc(c.replaces):''}</div>`:''}</div></div></td><td class="num"><b>${esc(P(c.price_div, c.item))}</b></td><td class="num">${pct(c.dps_pct)} DPS</td><td class="num">${c.life_es_change>=0?'+':''}${c.life_es_change} life/ES</td><td class="num">${pct(c.lowest_max_hit_pct)} min hit</td></tr>`;
     return `<div class="card"><h2>${esc(d.build)}: upgrade finder</h2><div class="sub">${esc(d.uniques_considered)} uniques tried in every slot · budget ${esc(d.budget)} · baseline ${Math.round(d.baseline.dps).toLocaleString()} DPS, ${d.baseline['life+es']} life+ES</div>
       <h2 style="font-size:13px;margin-top:8px">Biggest damage upgrades</h2><table>${(d.biggest_damage_upgrades||[]).map(row).join('')}</table>
       <h2 style="font-size:13px;margin-top:14px">Best damage per divine</h2><table>${(d.best_value_damage_upgrades||[]).map(row).join('')}</table></div>

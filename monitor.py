@@ -620,6 +620,25 @@ class Handler(http.server.BaseHTTPRequestHandler):
             st = overlaysrv.wait(int(q.get('after', ['0'])[0] or 0))
             st['page'] = os.path.getmtime(os.path.join(HERE, 'dashboard', 'overlay.html'))   # page reloads on change
             return self._send(200, json.dumps(st, default=str).encode('utf-8'), 'application/json')
+        if u.path == '/artfind':   # game-art picture by name: ?n=<name>&b=<base>&k=unique|skill|base (any kind if no k)
+            from poe2kit import art
+            q = {k: v[0] for k, v in urllib.parse.parse_qs(u.query).items()}
+            n, b, k = q.get('n', ''), q.get('b', ''), q.get('k', '')
+            rel = None
+            for kind in ([k] if k else ['unique', 'skill', 'base']):
+                rel = rel or art.find(kind, n)
+            rel = rel or (art.find('base', b) if b else None) or (art.for_item(n, b, 'UNIQUE') if n else None)
+            fp = art.file_for(rel) if rel else None
+            if not fp:
+                return self._send(404, b'', 'text/plain')
+            with open(fp, 'rb') as f:
+                body = f.read()
+            self.send_response(200)
+            self.send_header('Content-Type', 'image/png')
+            self.send_header('Cache-Control', 'max-age=604800')
+            self.end_headers()
+            self.wfile.write(body)
+            return
         if u.path.startswith('/art/'):
             from poe2kit import art
             fp = art.file_for(urllib.parse.unquote(u.path[5:]))
