@@ -211,3 +211,36 @@ def quest_reminders():
             out.append({'act': q.get('Act'), 'area': q.get('Area'), 'level': q.get('AreaLevel'), 'who': q.get('Info'),
                         'reward': st, 'points': q.get('questPoints') or 0})
     return out
+
+
+# ---------------- weapon-set points ----------------
+
+OFFENCE = ('damage', 'critical', 'cast speed', 'attack speed', 'penetrat', 'spell', 'projectile', 'area of effect',
+           'skill effect duration', 'lightning', 'fire', 'cold', 'chaos', 'minion')
+DEFENCE = ('life', 'mana', 'energy shield', 'resist', 'armour', 'evasion', 'block', 'attribute', 'strength',
+           'dexterity', 'intelligence', 'stun', 'recovery', 'regenerat', 'movement speed', 'spirit')
+
+
+def _offensive(node):
+    text = ' '.join((node or {}).get('s') or []).lower()
+    if not text or any(w in text for w in DEFENCE):
+        return False
+    return any(w in text for w in OFFENCE)
+
+
+def weapon_set_nodes(order_list, level_list, version='0_5'):
+    """Which planned passives to buy with the quest points (PoE 2 gives them as Weapon Set points: a passive bought
+    with one only works while that weapon set is in use). Damage nodes go on Weapon Set I, so the always-on defence
+    (life, resistances, attributes) stays on normal points. Each quest's 2 points go to the first damage nodes due
+    at or after that quest's level. Returns {node: quest label}."""
+    nodes, _, _ = _tree(version)
+    out, used = {}, set()
+    for q in sorted(quest_reminders(), key=lambda q: q.get('level') or 0):
+        for _ in range(int(q.get('points') or 0)):
+            pick = next((n for n, lv in zip(order_list, level_list)
+                         if n not in used and lv >= (q.get('level') or 0) and _offensive(nodes.get(n))), None)
+            if pick is None:
+                break
+            used.add(pick)
+            out[pick] = f"Act {q['act']} {q['area']}"
+    return out

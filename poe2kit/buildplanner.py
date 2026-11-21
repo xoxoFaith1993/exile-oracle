@@ -168,10 +168,17 @@ def make(con, build_id=None, pob_code=None, notes=None, name=None, include_gear=
             p['level_interval'] = [max(1, lvl - ahead), 100]
             p['additional_text'] = tag + ('\n' + p['additional_text'] if p.get('additional_text') else '')
             return p
-        for num, lvl in zip(main, route.levels(len(main))):
+        lv_list = route.levels(len(main))
+        ws = route.weapon_set_nodes(main, lv_list, active.get('treeVersion') or '0_5')
+        for num, lvl in zip(main, lv_list):
             p = passive(num, [1, 100])
             if p:
-                passives.append(due(p, lvl, f"<grey>{{Take at level {lvl}}}"))
+                tag = f"<grey>{{Take at level {lvl}}}"
+                if num in ws:   # quest points come as Weapon Set points: damage nodes go on Weapon Set I
+                    p['weapon_set'] = 1
+                    tag += f"\n<orange>{{Use a Weapon Set I point ({ws[num]} quest)}}"
+                passives.append(due(p, lvl, tag))
+        report['weapon_set_nodes'] = len(ws)
         trials = ['1st', '2nd', '3rd', '4th']
         for i, (num, lvl) in enumerate(zip(asc_nodes, route.asc_levels(len(asc_nodes)))):
             p = passive(num, [1, 100])
