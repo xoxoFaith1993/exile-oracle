@@ -204,7 +204,7 @@ def setting_up():
     wait = []
     if not os.path.exists(os.path.join(config.DATA_DIR, 'repoe', 'base_items.min.json')):
         wait.append('game data')
-    if not os.path.exists(os.path.join(config.POB_DIR, 'manifest.xml')) or not os.path.exists(pob.HOST):
+    if not pob.ready():
         wait.append('Path of Building')
     return wait
 

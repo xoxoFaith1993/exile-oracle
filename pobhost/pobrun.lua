@@ -2,7 +2,7 @@
 -- Run by poblua.exe with the working directory = <pob>\src. Env: POB_RUNTIME, POB_IN (xml), POB_OUT (json).
 local RUNTIME = os.getenv("POB_RUNTIME")
 package.path = RUNTIME .. "/lua/?.lua;" .. RUNTIME .. "/lua/?/init.lua;" .. package.path
-package.cpath = RUNTIME .. "/?.dll;" .. package.cpath
+package.cpath = (os.getenv("POB_CPATH") or (RUNTIME .. "/?.dll")) .. ";" .. package.cpath  -- Linux: .so add-ons
 
 arg = arg or {}  -- PoB's Main.lua reads the command-line table
 -- PoB prints a lot while loading; results go to POB_OUT, not stdout.

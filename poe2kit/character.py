@@ -23,10 +23,7 @@ def _dump_tree(version):
     raw = os.path.join(TREE_DIR, f'raw_{version}.json')
     if not os.path.exists(raw):
         os.makedirs(TREE_DIR, exist_ok=True)
-        env = dict(os.environ, POB_RUNTIME=os.path.join(pob.POB, 'runtime'), TREE_VERSION=version, POB_OUT=raw)
-        p = subprocess.run([os.path.abspath(pob.HOST), os.path.join(pob.POB, 'runtime'),
-                            os.path.join(config.ROOT, 'pobhost', 'treedump.lua')],
-                           cwd=os.path.join(pob.POB, 'src'), env=env, capture_output=True, text=True, timeout=300)
+        p = pob.run(os.path.join(config.ROOT, 'pobhost', 'treedump.lua'), {'TREE_VERSION': version, 'POB_OUT': raw})
         if p.returncode != 0 or not os.path.exists(raw):
             raise RuntimeError('tree dump failed: ' + (p.stderr or p.stdout)[-400:])
     with open(raw, encoding='utf-8') as f:

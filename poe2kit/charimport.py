@@ -51,12 +51,9 @@ def _run(mode, char=None):
     if allow_refresh and exp < time.time() + 60:  # a renewal will rewrite PoB's settings: keep a backup
         shutil.copy2(SETTINGS, os.path.join(config.DATA_DIR, 'pob-settings-backup.xml'))
     try:
-        env = dict(os.environ, POB_RUNTIME=os.path.join(pob.POB, 'runtime'), POB_USERPATH=USERPATH.replace('\\', '/'),
-                   POB_OUT=outp, POB_MODE=mode, POB_CHAR=char or '', POB_ALLOW_REFRESH='1' if allow_refresh else '0',
-                   TEMP=tmp, TMP=tmp)
-        p = subprocess.run([os.path.abspath(pob.HOST), os.path.join(pob.POB, 'runtime'), SCRIPT],
-                           cwd=os.path.join(pob.POB, 'src'), env=env, capture_output=True, text=True,
-                           timeout=180, stdin=subprocess.DEVNULL)
+        env = dict(POB_USERPATH=USERPATH.replace('\\', '/'), POB_OUT=outp, POB_MODE=mode, POB_CHAR=char or '',
+                   POB_ALLOW_REFRESH='1' if allow_refresh else '0', TEMP=tmp, TMP=tmp, TMPDIR=tmp)
+        p = pob.run(SCRIPT, env, timeout=180)
         if not os.path.exists(outp):
             tail = (p.stderr or p.stdout or '').strip().splitlines()[-4:]
             return {'ok': False, 'error': 'headless PoB failed: ' + ' | '.join(tail)}

@@ -133,6 +133,7 @@ settings.json
 *.zip
 release/private_patterns.txt
 gameart/
+/linux/
 '''
 
 

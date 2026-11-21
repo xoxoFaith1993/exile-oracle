@@ -4,7 +4,7 @@
 --      POB_MODE = "list" | "import", POB_CHAR (character name for import), POB_ALLOW_REFRESH = "1"/"0".
 local RUNTIME = os.getenv("POB_RUNTIME")
 package.path = RUNTIME .. "/lua/?.lua;" .. RUNTIME .. "/lua/?/init.lua;" .. package.path
-package.cpath = RUNTIME .. "/?.dll;" .. package.cpath
+package.cpath = (os.getenv("POB_CPATH") or (RUNTIME .. "/?.dll")) .. ";" .. package.cpath  -- Linux: .so add-ons
 arg = arg or {}
 dofile("HeadlessWrapper.lua")
 if not newBuild then error("PoB failed to start") end
@@ -21,7 +21,7 @@ end
 function launch:DownloadPage(url, callback, params)
 	params = params or {}
 	-- HeadlessWrapper blocks require("lcurl.safe"), so load PoB's own lcurl.dll directly
-	CURL = CURL or assert(package.loadlib(RUNTIME .. "/lcurl.dll", "luaopen_lcurl_safe"))()
+	CURL = CURL or assert(package.loadlib(os.getenv("POB_LCURL") or (RUNTIME .. "/lcurl.dll"), "luaopen_lcurl_safe"))()
 	local curl = CURL
 	local easy = curl.easy()
 	local responseHeader, responseBody = "", ""

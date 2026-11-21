@@ -1,9 +1,12 @@
 """Headless Path of Building: real DPS / defence numbers for any build, cached by content hash.
-Runs PoB's own LuaJIT through F:\\PoE2Toolkit\\tools\\poblua.exe (see pobhost\\)."""
+Windows: PoB's own LuaJIT through HOME\\tools\\poblua.exe (see pobhost\\).
+Linux: LuaJIT runs the same scripts directly, with lua-utf8 and lcurl built for Linux (the app's linux\\ folder,
+built by GitHub Actions; a system `luajit` works too)."""
 
 import hashlib
 import json
 import os
+import shutil
 import subprocess
 import tempfile
 
@@ -11,8 +14,41 @@ from . import config, vault
 
 POB = config.POB_DIR
 HOST = os.path.join(config.TOOLS_DIR, 'poblua.exe')
+LINUX_RT = os.path.join(config.ROOT, 'linux')   # bin/luajit + lib/lua-utf8.so, lib/lcurl.so
 SCRIPT = os.path.join(config.ROOT, 'pobhost', 'pobrun.lua')
 CACHE = os.path.join(config.DATA_DIR, 'pob-cache')
+
+
+def runner():
+    """(command prefix, extra environment) that runs one of our pobhost scripts, or None if nothing can."""
+    if os.name == 'nt':
+        return ([os.path.abspath(HOST), os.path.join(POB, 'runtime')], {}) if os.path.exists(HOST) else None
+    exe = os.path.join(LINUX_RT, 'bin', 'luajit')
+    exe = exe if os.access(exe, os.X_OK) else shutil.which('luajit')
+    if not exe:
+        return None
+    lib = os.path.join(LINUX_RT, 'lib')
+    env = {}
+    if os.path.isdir(lib):
+        env['POB_CPATH'] = os.path.join(lib, '?.so')
+        env['POB_LCURL'] = os.path.join(lib, 'lcurl.so')
+    return [exe], env
+
+
+def ready():
+    return os.path.exists(os.path.join(POB, 'manifest.xml')) and runner() is not None
+
+
+def run(script, env=None, timeout=300):
+    """Run a pobhost script inside PoB's src folder. Returns the CompletedProcess."""
+    r = runner()
+    if not r:
+        raise FileNotFoundError('no Lua runtime for Path of Building (Windows: tools\\poblua.exe; Linux: linux/bin/luajit)')
+    cmd, extra = r
+    e = dict(os.environ, POB_RUNTIME=os.path.join(POB, 'runtime'), **extra, **(env or {}))
+    e.pop('CI', None)   # PoB skips its mod cache when CI is set (its own test mode): slow and not what we want
+    return subprocess.run(cmd + [script], cwd=os.path.join(POB, 'src'), env=e, capture_output=True, text=True,
+                          encoding='utf-8', errors='replace', timeout=timeout, stdin=subprocess.DEVNULL)
 
 # The numbers people actually compare, in a sensible order (PoB mainOutput keys).
 KEY_STATS = [
@@ -53,12 +89,10 @@ def calc(xml_text, use_cache=True, timeout=300, main_group=None):
     try:
         with open(xml_path, 'w', encoding='utf-8') as f:
             f.write(xml_text)
-        env = dict(os.environ, POB_RUNTIME=os.path.join(POB, 'runtime'), POB_IN=xml_path, POB_OUT=out_path,
-                   TEMP=tmp, TMP=tmp)
+        env = dict(POB_IN=xml_path, POB_OUT=out_path, TEMP=tmp, TMP=tmp, TMPDIR=tmp)
         if main_group is not None:
             env['POB_MAIN_GROUP'] = str(int(main_group))
-        p = subprocess.run([os.path.abspath(HOST), os.path.join(POB, 'runtime'), SCRIPT], cwd=os.path.join(POB, 'src'),
-                           env=env, capture_output=True, text=True, timeout=timeout, stdin=subprocess.DEVNULL)
+        p = run(SCRIPT, env, timeout)
         if p.returncode != 0 or not os.path.exists(out_path):
             tail = (p.stderr or p.stdout or '').strip().splitlines()[-6:]
             raise RuntimeError('PoB failed: ' + ' | '.join(tail))

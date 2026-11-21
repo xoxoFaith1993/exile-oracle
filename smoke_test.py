@@ -59,7 +59,7 @@ def get(url, timeout=30):
         return r.status, r.read()
 
 
-def monitor():
+def monitor(strict=False):
     import launcher
     t0 = time.time()
     launcher.main(['--background'])
@@ -84,7 +84,7 @@ def monitor():
                     j = json.loads(body)
                 except ValueError:
                     j = {}
-                if e.code == 503 and j.get('setup'):   # first-start downloads still running: an honest answer
+                if e.code == 503 and j.get('setup') and not strict:   # first-start downloads still running
                     check(True, f'/api/{v} (waits for {", ".join(j["waiting_for"])})')
                 else:
                     check(False, f'/api/{v}: {e.code} {body[:400].decode("utf-8", "replace")}')
@@ -119,11 +119,46 @@ def mcp():
         p.kill()
 
 
+MINI_BUILD = ('<PathOfBuilding2><Build level="90" className="Witch" ascendClassName="None"/><Skills/>'
+              '<Tree activeSpec="1"><Spec treeVersion="0_3" classId="3" ascendClassId="0" nodes=""/></Tree>'
+              '<Items/><Config/></PathOfBuilding2>')   # an empty level-90 character: life comes from level alone
+
+
+def pob_part():
+    """--pob: download Path of Building + game data like a first start does, then run real PoB work through
+    this platform's Lua runtime and check the views that waited for it."""
+    from poe2kit import bootstrap, db, gamedata, leagueplan, pob
+    con = db.connect()
+    t0 = time.time()
+    got = bootstrap.run(con)
+    check(pob.ready(), f'Path of Building set up: {got} ({time.time() - t0:.0f} s)')
+    gamedata.update(max_age_days=3)
+    check(True, 'game data downloaded')
+    if not pob.ready():
+        return
+    t0 = time.time()
+    try:
+        r = pob.calc(MINI_BUILD, use_cache=False)
+        check(r.get('level') == 90 and (r['output'].get('Life') or 0) > 500,
+              f'PoB calculation: level {r.get("level")} {r.get("class")}, life {r["output"].get("Life")} '
+              f'({time.time() - t0:.1f} s)')
+    except Exception as e:
+        check(False, f'PoB calculation: {e}')
+    try:
+        cl = leagueplan.classes()
+        check(any(c['name'] == 'Witch' for c in cl), f'passive tree read through PoB: {len(cl)} classes')
+    except Exception as e:
+        check(False, f'passive tree: {e}')
+    monitor(strict=True)
+
+
 if __name__ == '__main__':
     print('python', sys.version.split()[0], 'on', sys.platform, '| home', os.environ['POE2KIT_HOME'])
     compile_all()
     detection()
     monitor()
     mcp()
+    if '--pob' in sys.argv:
+        pob_part()
     print(f'\n{len(fails)} failed' if fails else '\nall passed')
     sys.exit(1 if fails else 0)

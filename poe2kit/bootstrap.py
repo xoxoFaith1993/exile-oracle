@@ -21,7 +21,7 @@ POB_ZIP = 'https://codeload.github.com/PathOfBuildingCommunity/PathOfBuilding-Po
 
 def state(con):
     return {'pob': os.path.exists(os.path.join(config.POB_DIR, 'manifest.xml')),
-            'poblua': os.path.exists(os.path.join(config.TOOLS_DIR, 'poblua.exe')),
+            'poblua': __import__('poe2kit.pob', fromlist=['pob']).runner() is not None,   # Linux: LuaJIT
             'progress': db.kv_get(con, 'bootstrap_progress', '')}
 
 

@@ -54,11 +54,9 @@ def _run_batch(xml_text, slots, names, main_group):
             f.write(xml_text)
         with open(paths['jobs.json'], 'w', encoding='utf-8') as f:
             json.dump({'main_group': main_group, 'slots': slots, 'names': names}, f)
-        env = dict(os.environ, POB_RUNTIME=os.path.join(pob.POB, 'runtime'), POB_IN=paths['in.xml'],
-                   POB_JOBS=paths['jobs.json'], POB_OUT=paths['out.json'], TEMP=tmp, TMP=tmp)
-        p = subprocess.run([os.path.abspath(pob.HOST), os.path.join(pob.POB, 'runtime'), BATCH],
-                           cwd=os.path.join(pob.POB, 'src'), env=env, capture_output=True, text=True,
-                           timeout=1800, stdin=subprocess.DEVNULL)
+        env = dict(POB_IN=paths['in.xml'], POB_JOBS=paths['jobs.json'], POB_OUT=paths['out.json'],
+                   TEMP=tmp, TMP=tmp, TMPDIR=tmp)
+        p = pob.run(BATCH, env, timeout=1800)
         if p.returncode != 0 or not os.path.exists(paths['out.json']):
             raise RuntimeError('PoB batch failed: ' + ' | '.join((p.stderr or p.stdout).strip().splitlines()[-6:]))
         with open(paths['out.json'], encoding='utf-8') as f:

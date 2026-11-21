@@ -1,30 +1,51 @@
 name: Smoke test
 
-# Starts the toolkit in a fresh folder on Linux and Windows and checks every dashboard view and the Claude tools.
+# Builds the Linux Lua runtime for Path of Building, then starts the toolkit in a fresh folder on Linux and Windows:
+# every dashboard view, the Claude tools, and real Path of Building work (download, calculation, passive tree).
 on:
   push:
   pull_request:
   workflow_dispatch:
 
 jobs:
+  linux-runtime:
+    # oldest supported Ubuntu = oldest glibc, so the files also run on older distros and the Steam Deck
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq libcurl4-openssl-dev
+      - run: sh tools/build_linux_runtime.sh linux
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-runtime
+          path: linux/
+
   smoke:
+    needs: linux-runtime
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
         python: ['3.12', '3.x']
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
+      - uses: actions/download-artifact@v4
+        if: runner.os == 'Linux'
+        with:
+          name: linux-runtime
+          path: linux/
+      - if: runner.os == 'Linux'
+        run: chmod +x linux/bin/luajit
       - name: Smoke test
         env:
           POE2KIT_HOME: ${{ runner.temp }}/poe2kit-home
-        run: python smoke_test.py
+        run: python smoke_test.py --pob
       - name: Monitor log
         if: always()
         shell: bash
-        run: cat "${{ runner.temp }}/poe2kit-home/logs/monitor.log" || true
+        run: tail -50 "${{ runner.temp }}/poe2kit-home/logs/monitor.log" || true

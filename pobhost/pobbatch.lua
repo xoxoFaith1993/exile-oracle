@@ -3,7 +3,7 @@
 -- Env: POB_RUNTIME, POB_IN (build xml), POB_JOBS (json: {main_group=?, slots={...}, names={...}}), POB_OUT.
 local RUNTIME = os.getenv("POB_RUNTIME")
 package.path = RUNTIME .. "/lua/?.lua;" .. RUNTIME .. "/lua/?/init.lua;" .. package.path
-package.cpath = RUNTIME .. "/?.dll;" .. package.cpath
+package.cpath = (os.getenv("POB_CPATH") or (RUNTIME .. "/?.dll")) .. ";" .. package.cpath  -- Linux: .so add-ons
 arg = arg or {}
 dofile("HeadlessWrapper.lua")
 if not loadBuildFromXML then
