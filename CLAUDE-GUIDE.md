@@ -67,6 +67,8 @@ for 15 minutes).
 - In game, the **route panel** follows your zone by itself (Ctrl+Alt+R hides it).
 
 **My character**
+- Paste any build into the vault on the Builds page (a Path of Building code or a pobb.in / pastebin / poe.ninja link),
+  then ask about it by name.
 - "Import my character Bob_the_Witch and show it on the dashboard."
 - "How close am I to the top 1% of my ascendancy? What closes the gap fastest?"
 - "Find me upgrades under 5 divines, best DPS per divine first."

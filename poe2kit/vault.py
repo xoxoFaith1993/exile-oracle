@@ -145,3 +145,78 @@ def get(con, build_id):
         return None
     s = summarize(decode(r['pob_code']))
     return dict(r) | {'summary': s}
+
+
+# ---------------- paste a build / delete one (the author, 2026-11-21) ----------------
+
+PASTE_SITES = {   # build-sharing sites with a plain-text Path of Building code page
+    'pobb.in': lambda path: f'https://pobb.in/{path}/raw',
+    'pastebin.com': lambda path: f'https://pastebin.com/raw/{path.split("/")[-1]}',
+}
+
+
+def _fetch_code(url):
+    import urllib.parse
+    import urllib.request
+    u = urllib.parse.urlparse(url.strip())
+    host = (u.hostname or '').lower().removeprefix('www.')
+    path = u.path.strip('/')
+    if u.scheme not in ('http', 'https') or host not in PASTE_SITES or not re.fullmatch(r'(raw/)?[A-Za-z0-9_-]{3,40}', path):
+        return None
+    path = path.removeprefix('raw/')
+    req = urllib.request.Request(PASTE_SITES[host](path), headers={'User-Agent': config.user_agent()})
+    with urllib.request.urlopen(req, timeout=20) as r:
+        return r.read(2_000_000).decode('utf-8', errors='replace').strip()
+
+
+def from_paste(con, text, label=None, mine=False):
+    """Pasted text -> a vault build. Accepts a Path of Building code, or a link to it on pobb.in / pastebin.
+    A poe.ninja character link opens that character's page in Exile Oracle's own window (with its "Save this build"
+    button: the one page the player asked for, no poe.ninja builds API). Returns {'ok', 'id' | 'open_ninja' | 'why'}."""
+    text = (text or '').strip()
+    if not text:
+        return {'ok': False, 'why': 'Paste a Path of Building code or a build link first.'}
+    m = re.match(r'https?://(?:www\.)?poe\.ninja/poe2/builds/([a-z0-9]+)/character/([^/?#\s]+)/([^/?#\s]+)', text)
+    if m:
+        return {'ok': True, 'open_ninja': {'slug': m.group(1), 'path': f'{m.group(2)}/{m.group(3)}'}}
+    source = None
+    if text.lower().startswith(('http://', 'https://')):
+        try:
+            code = _fetch_code(text)
+        except Exception as e:
+            return {'ok': False, 'why': f'Could not read that link ({e}).'}
+        if code is None:
+            return {'ok': False, 'why': 'That site isn\'t supported. Paste the Path of Building code itself (in Path of '
+                                       'Building: Import/Export → Generate → Copy), or a pobb.in / pastebin / poe.ninja link.'}
+        source, text = text, code
+    code = re.sub(r'\s+', '', text)
+    try:
+        s = summarize(decode(code))
+    except Exception:
+        return {'ok': False, 'why': 'That isn\'t a Path of Building code (it should be one long line of letters and numbers).'}
+    old = con.execute('SELECT id FROM build WHERE pob_code=?', (code,)).fetchone()
+    if old:
+        return {'ok': True, 'id': old['id'], 'already': True}
+    name = (label or '').strip()[:80] or f"{s.get('ascendancy') or s.get('class') or 'Build'} · {s.get('main_skill') or '?'} (pasted)"
+    bid, s = add(con, code, name, owner='me' if mine else 'pasted', source_url=source,
+                 notes='pasted on the Builds page' + (f' from {source}' if source else ''))
+    return {'ok': True, 'id': bid, 'label': name, 'ascendancy': s.get('ascendancy'), 'level': s.get('level'),
+            'main_skill': s.get('main_skill')}
+
+
+def delete(con, build_id):
+    """Remove a build from the vault and what was kept for it (Build Lab cards / curves, its in-game plan). The
+    in-game Build Planner file the game reads is left alone (that's in the game's own folder)."""
+    bid = int(build_id)
+    row = con.execute('SELECT label FROM build WHERE id=?', (bid,)).fetchone()
+    if not row:
+        return {'ok': False, 'why': 'No such build.'}
+    con.execute('DELETE FROM build WHERE id=?', (bid,))
+    for k in (f'lab:cards:{bid}', f'planner:{bid}'):
+        con.execute('DELETE FROM kv WHERE k=?', (k,))
+    con.execute('DELETE FROM kv WHERE k LIKE ?', (f'lab:curves:{bid}:%',))
+    con.commit()
+    s = config.settings()
+    if str(s.get('active_build') or '') == str(bid):
+        config.save_settings({'active_build': None})
+    return {'ok': True, 'deleted': bid, 'label': row['label']}

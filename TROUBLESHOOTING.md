@@ -128,6 +128,13 @@ by itself.
 - Game log not found: the doctor shows the folder it looked in. Steam, Flatpak Steam and SD-card libraries are
   searched; the game folder can also be set in Settings. The in-game Build Planner folder is found in the game's Proton prefix in any of those libraries.
 
+## Build Vault: paste / delete
+| Problem | Check | Fix |
+|---|---|---|
+| "isn't a Path of Building code" | the paste is one long line from PoB (Import/Export → Generate → Copy) | copy it again; links work for pobb.in, pastebin and poe.ninja only |
+| A poe.ninja link only opened a window | that's by design (no poe.ninja builds API) | press "Save this build to my vault" in that window |
+| Deleted the wrong build | it's gone from the vault (its Build Lab cards too) | paste its code again; the in-game Build Planner file is untouched |
+
 ## Alerts and question chips
 | Problem | Check | Fix |
 |---|---|---|

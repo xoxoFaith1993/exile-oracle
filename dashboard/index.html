@@ -506,7 +506,14 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
       <div id="mhtable" style="overflow-x:auto"></div></div>
     <div class="card"><h2>Biggest movers</h2><div class="sub" id="moverssub">Last 24 hours, from the prices the monitor stored.</div><div id="movers"></div></div>
   </section>
-  <section id="builds"><div class="card"><h2>My characters</h2><div class="sub">Live from your account through Path of Building's GGG login, in the background. Only asks GGG when you press a button.</div><button class="btn" id="loadchars">Show my characters</button><div id="mychars"></div></div><div class="card"><h2>Build Vault</h2><div class="sub">Every build saved, kept forever. Ask the Oracle to cost, compare or upgrade any of them.</div><div id="buildlist"></div></div></section>
+  <section id="builds"><div class="card"><h2>My characters</h2><div class="sub">Live from your account through Path of Building's GGG login, in the background. Only asks GGG when you press a button.</div><button class="btn" id="loadchars">Show my characters</button><div id="mychars"></div></div><div class="card"><h2>Build Vault</h2><div class="sub">Every build saved, kept until you delete it. <b>View build</b> (or click a row) opens it on the Character page. Ask the Oracle to cost, compare or upgrade any of them.</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 6px">
+        <input class="crin" id="vpaste" placeholder="Paste a build: a Path of Building code, or a pobb.in / pastebin / poe.ninja link" style="flex:2;min-width:300px">
+        <input class="crin" id="vlabel" placeholder="Name (optional)" style="flex:1;min-width:160px">
+        <label class="small"><input type="checkbox" id="vmine"> my own character</label>
+        <button class="btn" id="vadd">Add to vault</button></div>
+      <div class="small muted" id="vmsg" style="min-height:1.2em"></div>
+      <div id="buildlist"></div></div></section>
   <section id="lab">
     <div class="card"><div class="lab-head"><h2 style="margin:0">Build Lab</h2>
       <select class="crin" id="labbuild" style="min-width:320px"></select><span id="labbadge"></span>
@@ -1840,8 +1847,31 @@ document.addEventListener('click', e => { const c = e.target.closest('.ci[data-q
 // ---------- builds / alerts ----------
 async function loadBuilds() {
   const b = await get('/api/builds');
-  $('#buildlist').innerHTML = !b.length ? '<div class="empty">No builds yet.</div>' : `<table><tr><th>#</th><th>Build</th><th>Ascendancy</th><th class="num">Level</th><th>Main skill</th><th>League</th><th>Whose</th><th>Saved</th></tr>${
-    b.map(x => `<tr class="click" data-build="${x.id}"><td class="muted">${x.id}</td><td><b>${esc(x.label)}</b></td><td>${esc(x.ascendancy)}</td><td class="num">${x.level}</td><td>${esc(x.main_skill)}</td><td class="muted">${esc(x.league)}</td><td class="muted">${esc(x.owner)}</td><td class="muted">${esc(x.added)}</td></tr>`).join('')}</table>`;
+  $('#buildlist').innerHTML = !b.length ? '<div class="empty">No builds yet. Paste one above.</div>' : `<table><tr><th>#</th><th>Build</th><th>Ascendancy</th><th class="num">Level</th><th>Main skill</th><th>League</th><th>Whose</th><th>Saved</th></tr>${
+    b.map(x => `<tr class="click" data-build="${x.id}"><td class="muted">${x.id}</td><td><b>${esc(x.label)}</b>
+      <div style="margin-top:4px;display:flex;gap:6px"><button class="btn" title="Open it on the Character page: gear, skills, passive tree and what it's worth" style="padding:1px 8px;font-size:11px">View build</button><button class="btn vdel" data-id="${x.id}" title="Delete this build from the vault" style="padding:1px 8px;font-size:11px">Delete</button></div></td>
+      <td>${esc(x.ascendancy)}</td><td class="num">${x.level}</td><td>${esc(x.main_skill)}</td><td class="muted">${esc(x.league)}</td><td class="muted">${esc(x.owner)}</td><td class="muted">${esc(x.added)}</td></tr>`).join('')}</table>`;
+  document.querySelectorAll('.vdel').forEach(btn => btn.onclick = async ev => {
+    ev.stopPropagation();   // not "open this build"
+    if (!btn.classList.contains('sure')) {   // first click asks, second click deletes (no pop-up box)
+      btn.classList.add('sure'); btn.textContent = 'Sure? Click again'; btn.style.borderColor = 'var(--accent)';
+      setTimeout(() => { if (btn.isConnected) { btn.classList.remove('sure'); btn.textContent = 'Delete'; btn.style.borderColor = ''; } }, 4000);
+      return;
+    }
+    const r = await post('/api/vault/delete', { id: +btn.dataset.id });
+    $('#vmsg').textContent = r.ok ? `Deleted #${r.deleted} ${r.label}.` : r.why;
+    loadBuilds(); loadActive();
+  });
+  $('#vadd').onclick = async () => {
+    const text = $('#vpaste').value.trim(); if (!text) { $('#vmsg').textContent = 'Paste a build code or link first.'; return; }
+    $('#vmsg').textContent = 'reading the build…';
+    const r = await post('/api/vault/paste', { text, label: $('#vlabel').value, mine: $('#vmine').checked });
+    if (!r.ok) { $('#vmsg').textContent = r.why; return; }
+    if (r.open_ninja) { $('#vmsg').textContent = "Opening that character's poe.ninja page: press \"Save this build to my vault\" there."; return; }
+    $('#vmsg').textContent = r.already ? `Already in the vault as #${r.id}.` : `Added #${r.id}: ${r.label} (${r.ascendancy || '?'} level ${r.level || '?'}, ${r.main_skill || '?'}).`;
+    $('#vpaste').value = ''; $('#vlabel').value = ''; loadBuilds(); loadActive();
+  };
+  $('#vpaste').onkeydown = e => { if (e.key === 'Enter') $('#vadd').click(); };
 }
 const KIND = { patch: 'patch notes', build: 'build', 'price-mine': '★ your item', 'price-market': 'market', digest: 'market digest', oracle: 'Oracle', update: 'update', news: 'news', install: 'install', pob: 'PoB', ggg: 'GGG' };
 const KGROUP = { 'price-mine': 'mine', 'price-market': 'market', digest: 'market', oracle: 'oracle', patch: 'patch', news: 'news' };

@@ -770,6 +770,20 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     data = {'ok': True}
                 finally:
                     c.close()
+            elif u.path in ('/api/vault/paste', '/api/vault/delete'):   # Builds page: paste a build / delete one
+                from poe2kit import vault, db as _db, osutil
+                c = _db.connect()
+                try:
+                    if u.path.endswith('paste'):
+                        data = vault.from_paste(c, str(body.get('text') or '')[:200000], body.get('label'), bool(body.get('mine')))
+                        n = data.get('open_ninja')
+                        if n:   # a poe.ninja character: its page in our own window, with the Save button
+                            osutil.detached([osutil.background_python(), os.path.join(HERE, 'ninja_view.pyw'), n['path'],
+                                             n['slug'], ''], cwd=HERE)
+                    else:
+                        data = vault.delete(c, body.get('id'))
+                finally:
+                    c.close()
             elif u.path == '/api/route/size':
                 from poe2kit import campaign
                 data = campaign.set_size(body)

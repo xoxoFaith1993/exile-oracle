@@ -312,6 +312,28 @@ def patchwatch_check():
           f'patch mode: starts on a game update, checks hourly, ends after 2 days ({quiet} {started} {waits} {hourly} {ended})')
 
 
+def vault_paste_check():
+    """Builds page: paste a build (code or link), duplicates, poe.ninja links, unsupported sites, delete."""
+    from poe2kit import vault, db
+    xml = ('<PathOfBuilding2><Build level="88" className="Witch" ascendClassName="Blood Mage" mainSocketGroup="1">'
+           '</Build><Skills><SkillSet id="1"><Skill enabled="true" mainActiveSkill="1"><Gem nameSpec="Comet" '
+           'enabled="true"/></Skill></SkillSet></Skills><Items></Items><Tree></Tree></PathOfBuilding2>')
+    code = vault.encode(xml)
+    con = db.connect()
+    r = vault.from_paste(con, '  ' + code + ' \n', 'Smoke test build')
+    again = vault.from_paste(con, code)
+    ninja = vault.from_paste(con, 'https://poe.ninja/poe2/builds/rites/character/Someone-1234/SomeChar')
+    other = vault.from_paste(con, 'https://example.com/build/abc')
+    junk = vault.from_paste(con, 'not a build')
+    gone = vault.delete(con, r.get('id'))
+    left = con.execute('SELECT 1 FROM build WHERE id=?', (r.get('id'),)).fetchone()
+    con.close()
+    check(r.get('ok') and r.get('level') == 88 and again.get('already') and again.get('id') == r.get('id')
+          and ninja.get('open_ninja', {}).get('path') == 'Someone-1234/SomeChar' and not other.get('ok')
+          and not junk.get('ok') and gone.get('ok') and not left,
+          'Build Vault: paste a code or link, no duplicates, poe.ninja opens its page, delete')
+
+
 def campaign_check():
     """R16 / R21: the rush route maps onto the game's zones, and a zone gives a route card."""
     from poe2kit import campaign
@@ -420,6 +442,7 @@ if __name__ == '__main__':
     dataupdate_check()
     alerts_check()
     patchwatch_check()
+    vault_paste_check()
     mcp()
     if '--pob' in sys.argv:
         pob_part()

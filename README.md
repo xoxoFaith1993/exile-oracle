@@ -159,6 +159,11 @@ Every Currency Exchange item: price, stock, 7-day trend.
 
 ![Market history](docs/screenshots/market-history.jpg)
 
+### Build Vault
+Every build you save, kept until you delete it. **Paste a build** (a Path of Building code, or a pobb.in, pastebin or
+poe.ninja link) and it's read and added; poe.ninja links open that character's page with a "Save this build" button.
+Each row has **View build** (opens it on the Character page) and **Delete** (asks first).
+
 ### Character
 Gear, skills and real DPS from Path of Building.
 
