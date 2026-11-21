@@ -92,4 +92,7 @@ Exile Oracle's tools are a standard MCP server, so other AI apps can use them to
 - Every app gets the same built-in instructions when it connects: how to use the tools, the Build Lab, and the rules.
   So you can ask the same questions as in this guide.
 - The Build Lab's *Oracle feed* shows which app is asking.
-- Gemini CLI on Windows: if PowerShell says "running scripts is disabled", start it with `gemini.cmd`.
+- **Gemini CLI** (tested): personal Google sign-in no longer works for it, so it needs a Gemini API key (*Use Gemini
+  API Key*). Start it in an **empty folder**, not the Exile Oracle folder, so it uses the tools instead of reading
+  the app's files. Free keys hit their per-minute limit quickly: if you see "quota exceeded", wait a minute. On
+  Windows, if PowerShell says "running scripts is disabled", start it with `gemini.cmd`.

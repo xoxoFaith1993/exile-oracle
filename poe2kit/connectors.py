@@ -57,10 +57,11 @@ def status():
                     'found': os.path.isdir(os.path.dirname(CODEX)) or bool(shutil.which('codex')),
                     'connected': BEGIN in codex_text or f'[mcp_servers.{NAME}]' in codex_text, 'file': CODEX,
                     'how': 'Restart the ChatGPT desktop app (or Codex) after connecting; then ask it about your character.'},
-        'gemini': {'name': 'Gemini CLI', 'tested': False,
+        'gemini': {'name': 'Gemini CLI', 'tested': True,   # confirmed 2026-11-21 (Gemini CLI 0.70, API key)
                    'found': os.path.isdir(os.path.dirname(GEMINI)) or bool(shutil.which('gemini')),
                    'connected': NAME in (gem.get('mcpServers') or {}), 'file': GEMINI,
-                   'how': 'Start a new gemini session after connecting; /mcp lists the Exile Oracle tools.'},
+                   'how': 'Start gemini in an empty folder (not the app folder) after connecting; /mcp lists the Exile Oracle tools. '
+                          'On Windows run gemini.cmd. Free API keys hit their per-minute limit fast.'},
     }
 
 

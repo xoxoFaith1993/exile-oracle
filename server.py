@@ -759,7 +759,7 @@ def _feed(tool, args, ok, ms, err=None):
     """Remember the call for the Build Lab's Oracle feed (last 60, local only; no item text)."""
     try:
         bits = []
-        for k in ('action', 'mode', 'build_id', 'item', 'name', 'slot', 'level', 'skill', 'title', 'budget_div'):
+        for k in ('action', 'mode', 'build_id', 'query', 'item', 'name', 'slot', 'level', 'skill', 'title', 'budget_div'):
             v = args.get(k)
             if v not in (None, ''):
                 v = str(v)[:60]
