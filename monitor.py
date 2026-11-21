@@ -198,6 +198,17 @@ def job_install(con):
     return json.dumps(st)
 
 
+def setting_up():
+    """What a fresh install is still waiting for (empty once ready)."""
+    from poe2kit import pob
+    wait = []
+    if not os.path.exists(os.path.join(config.DATA_DIR, 'repoe', 'base_items.min.json')):
+        wait.append('game data')
+    if not os.path.exists(os.path.join(config.POB_DIR, 'manifest.xml')) or not os.path.exists(pob.HOST):
+        wait.append('Path of Building')
+    return wait
+
+
 def job_gamedata(con):
     return json.dumps(gamedata.update(max_age_days=3))
 
@@ -525,6 +536,13 @@ class Handler(http.server.BaseHTTPRequestHandler):
             try:
                 data = api(u.path, q)
                 return self._send(200, json.dumps(data, default=str).encode('utf-8'), 'application/json')
+            except FileNotFoundError as e:
+                wait = setting_up()
+                if wait:   # a fresh install still downloading: say so instead of a crash
+                    return self._send(503, json.dumps({'setup': True, 'waiting_for': wait, 'error':
+                        'Still setting up (first start): downloading ' + ' and '.join(wait) +
+                        '. This takes a few minutes; this view works once it finishes.'}).encode(), 'application/json')
+                return self._send(500, json.dumps({'error': f'{type(e).__name__}: {e}'}).encode(), 'application/json')
             except Exception as e:
                 return self._send(500, json.dumps({'error': f'{type(e).__name__}: {e}'}).encode(), 'application/json')
         return self._send(404, b'not found', 'text/plain')
@@ -534,9 +552,8 @@ def take_lock():
     try:
         if os.path.exists(LOCK):
             pid = int(open(LOCK).read().strip() or 0)
-            alive = subprocess.run(['tasklist', '/FI', f'PID eq {pid}', '/NH'], capture_output=True,
-                                   text=True).stdout
-            if str(pid) in alive and 'python' in alive.lower():
+            from poe2kit import osutil
+            if osutil.pid_alive(pid) and pid != os.getpid():
                 return False
         with open(LOCK, 'w') as f:
             f.write(str(os.getpid()))

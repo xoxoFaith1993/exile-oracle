@@ -28,7 +28,8 @@ def check(con):
     req = urllib.request.Request(API, headers={'User-Agent': config.user_agent(), 'Accept': 'application/vnd.github+json'})
     with urllib.request.urlopen(req, timeout=30) as r:
         rel = json.loads(r.read())
-    asset = next((a for a in rel.get('assets', []) if a['name'].lower().endswith('.exe')), None)
+    want = (lambda n: n.endswith('.exe')) if os.name == 'nt' else (lambda n: 'linux' in n and n.endswith('.tar.gz'))
+    asset = next((a for a in rel.get('assets', []) if want(a['name'].lower())), None)
     info = {'checked': time.time(), 'current': config.VERSION, 'latest': (rel.get('tag_name') or '').lstrip('v'),
             'page': rel.get('html_url'), 'notes': (rel.get('body') or '')[:2000],
             'asset': asset and {'name': asset['name'], 'url': asset['browser_download_url'], 'size': asset['size']}}
@@ -63,5 +64,16 @@ def install(con):
             f.write(chunk)
     if os.path.getsize(path) != a['size']:
         return {'ok': False, 'why': 'download incomplete, try again'}
-    subprocess.Popen([path], creationflags=0x00000008)  # DETACHED: the installer closes this app, then updates it
+    from . import osutil
+    if os.name == 'nt':
+        osutil.detached([path])   # the installer closes this app, then updates it
+        return {'ok': True, 'file': path}
+    import tarfile
+    out = os.path.join(d, 'linux-' + info['latest'])
+    with tarfile.open(path) as t:
+        t.extractall(out, filter='data')
+    inst = next((os.path.join(r, 'install.sh') for r, _, fs in os.walk(out) if 'install.sh' in fs), None)
+    if not inst:
+        return {'ok': False, 'why': 'install.sh missing from the download'}
+    osutil.detached(['sh', inst, '--update'], cwd=os.path.dirname(inst))   # stops this app, copies, restarts
     return {'ok': True, 'file': path}

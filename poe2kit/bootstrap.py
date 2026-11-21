@@ -31,6 +31,8 @@ def _say(con, msg):
 
 
 def ensure_poblua(con):
+    if os.name != 'nt':
+        return 'not needed (Linux runs PoB with LuaJIT)'
     dst = os.path.join(config.TOOLS_DIR, 'poblua.exe')
     if os.path.exists(dst):
         return 'present'

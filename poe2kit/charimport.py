@@ -15,18 +15,17 @@ import subprocess
 import tempfile
 import time
 
-from . import config, db, pob, vault
+from . import config, db, osutil, pob, vault
 
-USERPATH = os.path.join(os.path.expanduser('~'), 'Documents', 'Path of Building (PoE2)') + os.sep
+# Path of Building's user folder: Windows Documents, or a Wine / Proton prefix's Documents on Linux
+USERPATH = osutil.find_documents('Path of Building (PoE2)') + os.sep
 SETTINGS = os.path.join(USERPATH, 'Settings.xml')
 SCRIPT = os.path.join(config.ROOT, 'pobhost', 'pobimport.lua')
 REUSE_SECONDS = 15 * 60
 
 
 def _pob_window_open():
-    p = subprocess.run(['tasklist', '/FI', 'IMAGENAME eq Path of Building-PoE2.exe', '/NH'],
-                       capture_output=True, text=True)
-    return 'Path of Building-PoE2.exe' in p.stdout
+    return osutil.process_running('Path of Building-PoE2')
 
 
 def _token_expiry():

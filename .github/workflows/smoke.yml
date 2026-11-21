@@ -1,0 +1,30 @@
+name: Smoke test
+
+# Starts the toolkit in a fresh folder on Linux and Windows and checks every dashboard view and the Claude tools.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.12', '3.x']
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Smoke test
+        env:
+          POE2KIT_HOME: ${{ runner.temp }}/poe2kit-home
+        run: python smoke_test.py
+      - name: Monitor log
+        if: always()
+        shell: bash
+        run: cat "${{ runner.temp }}/poe2kit-home/logs/monitor.log" || true

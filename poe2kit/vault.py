@@ -89,7 +89,8 @@ def import_folder(con):
     return added
 
 
-POB_BUILDS = os.path.join(os.path.expanduser('~'), 'Documents', 'Path of Building (PoE2)', 'Builds')
+from . import osutil  # noqa: E402
+POB_BUILDS = os.path.join(osutil.find_documents('Path of Building (PoE2)'), 'Builds')
 
 
 def encode(xml_text):

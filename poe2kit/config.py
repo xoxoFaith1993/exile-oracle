@@ -23,6 +23,9 @@ def _home():
     h = os.environ.get('POE2KIT_HOME')
     if h:
         return h
+    if os.name != 'nt':   # Linux / Steam Deck: XDG data folder
+        base = os.environ.get('XDG_DATA_HOME') or os.path.join(os.path.expanduser('~'), '.local', 'share')
+        return os.path.join(base, 'poe2toolkit')
     if os.path.isdir(r'F:\PoE2Toolkit'):
         return r'F:\PoE2Toolkit'
     return os.path.join(os.environ.get('LOCALAPPDATA') or os.path.expanduser('~'), 'PoE2Toolkit')
@@ -130,9 +133,20 @@ def watch_words():
 STEAM_APPID = '2694490'
 
 
+def _steam_roots_linux():
+    """Steam on Linux: native, the ~/.steam links, Flatpak Steam. (Steam Deck = native.)"""
+    home = os.path.expanduser('~')
+    return [os.path.join(home, '.steam', 'steam'), os.path.join(home, '.steam', 'root'),
+            os.path.join(home, '.local', 'share', 'Steam'),
+            os.path.join(home, '.var', 'app', 'com.valvesoftware.Steam', '.local', 'share', 'Steam'),
+            os.path.join(home, '.var', 'app', 'com.valvesoftware.Steam', 'data', 'Steam')]
+
+
 def _steam_libraries():
     libs = []
     roots = []
+    if os.name != 'nt':
+        roots = _steam_roots_linux()
     try:
         import winreg
         for hive, key in ((winreg.HKEY_CURRENT_USER, r'Software\Valve\Steam'),
@@ -148,15 +162,20 @@ def _steam_libraries():
                 pass
     except ImportError:
         pass
-    roots += [r'C:\Program Files (x86)\Steam', r'C:\Program Files\Steam']
+    if os.name == 'nt':
+        roots += [r'C:\Program Files (x86)\Steam', r'C:\Program Files\Steam']
     for r in roots:
         vdf = os.path.join(r, 'steamapps', 'libraryfolders.vdf')
         if os.path.exists(vdf):
             txt = open(vdf, encoding='utf-8', errors='ignore').read()
-            libs += [p.replace('\\\\', '\\') for p in re.findall(r'"path"\s+"([^"]+)"', txt)]
+            libs += [p.replace('\\\\', '\\') if os.name == 'nt' else p
+                     for p in re.findall(r'"path"\s+"([^"]+)"', txt)]
             libs.append(r)
-    # drive roots people commonly use
-    libs += [f'{d}:\\SteamLibrary' for d in 'CDEFGH']
+    if os.name == 'nt':   # drive roots people commonly use
+        libs += [f'{d}:\\SteamLibrary' for d in 'CDEFGH']
+    else:                 # Steam Deck SD cards and other mounted drives
+        import glob as _g
+        libs += _g.glob('/run/media/*/*/SteamLibrary') + _g.glob('/run/media/*/*') + _g.glob('/media/*/*/SteamLibrary')
     seen, out = set(), []
     for l in libs:
         n = os.path.normcase(os.path.normpath(l))
@@ -195,10 +214,11 @@ def poe2_dir():
         p = os.path.join(lib, 'steamapps', 'common', 'Path of Exile 2')
         if _is_game(p):
             return p
-    for p in (r'C:\Program Files (x86)\Grinding Gear Games\Path of Exile 2',
-              r'C:\Program Files\Grinding Gear Games\Path of Exile 2'):
-        if _is_game(p):
-            return p
+    if os.name == 'nt':
+        for p in (r'C:\Program Files (x86)\Grinding Gear Games\Path of Exile 2',
+                  r'C:\Program Files\Grinding Gear Games\Path of Exile 2'):
+            if _is_game(p):
+                return p
     return None
 
 
@@ -211,7 +231,10 @@ def client_log():
 
 
 def poe2x():
-    """The game-file extractor, if present (HOME\\tools, or the author's build in the poe2-offline project)."""
+    """The game-file extractor, if present (HOME\\tools, or the author's build in the poe2-offline project).
+    Windows only: the bundled game art covers Linux."""
+    if os.name != 'nt':
+        return None
     for p in (os.path.join(TOOLS_DIR, 'poe2x', 'poe2x.exe'), os.path.join(TOOLS_DIR, 'poe2x.exe'),
               r'D:\Modding\poe2-offline\tools\poe2x\bin\poe2x.exe'):
         if os.path.exists(p):

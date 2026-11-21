@@ -19,6 +19,9 @@ def _desktop_dirs():
     LocalCache folder (programs running outside Claude don't see it at %APPDATA%); the classic installer uses
     %APPDATA%\\Claude. Packaged locations first."""
     import glob
+    if os.name != 'nt':   # Linux: Claude desktop (where available) keeps its config in ~/.config/Claude
+        return [os.path.join(os.environ.get('XDG_CONFIG_HOME') or os.path.join(os.path.expanduser('~'), '.config'),
+                             'Claude')]
     local = os.environ.get('LOCALAPPDATA') or ''
     dirs = [os.path.join(p, 'LocalCache', 'Roaming', 'Claude')
             for p in glob.glob(os.path.join(local, 'Packages', 'Claude_*'))]
@@ -38,9 +41,8 @@ def _desktop_config():
 
 
 def _python():
-    d = os.path.dirname(sys.executable)
-    exe = os.path.join(d, 'python.exe')   # a console Python: MCP talks over stdin/stdout
-    return exe if os.path.exists(exe) else sys.executable
+    from . import osutil
+    return osutil.console_python()   # a console Python: MCP talks over stdin/stdout
 
 
 def server_entry():
