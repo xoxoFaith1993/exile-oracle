@@ -16,23 +16,52 @@ FILES = ['mods', 'base_items', 'skill_gems', 'uniques', 'item_classes', 'tags', 
 _cache = {}
 
 
-def update(max_age_days=3):
-    """Re-download the export files if older than max_age_days. Returns what changed."""
+def update(max_age_days=3, conditional=True):
+    """Re-download the export files if older than max_age_days. Returns what changed.
+    conditional: ask the server "only if changed" (ETag / Last-Modified), so a check that finds nothing new costs
+    almost nothing: patch mode (poe2kit.patchwatch) checks every hour this way."""
+    import urllib.error
     os.makedirs(DATA, exist_ok=True)
+    tags_p = os.path.join(DATA, 'etags.json')
+    try:
+        tags = json.load(open(tags_p, encoding='utf-8'))
+    except (OSError, ValueError):
+        tags = {}
     out = {}
     for f in FILES:
         p = os.path.join(DATA, f'{f}.min.json')
         if os.path.exists(p) and time.time() - os.path.getmtime(p) < max_age_days * 86400:
             out[f] = 'fresh'
             continue
-        req = urllib.request.Request(f'{SRC}/{f}.min.json', headers={'User-Agent': config.user_agent()})
-        with urllib.request.urlopen(req, timeout=120) as r:
+        headers = {'User-Agent': config.user_agent()}
+        t = tags.get(f) or {}
+        if conditional and os.path.exists(p):
+            if t.get('etag'):
+                headers['If-None-Match'] = t['etag']
+            if t.get('modified'):
+                headers['If-Modified-Since'] = t['modified']
+        req = urllib.request.Request(f'{SRC}/{f}.min.json', headers=headers)
+        try:
+            r = urllib.request.urlopen(req, timeout=120)
+        except urllib.error.HTTPError as e:
+            if e.code == 304:   # not changed since last time
+                os.utime(p, None)
+                out[f] = 'unchanged'
+                continue
+            raise
+        with r:
             body = r.read()
+            tags[f] = {'etag': r.headers.get('ETag'), 'modified': r.headers.get('Last-Modified')}
         json.loads(body)  # validate before replacing
         with open(p + '.part', 'wb') as fh:
             fh.write(body)
         os.replace(p + '.part', p)
         out[f] = f'{len(body) // 1024} KB'
+    try:
+        with open(tags_p, 'w', encoding='utf-8') as fh:
+            json.dump(tags, fh)
+    except OSError:
+        pass
     _cache.clear()
     return out
 

@@ -74,6 +74,13 @@ pack (zip + manifest with every file's size and sha256) and prints the `gh relea
 --prerelease` command. Publishing needs the author's OK, like a release. Apps pick it up within 6 hours, verify it,
 switch to it, and keep the previous one. `release/test_dataupdate.py` tests the whole path (part of smoke_test.py).
 Data only: never put code in a pack.
+- **Patch mode** (`poe2kit/patchwatch.py`): the app reads the game's build id (Steam's appmanifest, else the size and
+  time of `Bundles2/_.index.bin`); when it changes, it checks the community game data (conditional requests: only
+  what changed downloads) and our data packs every hour for 48 hours.
+- **Patch day on the author's PC:** `python release/patch_day.py` reads the updated game (launch_sweep.py), rebuilds
+  the data pack (make_datapack.py), makes a data update and lists what changed, then prints the publish command.
+  The game-file reader (poe2x) is NOT shipped: its library (LibGGPK3) is AGPL and it needs Oodle (oo2core.dll),
+  which can't be redistributed.
 
 ## Docs go with every change
 Players only see what the docs show. `build_release.py` refuses to build when a tool is missing from

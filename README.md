@@ -225,7 +225,8 @@ Enter. Settings → Question chips picks the app, or plain copy.
 
 ### Game data that updates itself
 After a patch (1.0 included), what Exile Oracle knows about the game (zones, atlas, campaign rewards, research)
-updates by itself within hours: a small data update, checked file by file before it's used, with the previous data
+updates by itself within hours. It notices when your game updates and then checks for new game data every hour for
+two days (only downloading what changed): a small data update, checked file by file before it's used, with the previous data
 kept so it can go back. Nothing to install. New features still come as app updates with the banner. Settings shows
 the data version and has **Check now** and **Go back**.
 

@@ -1,6 +1,6 @@
 {
- "data_version": "2026.11.21.0",
- "built": 1795296478,
+ "data_version": "2026.11.21.1",
+ "built": 1795296852,
  "min_app": "0.6.0",
  "files": {
   "atlas-strategies.json": {
@@ -12,8 +12,8 @@
    "sha256": "f709929aa809bdfa0e5c66a5d943d5227bda9834402dae82ce54742b76ccedcd"
   },
   "benchmarks.json": {
-   "size": 14465,
-   "sha256": "db8df26d3885102020ac26a84b8833a707fb1b5b8364aaad762b62550418cfad"
+   "size": 14466,
+   "sha256": "2f612870f3a072601a2c807fa1166601154a9d41c9ae97a612f69a08b0d30517"
   },
   "boss-readiness.json": {
    "size": 89633,
@@ -61,11 +61,11 @@
   },
   "planner_ids.json": {
    "size": 267295,
-   "sha256": "00327be990f9acfe8396df4d64c54d8289554c6293c23433642eb38aabb2af96"
+   "sha256": "f60d24a6cef7deb30b472c511dd173d08f8559673d61d3b6e0b04d187f6bb2db"
   },
   "playbook.json": {
-   "size": 17940,
-   "sha256": "8e127bef9b80152338330c4da6966070c083df348501cd374ba51ac036121705"
+   "size": 17938,
+   "sha256": "7214f0c16f4a2eeb707cc2d29215ac726cf8c9fc356db739c99b037a4c98ba0e"
   },
   "quest_rewards.json": {
    "size": 5432,

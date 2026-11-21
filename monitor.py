@@ -44,7 +44,7 @@ PATCH_WATCH = os.path.join(HERE, 'patch-watch', 'steam') if os.path.isdir(os.pat
 STEAM_NEWS = 'https://api.steampowered.com/ISteamNews/GetNewsForApp/v2/?appid=2694490&count=15&format=json'
 NEWS_WORDS = ['patch notes', 'hotfix', '1.0', 'league']   # plus the player's own watch words (config.profile)
 JOBS = {'prices': 30, 'exchange': 60, 'news': 20, 'install': 10, 'gamedata': 720, 'pob': 720, 'ggg_apps': 10080,
-        'mybuilds': 2, 'clientlog': 1, 'update': 720, 'dataupdate': 360}
+        'mybuilds': 2, 'clientlog': 1, 'update': 720, 'dataupdate': 360, 'patchwatch': 10}
 
 log = logging.getLogger('monitor')
 
@@ -280,9 +280,16 @@ def job_dataupdate(con):
     return r.get('why') or ('up to date' if r.get('ok') else 'failed')
 
 
+def job_patchwatch(con):
+    """R27: notice a game update and look for new game data every hour for 2 days after it."""
+    from poe2kit import patchwatch
+    return patchwatch.tick(con, alert)
+
+
 JOB_FUNCS = {'prices': job_prices, 'exchange': job_exchange, 'news': job_news, 'install': job_install,
              'gamedata': job_gamedata, 'pob': job_pob, 'ggg_apps': job_ggg_apps, 'mybuilds': job_mybuilds,
-             'clientlog': job_clientlog, 'update': job_update, 'dataupdate': job_dataupdate}
+             'clientlog': job_clientlog, 'update': job_update, 'dataupdate': job_dataupdate,
+             'patchwatch': job_patchwatch}
 
 
 def run_job(con, name):
@@ -391,9 +398,9 @@ def api(path, q):
         if path == '/api/active':   # R17: the player's characters and the active one
             from poe2kit import chars
             return chars.characters(con)
-        if path == '/api/data/status':   # R27: which data version is in use
-            from poe2kit import dataupdate
-            return dataupdate.status(con)
+        if path == '/api/data/status':   # R27: which data version is in use, and the game's own version
+            from poe2kit import dataupdate, patchwatch
+            return dict(dataupdate.status(con), game=patchwatch.status(con))
         if path == '/api/campaign':   # R16: campaign rush guide + checklist + where you are now
             from poe2kit import campaign
             return campaign.guide(con)
@@ -744,7 +751,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 c = _db.connect()
                 try:
                     data = dataupdate.check(c) if u.path.endswith('check') else dataupdate.rollback()
-                    data['status'] = dataupdate.status(c)
+                    from poe2kit import patchwatch
+                    data['status'] = dict(dataupdate.status(c), game=patchwatch.status(c))
                 finally:
                     c.close()
             elif u.path == '/api/ask/open':   # a question chip: open the AI app with the question typed in

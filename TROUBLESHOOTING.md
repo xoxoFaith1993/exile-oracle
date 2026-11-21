@@ -145,6 +145,7 @@ now, Go back). Packs are data only (JSON), never code.
 | "needs app X: update the app first" | the pack needs a newer app | install the app update from the banner |
 | "could not check" | internet / GitHub reachable? | it tries again in 6 hours; Check now to retry |
 | Pack refused: "does not match the manifest" | the download was damaged or changed | nothing to do: the old data stays in use; it retries later |
+| "patch mode" in Settings → Game data | the game updated (new build id) | normal: for 48 hours it checks for new game data every hour, downloading only what changed |
 | Files | `HOME\datapack-live\current.txt` names the pack in use; the folder before it is kept for Go back | deleting `datapack-live` returns to the data that came with the app |
 
 ## Reporting a bug (help the player write it)

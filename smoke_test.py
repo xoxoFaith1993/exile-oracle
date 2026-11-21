@@ -277,6 +277,41 @@ def alerts_check():
     check(ok and alerts.wanted('news'), 'alert settings: switch kinds off, thresholds, mute')
 
 
+def patchwatch_check():
+    """R27 step 2: a game update starts patch mode (hourly data checks for 2 days), then it ends."""
+    from poe2kit import patchwatch, gamedata, dataupdate, db
+    con = db.connect()
+    builds, calls, alerts = ['100'], [], []
+    keep = (patchwatch.game_build, gamedata.update, dataupdate.check, patchwatch.time.time)
+    clock = [1000000.0]
+    try:
+        patchwatch.game_build = lambda: {'build': builds[0], 'source': 'test'}
+        gamedata.update = lambda **k: calls.append('gamedata') or {'mods': 'unchanged'}
+        dataupdate.check = lambda c: calls.append('pack') or {'ok': True, 'why': 'up to date'}
+        patchwatch.time.time = lambda: clock[0]
+        db.kv_set(con, 'patchwatch', '{}')
+        patchwatch.tick(con, lambda *a: alerts.append(a))
+        quiet = not calls and not patchwatch.status(con)['patch_mode']
+        builds[0] = '101'
+        patchwatch.tick(con, lambda *a: alerts.append(a))
+        started = patchwatch.status(con)['patch_mode'] and calls == ['gamedata', 'pack'] and len(alerts) == 1
+        clock[0] += 600
+        patchwatch.tick(con)
+        waits = calls == ['gamedata', 'pack']
+        clock[0] += 3600
+        patchwatch.tick(con)
+        hourly = calls.count('gamedata') == 2
+        clock[0] += 49 * 3600
+        patchwatch.tick(con)
+        ended = not patchwatch.status(con)['patch_mode'] and calls.count('gamedata') == 2
+    finally:
+        patchwatch.game_build, gamedata.update, dataupdate.check, patchwatch.time.time = keep
+        db.kv_set(con, 'patchwatch', '{}')
+        con.close()
+    check(quiet and started and waits and hourly and ended,
+          f'patch mode: starts on a game update, checks hourly, ends after 2 days ({quiet} {started} {waits} {hourly} {ended})')
+
+
 def campaign_check():
     """R16 / R21: the rush route maps onto the game's zones, and a zone gives a route card."""
     from poe2kit import campaign
@@ -384,6 +419,7 @@ if __name__ == '__main__':
     atlasplan_check()
     dataupdate_check()
     alerts_check()
+    patchwatch_check()
     mcp()
     if '--pob' in sys.argv:
         pob_part()

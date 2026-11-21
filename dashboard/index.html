@@ -2562,7 +2562,8 @@ function drawDataStatus(s) {
   const lc = s.last_check || {};
   const when = s.built ? new Date(s.built * 1000).toLocaleString() : '';
   $('#datastatus').innerHTML = (!s.version || s.version === '0' ? 'Using <b>the data that came with the app</b>' : `Data <b>${esc(s.version)}</b> <span class="muted">(${s.source === 'downloaded' ? 'downloaded update' : 'came with the app'}${when ? ', made ' + esc(when) : ''})</span>`) +
-    (lc.checked ? `<div class="muted">Last checked ${ago(lc.checked)}: ${esc(lc.installed ? 'installed ' + lc.installed : lc.why || (lc.ok ? 'up to date' : 'failed'))}</div>` : '');
+    (lc.checked ? `<div class="muted">Last checked ${ago(lc.checked)}: ${esc(lc.installed ? 'installed ' + lc.installed : lc.why || (lc.ok ? 'up to date' : 'failed'))}</div>` : '') +
+    (s.game && s.game.build ? `<div class="muted" style="margin-top:4px">Your game: build ${esc(s.game.build)}${s.game.patch_mode ? ` · <b style="color:var(--eo-gold)">patch mode</b>: checking for new game data every hour until ${new Date(s.game.patch_until * 1000).toLocaleString()}${s.game.last_result ? ' (last: ' + esc(s.game.last_result) + ')' : ''}` : ''}</div>` : '');
 }
 async function loadDataStatus() {
   drawDataStatus(await get('/api/data/status'));

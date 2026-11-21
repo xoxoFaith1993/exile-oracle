@@ -63,7 +63,9 @@ def main(argv):
         print('using already-extracted files in', raw)
     else:
         print('extracting data tables with poe2x ...')
-        p = subprocess.run([POE2X, 'extract', INDEX, raw, 'data/balance'], capture_output=True, text=True)
+        # the tables, plus the atlas layout and stat texts the Atlas page reads (poe2kit/atlas.py, statdesc.py)
+        p = subprocess.run([POE2X, 'extract', INDEX, raw, 'data/balance', 'metadata/atlasskillgraphs',
+                            'data/statdescriptions'], capture_output=True, text=True)
         print(p.stdout[-2000:], p.stderr[-2000:])
         if p.returncode != 0:
             return 2
