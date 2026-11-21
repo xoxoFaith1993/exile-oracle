@@ -28,6 +28,9 @@ craft.
 > Character screenshots show a public top-player build from poe.ninja. Yours shows your own characters after you import them.
 
 ## Screenshots
+The sidebar groups (Oracle, Market, Farming, Campaign, Endgame, Character, Craft, News, Settings) open and close with a
+click; a first start shows only the group you're in, and the app remembers what you open.
+
 
 ### Home
 The Divine rate and the main currencies with their 7-day change, your latest alerts, and a way into everything else.
@@ -120,7 +123,9 @@ Every tablet type with its own modifiers, what to pair with each strategy, and t
 ![Tablets](docs/screenshots/tablets.jpg)
 
 ### Campaign + the route panel (new in 0.6.0)
-The fastest route act by act, every permanent reward with a checklist, the trials, and flask / boots / life breakpoints.
+The campaign has its own group in the sidebar with four pages: **Overview** (the rush at a glance, where you are now,
+how long it takes, what 1.0 changes), **Route** (the fastest route act by act, and flask / boots / life breakpoints),
+**Rewards** (every permanent reward with a checklist, and the trials) and **Tips** (rush tips and common mistakes).
 
 ![Campaign rush](docs/screenshots/campaign.jpg)
 ![The route, act by act](docs/screenshots/campaign-route.jpg)

@@ -408,6 +408,21 @@ def spreads_check():
           f"exchange price from the busiest market; gap finder strict ({len(r.get('gaps', []))} gaps)")
 
 
+def pages_check():
+    """Every dashboard card sits inside one page, so it shows only there (not under every page), and every sidebar
+    button has its page."""
+    import re
+    html = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dashboard', 'index.html'), encoding='utf-8').read()
+    main = html[html.index('<main>'):html.index('</main>')]
+    depth, stray = 0, 0
+    for tok in re.findall(r'<section|</section>|<div class="card', main):
+        depth += 1 if tok == '<section' else -1 if tok == '</section>' else 0
+        stray += tok.startswith('<div') and depth == 0
+    nav = html[html.index('<nav id="nav">'):html.index('</nav>')]
+    missing = [t for t in re.findall(r'data-tab="([^"]+)"', nav) if f'<section id="{t}"' not in main]
+    check(not stray and depth == 0 and not missing, f'dashboard: every card inside its page, every menu item has a page {missing or ""}')
+
+
 def weaponset_check():
     """A build whose weapons sit only in weapon set II is measured with set II (not with no weapon)."""
     from poe2kit import pob
@@ -581,6 +596,7 @@ if __name__ == '__main__':
     wanted_check()
     vault_paste_check()
     spreads_check()
+    pages_check()
     weaponset_check()
     buildcheck_check()
     newleague_check()

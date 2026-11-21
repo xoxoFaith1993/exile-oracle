@@ -213,7 +213,14 @@ nav .brand img { width: 40px; height: 40px; filter: drop-shadow(0 0 8px #c8283c5
 nav .brand b { font: 700 17px var(--eo-display); letter-spacing: .12em; color: var(--eo-gold); line-height: 1.05; }
 nav .brand span { display: block; font: 11px var(--eo-body); letter-spacing: .08em; color: var(--eo-muted); }
 nav .ng { font: 600 10.5px var(--eo-display); letter-spacing: .2em; text-transform: uppercase; color: var(--eo-gold-dim);
-  padding: 14px 16px 4px; }
+  padding: 14px 16px 4px; cursor: pointer; user-select: none; display: flex; align-items: center; gap: 6px; }
+nav .ng:hover { color: var(--eo-gold); }
+nav .ng::after { content: "▸"; margin-left: auto; font-size: 11px; letter-spacing: 0; transition: transform .15s; }
+nav .ng.open::after { transform: rotate(90deg); }
+nav .ng:focus { outline: none; } nav .ng:focus-visible { outline: 1px solid var(--eo-gold-dim); outline-offset: -1px; }
+nav .ng .ngdot { width: 7px; height: 7px; border-radius: 50%; background: var(--eo-blood-hi); display: none; }
+nav .ng.has-new:not(.open) .ngdot { display: inline-block; }
+nav button.folded { display: none; }
 nav button { text-align: left; border: 0; border-left: 2px solid transparent; border-bottom: 0; padding: 7px 16px 7px 18px;
   font: 600 12.5px var(--eo-display); letter-spacing: .09em; text-transform: uppercase; color: var(--eo-text-2); }
 nav button::before { content: "◈"; color: var(--eo-gold-dim); margin-right: 9px; font-size: 10px; }
@@ -455,7 +462,11 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
   <div class="ng">Farming</div>
   <button data-tab="farm">What to farm</button>
   <button data-tab="league">League start</button>
-  <button data-tab="campaign">Campaign</button>
+  <div class="ng">Campaign</div>
+  <button data-tab="campaign">Overview</button>
+  <button data-tab="cpactsp">Route</button>
+  <button data-tab="cprewardsp">Rewards</button>
+  <button data-tab="cptipsp">Tips</button>
   <div class="ng">Endgame</div>
   <button data-tab="atlas">Atlas</button>
   <button data-tab="maps">Maps</button>
@@ -705,20 +716,28 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
       <div class="card"><h2>Where you are now</h2><div class="sub">From the game's own log: updates as you change zones.</div><div id="cpzone"></div>
         <label class="small" style="display:block;margin-top:10px"><input type="checkbox" id="cproute"> Route panel in game <span class="muted">(a small card in a corner, campaign only; it never takes the mouse or keyboard)</span></label>
         <label class="small" style="display:block;margin-top:6px">Panel position <select class="crin" id="cpcorner"><option value="right">right, under the minimap</option><option value="left">left edge</option><option value="top-left">top left</option></select></label></div>
-      <div class="card"><h2>Rewards checklist</h2><div class="sub">Permanent rewards from the campaign. Tick each one you've taken.</div><div id="cprewards"></div></div>
+      <div class="card"><h2>How long it takes</h2><div id="cptimes"></div></div>
     </div>
+    <div class="grid2">
+      <div class="card"><h2>Coming in 1.0</h2><div id="cpwatch"></div></div>
+    </div>
+  </section>
+  <section id="cpactsp">
     <div class="card"><h2>The route, act by act</h2><div class="sub">Researched for 0.5. 1.0 (December 11) adds Acts 5 and 6 and removes the Interludes: this updates when it's out.</div><div id="cpacts"></div></div>
     <div class="grid2">
-      <div class="card"><h2>Ascendancy trials</h2><div id="cptrials"></div></div>
       <div class="card"><h2>Level breakpoints</h2><div id="cpbreaks"></div></div>
     </div>
+  </section>
+  <section id="cprewardsp">
+    <div class="grid2">
+      <div class="card"><h2>Rewards checklist</h2><div class="sub">Permanent rewards from the campaign. Tick each one you've taken.</div><div id="cprewards"></div></div>
+      <div class="card"><h2>Ascendancy trials</h2><div id="cptrials"></div></div>
+    </div>
+  </section>
+  <section id="cptipsp">
     <div class="grid2">
       <div class="card"><h2>Rush tips</h2><div id="cptips"></div></div>
       <div class="card"><h2>Common mistakes</h2><div id="cpmistakes"></div></div>
-    </div>
-    <div class="grid2">
-      <div class="card"><h2>How long it takes</h2><div id="cptimes"></div></div>
-      <div class="card"><h2>Coming in 1.0</h2><div id="cpwatch"></div></div>
     </div>
   </section>
   <section id="league">
@@ -797,7 +816,6 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
         <select class="crin" id="wlunit"><option value="div">div</option><option value="ex">ex</option><option value="chaos">chaos</option></select>
         <button class="btn" id="wladd">Add to wishlist</button> <span class="small muted" id="wlmsg"></span></div>
       <div id="wlitems" style="margin-top:10px"></div></div>
-  </section>
     <div class="card"><div class="lab-head"><h2 style="margin:0">Wanted items</h2><span class="small muted" id="wtsub"></span></div>
       <div class="sub">A specific item you're after, like a staff with exact stats you can't afford yet. Paste its trade-site link (or the item itself, copied in game with Ctrl+C) and press Check now whenever you want: the cheapest listings, new ones, re-priced ones, and the ones that are gone (sold or taken down). Pin a listing to follow it. Checked only when you press the button, inside the trade site's limits.</div>
       <textarea class="crin" id="wttext" rows="2" placeholder="Paste a trade-site link (pathofexile.com/trade2/search/...) or the item text" style="width:100%;margin-top:8px;resize:vertical"></textarea>
@@ -926,6 +944,41 @@ function pinTip(e, html) {
   hideTip();
 }
 
+// ---------- sidebar groups that open and close (the author, 2026-11-21: so a new player isn't overwhelmed and a group
+// can grow later). On a first start only the open page's group is open; what the player opens or closes is remembered.
+(function navGroups() {
+  let g = null, groups = {};
+  document.querySelectorAll('#nav > .ng, #nav > button').forEach(el => {
+    if (el.classList.contains('ng')) { g = el.textContent.trim(); groups[g] = { head: el, items: [] };
+      el.dataset.g = g; el.tabIndex = 0; el.setAttribute('role', 'button'); el.insertAdjacentHTML('beforeend', '<span class="ngdot"></span>'); }
+    else if (g) { el.dataset.g = g; groups[g].items.push(el); }
+  });
+  let saved = null;
+  try { saved = JSON.parse(localStorage.getItem('eo-nav-open') || 'null'); } catch (e) {}
+  const open = new Set(saved || []);
+  const save = () => { try { localStorage.setItem('eo-nav-open', JSON.stringify([...open])); } catch (e) {} };
+  const show = () => Object.entries(groups).forEach(([k, v]) => {
+    v.head.classList.toggle('open', open.has(k)); v.head.setAttribute('aria-expanded', open.has(k));
+    v.items.forEach(b => b.classList.toggle('folded', !open.has(k)));
+  });
+  window.navOpenGroup = k => { if (k && !open.has(k)) { open.add(k); save(); show(); } };
+  Object.entries(groups).forEach(([k, v]) => {
+    const flip = () => { open.has(k) ? open.delete(k) : open.add(k); save(); show(); };
+    v.head.onclick = flip;
+    v.head.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); } };
+    v.items.forEach(b => b.addEventListener('click', () => navOpenGroup(k)));   // a page opened from anywhere opens its group
+  });
+  if (!saved) { const on = document.querySelector('#nav > button.on'); if (on) open.add(on.dataset.g); }
+  const hashTab = location.hash.slice(1).replace(/[^a-z0-9]/gi, '');
+  const tabNow = hashTab && document.querySelector(`#nav > button[data-tab="${hashTab}"]`);
+  if (tabNow) open.add(tabNow.dataset.g);
+  show();
+  // unread alerts: a red dot on the closed group's header
+  const badge = document.getElementById('badge');
+  if (badge) new MutationObserver(() => { const h = groups[badge.closest('button').dataset.g]; if (h) h.head.classList.toggle('has-new', !badge.hidden); })
+    .observe(badge, { attributes: true, attributeFilter: ['hidden'] });
+})();
+
 // ---------- tabs ----------
 document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   document.querySelectorAll('.pintip').forEach(p => p.remove());   // pinned item panels belong to the page they came from
@@ -938,7 +991,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   if (b.dataset.tab === 'atlas') { loadAtlas(); loadAtlasPlan(); }
   if (b.dataset.tab === 'maps') { loadAtlasPlan(); mmPlace('waystone'); }
   if (b.dataset.tab === 'tablets') { loadAtlasPlan(); mmPlace('tablet'); }
-  if (b.dataset.tab === 'campaign') loadCampaign();
+  if (['campaign', 'cpactsp', 'cprewardsp', 'cptipsp'].includes(b.dataset.tab)) loadCampaign();
   if (b.dataset.tab === 'prophecy') loadProphecy();
   if (b.dataset.tab === 'compare') loadCompare();
   if (b.dataset.tab === 'economy') { loadLeagues(); loadOverview(); loadMovers(); loadMarket(); loadOracle($('#ordaysel').value); loadSpreads(); }
