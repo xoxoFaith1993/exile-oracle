@@ -333,11 +333,14 @@ function wire() {
   if (tr) tr.onclick = () => { if (cur && cur.url) fetch('/api/open', { method: 'POST', body: JSON.stringify({ url: cur.url }) }); };
 }
 
-let lastState = {};
+let lastState = {}, pageVer = null;
 async function poll() {
   for (;;) {
     try {
       const st = await (await fetch('/api/overlay/latest?after=' + ver)).json();
+      // the popup window is kept between overlay restarts: load the new page when its file changed
+      if (st.page && pageVer && st.page !== pageVer) { location.reload(); return; }
+      pageVer = pageVer || st.page;
       if (st.ver !== ver) { ver = st.ver; lastState = st; render(st); }
     } catch (e) { await new Promise(res => setTimeout(res, 2000)); }
   }

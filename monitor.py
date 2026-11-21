@@ -596,6 +596,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             from poe2kit import overlaysrv
             q = urllib.parse.parse_qs(u.query)
             st = overlaysrv.wait(int(q.get('after', ['0'])[0] or 0))
+            st['page'] = os.path.getmtime(os.path.join(HERE, 'dashboard', 'overlay.html'))   # page reloads on change
             return self._send(200, json.dumps(st, default=str).encode('utf-8'), 'application/json')
         if u.path.startswith('/art/'):
             from poe2kit import art
