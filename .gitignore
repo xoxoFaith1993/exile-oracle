@@ -1,9 +1,9 @@
 __pycache__/
 *.pyc
-vault/
+/vault/
 settings.json
-patch-watch/
-screenshots/
+/patch-watch/
+/screenshots/
 *.zip
 release/private_patterns.txt
 gameart/

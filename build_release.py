@@ -126,10 +126,10 @@ REPO_EXTRA = ['build_release.py', 'make_datapack.py']
 RELEASE_FILES = ['PoE2Toolkit.iss', 'LICENSES.md', 'README-friends.md', 'make_icon.py', 'icon.png', 'icon.ico']
 GITIGNORE = '''__pycache__/
 *.pyc
-vault/
+/vault/
 settings.json
-patch-watch/
-screenshots/
+/patch-watch/
+/screenshots/
 *.zip
 release/private_patterns.txt
 gameart/
