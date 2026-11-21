@@ -272,7 +272,7 @@ async function renderSettings(err) {
       ${[['quick', 'Quick check', 'closes when the mouse moves away'], ['detailed', 'Detailed check', 'stays open to tick rows'], ['settings', 'These settings', '']].map(([k, l, s]) =>
         row(l, `<div class="mm"><input class="pkey" data-pk="${k}" value="${esc(hk[k])}" readonly style="width:118px;border-radius:4px;cursor:pointer;text-align:center"></div><button class="btn pkdef" data-pk="${k}" title="back to ${esc((o.default_hotkeys || {})[k])}" style="padding:2px 8px;margin-left:4px">↺</button>`, s)).join('')}
     </div>
-    ${(o.key_warnings || []).length || o.error ? `<div class="kwarn" style="margin:6px 0 2px;padding:6px 9px;border:1px solid var(--eo-warning, #c9a227);border-radius:4px;color:var(--eo-warning, #e0b84a);font-size:12.5px">${[o.error, ...(o.key_warnings || [])].filter(Boolean).map(esc).join('<br>')}</div>` : ''}
+    ${(o.key_warnings || []).length || o.error ? `<div class="kwarn" style="margin:6px 0 2px;padding:6px 9px;border:1px solid var(--afk);border-radius:4px;color:var(--afk);font-size:12.5px">${[o.error, ...(o.key_warnings || [])].filter(Boolean).map(esc).join('<br>')}</div>` : ''}
     <div class="stats" style="margin-top:10px">
       ${row('Live trade-site prices', tog('live_trade', o.live_trade), "Uses GGG's trade site like Exiled Exchange 2: one search per check.")}
       ${row('Listings to search', seg('listing', o.listing, [['securable', 'buyout'], ['online', 'online']]))}
@@ -334,6 +334,19 @@ function render(st) {
     </div>
     ${best ? `<div class="hero"><div class="v">${priceHtml(best.div, r)}</div><div class="l">${esc(best.label)}${best.qty > 1 ? ` · ×${best.qty} = ${num((best.div * best.qty) < 1 && r.ex_per_div ? best.div * best.qty * r.ex_per_div : best.div * best.qty)} ${(best.div * best.qty) < 1 ? 'ex' : 'div'}` : ''}</div></div>` : ''}
   </div>`;
+
+  // R19: waystone / tablet check, each mod rated for the active build
+  const mc = r.mapcheck;
+  if (mc && mc.error) h += `<div class="note warn">${esc(mc.error)}</div>`;
+  else if (mc) {
+    const lc = { deadly: 'var(--accent-hi)', risky: 'var(--afk)', fine: 'var(--good)' };
+    h += `<div class="mapchk" style="margin-top:8px;padding:8px 10px;border:1px solid ${lc[mc.verdict] || 'var(--border)'};border-radius:4px">
+      <div class="sc" style="font-weight:700;color:${lc[mc.verdict] || 'var(--text)'}">${esc(mc.summary || '')}</div>
+      ${mc.build ? `<div class="k" style="color:var(--muted);font-size:11.5px">for ${esc(mc.build.label)}${mc.build.skill ? ' · ' + esc(mc.build.skill) : ''}</div>` : mc.kind === 'waystone' ? `<div class="k" style="color:var(--muted);font-size:11.5px">${esc(mc.build_error || 'save a build in the Build Vault to rate mods for it')}</div>` : ''}
+      ${mc.rewards && mc.rewards.length ? `<div class="pills" style="margin-top:6px">${mc.rewards.map(x => `<span class="pill sc">${esc(x.label)}: <b>${esc(x.value)}</b></span>`).join('')}</div>` : ''}
+      <div class="stats" style="margin-top:6px">${(mc.mods || []).map(m => `<div class="st"><div class="txt"><div class="t">${esc(m.line)}</div>${m.why ? `<div class="k" style="color:var(--muted);font-size:11.5px">${esc(m.why)}</div>` : ''}</div>${m.level ? `<span class="tag" style="color:${lc[m.level]}">${m.level}</span>` : ''}</div>`).join('') || '<div class="note">No modifiers (a normal waystone).</div>'}</div>
+    </div>`;
+  }
 
   // quick facts: poe.ninja + craft
   const cards = [];
@@ -419,7 +432,7 @@ addEventListener('keydown', e => { if (e.ctrlKey && ['+', '-', '=', '0'].include
 document.addEventListener('load', reportSize, true);   // item pictures change the height when they arrive
 
 function wire() {
-  document.querySelectorAll('.st').forEach(row => {
+  document.querySelectorAll('.st[data-k]').forEach(row => {   // filter rows only (the waystone check has plain rows)
     const s = filters.stats.find(x => x.key === row.dataset.k);
     const cb = row.querySelector('input[type=checkbox]');
     cb.onchange = () => { s.on = cb.checked; row.classList.toggle('off', !s.on); };

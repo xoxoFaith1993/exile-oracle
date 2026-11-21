@@ -146,6 +146,10 @@ def rate(groups, stats):
             res = [stats.get(f'{x} res') for x in ('fire', 'cold', 'lightning')]
             level = 'deadly' if any(r is not None and r < 75 for r in res) else 'risky'
             why = 'lowers your max resistances' + (' and you are already uncapped' if level == 'deadly' else '')
+        elif 'penetrat' in line and 'resist' in line:
+            res = [stats.get(f'{x} res') for x in ('fire', 'cold', 'lightning')]
+            level = 'risky'
+            why = 'monster hits ignore part of your resistances' + (' and you are uncapped' if any(r is not None and r < 75 for r in res) else '')
         elif 'cursed' in line or ('curse' in line and 'on monsters' not in line and 'player' in line):
             level, why = 'risky', 'curses you for the whole map'
         elif 'recovery' in line or 'regenerat' in line or 'leech' in line or 'recoup' in line:
@@ -175,3 +179,100 @@ def overview(con=None, build_id=None, kind='waystone'):
         ratings = rate(groups, lab.defence(con, build_id)['stats'])
     return {'kind': kind, 'limit': SEARCH_LIMIT,
             'groups': [dict(e, token=toks.get(e['group']), rating=ratings.get(e['group'])) for e in groups]}
+
+# ---------------- the overlay's waystone / tablet check (R19) ----------------
+
+RANGE = re.compile(r'\((-?[\d.]+)-(-?[\d.]+)\)')          # "27(25-30)%" in a detailed copy: keep the rolled 27
+REWARD_LINES = [('item quantity', 'Item quantity'), ('item rarity', 'Item rarity'), ('monster pack size', 'Pack size'),
+                ('waystone drop chance', 'Waystone drop chance'), ('revives available', 'Revives'),
+                ('magic monsters', 'Magic monsters'), ('rare monsters', 'Rare monsters'),
+                ('uses remaining', 'Uses left'), ('experience gain', 'Experience')]
+
+
+def active_build(con):
+    """The build the checks are for: the one picked in Settings (R17), else the followed plan, else the newest."""
+    from . import config, buildplan
+    s = config.settings()
+    bid = s.get('active_build')
+    if bid and con.execute('SELECT 1 FROM build WHERE id=?', (int(bid),)).fetchone():
+        return int(bid)
+    bid = next(iter(buildplan.followed(con).values()), None)
+    return bid or con.execute('SELECT MAX(id) FROM build').fetchone()[0]
+
+
+def _line_index(kind):
+    """Normalised mod line -> group, for lines that belong to exactly one group."""
+    key = 'idx:' + kind
+    if key in _cache:
+        return _cache[key]
+    seen = {}
+    for e in mods(kind):
+        for tr in e['tiers']:
+            for l in [tr['text']] + tr['extra']:
+                seen.setdefault(_norm(l).lower(), set()).add(e['group'])
+    idx = {k: next(iter(v)) for k, v in seen.items() if len(v) == 1}
+    _cache[key] = idx
+    return idx
+
+
+def _item_lines(text):
+    out = []
+    for raw in (text or '').replace('\r', '').split('\n'):
+        l = raw.strip()
+        if not l or l.startswith('{') or set(l) <= set('-'):
+            continue
+        l = re.sub(r'\s*\((augmented|implicit|enchant|rune|crafted|desecrated|fractured)\)\s*$', '', l, flags=re.I)
+        l = RANGE.sub('', l).strip()
+        out.append(l)
+    return out
+
+
+def check_item(con, text):
+    """A copied waystone or precursor tablet: each mod on it rated for the active build, its rewards, a verdict.
+    Returns None for any other item."""
+    head = (text or '')[:200].lower()
+    if 'item class: waystones' in head:
+        kind = 'waystone'
+    elif 'item class: tablet' in head or 'precursor tablet' in head.split('--------')[0]:
+        kind = 'tablet'
+    else:
+        return None
+    groups = {e['group']: e for e in mods(kind)}
+    idx, toks = _line_index(kind), _tokens(kind)
+    lines = _item_lines(text)
+    found, rewards, used = [], [], set()
+    for l in lines:
+        low = l.lower()
+        rw = next((lab for key, lab in REWARD_LINES if low.startswith(key) or (key in low and ':' in low)), None)
+        if rw and ':' in l:
+            rewards.append({'label': rw, 'value': l.split(':', 1)[1].strip()})
+            continue
+        g = idx.get(_norm(l).lower())
+        if not g:
+            g = next((gr for gr, tk in toks.items() if tk and tk in low and gr not in used and groups[gr]['line'].lower().split()[0] in low), None)
+        if g and g not in used:
+            used.add(g)
+            found.append({'group': g, 'line': l, 'kind': groups[g]['kind']})
+    out = {'kind': kind, 'mods': found, 'rewards': rewards, 'build': None, 'verdict': None}
+    if kind == 'waystone' and found:
+        bid = active_build(con)
+        if bid:
+            try:
+                from . import lab
+                d = lab.defence(con, bid)
+                ratings = rate([groups[f['group']] for f in found], d['stats'])
+                for f in found:
+                    f.update(ratings.get(f['group']) or {})
+                lab_row = con.execute('SELECT label FROM build WHERE id=?', (bid,)).fetchone()
+                out['build'] = {'id': bid, 'label': lab_row['label'] if lab_row else f'#{bid}',
+                                'skill': d.get('main_skill')}
+            except Exception as e:
+                out['build_error'] = f'could not rate for your build: {e}'
+        levels = [f.get('level') for f in found]
+        out['verdict'] = 'deadly' if 'deadly' in levels else 'risky' if 'risky' in levels else 'fine'
+        n = {k: levels.count(k) for k in ('deadly', 'risky')}
+        out['summary'] = ('Skip it or reroll: ' if n['deadly'] else 'Run it with care: ' if n['risky'] else 'Safe to run') + \
+            (', '.join(f'{v} {k}' for k, v in n.items() if v) if n['deadly'] or n['risky'] else '')
+    elif kind == 'tablet':
+        out['summary'] = f'{len(found)} modifier{"s" if len(found) != 1 else ""} on this tablet'
+    return out

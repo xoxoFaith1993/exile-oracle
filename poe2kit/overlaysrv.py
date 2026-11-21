@@ -47,6 +47,14 @@ def _work(cid, text, filters=None):
     try:
         res = pricecheck.check(con, text, progress=lambda part: _partial(cid, part), filters=filters)
         status = 'done'
+        try:   # R19: a waystone / tablet also gets its mods rated for the active build
+            from . import mapmods
+            mc = mapmods.check_item(con, text)
+            if mc and isinstance(res, dict):
+                res['mapcheck'] = mc
+        except Exception as e:
+            if isinstance(res, dict):
+                res['mapcheck'] = {'error': f'map check failed: {e}'}
     except Exception as e:
         res = {'error': f'{type(e).__name__}: {e}', 'trace': traceback.format_exc()[-1500:]}
         status = 'error'

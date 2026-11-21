@@ -189,6 +189,35 @@ def oracle_extras_check():
     check(oracle.hold_note('Exalted Orb') and oracle.hold_note('Soul Core of Tacati'), 'Oracle hold notes for the playbook')
     check(os.path.exists(os.path.join(HERE, 'ninja_view.pyw')), 'poe.ninja profile window script present')
 
+def waystone_check():
+    """R19: a copied waystone is matched to the game's map mods (rating is skipped here: no build needed)."""
+    from poe2kit import mapmods, db
+    text = '\n'.join(['Item Class: Waystones', 'Rarity: Rare', 'Doom Sanctuary', 'Waystone (Tier 15)', '--------',
+                      'Waystone Tier: 15', 'Monster Pack Size: +23% (augmented)', '--------', 'Item Level: 79',
+                      '--------', 'Monsters deal 22(20-24)% of Damage as Extra Cold',
+                      'Monsters have 75(70-79)% increased Stun Threshold'])
+    keep = mapmods.active_build
+    mapmods.active_build = lambda con: None
+    try:
+        con = db.connect()
+        r = mapmods.check_item(con, text)
+        con.close()
+    except Exception as e:
+        r = {'error': str(e)}
+    finally:
+        mapmods.active_build = keep
+    try:
+        have = bool(mapmods.mods('waystone'))
+    except Exception:
+        have = False
+    if not have:   # fresh test home without the game data download: only the "other items" part
+        check(mapmods.check_item(None, TEST_ITEM) is None, 'waystone check ignores other items (no game data here)')
+        return
+    check(r and len(r.get('mods') or []) == 2 and (r.get('rewards') or [{}])[0].get('label') == 'Pack size',
+          f"waystone check ({len((r or {}).get('mods') or [])} mods matched)")
+    check(mapmods.check_item(None, TEST_ITEM) is None, 'waystone check ignores other items')
+
+
 def appwindow_check():
     from poe2kit import appwindow
     cmd = appwindow.command()   # looks for Edge / Chrome / Chromium; opens nothing
@@ -272,6 +301,7 @@ if __name__ == '__main__':
     doctor_check()
     appwindow_check()
     oracle_extras_check()
+    waystone_check()
     mcp()
     if '--pob' in sys.argv:
         pob_part()
