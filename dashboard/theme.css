@@ -1,0 +1,138 @@
+/* Exile Oracle: dark PoE-gothic theme. One file for the dashboard and the overlay.
+   Fonts: Cinzel (headings) and Alegreya Sans (text), both SIL Open Font License, bundled in /static/fonts. */
+
+@font-face { font-family: "Cinzel"; src: url("/static/fonts/Cinzel-Variable.ttf") format("truetype");
+  font-weight: 400 900; font-display: swap; }
+@font-face { font-family: "Alegreya Sans"; src: url("/static/fonts/AlegreyaSans-Regular.ttf") format("truetype");
+  font-weight: 400; font-display: swap; }
+@font-face { font-family: "Alegreya Sans"; src: url("/static/fonts/AlegreyaSans-Medium.ttf") format("truetype");
+  font-weight: 500; font-display: swap; }
+@font-face { font-family: "Alegreya Sans"; src: url("/static/fonts/AlegreyaSans-Bold.ttf") format("truetype");
+  font-weight: 700; font-display: swap; }
+@font-face { font-family: "Alegreya Sans"; src: url("/static/fonts/AlegreyaSans-Italic.ttf") format("truetype");
+  font-weight: 400; font-style: italic; font-display: swap; }
+
+:root {
+  /* stone and parchment */
+  --eo-bg: #0c0a09;            /* the void behind everything */
+  --eo-stone: #15110e;         /* page */
+  --eo-panel: #1c1712;         /* panels */
+  --eo-panel-2: #241d16;       /* raised rows, inputs */
+  --eo-panel-3: #2e251b;       /* hover */
+  --eo-line: #3a2f22;          /* quiet borders */
+  --eo-gold: #c9a45c;          /* headings, frames */
+  --eo-gold-dim: #8a6f3e;      /* frame lines */
+  --eo-gold-hi: #e8c987;
+  --eo-text: #e2d6bf;          /* parchment */
+  --eo-text-2: #b8a888;
+  --eo-muted: #85765e;
+  /* blood */
+  --eo-blood: #a3192e;
+  --eo-blood-hi: #c8283c;
+  --eo-blood-dim: #4a1018;
+  /* signals (readable for colour-blind players: blue up, orange down) */
+  --eo-up: #6fa8dc;
+  --eo-down: #e08a4f;
+  --eo-good: #7fb069;
+  --eo-warn: #e3b341;
+  /* item rarity, as in the game */
+  --eo-normal: #c8c8c8;
+  --eo-magic: #8888ff;
+  --eo-rare: #ffff77;
+  --eo-unique: #af6025;
+  --eo-gem: #1ba29b;
+  --eo-currency: #aa9e82;
+  /* type */
+  --eo-display: "Cinzel", "Palatino Linotype", Georgia, serif;
+  --eo-body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  /* textures: fine grain for stone, a soft vignette for panels */
+  --eo-grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='.35'/></svg>");
+  --eo-radius: 3px;
+}
+
+/* ---------- base ---------- */
+.eo, .eo body { background: var(--eo-bg); }
+.eo body, body.eo {
+  margin: 0; color: var(--eo-text); font: 15px/1.45 var(--eo-body);
+  background: radial-gradient(ellipse at 50% -10%, #241a12 0%, var(--eo-stone) 45%, var(--eo-bg) 100%) fixed,
+              var(--eo-grain), var(--eo-bg);
+  font-variant-numeric: tabular-nums;
+}
+.eo h1, .eo h2, .eo h3, .eo .eo-display {
+  font-family: var(--eo-display); color: var(--eo-gold); font-weight: 600; letter-spacing: .06em; margin: 0;
+}
+.eo h1 { font-size: 22px; } .eo h2 { font-size: 16px; } .eo h3 { font-size: 13px; letter-spacing: .1em; }
+.eo a { color: var(--eo-gold-hi); }
+.eo ::selection { background: var(--eo-blood); color: #fff; }
+.eo ::-webkit-scrollbar { width: 10px; height: 10px; }
+.eo ::-webkit-scrollbar-track { background: var(--eo-stone); }
+.eo ::-webkit-scrollbar-thumb { background: #3a2f22; border: 2px solid var(--eo-stone); border-radius: 6px; }
+
+/* ---------- panels: dark with a thin gold frame and corner studs ---------- */
+.eo-panel {
+  position: relative; background: linear-gradient(180deg, var(--eo-panel-2), var(--eo-panel)), var(--eo-grain);
+  border: 1px solid var(--eo-gold-dim); border-radius: var(--eo-radius); padding: 12px 14px;
+  box-shadow: inset 0 0 0 1px #0008, inset 0 0 24px #0009, 0 2px 10px #0008;
+}
+.eo-panel::before, .eo-panel::after {   /* corner studs */
+  content: ""; position: absolute; width: 7px; height: 7px; border: 1px solid var(--eo-gold);
+  background: var(--eo-panel-3); transform: rotate(45deg); top: -4px;
+}
+.eo-panel::before { left: -4px; } .eo-panel::after { right: -4px; }
+.eo-panel > .eo-title {
+  font-family: var(--eo-display); color: var(--eo-gold); font-size: 13px; letter-spacing: .12em; text-transform: uppercase;
+  margin: -2px 0 10px; padding-bottom: 7px; border-bottom: 1px solid var(--eo-line);
+  display: flex; align-items: center; gap: 8px;
+}
+.eo-divider { height: 1px; margin: 12px 0; border: 0;
+  background: linear-gradient(90deg, transparent, var(--eo-gold-dim), transparent); }
+
+/* ---------- buttons ---------- */
+.eo-btn {
+  font: 600 12.5px var(--eo-display); letter-spacing: .1em; text-transform: uppercase; color: var(--eo-text);
+  background: linear-gradient(180deg, #2c241b, #1d1712); border: 1px solid var(--eo-gold-dim); border-radius: var(--eo-radius);
+  padding: 7px 14px; cursor: pointer; box-shadow: inset 0 1px 0 #ffffff10;
+}
+.eo-btn:hover { border-color: var(--eo-gold); color: var(--eo-gold-hi); }
+.eo-btn:disabled { opacity: .45; cursor: default; }
+.eo-btn.primary { color: #fff; background: linear-gradient(180deg, var(--eo-blood-hi), var(--eo-blood));
+  border-color: #d9475a; box-shadow: inset 0 1px 0 #ffffff25, 0 0 10px #a3192e55; }
+.eo-btn.primary:hover { background: linear-gradient(180deg, #d63a4e, var(--eo-blood-hi)); }
+.eo-seg { display: inline-flex; border: 1px solid var(--eo-gold-dim); border-radius: var(--eo-radius); overflow: hidden; }
+.eo-seg button { font: 600 11.5px var(--eo-display); letter-spacing: .08em; text-transform: uppercase; color: var(--eo-muted);
+  background: transparent; border: 0; padding: 6px 10px; cursor: pointer; }
+.eo-seg button.on { color: var(--eo-gold-hi); background: var(--eo-panel-3); }
+
+/* ---------- pills, tags ---------- */
+.eo-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; color: var(--eo-text-2);
+  background: var(--eo-panel-2); border: 1px solid var(--eo-line); border-radius: 999px; padding: 2px 10px; }
+.eo-pill b { color: var(--eo-text); font-weight: 700; }
+.eo-tag { font: 700 10px var(--eo-body); letter-spacing: .08em; text-transform: uppercase; padding: 1px 6px;
+  border-radius: 2px; background: #2a231b; color: var(--eo-muted); border: 1px solid #3a2f22; }
+.eo-tag.tier { background: #3b2e14; color: var(--eo-gold-hi); border-color: var(--eo-gold-dim); }
+.eo-tag.blood { background: var(--eo-blood-dim); color: #ffb3bd; border-color: #6b1a26; }
+
+/* ---------- tables ---------- */
+.eo-table { width: 100%; border-collapse: collapse; }
+.eo-table th { font: 600 11px var(--eo-display); letter-spacing: .12em; text-transform: uppercase; color: var(--eo-gold);
+  text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--eo-gold-dim); }
+.eo-table td { padding: 5px 8px; border-bottom: 1px solid #ffffff08; }
+.eo-table tbody tr:nth-child(even) td { background: #ffffff05; }
+.eo-table tbody tr:hover td { background: #c9a45c12; }
+.eo-num { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ---------- inputs ---------- */
+.eo-input { font: 500 14px var(--eo-body); color: var(--eo-text); background: #100d0a; border: 1px solid var(--eo-line);
+  border-radius: var(--eo-radius); padding: 5px 8px; outline: none; }
+.eo-input:focus { border-color: var(--eo-gold); box-shadow: 0 0 0 2px #c9a45c22; }
+.eo-check { accent-color: var(--eo-blood-hi); width: 15px; height: 15px; }
+
+/* ---------- item names in rarity colours ---------- */
+.eo-r-normal { color: var(--eo-normal); } .eo-r-magic { color: var(--eo-magic); } .eo-r-rare { color: var(--eo-rare); }
+.eo-r-unique { color: var(--eo-unique); } .eo-r-gem { color: var(--eo-gem); } .eo-r-currency { color: var(--eo-currency); }
+.eo-item-name { font-family: var(--eo-display); font-weight: 600; letter-spacing: .03em; }
+
+/* ---------- numbers that matter ---------- */
+.eo-big { font: 700 30px var(--eo-display); color: var(--eo-gold-hi); letter-spacing: .02em; text-shadow: 0 0 14px #c9a45c33; }
+.eo-up { color: var(--eo-up); } .eo-down { color: var(--eo-down); } .eo-muted { color: var(--eo-muted); }
+.eo-small { font-size: 12.5px; }

@@ -30,7 +30,7 @@ ISCC = next((p for p in (r'F:\Tools\InnoSetup\ISCC.exe', r'C:\Program Files\Inno
 
 FILES = ['monitor.py', 'server.py', 'tray.pyw', 'overlay.pyw', 'launcher.py', 'cli.py', 'leaguestart_pull.py', 'make_datapack.py',
          'launch_sweep.py', 'art_sweep.py', 'smoke_test.py', 'TROUBLESHOOTING.md']
-DIRS = {'poe2kit': ('.py',), 'dashboard': ('.html', '.ico', '.png'), 'pobhost': ('.lua', '.c'),
+DIRS = {'poe2kit': ('.py',), 'dashboard': ('.html', '.ico', '.png', '.css', '.svg'), 'pobhost': ('.lua', '.c'),
         'datapack': ('.json',), 'bin': ('.exe',)}
 RESEARCH = ['drop-rates.json', 'drop-rates.md']
 # personal details that must never ship: regexes in release\\private_patterns.txt (that file never ships)
@@ -52,6 +52,7 @@ def stage():
         for f in os.listdir(os.path.join(HERE, d)):
             if f.endswith(exts):
                 shutil.copy2(os.path.join(HERE, d, f), os.path.join(app, d, f))
+    shutil.copytree(os.path.join(HERE, 'dashboard', 'fonts'), os.path.join(app, 'dashboard', 'fonts'))   # OFL fonts
     os.makedirs(os.path.join(app, 'research'))
     for f in RESEARCH:
         shutil.copy2(os.path.join(HERE, 'research', f), os.path.join(app, 'research', f))

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <!-- Exile Oracle emblem: an eye in a gothic arch. Original artwork for this project (no game art). -->
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f0d797"/>
+      <stop offset=".5" stop-color="#c9a45c"/>
+      <stop offset="1" stop-color="#7d6230"/>
+    </linearGradient>
+    <linearGradient id="stone" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a2119"/>
+      <stop offset="1" stop-color="#0f0c0a"/>
+    </linearGradient>
+    <radialGradient id="iris" cx=".5" cy=".42" r=".6">
+      <stop offset="0" stop-color="#ff5a6e"/>
+      <stop offset=".45" stop-color="#c8283c"/>
+      <stop offset="1" stop-color="#3d0a12"/>
+    </radialGradient>
+    <radialGradient id="glow" cx=".5" cy=".58" r=".5">
+      <stop offset="0" stop-color="#c8283c" stop-opacity=".45"/>
+      <stop offset="1" stop-color="#c8283c" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <!-- arch: a pointed gothic window -->
+  <path d="M128 10 C 184 44 222 98 222 162 L 222 244 L 34 244 L 34 162 C 34 98 72 44 128 10 Z"
+        fill="url(#stone)" stroke="url(#gold)" stroke-width="10" stroke-linejoin="round"/>
+  <path d="M128 30 C 174 60 204 106 204 162 L 204 228 L 52 228 L 52 162 C 52 106 82 60 128 30 Z"
+        fill="none" stroke="#7d6230" stroke-width="2.5"/>
+  <circle cx="128" cy="152" r="88" fill="url(#glow)"/>
+  <!-- the star of foresight -->
+  <path d="M128 52 L 134 74 L 156 80 L 134 86 L 128 108 L 122 86 L 100 80 L 122 74 Z" fill="url(#gold)"/>
+  <!-- the eye -->
+  <path d="M58 158 Q 128 92 198 158 Q 128 224 58 158 Z" fill="#e8dcc4" stroke="url(#gold)" stroke-width="6"
+        stroke-linejoin="round"/>
+  <circle cx="128" cy="158" r="35" fill="url(#iris)" stroke="#2a080d" stroke-width="3"/>
+  <ellipse cx="128" cy="158" rx="8" ry="27" fill="#0a0506"/>
+  <circle cx="116" cy="146" r="6" fill="#fff" opacity=".85"/>
+</svg>

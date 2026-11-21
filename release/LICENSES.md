@@ -2,14 +2,14 @@
 
 **Exile Oracle** is a personal, free tool shared between friends. Use at your own risk; no warranty.
 It isn't affiliated with or endorsed by Grinding Gear Games. Path of Exile, its names and all of its artwork are
-© Grinding Gear Games. This free, non-commercial fan tool uses one piece of game art (the Blood Mage "Sanguimancy"
-ascendancy art) as its icon; it will be replaced on request (an original icon is ready in `release\icon.png`).
+© Grinding Gear Games. The Exile Oracle emblem (the eye in a gothic arch) is original artwork made for this project.
 The installer also bundles item, skill and passive-tree pictures taken from the game files (`toolkit\gameart`), so
 the tool looks right without extra downloads; they are © Grinding Gear Games, shipped for this free, non-commercial
 fan tool, and will be removed on request. Other item pictures load from GGG's own image servers through poe.ninja.
 
 ## Included
 - **Python 3.15** (embedded distribution), Python Software Foundation License: https://docs.python.org/3/license.html
+- **Cinzel** and **Alegreya Sans** fonts: SIL Open Font License 1.1 (licence texts in `toolkit\dashboardonts`).
 - **poblua.exe**: a small launcher that runs Path of Building's Lua runtime headless (source: `toolkit\pobhost\poblua.c`).
 
 Linux download only, built by GitHub Actions:

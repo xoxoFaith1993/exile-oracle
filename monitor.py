@@ -575,6 +575,23 @@ class Handler(http.server.BaseHTTPRequestHandler):
         if u.path in ('/', '/index.html'):
             with open(os.path.join(HERE, 'dashboard', 'index.html'), 'rb') as f:
                 return self._send(200, f.read(), 'text/html; charset=utf-8')
+        if u.path.startswith('/static/'):   # theme.css, fonts, the emblem (only files inside dashboard/)
+            base = os.path.join(HERE, 'dashboard')
+            fp = os.path.normpath(os.path.join(base, urllib.parse.unquote(u.path[8:])))
+            kinds = {'.css': 'text/css; charset=utf-8', '.ttf': 'font/ttf', '.woff2': 'font/woff2',
+                     '.svg': 'image/svg+xml', '.png': 'image/png', '.ico': 'image/x-icon', '.js': 'text/javascript',
+                     '.html': 'text/html; charset=utf-8'}
+            ext = os.path.splitext(fp)[1].lower()
+            if not fp.startswith(base + os.sep) or ext not in kinds or not os.path.isfile(fp):
+                return self._send(404, b'', 'text/plain')
+            with open(fp, 'rb') as f:
+                body = f.read()
+            self.send_response(200)
+            self.send_header('Content-Type', kinds[ext])
+            self.send_header('Cache-Control', 'no-cache')
+            self.end_headers()
+            self.wfile.write(body)
+            return
         if u.path == '/overlay':
             with open(os.path.join(HERE, 'dashboard', 'overlay.html'), 'rb') as f:
                 return self._send(200, f.read(), 'text/html; charset=utf-8')
