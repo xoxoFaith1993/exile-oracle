@@ -9,13 +9,67 @@ once and ask Claude anything about your character, the economy or your next craf
 
 > Screenshots are from the author's own copy (his Blood Mage). Yours shows your own characters after you import them.
 
-| | |
-|---|---|
-| ![Economy](docs/screenshots/economy.jpg) **Economy** – Mirror, Divine and the league's chase items at a glance | ![Market history](docs/screenshots/market-history.jpg) **Market history** – every exchange item, price, stock, 7-day trend |
-| ![Character](docs/screenshots/character.jpg) **Character** – gear, skills and DPS from Path of Building | ![Top 1%](docs/screenshots/top1.jpg) **Top 1% check** – you vs the top 1% of your ascendancy |
-| ![Farming](docs/screenshots/farming.jpg) **What to farm** – mechanics ranked by what actually sells | ![League start playbook](docs/screenshots/league-start-playbook.jpg) **League start playbook** – days 1–7 of past launches |
-| ![League start planner](docs/screenshots/league-start-planner.jpg) **League start planner** – any class, any ascendancy path | ![Craft lab](docs/screenshots/craft-lab.jpg) **Craft lab** – plan and practise a craft step by step |
-| ![Patch notes](docs/screenshots/patch-notes.jpg) **Patch notes** – every line that hits your builds | ![Connect to Claude](docs/screenshots/status-claude.jpg) **Your profile + Connect to Claude** |
+## Screenshots
+
+### Economy
+Mirror, Divine and the league's chase items at a glance.
+
+![Economy](docs/screenshots/economy.jpg)
+
+### Market history
+Every Currency Exchange item: price, stock, 7-day trend.
+
+![Market history](docs/screenshots/market-history.jpg)
+
+### Character
+Gear, skills and real DPS from Path of Building.
+
+![Character](docs/screenshots/character.jpg)
+
+### Passive tree + build value
+Your tree, and every item priced (rares estimated from craft cost).
+
+![Passive tree + build value](docs/screenshots/passive-tree.jpg)
+
+### Top 1% check
+You vs the top 1% of your ascendancy: level, DPS, toughness, gear value.
+
+![Top 1% check](docs/screenshots/top1.jpg)
+
+### From Claude
+Ask in chat and Claude puts the answer on your dashboard (here: your build vs a top-1% Blood Mage).
+
+![From Claude](docs/screenshots/from-claude.jpg)
+
+### What to farm
+League mechanics ranked by what actually sells, with drop estimates from tracked runs.
+
+![What to farm](docs/screenshots/farming.jpg)
+
+### League start playbook
+What each mechanic's loot sold for on days 1–7 of the last three launches.
+
+![League start playbook](docs/screenshots/league-start-playbook.jpg)
+
+### League start planner
+Any class, any ascendancy path: skills to cut, cheap leveling uniques, campaign rewards.
+
+![League start planner](docs/screenshots/league-start-planner.jpg)
+
+### Craft lab
+Plan a craft, practise it step by step, record what really happened in game.
+
+![Craft lab](docs/screenshots/craft-lab.jpg)
+
+### Patch notes
+Every line of a patch that hits your builds, with buff / nerf tags.
+
+![Patch notes](docs/screenshots/patch-notes.jpg)
+
+### Your profile + Connect to Claude
+Set your class once, connect Claude with one click.
+
+![Your profile + Connect to Claude](docs/screenshots/status-claude.jpg)
 
 ## Install
 1. Download `PoE2Toolkit-Setup-<version>.exe` from **[Releases](../../releases/latest)** and run it.

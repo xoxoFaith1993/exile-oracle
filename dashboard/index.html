@@ -372,7 +372,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   if (b.dataset.tab === 'status') { loadStatus(); loadProfile(); loadClaude(); }
   try { localStorage.setItem('poe2tab', b.dataset.tab); } catch (e) {}
 });
-try { const t = localStorage.getItem('poe2tab'); if (t) document.querySelector(`nav [data-tab="${t}"]`)?.click(); } catch (e) {}
+try { const t = location.hash.slice(1) || localStorage.getItem('poe2tab'); if (t) document.querySelector(`nav [data-tab="${t.replace(/[^a-z0-9]/gi, '')}"]`)?.click(); } catch (e) {}
 
 // ---------- header ----------
 let STATUS = null;
@@ -1168,7 +1168,7 @@ async function pollShow() {
       const f = VIEWS[s.type];
       $('#show').innerHTML = `<div class="muted small" style="margin:0 0 8px">${esc(s.caption || '')} · ${ago(s.ts)}</div>` +
         (f ? f(s.data || {}) : `<div class="card"><pre>${esc(JSON.stringify(s.data, null, 1))}</pre></div>`);
-      if (document.visibilityState === 'visible') document.querySelector('nav [data-tab="claude"]').click();
+      if (document.visibilityState === 'visible' && !location.hash) document.querySelector('nav [data-tab="claude"]').click();
     }
   } catch (e) {}
 }
