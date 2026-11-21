@@ -131,7 +131,7 @@ by itself.
 ## Damage looks far too low
 | Problem | Check | Fix |
 |---|---|---|
-| A build's DPS is much lower than in game | Character page: "Weapon set I is empty" warning? | fixed since 0.6.x: weapons only in set II are measured with set II. Re-open the page (Path of Building measures again) |
+| A build's DPS is much lower than in game | Character page → **Build check**: weapon set, main skill | weapons only in set II are fixed automatically; otherwise pick the right weapon set / main skill there (saved with the build; "Reset to as imported" undoes it) |
 | Gem level lower than in game | the skill's level in game includes "+ levels" from gear | the gem shows its own level; gear levels are counted in the DPS |
 
 ## Build Vault: paste / delete

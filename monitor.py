@@ -412,6 +412,9 @@ def api(path, q):
             if not a or not b:
                 return {'error': 'Save two builds in the vault to compare them (Builds page: paste a build).'}
             return compare.compare_view(con, a, int(b))
+        if path == '/api/buildcheck':   # Character page: how this build is measured
+            from poe2kit import vault, pob
+            return dict(vault.check(con, int(q.get('id') or 0)), pob_version=pob.version())
         if path == '/api/campaign':   # R16: campaign rush guide + checklist + where you are now
             from poe2kit import campaign
             return campaign.guide(con)
@@ -779,6 +782,14 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     c.execute('DELETE FROM alert WHERE seen=1')
                     c.commit()
                     data = {'ok': True}
+                finally:
+                    c.close()
+            elif u.path in ('/api/buildcheck/tune', '/api/buildcheck/reset'):   # fix how a build is measured
+                from poe2kit import vault, db as _db
+                c = _db.connect()
+                try:
+                    data = vault.tune(c, body.get('id'), body.get('weapon_set'), body.get('main_group')) \
+                        if u.path.endswith('tune') else vault.reset(c, body.get('id'))
                 finally:
                     c.close()
             elif u.path in ('/api/vault/paste', '/api/vault/delete'):   # Builds page: paste a build / delete one

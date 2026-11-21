@@ -124,6 +124,7 @@ def filled_weapon_set(xml_text):
 # (the note shows with the build's warnings). Add new ones here as they are found; each is
 # fix(xml) -> (xml, note or None), and must leave a correct build unchanged.
 AUTOFIXES = [filled_weapon_set]
+AUTOFIX_VERSION = 'af2'   # bump when a fix or its note changes: cached results are measured again
 
 
 def autofix(xml_text):
@@ -142,7 +143,7 @@ def calc(xml_text, use_cache=True, timeout=300, main_group=None):
     xml_text, fixnotes = autofix(xml_text)
     with open(SCRIPT, 'rb') as f:
         script = hashlib.sha1(f.read()).hexdigest()
-    key = hashlib.sha1((version() + script + str(main_group) + xml_text).encode('utf-8')).hexdigest()
+    key = hashlib.sha1((version() + script + str(main_group) + AUTOFIX_VERSION + xml_text).encode('utf-8')).hexdigest()
     os.makedirs(CACHE, exist_ok=True)
     cpath = os.path.join(CACHE, key + '.json')
     if use_cache and os.path.exists(cpath):

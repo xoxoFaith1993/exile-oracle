@@ -212,7 +212,7 @@ def delete(con, build_id):
     if not row:
         return {'ok': False, 'why': 'No such build.'}
     con.execute('DELETE FROM build WHERE id=?', (bid,))
-    for k in (f'lab:cards:{bid}', f'planner:{bid}'):
+    for k in (f'lab:cards:{bid}', f'planner:{bid}', f'tune:{bid}', f'tune:orig:{bid}'):
         con.execute('DELETE FROM kv WHERE k=?', (k,))
     con.execute('DELETE FROM kv WHERE k LIKE ?', (f'lab:curves:{bid}:%',))
     con.commit()
@@ -220,3 +220,70 @@ def delete(con, build_id):
     if str(s.get('active_build') or '') == str(bid):
         config.save_settings({'active_build': None})
     return {'ok': True, 'deleted': bid, 'label': row['label']}
+
+
+# ---------------- build check: how a build is measured, and fixing it (the author, 2026-11-21) ----------------
+
+def check(con, build_id):
+    """What Path of Building is told about this build: weapon sets, which one is used, the main skill, and whether it
+    was tuned. (The measured numbers and warnings come from the Character page itself.)"""
+    r = con.execute('SELECT pob_code FROM build WHERE id=?', (int(build_id),)).fetchone()
+    if not r:
+        return {'ok': False, 'why': 'No such build.'}
+    xml = decode(r['pob_code'])
+
+    def item(slot):
+        m = re.search(r'<Slot [^>]*itemId="(\d+)"[^>]*name="%s"' % re.escape(slot), xml)
+        return bool(m and m.group(1) != '0')
+    root = ET.fromstring(xml)
+    b = root.find('Build')
+    items = root.find('Items')
+    use2 = (items.get('useSecondWeaponSet') if items is not None else None) == 'true'
+    orig = db.kv_get(con, f'tune:orig:{int(build_id)}')
+    return {'ok': True, 'set1': item('Weapon 1') or item('Weapon 2'), 'set2': item('Weapon 1 Swap') or item('Weapon 2 Swap'),
+            'uses_set': 2 if use2 else 1, 'main_group': int(b.get('mainSocketGroup') or 1) if b is not None else 1,
+            'tuned': bool(orig), 'tune': json.loads(db.kv_get(con, f'tune:{int(build_id)}') or '{}')}
+
+
+def tune(con, build_id, weapon_set=None, main_group=None):
+    """Change how a build is measured: weapon set 1 / 2 (None = leave it to the auto-fixes) and the main skill group.
+    The build as it was imported is kept, so reset() brings it back."""
+    bid = int(build_id)
+    r = con.execute('SELECT pob_code FROM build WHERE id=?', (bid,)).fetchone()
+    if not r:
+        return {'ok': False, 'why': 'No such build.'}
+    if not db.kv_get(con, f'tune:orig:{bid}'):
+        db.kv_set(con, f'tune:orig:{bid}', r['pob_code'])
+    xml = decode(db.kv_get(con, f'tune:orig:{bid}'))
+    cur = json.loads(db.kv_get(con, f'tune:{bid}') or '{}')
+    if weapon_set is not None:
+        cur['weapon_set'] = int(weapon_set) if int(weapon_set) in (1, 2) else None
+    if main_group is not None:
+        cur['main_group'] = int(main_group) if int(main_group) > 0 else None
+    ws, mg = cur.get('weapon_set'), cur.get('main_group')
+    if ws:
+        val = 'true' if ws == 2 else 'nil'
+        xml = re.sub(r'(<(?:Items|ItemSet) [^>]*?)useSecondWeaponSet="[^"]*"', r'\1useSecondWeaponSet="%s"' % val, xml)
+        if 'useSecondWeaponSet=' not in xml:
+            xml = xml.replace('<Items ', f'<Items useSecondWeaponSet="{val}" ', 1)
+    if mg:
+        xml = re.sub(r'(<Build [^>]*?)mainSocketGroup="\d+"', r'\g<1>mainSocketGroup="%d"' % mg, xml, count=1)
+    code = encode(xml)
+    s = summarize(xml)
+    con.execute('UPDATE build SET pob_code=?, main_skill=? WHERE id=?', (code, s.get('main_skill'), bid))
+    db.kv_set(con, f'tune:{bid}', json.dumps(cur))
+    con.commit()
+    return dict(check(con, bid), main_skill=s.get('main_skill'))
+
+
+def reset(con, build_id):
+    """Back to the build exactly as it was imported."""
+    bid = int(build_id)
+    orig = db.kv_get(con, f'tune:orig:{bid}')
+    if not orig:
+        return check(con, bid)
+    s = summarize(decode(orig))
+    con.execute('UPDATE build SET pob_code=?, main_skill=? WHERE id=?', (orig, s.get('main_skill'), bid))
+    con.execute('DELETE FROM kv WHERE k IN (?, ?)', (f'tune:orig:{bid}', f'tune:{bid}'))
+    con.commit()
+    return check(con, bid)

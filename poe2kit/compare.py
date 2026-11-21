@@ -144,6 +144,8 @@ def compare_view(con, a_id, b_id):
                      'only_a': sorted(ta - tb), 'only_b': sorted(tb - ta), 'both': sorted(ta & tb)},
             'keystones': {'a': [k['name'] for k in ca.get('keystones') or []], 'b': [k['name'] for k in cb.get('keystones') or []]},
             'gear': _gear(ca, cb),
+            'equip': {'a': {'gear': ca.get('gear') or [], 'jewels': ca.get('jewels') or []},
+                      'b': {'gear': cb.get('gear') or [], 'jewels': cb.get('jewels') or []}},
             'skills': {'a': sk_a, 'b': sk_b, 'only_a': sorted(names_a - names_b), 'only_b': sorted(names_b - names_a)},
             'pushed': pushed(con) if pushed(con).get('a') == int(a_id) and pushed(con).get('b') == int(b_id) else None}
 

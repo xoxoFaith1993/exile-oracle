@@ -165,6 +165,10 @@ poe.ninja link) and it's read and added; poe.ninja links open that character's p
 Each row has **View build** (opens it on the Character page) and **Delete** (asks first).
 
 ### Character
+Gear (click an item to keep its stats open), skills, the passive tree and what the build is worth. **Build check**
+shows how Path of Building measured it (weapon set, main skill, versions, automatic fixes) and lets you change the
+weapon set or main skill when the numbers look wrong; "Reset to as imported" undoes it.
+
 Gear, skills and real DPS from Path of Building.
 
 ![Character](docs/screenshots/character.jpg)
@@ -175,7 +179,9 @@ Your tree, and every item priced (rares estimated from craft cost).
 ![Passive tree + build value](docs/screenshots/passive-tree.jpg)
 
 ### Compare
-Any two builds side by side, visually: a shape chart (damage, toughness, life, resistances, speed), stat bars with the
+Any two builds side by side, visually: both builds' gear in the game's equipment layout (hover an item, **hold Shift**
+to see both builds' items in that slot side by side, **click** to keep its stats open), skills, a shape chart (damage,
+toughness, life, resistances, speed), stat bars with the
 difference, the biggest hit each survives per damage type, the two passive trees on one tree (blue: only yours, red:
 only theirs, gold: both), gear slot by slot and skills. Ask the Oracle to compare builds and it lands here with its
 verdict.

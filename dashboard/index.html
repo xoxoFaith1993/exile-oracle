@@ -386,6 +386,10 @@ input[type=checkbox] { accent-color: var(--eo-blood-hi); }
 .cmpgear .it img { width: 34px; height: 34px; object-fit: contain; }
 .gemtag { display: inline-block; padding: 1px 7px; margin: 2px; border-radius: 3px; background: #241c14; font-size: 12px; }
 .gemtag.only { outline: 1px solid currentColor; }
+.pintip { position: fixed; z-index: 60; max-height: 85vh; overflow-y: auto; filter: drop-shadow(0 6px 18px #000c); }
+.pintip .pinx { position: sticky; top: 0; float: right; margin: 2px 2px -26px 0; z-index: 2; width: 24px; height: 24px; border-radius: 3px;
+  border: 1px solid #8a6f3e; background: #1c1712; color: #e2d6bf; cursor: pointer; font-size: 13px; line-height: 1; }
+.pintip .pinx:hover { border-color: #c8283c; color: #fff; }
 .mmlvl { font: 700 10px var(--eo-display); letter-spacing: .1em; text-transform: uppercase; padding: 1px 7px; border-radius: 999px; border: 1px solid; }
 .mmlvl.deadly { color: #ff7b7b; border-color: #7a2a2a; } .mmlvl.risky { color: #e9c46a; border-color: #6b5a2a; } .mmlvl.fine { color: var(--eo-good); border-color: #3f5f33; }
 #mmtable td { vertical-align: top; } #mmtable .tiers { font-size: 12px; color: var(--eo-muted); }
@@ -631,6 +635,8 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
       <label class="small"><span class="cmpB">■</span> <select class="crin" id="cmpb" style="max-width:260px"></select></label></div>
       <div class="sub">Two builds side by side, measured by Path of Building. Ask the Oracle to compare builds and it lands here with its verdict.</div>
       <div id="cmphead" style="margin-top:10px"></div></div>
+    <div class="card"><h2>Gear</h2><div class="sub">Hover an item for its details. <b>Hold Shift</b> to see both builds' items in that slot side by side (not for jewels: they don't pair up one to one). <b>Click</b> an item to keep its stats open.</div><div id="cmpgear"></div></div>
+    <div class="card"><h2>Skills</h2><div id="cmpskills"></div></div>
     <div class="grid2">
       <div class="card"><h2>Shape</h2><div class="sub">Further out is better. The rim is the better of the two; each ring in is 10× less.</div><div id="cmpradar"></div></div>
       <div class="card"><h2>Biggest hit you survive</h2><div class="sub">Per damage type: the shortest bar is the weak spot.</div><div id="cmphits"></div></div>
@@ -641,8 +647,6 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
       <div class="lab-tree" id="cmptree" style="height:520px"><div class="zbtn"><button data-z="1.4">+</button><button data-z="0.7">−</button><button data-z="fit">⤢</button></div>
         <div class="legend">hover a node for its name · Ctrl + scroll to zoom · drag to move</div></div>
       <div id="cmpkeys" class="small" style="margin-top:8px"></div></div>
-    <div class="card"><h2>Gear, slot by slot</h2><div id="cmpgear"></div></div>
-    <div class="card"><h2>Skills</h2><div id="cmpskills"></div></div>
   </section>
   <section id="top1">
     <div class="card"><h2>Top 1% check</h2><div class="sub">Your character against the top 1% of your ascendancy on poe.ninja: level, damage, toughness and gear value. Benchmarks are read on request (ask the Oracle to refresh them).</div>
@@ -881,9 +885,24 @@ function showTip(e, html) { tip.innerHTML = html; tip.style.display = 'block';
   const z = +document.body.style.zoom || 1;   // the tip lives inside the zoomed body: page pixels / zoom
   const x = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth * z - 8) / z; tip.style.left = x + 'px'; tip.style.top = (e.clientY + 14) / z + 'px'; }
 function hideTip() { tip.style.display = 'none'; }
+// click an item: its stats stay open in a pinned panel until its ✕ is pressed (several can be open at once)
+function pinTip(e, html) {
+  if (!html) return;
+  const z = +document.body.style.zoom || 1, n = document.querySelectorAll('.pintip').length;
+  const p = document.createElement('div');
+  p.className = 'pintip';
+  p.innerHTML = `<button class="pinx" title="Close">✕</button>${html}`;
+  document.body.appendChild(p);
+  const x = Math.min(e.clientX + 14 + n * 18, innerWidth - p.offsetWidth * z - 8) / z;
+  const y = Math.min(e.clientY + 14 + n * 18, innerHeight - p.offsetHeight * z - 8) / z;
+  p.style.left = Math.max(8, x) + 'px'; p.style.top = Math.max(8, y) + 'px';
+  p.querySelector('.pinx').onclick = () => p.remove();
+  hideTip();
+}
 
 // ---------- tabs ----------
 document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.pintip').forEach(p => p.remove());   // pinned item panels belong to the page they came from
   document.querySelectorAll('nav button').forEach(x => x.classList.toggle('on', x === b));
   document.querySelectorAll('section').forEach(s => s.classList.toggle('on', s.id === b.dataset.tab));
   setTimeout(() => pageAsks(b.dataset.tab));   // after the page's scripts have all loaded
@@ -1447,10 +1466,38 @@ async function loadCompare(a, b) {
   const box = $('#cmptree'); const old = box.querySelector('svg'); if (old) old.remove();
   await drawTree({ tree: { version: r.tree.version, allocated: [...r.tree.both, ...r.tree.only_a, ...r.tree.only_b], jewel_nodes: [], only_a: r.tree.only_a, only_b: r.tree.only_b } }, box);
   $('#cmpkeys').innerHTML = `<b>Keystones:</b> <span class="cmpA">${r.keystones.a.map(esc).join(', ') || 'none'}</span> · <span class="cmpB">${r.keystones.b.map(esc).join(', ') || 'none'}</span>`;
-  const it = (x, diff) => !x ? '<div class="it muted small">empty</div>' : `<div class="it${diff ? ' diff' : ''}">${x.icon ? `<img src="${ic(x.icon, 34)}" alt="">` : `<img src="/artfind?n=${encodeURIComponent(x.name || '')}&b=${encodeURIComponent(x.base || '')}" alt="" onerror="this.remove()">`}
-    <div><div class="small ${RCOL[x.rarity] || ''}"><b>${esc(x.name || x.base || '')}</b></div><div class="small muted">${esc(x.base && x.base !== x.name ? x.base : '')}${x.value_div != null ? ` · ${x.value_div < 1 ? '<1' : Math.round(x.value_div)} div` : ''}</div></div></div>`;
-  $('#cmpgear').innerHTML = `<div class="cmpgear"><div class="small cmpA">${nm(r.a)}</div><div></div><div class="small cmpB">${nm(r.b)}</div>` +
-    r.gear.map(g => `${it(g.a, !g.same)}<div class="small muted" style="text-align:center">${esc(g.slot)}</div>${it(g.b, !g.same)}`).join('') + '</div>';
+  // gear: the Character page's Equipment layout, both builds side by side (hover an item for its details)
+  const ea = invBlock(r.equip.a, 'a'), eb = invBlock(r.equip.b, 'b');
+  const worth = x => x.value_div != null ? ` · ${Math.round(x.value_div).toLocaleString()} div` : '';
+  $('#cmpgear').innerHTML = `<div style="display:flex;flex-wrap:wrap;gap:16px 28px;justify-content:space-around"><div style="flex:0 0 auto"><div class="small cmpA" style="text-align:center">■ ${nm(r.a)}${worth(r.a)}</div>${ea.html}</div>
+    <div style="flex:0 0 auto"><div class="small cmpB" style="text-align:center">■ ${nm(r.b)}${worth(r.b)}</div>${eb.html}</div></div>`;
+  const allItems = Object.assign({}, ea.items, eb.items);
+  // the item in the same slot on the other build (gear only: jewels don't pair up one to one)
+  const pair = key => {
+    const it = allItems[key]; if (!it || !it.slot || key.includes('j')) return null;
+    const other = key[0] === 'a' ? r.equip.b : r.equip.a;
+    const want = it.slot.replace(' Swap', ''), mine = it.slot.endsWith('Swap');
+    return other.gear.find(g => g.slot === it.slot) || other.gear.find(g => g.slot.replace(' Swap', '') === want && g.slot.endsWith('Swap') !== mine) || 'empty';
+  };
+  const cmpTip = (key, shift) => {
+    const it = allItems[key]; if (!it) return '';
+    const p = shift ? pair(key) : null;
+    if (!p) return itemTip(it) + (key.includes('j') || !shift ? (key.includes('j') ? '' : '<div class="small" style="margin-top:4px;text-align:center;background:#0b0908e6;border:1px solid #3a2e22;border-radius:3px;padding:2px 6px;color:#c9a45c">hold Shift to compare</div>') : '');
+    const mineFirst = key[0] === 'a';
+    const col = (x, who, cls) => `<div><div class="small ${cls}" style="text-align:center;margin-bottom:3px">■ ${who}</div>${x === 'empty' ? '<div class="ptip"><div class="hd">empty slot</div></div>' : itemTip(x)}</div>`;
+    const A = col(mineFirst ? it : p, nm(r.a), 'cmpA'), B = col(mineFirst ? p : it, nm(r.b), 'cmpB');
+    return `<div style="display:flex;gap:8px;align-items:flex-start">${A}${B}</div>`;
+  };
+  let hov = null;
+  $('#cmpgear').querySelectorAll('[data-tip]').forEach(el => {
+    el.onmousemove = e => { hov = { e, key: el.dataset.tip }; tip.style.padding = '0'; tip.style.background = 'transparent'; tip.style.border = '0'; showTip(e, cmpTip(el.dataset.tip, e.shiftKey)); };
+    el.onmouseleave = () => { hov = null; hideTip(); tip.style.padding = ''; tip.style.background = ''; tip.style.border = ''; };
+    el.style.cursor = 'pointer';
+    el.onclick = e => { e.stopPropagation(); pinTip(e, cmpTip(el.dataset.tip, e.shiftKey).replace(/<div class="small" style="margin-top:4px;text-align:center;background[^>]*>hold Shift to compare<\/div>/, '')); };
+  });
+  const reshow = e => { if (hov && (e.key === 'Shift')) showTip(hov.e, cmpTip(hov.key, e.type === 'keydown')); };
+  document.removeEventListener('keydown', window._cmpShift || (() => {})); document.removeEventListener('keyup', window._cmpShift || (() => {}));
+  window._cmpShift = reshow; document.addEventListener('keydown', reshow); document.addEventListener('keyup', reshow);
   const onlyA = new Set(r.skills.only_a), onlyB = new Set(r.skills.only_b);
   const col = (list, only, cls) => list.map(g => `<div style="margin:6px 0">${g.skills.map(s => `<span class="gemtag ${only.has(s) ? 'only ' + cls : ''}"><b>${esc(s)}</b></span>`).join('')}
     ${g.supports.map(s => `<span class="gemtag ${only.has(s) ? 'only ' + cls : ''}">${esc(s)}</span>`).join('')}</div>`).join('') || '<div class="muted small">none</div>';
@@ -2031,6 +2078,8 @@ function itemTip(it) {
 }
 function bindTips(root, getHtml) {
   root.querySelectorAll('[data-tip]').forEach(el => {
+    el.style.cursor = 'pointer';
+    el.onclick = e => { e.stopPropagation(); pinTip(e, getHtml(el.dataset.tip)); };
     el.onmousemove = e => { tip.style.padding = '0'; tip.style.background = 'transparent'; tip.style.border = '0'; showTip(e, getHtml(el.dataset.tip)); };
     el.onmouseleave = () => { hideTip(); tip.style.padding = ''; tip.style.background = ''; tip.style.border = ''; };
   });
@@ -2039,6 +2088,41 @@ const INV = { 'Weapon 1': [1, 1, 2, 4], 'Helmet': [4, 1, 2, 2], 'Weapon 2': [7, 
   'Body Armour': [4, 3, 2, 3], 'Ring 1': [3, 4, 1, 1], 'Ring 2': [6, 4, 1, 1], 'Gloves': [1, 5, 2, 2],
   'Belt': [4, 6, 2, 1], 'Boots': [7, 5, 2, 2], 'Charm 1': [3, 7, 1, 1], 'Charm 2': [4, 7, 1, 1], 'Charm 3': [5, 7, 1, 1],
   'Flask 1': [1, 7, 1, 2], 'Flask 2': [8, 7, 1, 2] };
+// the Equipment layout (also used twice on the Compare page). pre = a key prefix so two can share one page.
+function invBlock(c, pre) {
+  pre = pre || '';
+  const items = {}; c.gear.forEach((g, i) => items[pre + 'g' + i] = g); (c.jewels || []).forEach((j, i) => items[pre + 'j' + i] = j);
+  const bySlot = {}; c.gear.forEach((g, i) => bySlot[g.slot] = pre + 'g' + i);
+  const cell = (key, it, label) => `<div class="slot ${it ? RCOL[it.rarity] : ''}" ${it ? `data-tip="${key}"` : ''}>${it && it.art ? `<img src="${artSrc(it.art)}" alt="${esc(it.name)}">` : ''}${!it ? `<span class="lbl">${esc(label)}</span>` : ''}</div>`;
+  const swap = c.gear.filter(g => g.slot.endsWith('Swap'));
+  const wset = (!bySlot['Weapon 1'] && !bySlot['Weapon 2'] && swap.length) ? 2 : 1;
+  const inv = Object.entries(INV).map(([slot, [cx, cy, w, h]]) => {
+    const weapon = /^Weapon [12]$/.test(slot);
+    const key = weapon && wset === 2 ? bySlot[slot + ' Swap'] : bySlot[slot]; const it = key ? items[key] : null;
+    return `<div style="grid-column:${cx} / span ${w};grid-row:${cy} / span ${h};display:grid;position:relative">${cell(key, it, slot)}${weapon && wset === 2 && it ? '<span class="pill" style="position:absolute;left:4px;bottom:4px;font-size:10px">set II</span>' : ''}</div>`;
+  }).join('');
+  const jew = (c.jewels || []).map((j, i) => cell(pre + 'j' + i, j, 'Jewel')).join('');
+  return { items, html: `<div class="inv">${inv}</div>${jew ? `<div class="small muted" style="text-align:center;margin-top:6px">Jewels</div><div class="jrow">${jew}</div>` : ''}` };
+}
+// "Build check" on the Character page: how Path of Building measures this build, and changing it
+async function loadBuildCheck(c, box) {
+  const s = await get('/api/buildcheck?id=' + c.id), body = box.querySelector('.bcbody');
+  const groups = (c.skills || []).filter(g => g.gems && g.gems.some(x => !x.support));
+  const gname = g => esc(g.gems.filter(x => !x.support).map(x => x.name).join(' + '));
+  const setTxt = n => (n === 1 ? s.set1 : s.set2) ? 'has weapons' : 'empty';
+  const fixed = (c.warnings || []).filter(w => w.startsWith('Fixed automatically'));
+  body.innerHTML = `<div style="display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:center">
+    <span class="muted">Weapon set</span><span><select class="crin" id="bcws"><option value="0">automatic${fixed.length ? ' (set II: set I is empty)' : ''}</option><option value="1">I (${setTxt(1)})</option><option value="2">II (${setTxt(2)})</option></select></span>
+    <span class="muted">Main skill</span><span><select class="crin" id="bcmg">${groups.map(g => `<option value="${g.index}"${g.index === c.main_group ? ' selected' : ''}>${gname(g)}${g.dps ? ' · ' + g.dps.toLocaleString() + ' DPS' : ''}</option>`).join('')}</select></span>
+    <span class="muted">Measured by</span><span>Path of Building ${esc(s.pob_version || '?')} · tree ${esc(c.tree && c.tree.version || '?')}</span>
+    <span class="muted">Status</span><span>${s.tuned ? '<b style="color:var(--eo-gold)">changed by you</b> <button class="btn" id="bcreset" style="padding:1px 8px;font-size:11px">Reset to as imported</button>' : 'as imported'}${fixed.length ? ' · ' + fixed.length + ' automatic fix' : ''}</span></div>
+    <div class="muted" style="margin-top:6px">Changes are saved with the build and used everywhere (Build Lab, Compare, Top 1%). Still wrong? Ask the Oracle: "check why my numbers look off".</div>`;
+  const remeasure = async payload => { body.innerHTML = '<span class="spin"></span> Path of Building is measuring again…'; await post(payload ? '/api/buildcheck/tune' : '/api/buildcheck/reset', Object.assign({ id: c.id }, payload || {})); const fresh = await get('/api/character?id=' + c.id); fresh._openCheck = true; renderCharacter(fresh, CHAR_LAST.el); };
+  if (s.tune && s.tune.weapon_set) body.querySelector('#bcws').value = s.tune.weapon_set;
+  body.querySelector('#bcws').onchange = e => remeasure({ weapon_set: +e.target.value });
+  body.querySelector('#bcmg').onchange = e => remeasure({ main_group: +e.target.value });
+  const rb = body.querySelector('#bcreset'); if (rb) rb.onclick = () => remeasure(null);
+}
 let CHAR_LAST = null;
 document.addEventListener('click', e => {   // weapon set I / II toggle on the Character page
   const b = e.target.closest('[data-wset]'); if (!b || !CHAR_LAST) return;
@@ -2071,7 +2155,8 @@ function renderCharacter(c, el) {
     <div class="card"><div class="char-head"><h2>${esc(c.label)}</h2><span class="muted">Level ${esc(c.level)} ${esc(c.ascendancy || c.class)}</span>
       <span class="pill">${esc(c.league || '')}</span><span class="pill">${esc(c.owner)}</span>
       <span class="muted">Main skill <b style="color:var(--text-primary)">${esc(c.main_skill)}</b> · ${c.dps.toLocaleString()} DPS</span></div>
-      ${(c.warnings || []).map(w => w.startsWith('Fixed automatically') ? `<div class="small" style="color:var(--eo-good)">✔ ${esc(w)}</div>` : `<div class="small" style="color:var(--warning)">⚠ ${esc(w)}</div>`).join('')}</div>
+      ${(c.warnings || []).map(w => w.startsWith('Fixed automatically') ? `<div class="small" style="color:var(--eo-good)">✔ ${esc(w)}</div>` : `<div class="small" style="color:var(--warning)">⚠ ${esc(w)}</div>`).join('')}
+      <details class="bcheck" style="margin-top:8px"${c._openCheck ? ' open' : ''}><summary class="small"><b>Build check</b> <span class="muted">(numbers look wrong? see how this build is measured and fix it)</span></summary><div class="bcbody small" style="margin-top:6px">loading…</div></details></div>
     <div class="char-grid">
       <div>
         <div class="card"><h2>Equipment</h2><div class="inv">${inv}</div>
@@ -2094,6 +2179,7 @@ function renderCharacter(c, el) {
       </div>
     </div>`;
   bindTips(el, key => itemTip(items[key]));
+  const bc = el.querySelector('.bcheck'); if (bc) { bc.ontoggle = () => { if (bc.open) loadBuildCheck(c, bc); }; if (bc.open) loadBuildCheck(c, bc); }
   drawTree(c, document.getElementById('treebox'));
 }
 function valueCard(c) {

@@ -347,6 +347,29 @@ def weaponset_check():
           'empty weapon set I: measured with set II')
 
 
+def buildcheck_check():
+    """Build check: tune the weapon set and main skill (saved with the build), then reset to as imported."""
+    from poe2kit import vault, db
+    xml = ('<PathOfBuilding2><Build level="90" className="Witch" ascendClassName="Blood Mage" mainSocketGroup="1"></Build>'
+           '<Items activeItemSet="1" useSecondWeaponSet="nil"><ItemSet id="1" useSecondWeaponSet="nil">'
+           '<Slot itemId="0" name="Weapon 1"/><Slot itemId="7" name="Weapon 1 Swap"/></ItemSet></Items>'
+           '<Skills><SkillSet id="1"><Skill enabled="true"><Gem nameSpec="Comet" enabled="true"/></Skill>'
+           '<Skill enabled="true"><Gem nameSpec="Frost Wall" enabled="true"/></Skill></SkillSet></Skills><Tree></Tree></PathOfBuilding2>')
+    con = db.connect()
+    bid = vault.from_paste(con, vault.encode(xml), 'Check test')['id']
+    before = con.execute('SELECT pob_code FROM build WHERE id=?', (bid,)).fetchone()[0]
+    c0 = vault.check(con, bid)
+    c1 = vault.tune(con, bid, weapon_set=2, main_group=2)
+    tuned = vault.decode(con.execute('SELECT pob_code FROM build WHERE id=?', (bid,)).fetchone()[0])
+    c2 = vault.reset(con, bid)
+    after = con.execute('SELECT pob_code FROM build WHERE id=?', (bid,)).fetchone()[0]
+    vault.delete(con, bid)
+    con.close()
+    check(not c0['set1'] and c0['set2'] and c1['tuned'] and c1['uses_set'] == 2 and c1['main_group'] == 2
+          and 'mainSocketGroup="2"' in tuned and not c2['tuned'] and after == before,
+          'Build check: tune weapon set + main skill, reset to as imported')
+
+
 def campaign_check():
     """R16 / R21: the rush route maps onto the game's zones, and a zone gives a route card."""
     from poe2kit import campaign
@@ -457,6 +480,7 @@ if __name__ == '__main__':
     patchwatch_check()
     vault_paste_check()
     weaponset_check()
+    buildcheck_check()
     mcp()
     if '--pob' in sys.argv:
         pob_part()
