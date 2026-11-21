@@ -389,6 +389,9 @@ def api(path, q):
         if path == '/api/prophecy/uniques':   # R14: chase unique history by league day
             from poe2kit import prophecy
             return prophecy.unique_history(q.get('name') or None)
+        if path == '/api/active':   # R17: the player's characters and the active one
+            from poe2kit import chars
+            return chars.characters(con)
         if path == '/api/campaign':   # R16: campaign rush guide + checklist + where you are now
             from poe2kit import campaign
             return campaign.guide(con)
@@ -723,6 +726,13 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 c = _db.connect()
                 try:
                     data = prophecy.patch_prophecy(str(body.get('text') or '')[:200000], c)
+                finally:
+                    c.close()
+            elif u.path == '/api/active':   # R17: pick the active character
+                from poe2kit import chars, db as _db
+                c = _db.connect()
+                try:
+                    data = chars.set_active(c, body.get('build_id'))
                 finally:
                     c.close()
             elif u.path == '/api/route/size':

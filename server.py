@@ -24,6 +24,16 @@ def _age(ts):
     return f'{mins:.0f} min ago' if mins < 120 else f'{mins / 60:.1f} h ago'
 
 
+def _active(con):
+    try:
+        from poe2kit import chars
+        c = chars.characters(con)
+        return next(({k: x[k] for k in ('id', 'label', 'ascendancy', 'level', 'skill')}
+                     for x in c['characters'] if x['active']), None)
+    except Exception:
+        return None
+
+
 def t_status(a):
     con = db.connect()
     try:
@@ -39,6 +49,7 @@ def t_status(a):
             'exchange_hours_rows': n_ex,
             'exchange_synced_to': datetime.datetime.fromtimestamp(int(cur)).isoformat() if cur else None,
             'builds_in_vault': con.execute('SELECT COUNT(*) FROM build').fetchone()[0],
+            'active_character': _active(con),   # R17: the character every page follows (vault build id)
             'db': config.DB_PATH,
         }
     finally:
@@ -252,8 +263,8 @@ def t_lab(a):
     """Build Lab (dashboard): roadmap, power curves and what-if cards the player sees while you explain in chat."""
     from poe2kit import buildplan, lab
     con = db.connect()
-    bid = a.get('build_id') or next(iter(buildplan.followed(con).values()), None) \
-        or con.execute('SELECT MAX(id) FROM build').fetchone()[0]
+    from poe2kit import mapmods
+    bid = a.get('build_id') or mapmods.active_build(con)   # R17: the active character unless told otherwise
     act = a.get('action') or 'cards'
     if act == 'roadmap':
         r = lab.roadmap(con, bid)
@@ -591,7 +602,11 @@ def t_my_characters(a):
     from poe2kit import charimport
     con = db.connect()
     try:
-        return charimport.list_characters(con, fresh=bool(a.get('fresh')))
+        r = charimport.list_characters(con, fresh=bool(a.get('fresh')))
+        from poe2kit import chars
+        if isinstance(r, dict):   # R17: the vault characters and which one the dashboard is following
+            r['vault_characters'] = chars.characters(con)
+        return r
     finally:
         con.close()
 
@@ -645,7 +660,8 @@ S = lambda **p: {'type': 'object', 'properties': p}  # noqa: E731
 STR, NUM, BOOL = {'type': 'string'}, {'type': 'number'}, {'type': 'boolean'}
 
 TOOLS = [
-    ('poe2_status', 'Toolkit status: current league, how much price/exchange history is stored, builds in vault.',
+    ('poe2_status', 'Toolkit status: current league, how much price/exchange history is stored, builds in vault, and the '
+     'active character (the one the player picked in the top bar: answer for it unless they name another).',
      S(), t_status),
     ('poe2_refresh', 'Pull fresh prices from poe.ninja (cached, polite) and sync GGG hourly Currency Exchange history.',
      S(league=STR, exchange=BOOL, max_hours=NUM), t_refresh),

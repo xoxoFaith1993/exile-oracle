@@ -419,7 +419,9 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
 <header>
   <h1>PoE 2 <span>Toolkit</span></h1>
   <div class="chips" id="chips"><span class="chip">loading…</span></div>
-  <label class="chip" style="margin-left:auto">Prices in
+  <label class="chip" style="margin-left:auto" title="Every page follows this character: Build Lab, Atlas, the waystone check, farming, Top 1%">Playing
+    <select id="activechar" style="background:var(--surface-2);color:var(--text-primary);border:1px solid var(--border);border-radius:6px;margin-left:6px;font:inherit;max-width:260px"></select></label>
+  <label class="chip">Prices in
     <select id="unit" style="background:var(--surface-2);color:var(--text-primary);border:1px solid var(--border);border-radius:6px;margin-left:6px;font:inherit">
       <option value="auto">Auto (div, or ex under 1 div)</option><option value="div">Divine</option>
       <option value="ex">Exalted</option><option value="chaos">Chaos</option></select></label>
@@ -858,7 +860,7 @@ async function initLab() {
     sel.innerHTML = (b || []).map(x => `<option value="${x.id}">#${x.id} ${esc(x.label)} (${esc(x.ascendancy)} ${x.level})</option>`).join('');
     sel.onchange = () => loadLab(sel.value);
   }
-  if (!LAB) loadLab('');
+  if (!LAB) loadLab(ACTIVE || '');
 }
 async function loadLab(id) {
   $('#labinfo').textContent = 'working out the route…';
@@ -1306,6 +1308,27 @@ async function loadRoi() {
     <div class="small muted">Usual range for ${esc(r.run)}: ${dv(r.range_per_hour_div[0])}–${dv(r.range_per_hour_div[1])} div / hour (${esc(r.phase)}). ${esc(r.note)}</div>`;
 }
 
+// ---------- several characters (R17): the active one, followed by every page ----------
+let ACTIVE = null;
+async function loadActive() {
+  try {
+    const r = await get('/api/active');
+    ACTIVE = r.active;
+    const s = $('#activechar');
+    s.innerHTML = (r.characters || []).map(c => `<option value="${c.id}">${esc(c.label.replace(/ \(live .*\)$/, ''))} · ${esc(c.ascendancy || c.class || '')} ${c.level || ''}</option>`).join('') || '<option value="">no characters yet</option>';
+    if (ACTIVE) s.value = ACTIVE;
+    s.onchange = async () => {
+      await post('/api/active', { build_id: +s.value });
+      ACTIVE = +s.value;
+      // every page re-reads for the new character
+      LAB = null; T1INIT = false;
+      ['#labbuild', '#mmbuild', '#pfbuild'].forEach(q => { const e = $(q); if (e) e.value = ACTIVE; });
+      const on = document.querySelector('nav button.on'); if (on) on.click();
+    };
+  } catch (e) {}
+}
+loadActive();
+
 // ---------- Prophecy (R14): omen, timeline, forecasts, patch prophecy, farming oracle, chase uniques ----------
 const pnum = v => v == null ? '–' : v >= 100 ? Math.round(v).toLocaleString() : v >= 1 ? v.toFixed(2) : v.toPrecision(2);
 const fmtIn = h => h < 1 ? `${Math.round(h * 60)} min` : h < 48 ? `${h.toFixed(h < 10 ? 1 : 0)} h` : `${(h / 24).toFixed(h < 240 ? 1 : 0)} days`;
@@ -1338,7 +1361,7 @@ async function loadProphecy() {
   if (!sel.options.length) {
     const b = await get('/api/builds');
     sel.innerHTML = (b || []).map(x => `<option value="${x.id}">#${x.id} ${esc(x.label)}</option>`).join('');
-    sel.value = (LAB && LAB.build) ? LAB.build.id : (b && b.length ? b[b.length - 1].id : '');
+    sel.value = ACTIVE || ((LAB && LAB.build) ? LAB.build.id : (b && b.length ? b[b.length - 1].id : ''));
     sel.onchange = loadFarmOracle;
   }
   loadFarmOracle();
@@ -1513,7 +1536,7 @@ async function loadMapMods() {
   if (!sel.options.length) {
     const b = await get('/api/builds');
     sel.innerHTML = '<option value="">(no rating)</option>' + (b || []).map(x => `<option value="${x.id}">#${x.id} ${esc(x.label)}</option>`).join('');
-    const lab = (LAB && LAB.build) ? LAB.build.id : (b && b.length ? b[b.length - 1].id : '');
+    const lab = ACTIVE || ((LAB && LAB.build) ? LAB.build.id : (b && b.length ? b[b.length - 1].id : ''));
     sel.value = lab; sel.onchange = loadMapMods;
   }
   $('#mmtable').innerHTML = '<tr><td class="muted small"><span class="spin"></span>Reading the modifiers and rating them for your build…</td></tr>';
@@ -2208,6 +2231,7 @@ async function initTop1() {
     const builds = (await get('/api/builds')).filter(b => b.owner === 'me');
     $('#t1build').innerHTML = builds.map(b => `<option value="${b.id}">#${b.id} ${esc(b.label)} (${esc(b.ascendancy || b.class || '')} ${b.level || ''})</option>`).join('');
     $('#t1go').onclick = runTop1;
+    if (ACTIVE && builds.some(b => b.id === ACTIVE)) $('#t1build').value = ACTIVE;
   }
   if (!$('#t1view').innerHTML) runTop1();
 }
