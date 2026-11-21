@@ -393,7 +393,8 @@ input[type=checkbox] { accent-color: var(--eo-blood-hi); }
 .cmpgear .it img { width: 34px; height: 34px; object-fit: contain; }
 .gemtag { display: inline-block; padding: 1px 7px; margin: 2px; border-radius: 3px; background: #241c14; font-size: 12px; }
 .gemtag.only { outline: 1px solid currentColor; }
-.pintip { position: fixed; z-index: 60; max-height: 85vh; overflow-y: auto; filter: drop-shadow(0 6px 18px #000c); }
+.pintip { position: fixed; z-index: 60; max-height: 85vh; overflow-y: auto; filter: drop-shadow(0 6px 18px #000c); cursor: move; user-select: none; }
+.pintip.dragging { filter: drop-shadow(0 10px 26px #000e); opacity: .96; }
 .pintip .pinx { position: sticky; top: 0; float: right; margin: 2px 2px -26px 0; z-index: 2; width: 24px; height: 24px; border-radius: 3px;
   border: 1px solid #8a6f3e; background: #1c1712; color: #e2d6bf; cursor: pointer; font-size: 13px; line-height: 1; }
 .pintip .pinx:hover { border-color: #c8283c; color: #fff; }
@@ -971,17 +972,38 @@ function showTip(e, html) { tip.innerHTML = html; tip.style.display = 'block';
   const x = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth * z - 8) / z; tip.style.left = x + 'px'; tip.style.top = (e.clientY + 14) / z + 'px'; }
 function hideTip() { tip.style.display = 'none'; }
 // click an item: its stats stay open in a pinned panel until its ✕ is pressed (several can be open at once)
+let PINZ = 60;
 function pinTip(e, html) {
   if (!html) return;
+  const src = e.currentTarget || e.target;
+  const open = [...document.querySelectorAll('.pintip')].find(x => x._src === src);
+  if (open) { open.remove(); hideTip(); return; }   // clicking the same item again closes its panel
   const z = +document.body.style.zoom || 1, n = document.querySelectorAll('.pintip').length;
   const p = document.createElement('div');
   p.className = 'pintip';
+  p._src = src;
+  p.style.zIndex = ++PINZ;
   p.innerHTML = `<button class="pinx" title="Close">✕</button>${html}`;
   document.body.appendChild(p);
   const x = Math.min(e.clientX + 14 + n * 18, innerWidth - p.offsetWidth * z - 8) / z;
   const y = Math.min(e.clientY + 14 + n * 18, innerHeight - p.offsetHeight * z - 8) / z;
   p.style.left = Math.max(8, x) + 'px'; p.style.top = Math.max(8, y) + 'px';
   p.querySelector('.pinx').onclick = () => p.remove();
+  // drag it anywhere: hold the mouse on the panel and move (not on its scrollbar or the close button)
+  p.addEventListener('mousedown', ev => {
+    if (ev.button !== 0 || ev.target.closest('.pinx') || ev.offsetX > p.clientWidth) return;
+    ev.preventDefault();
+    p.style.zIndex = ++PINZ;
+    const zz = +document.body.style.zoom || 1;
+    const sx = ev.clientX, sy = ev.clientY, l0 = parseFloat(p.style.left), t0 = parseFloat(p.style.top);
+    p.classList.add('dragging');
+    const move = m => {
+      p.style.left = Math.min(Math.max(0, l0 + (m.clientX - sx) / zz), innerWidth / zz - 40) + 'px';
+      p.style.top = Math.min(Math.max(0, t0 + (m.clientY - sy) / zz), innerHeight / zz - 30) + 'px';
+    };
+    const up = () => { p.classList.remove('dragging'); removeEventListener('mousemove', move); removeEventListener('mouseup', up); };
+    addEventListener('mousemove', move); addEventListener('mouseup', up);
+  });
   hideTip();
 }
 

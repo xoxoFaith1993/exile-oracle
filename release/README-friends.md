@@ -1,15 +1,20 @@
 # Exile Oracle
 
-A personal Path of Exile 2 companion. It runs on your own PC, in its own window:
+A Path of Exile 2 companion that measures your build, reads the market and past leagues, and tells you what to do
+next. It runs on your own PC, in its own window:
 
+- **League plan:** your league in six stages with "ready to move on" checks measured on your build, and **Stuck?**
+  for when you keep dying, can't make currency or want to start over;
+- **your build:** the Build Lab (every idea measured by Path of Building before you buy), Character, Compare, Top 1%;
+- **the market:** live prices, exchange gaps, a wishlist with target prices, and wanted items you can check on the
+  trade site;
 - **the Oracle:** a daily omen, price forecasts, patch prophecy and a league timeline;
-- **Endgame (Atlas, Maps, Tablets):** atlas strategies drawn on your tree, waystone rolling and map mods rated for your build, tablets;
 - **the campaign:** a rush guide and a route panel in game;
-- **your characters:** the Build Lab, a Top 1% check;
-- **the economy:** live prices, what to farm, the league-start playbook;
+- **endgame:** atlas strategies drawn on your tree, waystone rolling and map mods rated for your build, tablets;
 - **a price-check overlay** (Ctrl+D) that also rates waystones.
 
-Also in it: your play sessions, a craft lab, and patch notes checked against your builds.
+Also in it: what to farm, your play sessions, a craft lab, patch notes checked against your builds, and alerts you
+choose. If something goes wrong it says so in plain words and keeps working, and a daily backup keeps your builds safe.
 
 ## Install
 1. Run `ExileOracle-Setup.exe`. Windows may say "Windows protected your PC" because the installer isn't signed:
@@ -20,7 +25,8 @@ Also in it: your play sessions, a craft lab, and patch notes checked against you
    `%LOCALAPPDATA%\PoE2Toolkit`).
 
 ## First steps
-- **Settings → Your profile:** pick your class and ascendancy and save. That sets the defaults everywhere.
+- **Settings → Your profile:** pick your class, ascendancy and how well you know the game, and save. That sets the
+  defaults everywhere and how much the Oracle explains.
 - **Your characters:** install *Path of Building Community (PoE 2)* and sign in to your GGG account there once. The
   Builds tab can then import your characters (only when you press the button).
 - **Sessions:** start the game once; the toolkit reads the game's own log file to track maps, map time and deaths.

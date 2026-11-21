@@ -87,6 +87,11 @@ def docs_check():
     for img in re.findall(r'(docs/screenshots/[\w.-]+)', readme):
         if not os.path.exists(os.path.join(gh, img)):
             missing.append(f'release/github/{img} (README shows it; take it with release/readme_shots.py)')
+    gal = os.path.join(gh, 'docs', 'GALLERY.md')   # every page in pictures: each picture must exist
+    if os.path.exists(gal):
+        for img in re.findall(r'(screenshots/[\w.-]+)', open(gal, encoding='utf-8').read()):
+            if not os.path.exists(os.path.join(gh, 'docs', img)):
+                missing.append(f'release/github/docs/{img} (the gallery shows it)')
     if missing:
         print('DOCS CHECK FAILED: players would miss these. Add them, then build again:')
         for m in missing:
