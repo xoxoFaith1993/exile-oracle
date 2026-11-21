@@ -9,7 +9,6 @@ import subprocess
 import sys
 import time
 import urllib.request
-import webbrowser
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -77,7 +76,8 @@ def open_dashboard():
         if monitor_up():
             break
         time.sleep(0.5)
-    webbrowser.open(URL)
+    from poe2kit import appwindow
+    appwindow.open_dashboard()
 
 
 def autostart(enable=None):

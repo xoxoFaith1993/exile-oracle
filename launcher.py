@@ -9,7 +9,6 @@ import os
 import sys
 import time
 import urllib.request
-import webbrowser
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -51,7 +50,8 @@ def main(argv):
             if up():
                 break
     if '--background' not in argv:
-        webbrowser.open(URL)
+        from poe2kit import appwindow
+        appwindow.open_dashboard()
 
 
 if __name__ == '__main__':

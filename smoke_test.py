@@ -168,6 +168,13 @@ def doctor_check():
           f"doctor runs ({len(r['checks'])} checks, guide attached)")
 
 
+def appwindow_check():
+    from poe2kit import appwindow
+    cmd = appwindow.command()   # looks for Edge / Chrome / Chromium; opens nothing
+    check(appwindow.mode() in ('app', 'browser') and (cmd is None or any(x.startswith('--app=') for x in cmd)),
+          f"dashboard window: {'app window via ' + os.path.basename(cmd[0]) if cmd else 'browser tab (no Chromium found)'}")
+
+
 def mcp():
     p = subprocess.Popen([sys.executable, os.path.join(HERE, 'server.py')], stdin=subprocess.PIPE,
                          stdout=subprocess.PIPE, text=True, encoding='utf-8')
@@ -242,6 +249,7 @@ if __name__ == '__main__':
     planner_check()
     monitor()
     doctor_check()
+    appwindow_check()
     mcp()
     if '--pob' in sys.argv:
         pob_part()

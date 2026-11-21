@@ -320,6 +320,7 @@ def api(path, q):
             s['monitor_alive'] = bool(hb and time.time() - float(hb) < 180)
             s['install'] = install_state()
             s['profile'] = config.profile()
+            s['dashboard_window'] = config.settings().get('dashboard_window') or 'app'
             s['paths'] = {'home': config.HOME, 'poe2': config.poe2_dir(), 'client_log': config.client_log(),
                           'version': config.VERSION}
             return s
@@ -446,6 +447,10 @@ def craft_post(path, b):
                 ch['poe2_dir'] = b['poe2_dir'] or None
             config.save_settings(ch)
             return {'ok': True, 'profile': config.profile(), 'poe2': config.poe2_dir()}
+        if path == '/api/window':   # how the tray / shortcut open the dashboard: 'app' window or 'browser' tab
+            config.save_settings({'dashboard_window': 'browser' if b.get('mode') == 'browser' else 'app'})
+            from poe2kit import appwindow
+            return {'ok': True, 'mode': appwindow.mode()}
         if path == '/api/patch/analyze':
             from poe2kit import patchnotes
             return patchnotes.analyze(con, b.get('text', ''), b.get('title') or 'pasted notes')

@@ -57,7 +57,7 @@ Name: "{autodesktop}\Exile Oracle"; Filename: "{app}\python\pythonw.exe"; Parame
 Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "PoE2Toolkit"; ValueData: """{app}\python\pythonw.exe"" ""{app}\toolkit\tray.pyw"" --background"; Flags: uninsdeletevalue; Tasks: autostart
 
 [Run]
-Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\toolkit\tray.pyw"""; WorkingDir: "{app}\toolkit"; Description: "Start Exile Oract now"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\toolkit\tray.pyw"""; WorkingDir: "{app}\toolkit"; Description: "Start Exile Oracle now"; Flags: nowait postinstall skipifsilent
 
 [UninstallRun]
 Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -Command ""Get-CimInstance Win32_Process -Filter \""Name like 'python%'\"" | Where-Object {{ $_.CommandLine -like '*{app}*' } | ForEach-Object {{ Stop-Process -Id $_.ProcessId -Force }"""; Flags: runhidden; RunOnceId: "StopToolkit"
