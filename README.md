@@ -53,6 +53,13 @@ script: skip what you know.
 
 ![League plan](docs/screenshots/league-plan.jpg)
 
+**Stuck?** Pick what's wrong (I keep dying, I'm too slow, I'm not making currency, I don't know what to do next, I
+want to start over). The Oracle measures your build against what the content you play needs, shows the gaps biggest
+first with your numbers, and three ways out: fix it cheaply, respec, or start over with a plan sized to the currency
+you have. If your build can't be read, it asks three quick questions instead. Home has a "Feeling stuck?" link.
+
+![Stuck](docs/screenshots/stuck.jpg)
+
 ### Build Lab (new in 0.5.0)
 The Oracle's workbench for one build: ask in chat, and what it works out shows here.
 

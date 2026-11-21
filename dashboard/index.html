@@ -491,7 +491,7 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
 </nav>
 <main>
   <section id="home" class="on">
-    <div class="home-hero"><img src="/static/emblem.png" alt=""><div><h1>EXILE ORACLE</h1><div class="sub" id="homesub">Your Path of Exile 2 companion</div></div></div>
+    <div class="home-hero"><img src="/static/emblem.png" alt=""><div><h1>EXILE ORACLE</h1><div class="sub" id="homesub">Your Path of Exile 2 companion</div><a href="#" class="small" onclick="openStuck();return false" style="color:var(--eo-gold)">Feeling stuck? Get a way out →</a></div></div>
     <div class="card" id="expask" hidden style="margin-bottom:14px"><div class="lab-head"><h2 style="margin:0">How well do you know Path of Exile 2?</h2><span style="flex:1"></span><a href="#" class="small muted" id="expskip">not now</a></div>
       <div class="sub">So the Oracle explains just enough: more for newer players, short and numeric for veterans. It never changes what you can do. You can change it any time in Settings.</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn expbtn" data-e="new">New or returning</button><button class="btn expbtn" data-e="some">Played a fair bit</button><button class="btn expbtn" data-e="veteran">Veteran (1,000+ hours)</button></div></div>
@@ -553,6 +553,13 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
       <label class="small">For <select class="crin" id="jbuild" style="min-width:240px"></select></label></div>
       <div class="sub">League start to min-max in six stages. Each stage has a goal and "ready to move on" checks that Path of Building measures on your build, against researched numbers (the source is on every check). It's a map with checkpoints, not a script: skip what you know, do it your way.</div>
       <div id="jnow" style="margin-top:10px"></div></div>
+    <div class="card" id="stuckcard"><div class="lab-head"><h2 style="margin:0">Stuck?</h2><span class="small muted">pick what's wrong: the Oracle measures your build and shows the cheapest ways out</span></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+        <button class="btn stuckbtn" data-s="dying">I keep dying</button><button class="btn stuckbtn" data-s="damage">I'm too slow / low damage</button>
+        <button class="btn stuckbtn" data-s="broke">I'm not making currency</button><button class="btn stuckbtn" data-s="lost">I don't know what to do next</button>
+        <button class="btn stuckbtn" data-s="restart">I want to start over</button>
+        <label class="small" style="margin-left:auto">I could spend about <input class="crin" id="stuckbudget" type="number" min="0" step="any" style="width:70px"> div</label></div>
+      <div id="stuckout" style="margin-top:10px"></div></div>
     <div id="jstages"></div>
     <div class="card"><h2>What it's based on</h2><div id="jtheory" class="small"></div>
       <details style="margin-top:8px"><summary class="small">Words used on this page</summary><div id="jgloss" class="small" style="margin-top:6px"></div></details></div>
@@ -2203,6 +2210,42 @@ async function loadJourney() {
   $('#jgloss').innerHTML = Object.entries(p.glossary || {}).map(([k, v]) => `<div style="margin-top:4px"><b>${esc(k)}</b>: ${esc(v)}</div>`).join('');
   const lv = (p.experience || {}).level;
   if (!lv || lv === 'new') $('#jgloss').closest('details').open = true;
+}
+
+// ---------- "I'm stuck" (poe2kit/rescue.py) ----------
+let STUCK = null;
+async function loadStuck(sym, extra) {
+  STUCK = sym;
+  document.querySelectorAll('.stuckbtn').forEach(b => b.classList.toggle('on', b.dataset.s === sym));
+  $('#stuckout').innerHTML = '<span class="spin"></span>';
+  const q = new URLSearchParams({ symptom: sym, budget: $('#stuckbudget').value || '' });
+  if ($('#jbuild').value) q.set('build', $('#jbuild').value);
+  Object.entries(extra || {}).forEach(([k, v]) => v && q.set(k, v));
+  const r = await get('/api/rescue?' + q);
+  const nf = v => typeof v === 'number' ? (Math.abs(v) >= 1000 ? Math.round(v).toLocaleString() : String(Math.round(v * 10) / 10)) : esc(v ?? '');
+  const go = pg => pg ? ` <button class="btn stuckgo" data-p="${pg}" style="padding:0 8px;font-size:11px">${esc(JPAGE[pg] || ({ economy: 'Economy', status: 'Settings', journey: 'League plan' })[pg] || pg)} →</button>` : '';
+  const way = (title, items, rec) => items.length ? `<div class="card" style="margin:0;padding:12px;${rec ? 'border-color:var(--eo-blood-hi)' : ''}"><b>${title}</b>${rec ? ' <span class="pill" style="border-color:var(--eo-blood-hi)">start here</span>' : ''}
+      <ol style="margin:6px 0 0 18px;padding:0" class="small">${items.map(x => `<li style="margin-bottom:4px">${esc(x.text)}${go(x.page)}</li>`).join('')}</ol></div>` : '';
+  $('#stuckout').innerHTML =
+    (r.questions ? `<div class="small" style="padding:8px 10px;border:1px dashed var(--eo-gold-dim);margin-bottom:8px">${esc(r.not_measured || '')} A few quick answers instead:
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;align-items:center">
+        <select class="crin" id="sqcontent">${Object.entries(r.questions[0].options).map(([k, v]) => `<option value="${k}"${k === r.content ? ' selected' : ''}>${esc(v)}</option>`).join('')}</select>
+        <input class="crin" id="sqlevel" type="number" min="1" max="100" placeholder="level" style="width:70px">
+        <button class="btn" id="sqgo">Answer</button></div></div>` : '') +
+    `<div class="small muted">${r.build ? esc(r.build.label) + ' · ' : ''}playing ${esc(r.content_text)}${r.budget_div ? ` · about ${r.budget_div} div to spend` : ''}</div>` +
+    (r.reassure ? `<div class="small" style="margin-top:6px;color:var(--eo-good)">${esc(r.reassure)}</div>` : '') +
+    (r.findings.length ? `<table class="up" style="margin-top:8px"><tr><th>The gaps, biggest first</th><th class="num">You</th><th class="num">Needed for ${esc(r.content_text)}</th></tr>
+      ${r.findings.map(f => `<tr><td>${esc(f.what)} <span class="small muted">(${f.area})</span></td><td class="num">${nf(f.have)}${esc(f.unit)}</td><td class="num">${nf(f.need)}${esc(f.unit)}</td></tr>`).join('')}</table>` : '') +
+    `<div class="grid2" style="margin-top:10px;gap:10px">${way('Fix it cheaply', r.ways_out.fix, r.recommend === 'fix')}${way('Respec', r.ways_out.respec, r.recommend === 'respec')}</div>
+     <div style="margin-top:10px">${way('Start over', r.ways_out.restart, r.recommend === 'restart')}</div>
+     <div class="small muted" style="margin-top:6px">${esc(r.note)}</div>`;
+  document.querySelectorAll('.stuckgo').forEach(b => b.onclick = () => document.querySelector(`nav [data-tab="${b.dataset.p}"]`)?.click());
+  if ($('#sqgo')) $('#sqgo').onclick = () => loadStuck(STUCK, { content: $('#sqcontent').value, level: $('#sqlevel').value });
+}
+document.querySelectorAll('.stuckbtn').forEach(b => b.onclick = () => loadStuck(b.dataset.s));
+function openStuck() {   // from Home: open the League plan at the "Stuck?" card
+  document.querySelector('nav [data-tab="journey"]').click();
+  setTimeout(() => $('#stuckcard').scrollIntoView({ block: 'start' }), 300);
 }
 
 // ---------- wanted items: saved trade searches, checked by hand ----------

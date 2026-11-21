@@ -438,6 +438,12 @@ def api(path, q):
         if path == '/api/wishlist':   # R25: chase items with a target price
             from poe2kit import wishlist
             return wishlist.status(con)
+        if path == '/api/rescue':   # "I'm stuck" on the League plan page
+            from poe2kit import rescue
+            bid = q.get('build')
+            return rescue.rescue(con, q.get('symptom') or 'lost', int(bid) if bid not in (None, '', 'scratch') else None,
+                                 q.get('budget'), q.get('content') or None, q.get('level') or None,
+                                 scratch=bid == 'scratch')
         if path == '/api/plan':   # the League plan page
             from poe2kit import journey
             bid = q.get('build')

@@ -323,6 +323,23 @@ def journey_check():
     check(ok, 'league plan: six stages from scratch, every check says what it needs')
 
 
+def rescue_check():
+    """"I'm stuck": gaps found and ordered from measured numbers, three ways out; with no build it asks plain
+    questions instead of failing."""
+    from poe2kit import rescue, db
+    m = {'level': 88, 'dps': 150000, 'life_es': 2500, 'ehp': 20000, 'res': {'fire': 60, 'cold': 75, 'lightning': 75,
+         'chaos': -10}, 'hits': {'physical': 3000, 'fire': 6000, 'cold': 7000, 'lightning': 7000, 'chaos': 4000}}
+    f = rescue._findings(m, 'red')
+    con = db.connect()
+    try:
+        r = rescue.rescue(con, 'dying', scratch=True, budget_div=2, level=40)
+    finally:
+        con.close()
+    check(f and f[0]['area'] == 'defence' and {x['what'] for x in f} >= {'Fire resistance', 'DPS (one target)'}
+          and r.get('questions') and r['ways_out']['restart'] and r['content'] == 'campaign',
+          "I'm stuck: gaps biggest first, three ways out, plain questions without a build")
+
+
 def wishlist_check():
     """R25: a wish at its target alerts once, becomes the Home omen, and can be removed."""
     import time as _t
@@ -639,6 +656,7 @@ if __name__ == '__main__':
     alerts_check()
     patchwatch_check()
     wishlist_check()
+    rescue_check()
     journey_check()
     wanted_check()
     vault_paste_check()

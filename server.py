@@ -675,6 +675,16 @@ def t_plan(a):
         con.close()
 
 
+def t_rescue(a):
+    from poe2kit import rescue
+    con = db.connect()
+    try:
+        return rescue.rescue(con, a.get('symptom') or 'lost', a.get('build_id'), a.get('budget_div'),
+                             a.get('content'), a.get('level'), scratch=bool(a.get('scratch')))
+    finally:
+        con.close()
+
+
 def t_wishlist(a):
     from poe2kit import wishlist
     con = db.connect()
@@ -886,6 +896,18 @@ TOOLS = [
      'first", and to start a fresh plan. Explain at the player\'s experience level, offer options, label theory. '
      'The League plan page on the dashboard shows the same.',
      S(build_id=NUM, class_name=STR, ascendancy=STR, budget_div=NUM), t_plan),
+    ('poe2_rescue',
+     '"I\'m stuck": the player says what is wrong (symptom: dying / damage / broke / lost / restart). The build '
+     '(default: the active character) is measured by Path of Building against the numbers for the content they play '
+     '(content: campaign / early / red / endgame, guessed if not given); the gaps come biggest first, then three ways '
+     'out: fix cheaply (gear / passives / gems, tried as Build Lab cards first), respec (when the gap is too big for '
+     'gear), start over (a fresh plan sized to budget_div). reassure = the numbers say this part is fine (say so). '
+     'If the build can\'t be read, questions lists what to ask the player (where they play, level, budget): ask, '
+     'then call again with content / level / budget_div. Be kind and concrete; the player chooses the way out. '
+     'The League plan page has the same "Stuck?" card.',
+     S(symptom={'type': 'string', 'enum': ['dying', 'damage', 'broke', 'lost', 'restart']}, build_id=NUM,
+       budget_div=NUM, content={'type': 'string', 'enum': ['campaign', 'early', 'red', 'endgame']}, level=NUM,
+       scratch=BOOL), t_rescue),
     ('poe2_wishlist',
      "The player's chase-item wishlist (its own Wishlist page under Market): items they want to buy (side=buy: tell me when it drops to the "
      'target) or sell (side=sell: when it rises to it) at a target price. action=list (default) shows each wish with '
@@ -935,7 +957,7 @@ INSTRUCTIONS = (
     'options -> poe2_upgrades (DPS per divine) -> poe2_top1 (gap to the top 1%) -> poe2_compare. Their characters: '
     'poe2_my_characters / poe2_import_character, only when asked.\n'
     '- Where am I / what next / a full plan: poe2_plan first (every stage with measured checks), then the tools '
-    'below.\n'
+    'below. Stuck, dying, broke, or wants to start over: poe2_rescue.\n'
     '- A league start or a fresh start: poe2_league_plan (class + ascendancy chain: rewards, gems, ascendancy nodes, '
     'cheap levelling uniques) -> poe2_levelling (review the route) -> poe2_build_planner (into the game\'s planner) '
     '-> poe2_campaign (rush route, rewards checklist) -> poe2_league_start (sell / hold in days 1-7) -> poe2_farm and '
@@ -963,7 +985,7 @@ FEED_WORDS = {
     'poe2_compare': 'compared two builds (Compare page)', 'poe2_read_rare': 'read a rare item',
     'poe2_build_planner': 'worked on the in-game Build Planner', 'poe2_levelling': 'checked the levelling route',
     'poe2_lab': 'used the Build Lab', 'poe2_oracle': 'read the market history (the Oracle)', 'poe2_campaign': 'read the campaign guide', 'poe2_atlas': 'planned the atlas', 'poe2_doctor': 'checked the app for problems',
-    'poe2_plan': 'made your league plan', 'poe2_wishlist': 'checked your wishlist', 'poe2_from_overlay': 'read the items you sent', 'poe2_trade_link': 'made a trade-site link',
+    'poe2_plan': 'made your league plan', 'poe2_rescue': 'looked at why you are stuck', 'poe2_wishlist': 'checked your wishlist', 'poe2_from_overlay': 'read the items you sent', 'poe2_trade_link': 'made a trade-site link',
     'poe2_status': 'checked the app status', 'poe2_refresh': 'refreshed prices', 'poe2_top1': 'ran the Top 1% check',
 }
 CLIENT = {'name': None}

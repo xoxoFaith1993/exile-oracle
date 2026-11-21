@@ -101,7 +101,8 @@ for 15 minutes).
 - "Plan my league start as a Lich then Blood Mage: campaign, first maps, first upgrades."
 - "I want to play <skill>. Is it a good league starter, and what would the first week look like?"
 - "Here's a build I like (PoB code / pobb.in link). Turn it into a league start I can actually afford."
-- "I'm stuck at tier 10 maps and dying. What's wrong, and what's the cheapest way out?"
+- "I'm stuck at tier 10 maps and dying. What's wrong, and what's the cheapest way out?" (the **Stuck?** card on the
+  League plan page does the same: fix cheaply, respec, or start over)
 Claude puts every option it compares on the **Build Lab** (Path of Building measures it) and tells you which parts
 are measured and which are rules of thumb.
 
@@ -192,6 +193,7 @@ The same tools work in Claude, ChatGPT / Codex and Gemini CLI.
 | `poe2_doctor` | Something in the toolkit is broken or acting odd (overlay, prices, dashboard, Build Planner, Path of Building, Claude connection)? Call this FIRST |
 | `poe2_from_overlay` | Items the player sent from the in-game price-check overlay (its Ask the Oracle button, called Ask Claude before 0.4.0), newest first |
 | `poe2_plan` | League plan |
+| `poe2_rescue` | "I'm stuck" |
 | `poe2_wishlist` | The player's chase-item wishlist (its own Wishlist page under Market) |
 | `poe2_trade_link` | Make an official trade-site search link (by unique name and/or base type) to open in a browser. |
 <!-- /tools -->
