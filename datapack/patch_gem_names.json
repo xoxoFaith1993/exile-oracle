@@ -1,0 +1,4506 @@
+{
+"Untether": {
+"type": "active",
+"lineage": false
+},
+"Alchemist's Boon": {
+"type": "active",
+"lineage": false
+},
+"Ancestral Cry": {
+"type": "active",
+"lineage": false
+},
+"Archmage": {
+"type": "active",
+"lineage": false
+},
+"Armour Piercing Rounds": {
+"type": "active",
+"lineage": false
+},
+"Align Fate": {
+"type": "active",
+"lineage": false
+},
+"Ancestral Spirits": {
+"type": "active",
+"lineage": false
+},
+"Bleeding Concoction": {
+"type": "active",
+"lineage": false
+},
+"Blood Boil": {
+"type": "active",
+"lineage": false
+},
+"Ruzhan's Trap": {
+"type": "active",
+"lineage": false
+},
+"Ruzhan's Fury": {
+"type": "active",
+"lineage": false
+},
+"Ruzhan's Reckoning": {
+"type": "active",
+"lineage": false
+},
+"Kelari's Judgment": {
+"type": "active",
+"lineage": false
+},
+"Kelari's Deception": {
+"type": "active",
+"lineage": false
+},
+"Navira's Well": {
+"type": "active",
+"lineage": false
+},
+"Navira's Fracturing": {
+"type": "active",
+"lineage": false
+},
+"Navira's Oasis": {
+"type": "active",
+"lineage": false
+},
+"Kelari's Malediction": {
+"type": "active",
+"lineage": false
+},
+"Demon Form": {
+"type": "active",
+"lineage": false
+},
+"Elemental Expression": {
+"type": "active",
+"lineage": false
+},
+"Elemental Storm": {
+"type": "active",
+"lineage": false
+},
+"Encase in Jade": {
+"type": "active",
+"lineage": false
+},
+"Explosive Concoction": {
+"type": "active",
+"lineage": false
+},
+"Fire Spell on Hit": {
+"type": "spirit",
+"lineage": false
+},
+"Fulminating Concoction": {
+"type": "active",
+"lineage": false
+},
+"Hollow Focus": {
+"type": "active",
+"lineage": false
+},
+"Hollow Form": {
+"type": "spirit",
+"lineage": false
+},
+"Hollow Resonance": {
+"type": "active",
+"lineage": false
+},
+"Inevitable Agony": {
+"type": "active",
+"lineage": false
+},
+"Elemental Surge": {
+"type": "active",
+"lineage": false
+},
+"Into the Breach": {
+"type": "active",
+"lineage": false
+},
+"Life Remnants": {
+"type": "active",
+"lineage": false
+},
+"Manifest Weapon": {
+"type": "active",
+"lineage": false
+},
+"Meditate": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Arcane Archery": {
+"type": "spirit",
+"lineage": false
+},
+"[DNT] Meta Ranged Attack on Freeze": {
+"type": "spirit",
+"lineage": false
+},
+"[DNT] Meta Ranged Attack on Ignite": {
+"type": "spirit",
+"lineage": false
+},
+"[DNT] Meta Ranged Attack on Shock": {
+"type": "spirit",
+"lineage": false
+},
+"Mirage Deadeye": {
+"type": "spirit",
+"lineage": false
+},
+"Moment of Vulnerability": {
+"type": "active",
+"lineage": false
+},
+"Acidic Concoction": {
+"type": "active",
+"lineage": false
+},
+"Queen's Procession": {
+"type": "active",
+"lineage": false
+},
+"Ritual Sacrifice": {
+"type": "active",
+"lineage": false
+},
+"Shattering Concoction": {
+"type": "active",
+"lineage": false
+},
+"Sorcery Ward": {
+"type": "active",
+"lineage": false
+},
+"Ruzhan, the Blazing Sword": {
+"type": "active",
+"lineage": false
+},
+"Summon Infernal Hound": {
+"type": "active",
+"lineage": false
+},
+"Kelari, the Tainted Sands": {
+"type": "active",
+"lineage": false
+},
+"Navira, the Last Mirage": {
+"type": "active",
+"lineage": false
+},
+"Temper Weapon": {
+"type": "active",
+"lineage": false
+},
+"Temporal Rift": {
+"type": "active",
+"lineage": false
+},
+"Time Freeze": {
+"type": "active",
+"lineage": false
+},
+"Time Snap": {
+"type": "active",
+"lineage": false
+},
+"Unbound Avatar": {
+"type": "active",
+"lineage": false
+},
+"Unleash": {
+"type": "active",
+"lineage": false
+},
+"Vivid Stampede": {
+"type": "active",
+"lineage": false
+},
+"Void Illusion": {
+"type": "active",
+"lineage": false
+},
+"[DNT] UNUSED": {
+"type": "active",
+"lineage": false
+},
+"Called Shots": {
+"type": "spirit",
+"lineage": false
+},
+"Attrition": {
+"type": "active",
+"lineage": false
+},
+"Barkskin": {
+"type": "active",
+"lineage": false
+},
+"Fury of the Mountain": {
+"type": "active",
+"lineage": false
+},
+"Berserk": {
+"type": "active",
+"lineage": false
+},
+"Black Powder Blitz": {
+"type": "active",
+"lineage": false
+},
+"Blink": {
+"type": "active",
+"lineage": false
+},
+"Bloodhound's Mark": {
+"type": "active",
+"lineage": false
+},
+"Bone Blast": {
+"type": "active",
+"lineage": false
+},
+"Bone Cage": {
+"type": "active",
+"lineage": false
+},
+"Bonestorm": {
+"type": "active",
+"lineage": false
+},
+"Chaotic Surge": {
+"type": "active",
+"lineage": false
+},
+"Charge Regulation": {
+"type": "active",
+"lineage": false
+},
+"Cluster Grenade": {
+"type": "active",
+"lineage": false
+},
+"Snap": {
+"type": "active",
+"lineage": false
+},
+"Combat Frenzy": {
+"type": "active",
+"lineage": false
+},
+"Convalescence": {
+"type": "active",
+"lineage": false
+},
+"Requiem": {
+"type": "active",
+"lineage": false
+},
+"Cull The Weak": {
+"type": "active",
+"lineage": false
+},
+"Dark Effigy": {
+"type": "active",
+"lineage": false
+},
+"Defiance Banner": {
+"type": "active",
+"lineage": false
+},
+"Detonate Minion": {
+"type": "active",
+"lineage": false
+},
+"Detonating Arrow": {
+"type": "active",
+"lineage": false
+},
+"Dread Banner": {
+"type": "active",
+"lineage": false
+},
+"Electrocuting Arrow": {
+"type": "active",
+"lineage": false
+},
+"Elemental Conflux": {
+"type": "active",
+"lineage": false
+},
+"Elemental Invocation": {
+"type": "spirit",
+"lineage": false
+},
+"Elemental Siphon": {
+"type": "active",
+"lineage": false
+},
+"Elemental Sundering": {
+"type": "active",
+"lineage": false
+},
+"Elemental Weakness": {
+"type": "active",
+"lineage": false
+},
+"Emergency Reload": {
+"type": "active",
+"lineage": false
+},
+"Entangle": {
+"type": "active",
+"lineage": false
+},
+"Bursting Fen Toad": {
+"type": "active",
+"lineage": false
+},
+"Explosive Grenade": {
+"type": "active",
+"lineage": false
+},
+"Explosive Shot": {
+"type": "active",
+"lineage": false
+},
+"Explosive Spear": {
+"type": "active",
+"lineage": false
+},
+"Fangs of Frost": {
+"type": "active",
+"lineage": false
+},
+"Feast of Flesh": {
+"type": "active",
+"lineage": false
+},
+"Feral Invocation": {
+"type": "spirit",
+"lineage": false
+},
+"Fireball": {
+"type": "active",
+"lineage": false
+},
+"[DNT] Flame Link": {
+"type": "active",
+"lineage": false
+},
+"Flash Grenade": {
+"type": "active",
+"lineage": false
+},
+"Forge Hammer": {
+"type": "active",
+"lineage": false
+},
+"Fortifying Cry": {
+"type": "active",
+"lineage": false
+},
+"Fragmentation Rounds": {
+"type": "active",
+"lineage": false
+},
+"Freezing Mark": {
+"type": "active",
+"lineage": false
+},
+"Freezing Salvo": {
+"type": "active",
+"lineage": false
+},
+"Frost Darts": {
+"type": "active",
+"lineage": false
+},
+"Frozen Locus": {
+"type": "active",
+"lineage": false
+},
+"Fulmination": {
+"type": "active",
+"lineage": false
+},
+"Galvanic Shards": {
+"type": "active",
+"lineage": false
+},
+"Gas Arrow": {
+"type": "active",
+"lineage": false
+},
+"Gas Grenade": {
+"type": "active",
+"lineage": false
+},
+"Gathering Storm": {
+"type": "active",
+"lineage": false
+},
+"Gemini Surge": {
+"type": "active",
+"lineage": false
+},
+"Glacial Bolt": {
+"type": "active",
+"lineage": false
+},
+"Grim Feast": {
+"type": "active",
+"lineage": false
+},
+"Hailstorm Rounds": {
+"type": "active",
+"lineage": false
+},
+"[DNT] Hammer of Ngamahu": {
+"type": "active",
+"lineage": false
+},
+"Hammer of the Gods": {
+"type": "active",
+"lineage": false
+},
+"Hand of Chayula": {
+"type": "spirit",
+"lineage": false
+},
+"Heart of Ice": {
+"type": "active",
+"lineage": false
+},
+"Herald of Blood": {
+"type": "active",
+"lineage": false
+},
+"Herald of Plague": {
+"type": "active",
+"lineage": false
+},
+"High Velocity Rounds": {
+"type": "active",
+"lineage": false
+},
+"Hydra Familiar": {
+"type": "spirit",
+"lineage": false
+},
+"Ice Fragments": {
+"type": "active",
+"lineage": false
+},
+"Ice Shards": {
+"type": "active",
+"lineage": false
+},
+"Ice Shot": {
+"type": "active",
+"lineage": false
+},
+"Ice-Tipped Arrows": {
+"type": "active",
+"lineage": false
+},
+"Icestorm": {
+"type": "active",
+"lineage": false
+},
+"Incendiary Shot": {
+"type": "active",
+"lineage": false
+},
+"[DNT] Internecine Draw": {
+"type": "active",
+"lineage": false
+},
+"Iron Ward": {
+"type": "active",
+"lineage": false
+},
+"[DNT] Lightless Stalker": {
+"type": "active",
+"lineage": false
+},
+"Lightning Rod": {
+"type": "active",
+"lineage": false
+},
+"Living Bomb": {
+"type": "active",
+"lineage": false
+},
+"Lunar Assault": {
+"type": "active",
+"lineage": false
+},
+"Magma Barrier": {
+"type": "active",
+"lineage": false
+},
+"Magnetic Salvo": {
+"type": "active",
+"lineage": false
+},
+"Malice": {
+"type": "active",
+"lineage": false
+},
+"Mana Drain": {
+"type": "active",
+"lineage": false
+},
+"Mana Remnants": {
+"type": "active",
+"lineage": false
+},
+"Mantra of Destruction": {
+"type": "active",
+"lineage": false
+},
+"Mirage Archer": {
+"type": "spirit",
+"lineage": false
+},
+"Molten Blast": {
+"type": "active",
+"lineage": false
+},
+"Mortar Cannon": {
+"type": "spirit",
+"lineage": false
+},
+"Oil Barrage": {
+"type": "active",
+"lineage": false
+},
+"Oil Grenade": {
+"type": "active",
+"lineage": false
+},
+"Overwhelming Presence": {
+"type": "active",
+"lineage": false
+},
+"Parry": {
+"type": "active",
+"lineage": false
+},
+"Perfect Strike": {
+"type": "active",
+"lineage": false
+},
+"Permafrost Bolts": {
+"type": "active",
+"lineage": false
+},
+"Phantasmal Arrow": {
+"type": "active",
+"lineage": false
+},
+"Pinnacle of Power": {
+"type": "active",
+"lineage": false
+},
+"Plasma Blast": {
+"type": "active",
+"lineage": false
+},
+"Axe Slash": {
+"type": "active",
+"lineage": false
+},
+"Mace Strike": {
+"type": "active",
+"lineage": false
+},
+"Sword Slash": {
+"type": "active",
+"lineage": false
+},
+"Bow Shot": {
+"type": "active",
+"lineage": false
+},
+"Claw Stab": {
+"type": "active",
+"lineage": false
+},
+"Crossbow Shot": {
+"type": "active",
+"lineage": false
+},
+"Dagger Stab": {
+"type": "active",
+"lineage": false
+},
+"Flail Strike": {
+"type": "active",
+"lineage": false
+},
+"Grenade": {
+"type": "active",
+"lineage": false
+},
+"Quarterstaff Strike": {
+"type": "active",
+"lineage": false
+},
+"Spear Stab": {
+"type": "active",
+"lineage": false
+},
+"Spear Throw": {
+"type": "active",
+"lineage": false
+},
+"Punch": {
+"type": "active",
+"lineage": false
+},
+"Playtest Attack": {
+"type": "active",
+"lineage": false
+},
+"Playtest Slam": {
+"type": "active",
+"lineage": false
+},
+"Playtest Spell": {
+"type": "active",
+"lineage": false
+},
+"Poisonburst Arrow": {
+"type": "active",
+"lineage": false
+},
+"Primal Avatar": {
+"type": "active",
+"lineage": false
+},
+"[DNT] Primal Quadrilla Slam": {
+"type": "active",
+"lineage": false
+},
+"Primal Bounty": {
+"type": "active",
+"lineage": false
+},
+"Primal Strikes": {
+"type": "active",
+"lineage": false
+},
+"Profane Ritual": {
+"type": "active",
+"lineage": false
+},
+"Raging Spirits": {
+"type": "active",
+"lineage": false
+},
+"Rake": {
+"type": "active",
+"lineage": false
+},
+"Rapid Shot": {
+"type": "active",
+"lineage": false
+},
+"Ravenous Swarm": {
+"type": "active",
+"lineage": false
+},
+"Reaper's Invocation": {
+"type": "spirit",
+"lineage": false
+},
+"[DNT] Red Queen's Visage": {
+"type": "active",
+"lineage": false
+},
+"Resonating Shield": {
+"type": "active",
+"lineage": false
+},
+"Sacrifice": {
+"type": "active",
+"lineage": false
+},
+"Sanguine Revelry": {
+"type": "active",
+"lineage": false
+},
+"Scavenged Plating": {
+"type": "active",
+"lineage": false
+},
+"Shard Scavenger": {
+"type": "active",
+"lineage": false
+},
+"Raise Shield": {
+"type": "active",
+"lineage": false
+},
+"Shield Wall": {
+"type": "active",
+"lineage": false
+},
+"Shockburst Rounds": {
+"type": "active",
+"lineage": false
+},
+"Shockchain Arrow": {
+"type": "active",
+"lineage": false
+},
+"Siege Cascade": {
+"type": "active",
+"lineage": false
+},
+"Siphon Elements": {
+"type": "active",
+"lineage": false
+},
+"Siphoning Strike": {
+"type": "active",
+"lineage": false
+},
+"Snipe": {
+"type": "active",
+"lineage": false
+},
+"Solar Orb": {
+"type": "active",
+"lineage": false
+},
+"[DNT] Soul Link": {
+"type": "active",
+"lineage": false
+},
+"Soul Offering": {
+"type": "active",
+"lineage": false
+},
+"Spear of Solaris": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Spear Vortex": {
+"type": "active",
+"lineage": false
+},
+"Spellslinger": {
+"type": "spirit",
+"lineage": false
+},
+"Stampede": {
+"type": "active",
+"lineage": false
+},
+"Storm Lance": {
+"type": "active",
+"lineage": false
+},
+"Storm Wave": {
+"type": "active",
+"lineage": false
+},
+"Stormblast Bolts": {
+"type": "active",
+"lineage": false
+},
+"Stormcaller Arrow": {
+"type": "active",
+"lineage": false
+},
+"Tame Beast": {
+"type": "active",
+"lineage": false
+},
+"Tempest Bell": {
+"type": "active",
+"lineage": false
+},
+"Thrashing Vines": {
+"type": "active",
+"lineage": false
+},
+"Thunderous Leap": {
+"type": "active",
+"lineage": false
+},
+"Time of Need": {
+"type": "active",
+"lineage": false
+},
+"Tornado Shot": {
+"type": "active",
+"lineage": false
+},
+"Toxic Domain": {
+"type": "active",
+"lineage": false
+},
+"Toxic Growth": {
+"type": "active",
+"lineage": false
+},
+"Abyssal Apparition": {
+"type": "active",
+"lineage": false
+},
+"[DNT] Caustic Cloud": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Detonation": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Gas Cloud": {
+"type": "active",
+"lineage": false
+},
+"Trinity": {
+"type": "active",
+"lineage": false
+},
+"Twister": {
+"type": "active",
+"lineage": false
+},
+"Unearth": {
+"type": "active",
+"lineage": false
+},
+"Lightning Bolt": {
+"type": "active",
+"lineage": false
+},
+"Ember Fusillade": {
+"type": "active",
+"lineage": false
+},
+"Spark": {
+"type": "active",
+"lineage": false
+},
+"Removed Skill": {
+"type": "active",
+"lineage": false
+},
+"Vaulting Impact": {
+"type": "active",
+"lineage": false
+},
+"Vine Arrow": {
+"type": "active",
+"lineage": false
+},
+"Voltaic Mark": {
+"type": "active",
+"lineage": false
+},
+"War Banner": {
+"type": "active",
+"lineage": false
+},
+"Whirlwind Lance": {
+"type": "active",
+"lineage": false
+},
+"Wild Protector": {
+"type": "active",
+"lineage": false
+},
+"Wind Dancer": {
+"type": "active",
+"lineage": false
+},
+"Wind Serpent's Fury": {
+"type": "active",
+"lineage": false
+},
+"Wing Blast": {
+"type": "active",
+"lineage": false
+},
+"Withering Presence": {
+"type": "active",
+"lineage": false
+},
+"Arctic Howl": {
+"type": "active",
+"lineage": false
+},
+"Cross Slash": {
+"type": "active",
+"lineage": false
+},
+"Lunar Blessing": {
+"type": "active",
+"lineage": false
+},
+"Shred": {
+"type": "active",
+"lineage": false
+},
+"Devour": {
+"type": "active",
+"lineage": false
+},
+"Flame Breath": {
+"type": "active",
+"lineage": false
+},
+"Abiding Hex": {
+"type": "support",
+"lineage": false
+},
+"Sacrificial Offering": {
+"type": "support",
+"lineage": false
+},
+"Acrimony": {
+"type": "support",
+"lineage": false
+},
+"Adhesive Grenades I": {
+"type": "support",
+"lineage": false
+},
+"Adhesive Grenades III": {
+"type": "support",
+"lineage": false
+},
+"Adhesive Grenades II": {
+"type": "support",
+"lineage": false
+},
+"Admixture": {
+"type": "support",
+"lineage": false
+},
+"Advancing Storm": {
+"type": "support",
+"lineage": false
+},
+"Alignment I": {
+"type": "support",
+"lineage": false
+},
+"Alignment III": {
+"type": "support",
+"lineage": false
+},
+"Alignment II": {
+"type": "support",
+"lineage": false
+},
+"Amanamu's Tithe": {
+"type": "support",
+"lineage": true
+},
+"Ambrosia": {
+"type": "support",
+"lineage": false
+},
+"Ambrosia II": {
+"type": "support",
+"lineage": false
+},
+"Ammo Conservation I": {
+"type": "support",
+"lineage": false
+},
+"Arjun's Medal": {
+"type": "support",
+"lineage": true
+},
+"Ammo Conservation III": {
+"type": "support",
+"lineage": false
+},
+"Ammo Conservation II": {
+"type": "support",
+"lineage": false
+},
+"Ancestral Aid": {
+"type": "support",
+"lineage": false
+},
+"Ancestral Call I": {
+"type": "support",
+"lineage": false
+},
+"Ancestral Call III": {
+"type": "support",
+"lineage": false
+},
+"Ancestral Call II": {
+"type": "support",
+"lineage": false
+},
+"Urgent Totems I": {
+"type": "support",
+"lineage": false
+},
+"Urgent Totems III": {
+"type": "support",
+"lineage": false
+},
+"Urgent Totems II": {
+"type": "support",
+"lineage": false
+},
+"Arakaali's Lust": {
+"type": "support",
+"lineage": true
+},
+"[DNT] Arbiters Calling": {
+"type": "support",
+"lineage": true
+},
+"Arbiter's Ignition": {
+"type": "support",
+"lineage": true
+},
+"Arbiter's Reach": {
+"type": "support",
+"lineage": true
+},
+"Armour Explosion": {
+"type": "support",
+"lineage": false
+},
+"Arms Length": {
+"type": "support",
+"lineage": false
+},
+"Astral Projection": {
+"type": "support",
+"lineage": false
+},
+"Atziri's Allure": {
+"type": "support",
+"lineage": true
+},
+"Atziri's Call": {
+"type": "support",
+"lineage": true
+},
+"Atziri's Communion": {
+"type": "support",
+"lineage": true
+},
+"Atziri's Impatience": {
+"type": "support",
+"lineage": true
+},
+"Auto Reload": {
+"type": "support",
+"lineage": false
+},
+"Barbs I": {
+"type": "support",
+"lineage": false
+},
+"Barbs III": {
+"type": "support",
+"lineage": false
+},
+"Barbs II": {
+"type": "support",
+"lineage": false
+},
+"Battershout": {
+"type": "support",
+"lineage": false
+},
+"Bidding I": {
+"type": "support",
+"lineage": false
+},
+"Bidding III": {
+"type": "support",
+"lineage": false
+},
+"Bidding II": {
+"type": "support",
+"lineage": false
+},
+"Blindside": {
+"type": "support",
+"lineage": false
+},
+"Hobble": {
+"type": "support",
+"lineage": false
+},
+"Bone Shrapnel": {
+"type": "support",
+"lineage": false
+},
+"Brambleslam": {
+"type": "support",
+"lineage": false
+},
+"Branching Fissures I": {
+"type": "support",
+"lineage": false
+},
+"Branching Fissures II": {
+"type": "support",
+"lineage": false
+},
+"Breachlord's Amalgam": {
+"type": "support",
+"lineage": true
+},
+"Breachlord's Rift": {
+"type": "support",
+"lineage": true
+},
+"Break Endurance": {
+"type": "support",
+"lineage": false
+},
+"Brink I": {
+"type": "support",
+"lineage": false
+},
+"Brink II": {
+"type": "support",
+"lineage": false
+},
+"Burgeon I": {
+"type": "support",
+"lineage": false
+},
+"Burgeon II": {
+"type": "support",
+"lineage": false
+},
+"Cadence": {
+"type": "support",
+"lineage": false
+},
+"Caltrops": {
+"type": "support",
+"lineage": false
+},
+"Energy Capacitor": {
+"type": "support",
+"lineage": false
+},
+"Catharsis": {
+"type": "support",
+"lineage": false
+},
+"Catha's Brilliance": {
+"type": "support",
+"lineage": true
+},
+"Chaotic Freeze": {
+"type": "support",
+"lineage": false
+},
+"Charged Shots I": {
+"type": "support",
+"lineage": false
+},
+"Charged Shots II": {
+"type": "support",
+"lineage": false
+},
+"Charm Bounty": {
+"type": "support",
+"lineage": false
+},
+"Clash": {
+"type": "support",
+"lineage": false
+},
+"Ratha's Assault": {
+"type": "support",
+"lineage": true
+},
+"Commandment": {
+"type": "support",
+"lineage": false
+},
+"Commiserate": {
+"type": "support",
+"lineage": false
+},
+"Concoct I": {
+"type": "support",
+"lineage": false
+},
+"Concoct II": {
+"type": "support",
+"lineage": false
+},
+"Considered Casting": {
+"type": "support",
+"lineage": false
+},
+"Cool Headed": {
+"type": "support",
+"lineage": false
+},
+"Corpse Conservation": {
+"type": "support",
+"lineage": false
+},
+"Crackling Barrier": {
+"type": "support",
+"lineage": false
+},
+"Crater": {
+"type": "support",
+"lineage": false
+},
+"Crazed Minions": {
+"type": "support",
+"lineage": false
+},
+"Crystalline Shards": {
+"type": "support",
+"lineage": false
+},
+"Culling Strike I": {
+"type": "support",
+"lineage": false
+},
+"Culling Strike II": {
+"type": "support",
+"lineage": false
+},
+"Culmination I": {
+"type": "support",
+"lineage": false
+},
+"Culmination II": {
+"type": "support",
+"lineage": false
+},
+"Cursed Ground": {
+"type": "support",
+"lineage": false
+},
+"Danse Macabre": {
+"type": "support",
+"lineage": false
+},
+"Daresso's Passion": {
+"type": "support",
+"lineage": true
+},
+"Dauntless": {
+"type": "support",
+"lineage": false
+},
+"Dazing Cry": {
+"type": "support",
+"lineage": false
+},
+"Dazzle": {
+"type": "support",
+"lineage": false
+},
+"Deadly Resolve": {
+"type": "support",
+"lineage": false
+},
+"Deathmarch": {
+"type": "support",
+"lineage": false
+},
+"Decaying Hex": {
+"type": "support",
+"lineage": false
+},
+"Defy I": {
+"type": "support",
+"lineage": false
+},
+"Defy II": {
+"type": "support",
+"lineage": false
+},
+"Delayed Gratification": {
+"type": "support",
+"lineage": false
+},
+"Delayed Reaction": {
+"type": "support",
+"lineage": false
+},
+"Deliberation": {
+"type": "support",
+"lineage": false
+},
+"Derange": {
+"type": "support",
+"lineage": false
+},
+"Desperation": {
+"type": "support",
+"lineage": false
+},
+"Dialla's Desire": {
+"type": "support",
+"lineage": true
+},
+"Direstrike I": {
+"type": "support",
+"lineage": false
+},
+"Direstrike II": {
+"type": "support",
+"lineage": false
+},
+"Harmonic Remnants I": {
+"type": "support",
+"lineage": false
+},
+"Harmonic Remnants II": {
+"type": "support",
+"lineage": false
+},
+"Doedre's Undoing": {
+"type": "support",
+"lineage": true
+},
+"Persistent Ground I": {
+"type": "support",
+"lineage": false
+},
+"Persistent Ground III": {
+"type": "support",
+"lineage": false
+},
+"Persistent Ground II": {
+"type": "support",
+"lineage": false
+},
+"Double Barrel I": {
+"type": "support",
+"lineage": false
+},
+"Double Barrel III": {
+"type": "support",
+"lineage": false
+},
+"Double Barrel II": {
+"type": "support",
+"lineage": false
+},
+"Dreamer's Knell": {
+"type": "support",
+"lineage": true
+},
+"Durability": {
+"type": "support",
+"lineage": false
+},
+"Embitter": {
+"type": "support",
+"lineage": false
+},
+"Enduring Impact I": {
+"type": "support",
+"lineage": false
+},
+"Enduring Impact II": {
+"type": "support",
+"lineage": false
+},
+"Energy Retention": {
+"type": "support",
+"lineage": false
+},
+"Hulking Minions": {
+"type": "support",
+"lineage": false
+},
+"Esh's Prowess": {
+"type": "support",
+"lineage": true
+},
+"Esh's Radiance": {
+"type": "support",
+"lineage": true
+},
+"Excise": {
+"type": "support",
+"lineage": false
+},
+"Excoriate": {
+"type": "support",
+"lineage": false
+},
+"Execrate": {
+"type": "support",
+"lineage": false
+},
+"Expanse": {
+"type": "support",
+"lineage": false
+},
+"Short Fuse I": {
+"type": "support",
+"lineage": false
+},
+"Short Fuse II": {
+"type": "support",
+"lineage": false
+},
+"Extraction": {
+"type": "support",
+"lineage": false
+},
+"Ferocity": {
+"type": "support",
+"lineage": false
+},
+"Selfless Remnants": {
+"type": "support",
+"lineage": false
+},
+"First Blood": {
+"type": "support",
+"lineage": false
+},
+"Flame Pillar": {
+"type": "support",
+"lineage": false
+},
+"Flamepierce": {
+"type": "support",
+"lineage": false
+},
+"Flow": {
+"type": "support",
+"lineage": false
+},
+"Fluke": {
+"type": "support",
+"lineage": false
+},
+"Ixchel's Torment": {
+"type": "support",
+"lineage": true
+},
+"Focused Curse": {
+"type": "support",
+"lineage": false
+},
+"Freezefork": {
+"type": "support",
+"lineage": false
+},
+"Fresh Clip I": {
+"type": "support",
+"lineage": false
+},
+"Fresh Clip II": {
+"type": "support",
+"lineage": false
+},
+"[DNT] From the Grave": {
+"type": "support",
+"lineage": false
+},
+"Frozen Spite": {
+"type": "support",
+"lineage": false
+},
+"Gambleshot": {
+"type": "support",
+"lineage": false
+},
+"Garukhan's Resolve": {
+"type": "support",
+"lineage": true
+},
+"Glacier": {
+"type": "support",
+"lineage": false
+},
+"Cirel's Cultivation": {
+"type": "support",
+"lineage": true
+},
+"Greatwood II": {
+"type": "support",
+"lineage": false
+},
+"[DNT] Greybeard's Fuse": {
+"type": "support",
+"lineage": true
+},
+"Relentless Rage": {
+"type": "support",
+"lineage": false
+},
+"Guatelitzi's Ablation": {
+"type": "support",
+"lineage": true
+},
+"Haemocrystals": {
+"type": "support",
+"lineage": false
+},
+"Hardy Totems I": {
+"type": "support",
+"lineage": false
+},
+"Tawhoa's Tending": {
+"type": "support",
+"lineage": true
+},
+"Hardy Totems II": {
+"type": "support",
+"lineage": false
+},
+"Hayoxi's Fulmination": {
+"type": "support",
+"lineage": true
+},
+"Heft": {
+"type": "support",
+"lineage": false
+},
+"Helbrym's Hide": {
+"type": "support",
+"lineage": true
+},
+"Her Declaration": {
+"type": "support",
+"lineage": true
+},
+"Hinder": {
+"type": "support",
+"lineage": false
+},
+"Hit and Run": {
+"type": "support",
+"lineage": false
+},
+"Hoarfrost": {
+"type": "support",
+"lineage": false
+},
+"Holy Descent": {
+"type": "support",
+"lineage": false
+},
+"Icicle": {
+"type": "support",
+"lineage": false
+},
+"Impale": {
+"type": "support",
+"lineage": false
+},
+"Boundless Energy I": {
+"type": "support",
+"lineage": false
+},
+"Boundless Energy II": {
+"type": "support",
+"lineage": false
+},
+"Incision": {
+"type": "support",
+"lineage": false
+},
+"Inhibitor": {
+"type": "support",
+"lineage": false
+},
+"Innervate": {
+"type": "support",
+"lineage": false
+},
+"Intense Agony": {
+"type": "support",
+"lineage": false
+},
+"Remnant Potency I": {
+"type": "support",
+"lineage": false
+},
+"Remnant Potency III": {
+"type": "support",
+"lineage": false
+},
+"Remnant Potency II": {
+"type": "support",
+"lineage": false
+},
+"[DNT-UNUSED] Iron Grip": {
+"type": "support",
+"lineage": false
+},
+"[DNT-UNUSED] Iron Will": {
+"type": "support",
+"lineage": false
+},
+"Reinforced Totems I": {
+"type": "support",
+"lineage": false
+},
+"Reinforced Totems II": {
+"type": "support",
+"lineage": false
+},
+"Kalisa's Crescendo": {
+"type": "support",
+"lineage": true
+},
+"Kaom's Madness": {
+"type": "support",
+"lineage": true
+},
+"Khatal's Rejuvenation": {
+"type": "support",
+"lineage": true
+},
+"Styrn's Anthem": {
+"type": "support",
+"lineage": true
+},
+"Kulemak's Dominion": {
+"type": "support",
+"lineage": true
+},
+"Kurgal's Leash": {
+"type": "support",
+"lineage": true
+},
+"Last Gasp": {
+"type": "support",
+"lineage": false
+},
+"Leverage": {
+"type": "support",
+"lineage": false
+},
+"Living Lightning": {
+"type": "support",
+"lineage": false
+},
+"Living Lightning II": {
+"type": "support",
+"lineage": false
+},
+"Long Fuse I": {
+"type": "support",
+"lineage": false
+},
+"Long Fuse II": {
+"type": "support",
+"lineage": false
+},
+"Loyalty": {
+"type": "support",
+"lineage": false
+},
+"Magnetic Remnants": {
+"type": "support",
+"lineage": false
+},
+"Malady": {
+"type": "support",
+"lineage": false
+},
+"Medved's Felling": {
+"type": "support",
+"lineage": true
+},
+"[DNT] Mhacha's Guidance": {
+"type": "support",
+"lineage": true
+},
+"Minion Instability": {
+"type": "support",
+"lineage": false
+},
+"Minion Pact I": {
+"type": "support",
+"lineage": false
+},
+"Minion Pact II": {
+"type": "support",
+"lineage": false
+},
+"Morgana's Tempest": {
+"type": "support",
+"lineage": true
+},
+"Mórrigan's Insight": {
+"type": "support",
+"lineage": true
+},
+"Muster": {
+"type": "support",
+"lineage": false
+},
+"Mysticism I": {
+"type": "support",
+"lineage": false
+},
+"Mysticism II": {
+"type": "support",
+"lineage": false
+},
+"Nadir": {
+"type": "support",
+"lineage": false
+},
+"Nimble Reload": {
+"type": "support",
+"lineage": false
+},
+"Outmaneuver": {
+"type": "support",
+"lineage": false
+},
+"Overextend": {
+"type": "support",
+"lineage": false
+},
+"Payload": {
+"type": "support",
+"lineage": false
+},
+"Perfected Endurance": {
+"type": "support",
+"lineage": false
+},
+"Perfection": {
+"type": "support",
+"lineage": false
+},
+"Dominus' Grasp": {
+"type": "support",
+"lineage": true
+},
+"Poison Spores": {
+"type": "support",
+"lineage": false
+},
+"Potential": {
+"type": "support",
+"lineage": false
+},
+"Practiced Combo": {
+"type": "support",
+"lineage": false
+},
+"Profanity I": {
+"type": "support",
+"lineage": false
+},
+"Profanity II": {
+"type": "support",
+"lineage": false
+},
+"Prototype Seventeen": {
+"type": "support",
+"lineage": true
+},
+"Punch Through": {
+"type": "support",
+"lineage": false
+},
+"Pursuit I": {
+"type": "support",
+"lineage": false
+},
+"Pursuit III": {
+"type": "support",
+"lineage": false
+},
+"Pursuit II": {
+"type": "support",
+"lineage": false
+},
+"Quill Burst": {
+"type": "support",
+"lineage": false
+},
+"Rageforged I": {
+"type": "support",
+"lineage": false
+},
+"Rageforged II": {
+"type": "support",
+"lineage": false
+},
+"Raging Cry": {
+"type": "support",
+"lineage": false
+},
+"Rakiata's Flow": {
+"type": "support",
+"lineage": true
+},
+"Rally": {
+"type": "support",
+"lineage": false
+},
+"Overreach": {
+"type": "support",
+"lineage": false
+},
+"Rearm I": {
+"type": "support",
+"lineage": false
+},
+"Rearm II": {
+"type": "support",
+"lineage": false
+},
+"Refraction I": {
+"type": "support",
+"lineage": false
+},
+"Refraction III": {
+"type": "support",
+"lineage": false
+},
+"Refraction II": {
+"type": "support",
+"lineage": false
+},
+"Retaliate I": {
+"type": "support",
+"lineage": false
+},
+"Retaliate II": {
+"type": "support",
+"lineage": false
+},
+"Frenzied Riposte": {
+"type": "support",
+"lineage": false
+},
+"Retreat I": {
+"type": "support",
+"lineage": false
+},
+"Retreat III": {
+"type": "support",
+"lineage": false
+},
+"Retreat II": {
+"type": "support",
+"lineage": false
+},
+"Reverberate": {
+"type": "support",
+"lineage": false
+},
+"Ricochet I": {
+"type": "support",
+"lineage": false
+},
+"Ricochet III": {
+"type": "support",
+"lineage": false
+},
+"Ricochet II": {
+"type": "support",
+"lineage": false
+},
+"Rigwald's Ferocity": {
+"type": "support",
+"lineage": true
+},
+"Rime": {
+"type": "support",
+"lineage": false
+},
+"Rip": {
+"type": "support",
+"lineage": false
+},
+"Ritualistic Curse": {
+"type": "support",
+"lineage": false
+},
+"Romira's Requital": {
+"type": "support",
+"lineage": true
+},
+"Rupture": {
+"type": "support",
+"lineage": false
+},
+"Rusted Spikes": {
+"type": "support",
+"lineage": false
+},
+"Sacrificial Lamb I": {
+"type": "support",
+"lineage": false
+},
+"Sacrificial Lamb II": {
+"type": "support",
+"lineage": false
+},
+"Salvo": {
+"type": "support",
+"lineage": false
+},
+"See Red": {
+"type": "support",
+"lineage": false
+},
+"Seraph's Heart": {
+"type": "support",
+"lineage": true
+},
+"Shocking Leap": {
+"type": "support",
+"lineage": false
+},
+"Electromagnetism": {
+"type": "support",
+"lineage": false
+},
+"Mark for Death": {
+"type": "support",
+"lineage": false
+},
+"Mark for Death II": {
+"type": "support",
+"lineage": false
+},
+"Skittering Stone I": {
+"type": "support",
+"lineage": false
+},
+"Skittering Stone II": {
+"type": "support",
+"lineage": false
+},
+"Soulbreaker": {
+"type": "support",
+"lineage": false
+},
+"Spar": {
+"type": "support",
+"lineage": false
+},
+"[DNT-UNUSED] Spectral Palm": {
+"type": "support",
+"lineage": false
+},
+"Spectral Volley": {
+"type": "support",
+"lineage": false
+},
+"Spell Cascade": {
+"type": "support",
+"lineage": false
+},
+"Splinter Totem I": {
+"type": "support",
+"lineage": false
+},
+"Splinter Totem II": {
+"type": "support",
+"lineage": false
+},
+"Static Shocks": {
+"type": "support",
+"lineage": false
+},
+"Steadfast I": {
+"type": "support",
+"lineage": false
+},
+"Steadfast II": {
+"type": "support",
+"lineage": false
+},
+"Stoicism I": {
+"type": "support",
+"lineage": false
+},
+"Stoicism II": {
+"type": "support",
+"lineage": false
+},
+"Stomping Ground": {
+"type": "support",
+"lineage": false
+},
+"[DNT] Stone Slam Aegis": {
+"type": "support",
+"lineage": false
+},
+"Stormchain": {
+"type": "support",
+"lineage": false
+},
+"Streamlined Rounds": {
+"type": "support",
+"lineage": false
+},
+"Potent Exposure": {
+"type": "support",
+"lineage": false
+},
+"Strong Hearted": {
+"type": "support",
+"lineage": false
+},
+"Styrn's Ferocity": {
+"type": "support",
+"lineage": true
+},
+"Styrn's Mountain": {
+"type": "support",
+"lineage": true
+},
+"Encroaching Ground": {
+"type": "support",
+"lineage": false
+},
+"Swift Affliction I": {
+"type": "support",
+"lineage": false
+},
+"Swift Affliction III": {
+"type": "support",
+"lineage": false
+},
+"Swift Affliction II": {
+"type": "support",
+"lineage": false
+},
+"Syzygy": {
+"type": "support",
+"lineage": false
+},
+"Tacati's Ire": {
+"type": "support",
+"lineage": true
+},
+"[DNT] Tangmazu Lineage": {
+"type": "support",
+"lineage": true
+},
+"Tangmazu's Thurible": {
+"type": "support",
+"lineage": true
+},
+"Tasalio's Rhythm": {
+"type": "support",
+"lineage": true
+},
+"Tear": {
+"type": "support",
+"lineage": false
+},
+"Tecrod's Revenge": {
+"type": "support",
+"lineage": true
+},
+"[DNT] Tekaru's Snare": {
+"type": "support",
+"lineage": true
+},
+"Thornskin I": {
+"type": "support",
+"lineage": false
+},
+"Thornskin II": {
+"type": "support",
+"lineage": false
+},
+"[DNT-UNUSED] Timerot": {
+"type": "support",
+"lineage": false
+},
+"Tireless": {
+"type": "support",
+"lineage": false
+},
+"[DNT-UNUSED] Titanic Arrows": {
+"type": "support",
+"lineage": false
+},
+"[DNT] Totemic Aegis": {
+"type": "support",
+"lineage": false
+},
+"Tremors": {
+"type": "support",
+"lineage": false
+},
+"Trickster's Shard": {
+"type": "support",
+"lineage": true
+},
+"Tul's Avalanche": {
+"type": "support",
+"lineage": true
+},
+"Tul's Stillness": {
+"type": "support",
+"lineage": true
+},
+"Tumult": {
+"type": "support",
+"lineage": false
+},
+"Heightened Charges": {
+"type": "support",
+"lineage": false
+},
+"Uhtred's Augury": {
+"type": "support",
+"lineage": true
+},
+"Uhtred's Constellation": {
+"type": "support",
+"lineage": true
+},
+"Uhtred's Exodus": {
+"type": "support",
+"lineage": true
+},
+"Uhtred's Omen": {
+"type": "support",
+"lineage": true
+},
+"Uhtred's Rite": {
+"type": "support",
+"lineage": true
+},
+"Unabating": {
+"type": "support",
+"lineage": false
+},
+"Unbending": {
+"type": "support",
+"lineage": false
+},
+"Undermine": {
+"type": "support",
+"lineage": false
+},
+"Unerring Power": {
+"type": "support",
+"lineage": false
+},
+"Unsteady Tempo": {
+"type": "support",
+"lineage": false
+},
+"Untouchable": {
+"type": "support",
+"lineage": false
+},
+"Unyielding": {
+"type": "support",
+"lineage": false
+},
+"Upheaval I": {
+"type": "support",
+"lineage": false
+},
+"Upheaval II": {
+"type": "support",
+"lineage": false
+},
+"Upwelling I": {
+"type": "support",
+"lineage": false
+},
+"Upwelling II": {
+"type": "support",
+"lineage": false
+},
+"Uul-Netol's Embrace": {
+"type": "support",
+"lineage": true
+},
+"Vanguard I": {
+"type": "support",
+"lineage": false
+},
+"Vanguard II": {
+"type": "support",
+"lineage": false
+},
+"Varashta's Blessing": {
+"type": "support",
+"lineage": true
+},
+"Verglas": {
+"type": "support",
+"lineage": false
+},
+"Volatile Power": {
+"type": "support",
+"lineage": false
+},
+"Volatility": {
+"type": "support",
+"lineage": false
+},
+"Volcanic Eruption": {
+"type": "support",
+"lineage": false
+},
+"Volt": {
+"type": "support",
+"lineage": false
+},
+"Vorana's Siege": {
+"type": "support",
+"lineage": true
+},
+"[DNT] Vorana's Touch": {
+"type": "support",
+"lineage": true
+},
+"Vruun's Aftermath": {
+"type": "support",
+"lineage": true
+},
+"Vruun's Inevitability": {
+"type": "support",
+"lineage": true
+},
+"Warm Blooded": {
+"type": "support",
+"lineage": false
+},
+"[DNT] Wendigos Authority": {
+"type": "support",
+"lineage": true
+},
+"[DNT] Wendigo's Pareidolia": {
+"type": "support",
+"lineage": true
+},
+"Wildshards I": {
+"type": "support",
+"lineage": false
+},
+"Sione's Temper": {
+"type": "support",
+"lineage": true
+},
+"Wildshards II": {
+"type": "support",
+"lineage": false
+},
+"Xibaqua's Rending": {
+"type": "support",
+"lineage": true
+},
+"Xoph's Pyre": {
+"type": "support",
+"lineage": true
+},
+"Zarokh's Refrain": {
+"type": "support",
+"lineage": true
+},
+"Zenith I": {
+"type": "support",
+"lineage": false
+},
+"Zenith II": {
+"type": "support",
+"lineage": false
+},
+"Zerphi's Infamy": {
+"type": "support",
+"lineage": true
+},
+"Coming Soon": {
+"type": "support",
+"lineage": false
+},
+"Abyssal Pact": {
+"type": "active",
+"lineage": false
+},
+"Ancestral Warrior Totem": {
+"type": "spirit",
+"lineage": false
+},
+"Wildwood's Gifts": {
+"type": "active",
+"lineage": false
+},
+"Animus Exchange": {
+"type": "active",
+"lineage": false
+},
+"Animus Splinters": {
+"type": "spirit",
+"lineage": false
+},
+"Arc": {
+"type": "active",
+"lineage": false
+},
+"Archon of Chayula": {
+"type": "active",
+"lineage": false
+},
+"Arctic Armour": {
+"type": "active",
+"lineage": false
+},
+"Armour Breaker": {
+"type": "active",
+"lineage": false
+},
+"Siege Ballista": {
+"type": "active",
+"lineage": false
+},
+"Apocalypse": {
+"type": "active",
+"lineage": false
+},
+"Supporting Fire": {
+"type": "active",
+"lineage": false
+},
+"Virtuous Barrier": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Axe Chop": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Axe Execute": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Axe Heavy Cleave": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Axe Leaping Chop": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Axe Raised Chop": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Axe Slash": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Axe Whirling Slash": {
+"type": "active",
+"lineage": false
+},
+"Azmerian Swarms": {
+"type": "active",
+"lineage": false
+},
+"Azmerian Wolf": {
+"type": "active",
+"lineage": false
+},
+"Ball Lightning": {
+"type": "active",
+"lineage": false
+},
+"Barrage": {
+"type": "active",
+"lineage": false
+},
+"Barrier Invocation": {
+"type": "spirit",
+"lineage": false
+},
+"Maul": {
+"type": "active",
+"lineage": false
+},
+"Rampage": {
+"type": "active",
+"lineage": false
+},
+"Bind Spectre": {
+"type": "active",
+"lineage": false
+},
+"Bitter Dead": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Blade Dance": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Blade Nova": {
+"type": "active",
+"lineage": false
+},
+"Blasphemy": {
+"type": "spirit",
+"lineage": false
+},
+"Blood Hunt": {
+"type": "active",
+"lineage": false
+},
+"Bone Offering": {
+"type": "active",
+"lineage": false
+},
+"Boneshatter": {
+"type": "active",
+"lineage": false
+},
+"Briarpatch": {
+"type": "active",
+"lineage": false
+},
+"Curse on Block": {
+"type": "spirit",
+"lineage": false
+},
+"Cast on Block": {
+"type": "spirit",
+"lineage": false
+},
+"Cast on Charm Use": {
+"type": "spirit",
+"lineage": false
+},
+"Cast on Critical": {
+"type": "spirit",
+"lineage": false
+},
+"Cast on Death": {
+"type": "spirit",
+"lineage": false
+},
+"Cast on Dodge": {
+"type": "spirit",
+"lineage": false
+},
+"Cast on Elemental Ailment": {
+"type": "spirit",
+"lineage": false
+},
+"Cast on Freeze": {
+"type": "spirit",
+"lineage": false
+},
+"Cast on Ignite": {
+"type": "spirit",
+"lineage": false
+},
+"Cast on Melee Kill": {
+"type": "spirit",
+"lineage": false
+},
+"Cast on Melee Stun": {
+"type": "spirit",
+"lineage": false
+},
+"Cast on Minion Death": {
+"type": "spirit",
+"lineage": false
+},
+"Cast on Shock": {
+"type": "spirit",
+"lineage": false
+},
+"Cast when Damage Taken": {
+"type": "spirit",
+"lineage": false
+},
+"Cast when Stunned": {
+"type": "spirit",
+"lineage": false
+},
+"Cast while Channelling": {
+"type": "spirit",
+"lineage": false
+},
+"Chaos Bolt": {
+"type": "active",
+"lineage": false
+},
+"Charged Staff": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Claw Rake": {
+"type": "active",
+"lineage": false
+},
+"Coiling Bolts": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Combo Knife Throw": {
+"type": "active",
+"lineage": false
+},
+"Comet": {
+"type": "active",
+"lineage": false
+},
+"Conductive Runes": {
+"type": "active",
+"lineage": false
+},
+"Conductivity": {
+"type": "active",
+"lineage": false
+},
+"Contagion": {
+"type": "active",
+"lineage": false
+},
+"Decompose": {
+"type": "active",
+"lineage": false
+},
+"Crackling Palm": {
+"type": "active",
+"lineage": false
+},
+"[DNT] Crushing Earth": {
+"type": "active",
+"lineage": false
+},
+"Crushing Fear": {
+"type": "active",
+"lineage": false
+},
+"Dark Pact": {
+"type": "active",
+"lineage": false
+},
+"His Dark Horizon": {
+"type": "active",
+"lineage": false
+},
+"Demon Magus": {
+"type": "spirit",
+"lineage": false
+},
+"Despair": {
+"type": "active",
+"lineage": false
+},
+"Detonate Dead": {
+"type": "active",
+"lineage": false
+},
+"Detonate Living": {
+"type": "active",
+"lineage": false
+},
+"Discipline": {
+"type": "active",
+"lineage": false
+},
+"Disengage": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Dodge Roll": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Dominating Aura": {
+"type": "active",
+"lineage": false
+},
+"Earthquake": {
+"type": "active",
+"lineage": false
+},
+"Earthshatter": {
+"type": "active",
+"lineage": false
+},
+"Enervating Nova": {
+"type": "active",
+"lineage": false
+},
+"Enfeeble": {
+"type": "active",
+"lineage": false
+},
+"Escape Shot": {
+"type": "active",
+"lineage": false
+},
+"Essence Drain": {
+"type": "active",
+"lineage": false
+},
+"Eternal March": {
+"type": "active",
+"lineage": false
+},
+"Eternal Rage": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Evasive Strike": {
+"type": "active",
+"lineage": false
+},
+"Explosive Transmutation": {
+"type": "active",
+"lineage": false
+},
+"Exsanguinate": {
+"type": "active",
+"lineage": false
+},
+"Eye of Winter": {
+"type": "active",
+"lineage": false
+},
+"Falling Thunder": {
+"type": "active",
+"lineage": false
+},
+"Ferocious Roar": {
+"type": "spirit",
+"lineage": false
+},
+"Firebolt": {
+"type": "active",
+"lineage": false
+},
+"Firestorm": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Flame Slice": {
+"type": "active",
+"lineage": false
+},
+"Flame Wall": {
+"type": "active",
+"lineage": false
+},
+"Flameblast": {
+"type": "active",
+"lineage": false
+},
+"Flammability": {
+"type": "active",
+"lineage": false
+},
+"Flicker Strike": {
+"type": "active",
+"lineage": false
+},
+"Fragments Of The Past": {
+"type": "active",
+"lineage": false
+},
+"Freezing Shards": {
+"type": "active",
+"lineage": false
+},
+"Frost Bomb": {
+"type": "active",
+"lineage": false
+},
+"Frost Wall": {
+"type": "active",
+"lineage": false
+},
+"Frostbolt": {
+"type": "active",
+"lineage": false
+},
+"Frostflame Nova": {
+"type": "active",
+"lineage": false
+},
+"[DNT] Fungal Terrain": {
+"type": "active",
+"lineage": false
+},
+"Furious Slam": {
+"type": "active",
+"lineage": false
+},
+"Future-Past": {
+"type": "active",
+"lineage": false
+},
+"Galvanic Field": {
+"type": "active",
+"lineage": false
+},
+"Gelid Palm": {
+"type": "active",
+"lineage": false
+},
+"Ghost Dance": {
+"type": "active",
+"lineage": false
+},
+"Glacial Cascade": {
+"type": "active",
+"lineage": false
+},
+"Soaring Midnight": {
+"type": "active",
+"lineage": false
+},
+"Glacial Lance": {
+"type": "active",
+"lineage": false
+},
+"His Grave Command": {
+"type": "active",
+"lineage": false
+},
+"Grim Pillars": {
+"type": "active",
+"lineage": false
+},
+"Harbinger of Madness": {
+"type": "active",
+"lineage": false
+},
+"Kinetic Bash": {
+"type": "active",
+"lineage": false
+},
+"Herald of Ash": {
+"type": "active",
+"lineage": false
+},
+"Herald of Ice": {
+"type": "active",
+"lineage": false
+},
+"Herald of Thunder": {
+"type": "active",
+"lineage": false
+},
+"Hexblast": {
+"type": "active",
+"lineage": false
+},
+"His Foul Emergence": {
+"type": "active",
+"lineage": false
+},
+"His Winnowing Flame": {
+"type": "active",
+"lineage": false
+},
+"Hollow Shell": {
+"type": "active",
+"lineage": false
+},
+"Cackling Companions": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Hyper Slash": {
+"type": "active",
+"lineage": false
+},
+"Hypothermia": {
+"type": "active",
+"lineage": false
+},
+"Ice Nova": {
+"type": "active",
+"lineage": false
+},
+"Ice Strike": {
+"type": "active",
+"lineage": false
+},
+"Impurity": {
+"type": "active",
+"lineage": false
+},
+"Incinerate": {
+"type": "active",
+"lineage": false
+},
+"Infernal Cry": {
+"type": "active",
+"lineage": false
+},
+"Killing Palm": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Knife Flip": {
+"type": "active",
+"lineage": false
+},
+"[DNT] Landslide": {
+"type": "active",
+"lineage": false
+},
+"Leap Slam": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Leaping Axe Catch": {
+"type": "active",
+"lineage": false
+},
+"Leylines": {
+"type": "active",
+"lineage": false
+},
+"Lightning Arrow": {
+"type": "active",
+"lineage": false
+},
+"Lightning Conduit": {
+"type": "active",
+"lineage": false
+},
+"Lightning Spear": {
+"type": "active",
+"lineage": false
+},
+"Thundergod's Wrath": {
+"type": "spirit",
+"lineage": false
+},
+"Lightning Warp": {
+"type": "active",
+"lineage": false
+},
+"Lingering Illusion": {
+"type": "active",
+"lineage": false
+},
+"Mana Tempest": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Meta Bow Totem": {
+"type": "spirit",
+"lineage": false
+},
+"Midnight Zenith": {
+"type": "active",
+"lineage": false
+},
+"Mirror of Refraction": {
+"type": "active",
+"lineage": false
+},
+"Mist Raven": {
+"type": "active",
+"lineage": false
+},
+"[DNT] MistRavenCompanionSwoop": {
+"type": "active",
+"lineage": false
+},
+"Molten Crash": {
+"type": "active",
+"lineage": false
+},
+"Molten Shower": {
+"type": "active",
+"lineage": false
+},
+"Orb of Storms": {
+"type": "active",
+"lineage": false
+},
+"Pain Offering": {
+"type": "active",
+"lineage": false
+},
+"Plague Bearer": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Plunging Blade": {
+"type": "active",
+"lineage": false
+},
+"Power Siphon": {
+"type": "active",
+"lineage": false
+},
+"Powered by Verisium": {
+"type": "active",
+"lineage": false
+},
+"Purity of Fire": {
+"type": "active",
+"lineage": false
+},
+"Purity of Ice": {
+"type": "active",
+"lineage": false
+},
+"Purity of Lightning": {
+"type": "active",
+"lineage": false
+},
+"Rain of Arrows": {
+"type": "active",
+"lineage": false
+},
+"Rain of Blades": {
+"type": "active",
+"lineage": false
+},
+"Raise Zombie": {
+"type": "active",
+"lineage": false
+},
+"Rapid Assault": {
+"type": "active",
+"lineage": false
+},
+"Reap": {
+"type": "active",
+"lineage": false
+},
+"Refutation": {
+"type": "active",
+"lineage": false
+},
+"Remnants of Kalguur": {
+"type": "active",
+"lineage": false
+},
+"Rend": {
+"type": "active",
+"lineage": false
+},
+"Repulsion": {
+"type": "active",
+"lineage": false
+},
+"Rhoa Mount": {
+"type": "active",
+"lineage": false
+},
+"Righteous Descent": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] RingOfBlades": {
+"type": "active",
+"lineage": false
+},
+"Artillery Ballista": {
+"type": "active",
+"lineage": false
+},
+"Rolling Magma": {
+"type": "active",
+"lineage": false
+},
+"Rolling Slam": {
+"type": "active",
+"lineage": false
+},
+"Runic Reprieve": {
+"type": "active",
+"lineage": false
+},
+"Runic Tempering": {
+"type": "active",
+"lineage": false
+},
+"Savage Fury": {
+"type": "active",
+"lineage": false
+},
+"His Scattering Calamity": {
+"type": "active",
+"lineage": false
+},
+"Seismic Cry": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Shadow Ambush": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Shadow Dash": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Shadow Thief Slash": {
+"type": "active",
+"lineage": false
+},
+"Shattering Palm": {
+"type": "active",
+"lineage": false
+},
+"Shattering Spite": {
+"type": "active",
+"lineage": false
+},
+"Shield Charge": {
+"type": "active",
+"lineage": false
+},
+"Shockwave Totem": {
+"type": "active",
+"lineage": false
+},
+"Shroud": {
+"type": "active",
+"lineage": false
+},
+"Rite of Restoration": {
+"type": "active",
+"lineage": false
+},
+"Sigil of Power": {
+"type": "active",
+"lineage": false
+},
+"Skeletal Arsonist": {
+"type": "active",
+"lineage": false
+},
+"Skeletal Brute": {
+"type": "active",
+"lineage": false
+},
+"Skeletal Cleric": {
+"type": "active",
+"lineage": false
+},
+"Skeletal Frost Mage": {
+"type": "active",
+"lineage": false
+},
+"Skeletal Reaver": {
+"type": "active",
+"lineage": false
+},
+"Skeletal Sniper": {
+"type": "active",
+"lineage": false
+},
+"Skeletal Storm Mage": {
+"type": "active",
+"lineage": false
+},
+"Skeletal Warrior": {
+"type": "active",
+"lineage": false
+},
+"Skyfall": {
+"type": "active",
+"lineage": false
+},
+"Smash to Smithereens": {
+"type": "active",
+"lineage": false
+},
+"Sniper's Mark": {
+"type": "active",
+"lineage": false
+},
+"Soul Crystal: {0}": {
+"type": "active",
+"lineage": false
+},
+"Soulrend": {
+"type": "active",
+"lineage": false
+},
+"Spearfield": {
+"type": "active",
+"lineage": false
+},
+"Spell Totem": {
+"type": "spirit",
+"lineage": false
+},
+"[DNT-UNUSED] Spinning Flail": {
+"type": "active",
+"lineage": false
+},
+"Spinning Inferno": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Spinning Throw": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Spiral Throw": {
+"type": "active",
+"lineage": false
+},
+"Spiral Volley": {
+"type": "active",
+"lineage": false
+},
+"Spiraling Conspiracy": {
+"type": "active",
+"lineage": false
+},
+"Spirit Vessel": {
+"type": "spirit",
+"lineage": false
+},
+"Staggering Palm": {
+"type": "active",
+"lineage": false
+},
+"Starborn Onslaught": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Storm Blade": {
+"type": "active",
+"lineage": false
+},
+"Companion: {0}": {
+"type": "active",
+"lineage": false
+},
+"Summon Companion": {
+"type": "spirit",
+"lineage": false
+},
+"Spectre: {0}": {
+"type": "active",
+"lineage": false
+},
+"Sunder": {
+"type": "active",
+"lineage": false
+},
+"Supercharged Slam": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Sword Leap Slash": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Sword Lunge": {
+"type": "active",
+"lineage": false
+},
+"Tempest Flurry": {
+"type": "active",
+"lineage": false
+},
+"Temporal Chains": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] The Flawed Edict": {
+"type": "active",
+"lineage": false
+},
+"The Stars Answer": {
+"type": "active",
+"lineage": false
+},
+"Thunderstorm": {
+"type": "active",
+"lineage": false
+},
+"Tornado": {
+"type": "active",
+"lineage": false
+},
+"Trail of Caltrops": {
+"type": "active",
+"lineage": false
+},
+"[DNT] Whip": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Triple Slash Combo": {
+"type": "active",
+"lineage": false
+},
+"Triskelion Cascade": {
+"type": "active",
+"lineage": false
+},
+"Herald of the Royal Queen": {
+"type": "active",
+"lineage": false
+},
+"Valako's Charge": {
+"type": "active",
+"lineage": false
+},
+"Verisium Manifestations": {
+"type": "active",
+"lineage": false
+},
+"His Vile Intrusion": {
+"type": "active",
+"lineage": false
+},
+"Volatile Dead": {
+"type": "active",
+"lineage": false
+},
+"Volcanic Fissure": {
+"type": "active",
+"lineage": false
+},
+"Volcano": {
+"type": "active",
+"lineage": false
+},
+"Voltaic Barrier": {
+"type": "active",
+"lineage": false
+},
+"Voltaic Grenade": {
+"type": "active",
+"lineage": false
+},
+"Vulnerability": {
+"type": "active",
+"lineage": false
+},
+"Walking Calamity": {
+"type": "active",
+"lineage": false
+},
+"Wardbound Minions": {
+"type": "active",
+"lineage": false
+},
+"Wave of Frost": {
+"type": "active",
+"lineage": false
+},
+"Whirling Assault": {
+"type": "active",
+"lineage": false
+},
+"Whirling Slash": {
+"type": "active",
+"lineage": false
+},
+"Wind Blast": {
+"type": "active",
+"lineage": false
+},
+"Wither": {
+"type": "active",
+"lineage": false
+},
+"[DNT-UNUSED] Howl": {
+"type": "active",
+"lineage": false
+},
+"Wolf Pack": {
+"type": "active",
+"lineage": false
+},
+"Pounce": {
+"type": "spirit",
+"lineage": false
+},
+"Enervation": {
+"type": "support",
+"lineage": false
+},
+"Projectile Acceleration I": {
+"type": "support",
+"lineage": false
+},
+"Projectile Acceleration III": {
+"type": "support",
+"lineage": false
+},
+"Projectile Acceleration II": {
+"type": "support",
+"lineage": false
+},
+"Aftershock I": {
+"type": "support",
+"lineage": false
+},
+"Aftershock III": {
+"type": "support",
+"lineage": false
+},
+"Aftershock II": {
+"type": "support",
+"lineage": false
+},
+"Ahn's Citadel": {
+"type": "support",
+"lineage": true
+},
+"Ailith's Chimes": {
+"type": "support",
+"lineage": true
+},
+"Ambush": {
+"type": "support",
+"lineage": false
+},
+"Arcane Surge": {
+"type": "support",
+"lineage": false
+},
+"Rapid Casting I": {
+"type": "support",
+"lineage": false
+},
+"Rapid Casting III": {
+"type": "support",
+"lineage": false
+},
+"Rapid Casting II": {
+"type": "support",
+"lineage": false
+},
+"Atalui's Bloodletting": {
+"type": "support",
+"lineage": true
+},
+"Behead I": {
+"type": "support",
+"lineage": false
+},
+"Behead II": {
+"type": "support",
+"lineage": false
+},
+"Bhatair's Vengeance": {
+"type": "support",
+"lineage": true
+},
+"Biting Frost I": {
+"type": "support",
+"lineage": false
+},
+"Biting Frost II": {
+"type": "support",
+"lineage": false
+},
+"Blazing Critical": {
+"type": "support",
+"lineage": false
+},
+"Blind I": {
+"type": "support",
+"lineage": false
+},
+"Blind II": {
+"type": "support",
+"lineage": false
+},
+"Bloodlust": {
+"type": "support",
+"lineage": false
+},
+"Knockback": {
+"type": "support",
+"lineage": false
+},
+"Bounty I": {
+"type": "support",
+"lineage": false
+},
+"Bounty II": {
+"type": "support",
+"lineage": false
+},
+"Break Posture": {
+"type": "support",
+"lineage": false
+},
+"Brittle Armour": {
+"type": "support",
+"lineage": false
+},
+"Brutality I": {
+"type": "support",
+"lineage": false
+},
+"Brutality III": {
+"type": "support",
+"lineage": false
+},
+"Brutality II": {
+"type": "support",
+"lineage": false
+},
+"Brutus' Brain": {
+"type": "support",
+"lineage": true
+},
+"Heightened Accuracy I": {
+"type": "support",
+"lineage": false
+},
+"Heightened Accuracy II": {
+"type": "support",
+"lineage": false
+},
+"Burning Inscription": {
+"type": "support",
+"lineage": false
+},
+"Bursting Plague": {
+"type": "support",
+"lineage": false
+},
+"Cannibalism I": {
+"type": "support",
+"lineage": false
+},
+"Cannibalism II": {
+"type": "support",
+"lineage": false
+},
+"Catalysing Elements": {
+"type": "support",
+"lineage": false
+},
+"Chain I": {
+"type": "support",
+"lineage": false
+},
+"Chain III": {
+"type": "support",
+"lineage": false
+},
+"Chain II": {
+"type": "support",
+"lineage": false
+},
+"Chance to Freeze": {
+"type": "support",
+"lineage": false
+},
+"Chaos Attunement": {
+"type": "support",
+"lineage": false
+},
+"Chaos Mastery": {
+"type": "support",
+"lineage": false
+},
+"Charged Mark": {
+"type": "support",
+"lineage": false
+},
+"Clarity I": {
+"type": "support",
+"lineage": false
+},
+"Clarity II": {
+"type": "support",
+"lineage": false
+},
+"Close Combat I": {
+"type": "support",
+"lineage": false
+},
+"Close Combat II": {
+"type": "support",
+"lineage": false
+},
+"Cold Exposure": {
+"type": "support",
+"lineage": false
+},
+"Cold Attunement": {
+"type": "support",
+"lineage": false
+},
+"Cold Mastery": {
+"type": "support",
+"lineage": false
+},
+"Cold Penetration": {
+"type": "support",
+"lineage": false
+},
+"Combo Finisher I": {
+"type": "support",
+"lineage": false
+},
+"Combo Finisher II": {
+"type": "support",
+"lineage": false
+},
+"Escalating Poison": {
+"type": "support",
+"lineage": false
+},
+"Concentrated Area": {
+"type": "support",
+"lineage": false
+},
+"Concussive Runes": {
+"type": "support",
+"lineage": false
+},
+"Concussive Spells": {
+"type": "support",
+"lineage": false
+},
+"Shock": {
+"type": "support",
+"lineage": false
+},
+"Controlled Destruction": {
+"type": "support",
+"lineage": false
+},
+"Controlled Hazard": {
+"type": "support",
+"lineage": false
+},
+"Corrosion": {
+"type": "support",
+"lineage": false
+},
+"Corrupting Cry I": {
+"type": "support",
+"lineage": false
+},
+"Paquate's Pact": {
+"type": "support",
+"lineage": true
+},
+"Corrupting Cry II": {
+"type": "support",
+"lineage": false
+},
+"Shock Conduction": {
+"type": "support",
+"lineage": false
+},
+"Shock Conduction II": {
+"type": "support",
+"lineage": false
+},
+"Creeping Chill": {
+"type": "support",
+"lineage": false
+},
+"Crescendo I": {
+"type": "support",
+"lineage": false
+},
+"Crescendo III": {
+"type": "support",
+"lineage": false
+},
+"Crescendo II": {
+"type": "support",
+"lineage": false
+},
+"Coursing Current": {
+"type": "support",
+"lineage": false
+},
+"Deadly Herald": {
+"type": "support",
+"lineage": false
+},
+"Deadly Poison I": {
+"type": "support",
+"lineage": false
+},
+"Deadly Poison II": {
+"type": "support",
+"lineage": false
+},
+"Projectile Deceleration I": {
+"type": "support",
+"lineage": false
+},
+"Projectile Deceleration II": {
+"type": "support",
+"lineage": false
+},
+"Deep Cuts I": {
+"type": "support",
+"lineage": false
+},
+"Deep Cuts II": {
+"type": "support",
+"lineage": false
+},
+"Deep Freeze": {
+"type": "support",
+"lineage": false
+},
+"Armour Demolisher I": {
+"type": "support",
+"lineage": false
+},
+"Armour Demolisher II": {
+"type": "support",
+"lineage": false
+},
+"Lasting Ground": {
+"type": "support",
+"lineage": false
+},
+"Devastate": {
+"type": "support",
+"lineage": false
+},
+"Daze": {
+"type": "support",
+"lineage": false
+},
+"Drain Ailments": {
+"type": "support",
+"lineage": false
+},
+"Echoing Cry": {
+"type": "support",
+"lineage": false
+},
+"Einhar's Beastrite": {
+"type": "support",
+"lineage": true
+},
+"Electrocute": {
+"type": "support",
+"lineage": false
+},
+"Elemental Army": {
+"type": "support",
+"lineage": false
+},
+"Elemental Discharge": {
+"type": "support",
+"lineage": false
+},
+"Elemental Focus": {
+"type": "support",
+"lineage": false
+},
+"Empowered Sparks I": {
+"type": "support",
+"lineage": false
+},
+"Empowered Sparks II": {
+"type": "support",
+"lineage": false
+},
+"Slow Potency": {
+"type": "support",
+"lineage": false
+},
+"Energy Barrier": {
+"type": "support",
+"lineage": false
+},
+"Enraged Warcry I": {
+"type": "support",
+"lineage": false
+},
+"Enraged Warcry II": {
+"type": "support",
+"lineage": false
+},
+"Poison I": {
+"type": "support",
+"lineage": false
+},
+"Poison III": {
+"type": "support",
+"lineage": false
+},
+"Poison II": {
+"type": "support",
+"lineage": false
+},
+"Eonyr's Thunder": {
+"type": "support",
+"lineage": true
+},
+"Essence Harvest": {
+"type": "support",
+"lineage": false
+},
+"Eternal Flame I": {
+"type": "support",
+"lineage": false
+},
+"Eternal Flame III": {
+"type": "support",
+"lineage": false
+},
+"Eternal Flame II": {
+"type": "support",
+"lineage": false
+},
+"Eternal Mark": {
+"type": "support",
+"lineage": false
+},
+"Execute I": {
+"type": "support",
+"lineage": false
+},
+"Execute III": {
+"type": "support",
+"lineage": false
+},
+"Execute II": {
+"type": "support",
+"lineage": false
+},
+"Expand": {
+"type": "support",
+"lineage": false
+},
+"Exploit Weakness": {
+"type": "support",
+"lineage": false
+},
+"Accelerated Growth": {
+"type": "support",
+"lineage": false
+},
+"Accelerated Growth II": {
+"type": "support",
+"lineage": false
+},
+"Exposing Cry": {
+"type": "support",
+"lineage": false
+},
+"Fan The Flames": {
+"type": "support",
+"lineage": false
+},
+"Fan The Flames II": {
+"type": "support",
+"lineage": false
+},
+"Compressed Duration I": {
+"type": "support",
+"lineage": false
+},
+"Compressed Duration II": {
+"type": "support",
+"lineage": false
+},
+"Feeding Frenzy I": {
+"type": "support",
+"lineage": false
+},
+"Feeding Frenzy II": {
+"type": "support",
+"lineage": false
+},
+"Fiery Death": {
+"type": "support",
+"lineage": false
+},
+"Fire Exposure": {
+"type": "support",
+"lineage": false
+},
+"Fire Attunement": {
+"type": "support",
+"lineage": false
+},
+"Fire Mastery": {
+"type": "support",
+"lineage": false
+},
+"Fire Penetration I": {
+"type": "support",
+"lineage": false
+},
+"Fire Penetration II": {
+"type": "support",
+"lineage": false
+},
+"Fist Of Kalguur": {
+"type": "support",
+"lineage": false
+},
+"Fist of War I": {
+"type": "support",
+"lineage": false
+},
+"Fist of War III": {
+"type": "support",
+"lineage": false
+},
+"Fist of War II": {
+"type": "support",
+"lineage": false
+},
+"Font of Blood": {
+"type": "support",
+"lineage": false
+},
+"Font of Mana": {
+"type": "support",
+"lineage": false
+},
+"Font of Rage": {
+"type": "support",
+"lineage": false
+},
+"Fork": {
+"type": "support",
+"lineage": false
+},
+"Fortress I": {
+"type": "support",
+"lineage": false
+},
+"Fortress II": {
+"type": "support",
+"lineage": false
+},
+"Frost Nexus": {
+"type": "support",
+"lineage": false
+},
+"Frostfire": {
+"type": "support",
+"lineage": false
+},
+"Frozen Vortex": {
+"type": "support",
+"lineage": false
+},
+"Fusillade": {
+"type": "support",
+"lineage": false
+},
+"Freeze": {
+"type": "support",
+"lineage": false
+},
+"Gorge": {
+"type": "support",
+"lineage": false
+},
+"Healing Runes": {
+"type": "support",
+"lineage": false
+},
+"Heavy Swing": {
+"type": "support",
+"lineage": false
+},
+"Heightened Curse": {
+"type": "support",
+"lineage": false
+},
+"Herbalism I": {
+"type": "support",
+"lineage": false
+},
+"Herbalism II": {
+"type": "support",
+"lineage": false
+},
+"Hex Bloom": {
+"type": "support",
+"lineage": false
+},
+"Hourglass": {
+"type": "support",
+"lineage": false
+},
+"Ice Bite I": {
+"type": "support",
+"lineage": false
+},
+"Ice Bite II": {
+"type": "support",
+"lineage": false
+},
+"Ignite I": {
+"type": "support",
+"lineage": false
+},
+"Ignite III": {
+"type": "support",
+"lineage": false
+},
+"Ignite II": {
+"type": "support",
+"lineage": false
+},
+"Immolate": {
+"type": "support",
+"lineage": false
+},
+"Impact Shockwave": {
+"type": "support",
+"lineage": false
+},
+"Impending Doom": {
+"type": "support",
+"lineage": false
+},
+"Inexorable Critical I": {
+"type": "support",
+"lineage": false
+},
+"Inexorable Critical II": {
+"type": "support",
+"lineage": false
+},
+"Infernal Legion I": {
+"type": "support",
+"lineage": false
+},
+"Infernal Legion III": {
+"type": "support",
+"lineage": false
+},
+"Infernal Legion II": {
+"type": "support",
+"lineage": false
+},
+"Infusion": {
+"type": "support",
+"lineage": false
+},
+"Cooldown Recovery I": {
+"type": "support",
+"lineage": false
+},
+"Cooldown Recovery II": {
+"type": "support",
+"lineage": false
+},
+"Efficiency I": {
+"type": "support",
+"lineage": false
+},
+"Efficiency II": {
+"type": "support",
+"lineage": false
+},
+"Invocation": {
+"type": "support",
+"lineage": false
+},
+"Jagged Ground I": {
+"type": "support",
+"lineage": false
+},
+"Jagged Ground II": {
+"type": "support",
+"lineage": false
+},
+"Bleed I": {
+"type": "support",
+"lineage": false
+},
+"Bleed IV": {
+"type": "support",
+"lineage": false
+},
+"Bleed III": {
+"type": "support",
+"lineage": false
+},
+"Bleed II": {
+"type": "support",
+"lineage": false
+},
+"Lasting Shock": {
+"type": "support",
+"lineage": false
+},
+"Life Bounty": {
+"type": "support",
+"lineage": false
+},
+"Life Drain": {
+"type": "support",
+"lineage": false
+},
+"Life Leech I": {
+"type": "support",
+"lineage": false
+},
+"Life Leech III": {
+"type": "support",
+"lineage": false
+},
+"Life Leech II": {
+"type": "support",
+"lineage": false
+},
+"Lifetap": {
+"type": "support",
+"lineage": false
+},
+"Lightning Exposure": {
+"type": "support",
+"lineage": false
+},
+"Lightning Attunement": {
+"type": "support",
+"lineage": false
+},
+"Lightning Mastery": {
+"type": "support",
+"lineage": false
+},
+"Lightning Penetration": {
+"type": "support",
+"lineage": false
+},
+"Lockdown": {
+"type": "support",
+"lineage": false
+},
+"Longshot I": {
+"type": "support",
+"lineage": false
+},
+"Longshot II": {
+"type": "support",
+"lineage": false
+},
+"Magnified Area I": {
+"type": "support",
+"lineage": false
+},
+"Magnified Area II": {
+"type": "support",
+"lineage": false
+},
+"Maim": {
+"type": "support",
+"lineage": false
+},
+"Mana Bounty": {
+"type": "support",
+"lineage": false
+},
+"Mana Flare": {
+"type": "support",
+"lineage": false
+},
+"Mark of Siphoning": {
+"type": "support",
+"lineage": false
+},
+"Mark of Siphoning II": {
+"type": "support",
+"lineage": false
+},
+"Rapid Attacks I": {
+"type": "support",
+"lineage": false
+},
+"Rapid Attacks III": {
+"type": "support",
+"lineage": false
+},
+"Rapid Attacks II": {
+"type": "support",
+"lineage": false
+},
+"Meat Shield I": {
+"type": "support",
+"lineage": false
+},
+"Meat Shield II": {
+"type": "support",
+"lineage": false
+},
+"Minion Mastery": {
+"type": "support",
+"lineage": false
+},
+"Minion Splash I": {
+"type": "support",
+"lineage": false
+},
+"Minion Splash II": {
+"type": "support",
+"lineage": false
+},
+"Mobility": {
+"type": "support",
+"lineage": false
+},
+"Momentum": {
+"type": "support",
+"lineage": false
+},
+"Murderous Intent": {
+"type": "support",
+"lineage": false
+},
+"Neural Overload": {
+"type": "support",
+"lineage": false
+},
+"Nova Projectiles I": {
+"type": "support",
+"lineage": false
+},
+"Nova Projectiles II": {
+"type": "support",
+"lineage": false
+},
+"Oisín's Oath": {
+"type": "support",
+"lineage": true
+},
+"Olroth's Hubris": {
+"type": "support",
+"lineage": true
+},
+"Opening Move": {
+"type": "support",
+"lineage": false
+},
+"Overabundance I": {
+"type": "support",
+"lineage": false
+},
+"Overabundance III": {
+"type": "support",
+"lineage": false
+},
+"Overabundance II": {
+"type": "support",
+"lineage": false
+},
+"Overcharge": {
+"type": "support",
+"lineage": false
+},
+"Stun I": {
+"type": "support",
+"lineage": false
+},
+"Stun III": {
+"type": "support",
+"lineage": false
+},
+"Stun II": {
+"type": "support",
+"lineage": false
+},
+"Perpetual Charge": {
+"type": "support",
+"lineage": false
+},
+"Prolonged Duration I": {
+"type": "support",
+"lineage": false
+},
+"Prolonged Duration III": {
+"type": "support",
+"lineage": false
+},
+"Prolonged Duration II": {
+"type": "support",
+"lineage": false
+},
+"Physical Mastery": {
+"type": "support",
+"lineage": false
+},
+"Pierce I": {
+"type": "support",
+"lineage": false
+},
+"Pierce III": {
+"type": "support",
+"lineage": false
+},
+"Pierce II": {
+"type": "support",
+"lineage": false
+},
+"Pin I": {
+"type": "support",
+"lineage": false
+},
+"Pin III": {
+"type": "support",
+"lineage": false
+},
+"Pin II": {
+"type": "support",
+"lineage": false
+},
+"Pinpoint Critical": {
+"type": "support",
+"lineage": false
+},
+"Practical Magic I": {
+"type": "support",
+"lineage": false
+},
+"Practical Magic II": {
+"type": "support",
+"lineage": false
+},
+"Precision I": {
+"type": "support",
+"lineage": false
+},
+"Precision II": {
+"type": "support",
+"lineage": false
+},
+"Premeditation": {
+"type": "support",
+"lineage": false
+},
+"Elemental Armament I": {
+"type": "support",
+"lineage": false
+},
+"Elemental Armament III": {
+"type": "support",
+"lineage": false
+},
+"Elemental Armament II": {
+"type": "support",
+"lineage": false
+},
+"Charge Profusion I": {
+"type": "support",
+"lineage": false
+},
+"Charge Profusion II": {
+"type": "support",
+"lineage": false
+},
+"Rage I": {
+"type": "support",
+"lineage": false
+},
+"Rage III": {
+"type": "support",
+"lineage": false
+},
+"Rage II": {
+"type": "support",
+"lineage": false
+},
+"Rending Apex": {
+"type": "support",
+"lineage": false
+},
+"Rising Tempest": {
+"type": "support",
+"lineage": false
+},
+"Runeforged Blades": {
+"type": "support",
+"lineage": false
+},
+"Runic Extraction": {
+"type": "support",
+"lineage": false
+},
+"Runic Infusion": {
+"type": "support",
+"lineage": false
+},
+"Ruthless": {
+"type": "support",
+"lineage": false
+},
+"Multishot I": {
+"type": "support",
+"lineage": false
+},
+"Multishot II": {
+"type": "support",
+"lineage": false
+},
+"Scouring Flame": {
+"type": "support",
+"lineage": false
+},
+"Searing Flame I": {
+"type": "support",
+"lineage": false
+},
+"Searing Flame II": {
+"type": "support",
+"lineage": false
+},
+"Second Wind I": {
+"type": "support",
+"lineage": false
+},
+"Second Wind III": {
+"type": "support",
+"lineage": false
+},
+"Second Wind II": {
+"type": "support",
+"lineage": false
+},
+"Shock Siphon": {
+"type": "support",
+"lineage": false
+},
+"Tectonic Slams": {
+"type": "support",
+"lineage": false
+},
+"Soul Drain": {
+"type": "support",
+"lineage": false
+},
+"Mana Leech": {
+"type": "support",
+"lineage": false
+},
+"Spell Echo": {
+"type": "support",
+"lineage": false
+},
+"[DNT-UNUSED] Spiral Projectiles I": {
+"type": "support",
+"lineage": false
+},
+"Armour Break I": {
+"type": "support",
+"lineage": false
+},
+"Armour Break III": {
+"type": "support",
+"lineage": false
+},
+"Armour Break II": {
+"type": "support",
+"lineage": false
+},
+"Spreading Frost": {
+"type": "support",
+"lineage": false
+},
+"Stormfire": {
+"type": "support",
+"lineage": false
+},
+"Supercritical": {
+"type": "support",
+"lineage": false
+},
+"Thrill of the Kill": {
+"type": "support",
+"lineage": false
+},
+"Thrill of the Kill II": {
+"type": "support",
+"lineage": false
+},
+"Unbreakable": {
+"type": "support",
+"lineage": false
+},
+"Uruk's Smelting": {
+"type": "support",
+"lineage": true
+},
+"Vilenta's Propulsion": {
+"type": "support",
+"lineage": true
+},
+"Vitality I": {
+"type": "support",
+"lineage": false
+},
+"Vitality II": {
+"type": "support",
+"lineage": false
+},
+"Wildfire": {
+"type": "support",
+"lineage": false
+},
+"Wind Wave": {
+"type": "support",
+"lineage": false
+},
+"Window of Opportunity I": {
+"type": "support",
+"lineage": false
+},
+"Window of Opportunity II": {
+"type": "support",
+"lineage": false
+},
+"Withering Touch": {
+"type": "support",
+"lineage": false
+},
+"Zarokh's Revolt": {
+"type": "support",
+"lineage": true
+},
+"Olroth's Conviction": {
+"type": "support",
+"lineage": true
+},
+"Consecrate": {
+"type": "active",
+"lineage": false
+}
+}

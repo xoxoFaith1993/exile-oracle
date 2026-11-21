@@ -292,8 +292,25 @@ def t_campaign(a):
 
 def t_oracle(a):
     """The Oracle's market advice from three league launches: phase, what to do now, item outlook."""
-    from poe2kit import oracle
+    from poe2kit import oracle, prophecy, mapmods
     con = db.connect()
+    mode = (a.get('mode') or 'advice').lower()
+    if mode == 'omen':
+        return {'omen': prophecy.omen(con), 'countdowns': prophecy.countdowns(con)}
+    if mode == 'timeline':
+        return {'timeline': prophecy.timeline(con), 'countdowns': prophecy.countdowns(con)}
+    if mode == 'forecast':
+        if not a.get('item'):
+            return {'error': 'item is needed for a forecast'}
+        r = prophecy.forecast_item(con, a['item'], day=a.get('day'))
+        r.pop('past', None)
+        return r
+    if mode == 'patch':
+        return prophecy.patch_prophecy(a['text'], con) if a.get('text') else (prophecy.latest_patch_prophecy(con) or {'error': 'no patch notes stored'})
+    if mode == 'farm':
+        return prophecy.farm_oracle(con, a.get('build_id') or mapmods.active_build(con), a.get('day'))
+    if mode == 'uniques':
+        return prophecy.unique_history(a.get('item'))
     r = oracle.advice(con, day=a.get('day'))
     if a.get('item'):
         want = a['item'].lower()
@@ -733,12 +750,16 @@ TOOLS = [
      S(part=STR, tick=STR, on=BOOL), t_campaign),
     ('poe2_oracle',
      'The Oracle: market timing from the last three league launches (GGG exchange history, prices in Divines). '
-     'Gives the league day and phase (day 1-3 / week 1 / week 2-3 / week 4+), what to do now and what comes next '
-     '(strategies with their evidence), and for 42 key items where they usually go in the next 7 days (sell now / '
-     'hold / steady) next to the live price. item = one item; day = pretend another league day (e.g. plan day 0 of '
-     '1.0). Use it for "what should I sell / hold / buy", money-making and league-start questions; say it is history, '
-     'not a promise, and that patches move prices.',
-     S(day=NUM, item=STR, top=NUM), t_oracle),
+     'mode="advice" (default): league day and phase, what to do now and next, and for 42 key items where they usually '
+     'go in the next 7 days (sell now / hold / steady) next to the live price. mode="omen": the strongest call today + '
+     'countdowns (1.0 launch, plan windows). mode="timeline": what usually happens when, day 0 to 70+. '
+     'mode="forecast" + item: median and 10-90% range at +1/+3/+7/+14 days from a model tested on six launches (its '
+     'range held 79% of the time; direction calls right ~60%). mode="patch" (+ text = pasted notes, else the newest '
+     'stored notes): which items a patch should move and how much, from 276 measured patches. mode="farm" '
+     '(+ build_id): div/hour per strategy now and next phase, checked against the PoB damage and EHP of the build. '
+     'mode="uniques" (+ item): chase unique prices by league day in past leagues. item = one item; day = pretend '
+     'another league day (e.g. plan day 0 of 1.0). Say it is history, not a promise, and that patches move prices.',
+     S(mode=STR, day=NUM, item=STR, top=NUM, text=STR, build_id=NUM), t_oracle),
     ('poe2_doctor',
      'Something in the toolkit is broken or acting odd (overlay, prices, dashboard, Build Planner, Path of Building, '
      "Claude connection)? Call this FIRST: it checks every part (read-only) and returns what's wrong, which sections "

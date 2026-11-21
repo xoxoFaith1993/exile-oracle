@@ -365,6 +365,30 @@ def api(path, q):
                     out.setdefault(_up.unquote(p).rpartition('/')[2], p)
                 league = league or lg
             return {'league': league, 'links': out}
+        if path == '/api/prophecy':   # R14: timeline, countdowns, the daily omen
+            from poe2kit import prophecy
+            return {'timeline': prophecy.timeline(con, q.get('league') or None),
+                    'countdowns': prophecy.countdowns(con, q.get('league') or None),
+                    'omen': prophecy.omen(con, q.get('league') or None)}
+        if path == '/api/prophecy/omen':
+            from poe2kit import prophecy
+            return {'omen': prophecy.omen(con), 'countdowns': prophecy.countdowns(con)}
+        if path == '/api/forecast':   # R14: one item's forecast fan + its past launches
+            from poe2kit import prophecy
+            if not q.get('item'):
+                return {'items': prophecy.forecast_items()}
+            return prophecy.forecast_item(con, q['item'], q.get('league') or None,
+                                          float(q['day']) if q.get('day') else None)
+        if path == '/api/prophecy/patch':   # R14: the newest stored patch notes, read by the rulebook
+            from poe2kit import prophecy
+            return prophecy.latest_patch_prophecy(con, q.get('gid') or None) or {'items': [], 'error': 'no patch notes stored yet'}
+        if path == '/api/prophecy/farm':   # R14: farming oracle for a build
+            from poe2kit import prophecy, mapmods
+            return prophecy.farm_oracle(con, int(q.get('build') or 0) or mapmods.active_build(con),
+                                        float(q['day']) if q.get('day') else None)
+        if path == '/api/prophecy/uniques':   # R14: chase unique history by league day
+            from poe2kit import prophecy
+            return prophecy.unique_history(q.get('name') or None)
         if path == '/api/campaign':   # R16: campaign rush guide + checklist + where you are now
             from poe2kit import campaign
             return campaign.guide(con)
@@ -677,6 +701,13 @@ class Handler(http.server.BaseHTTPRequestHandler):
             elif u.path == '/api/route/zone':   # R21: overlay.pyw saw a zone change in Client.txt
                 from poe2kit import campaign
                 data = {'ver': campaign.set_zone(str(body.get('area') or '')[:80] or None, body.get('level'))}
+            elif u.path == '/api/prophecy/patch':   # R14: pasted patch notes -> expected price moves
+                from poe2kit import prophecy, db as _db
+                c = _db.connect()
+                try:
+                    data = prophecy.patch_prophecy(str(body.get('text') or '')[:200000], c)
+                finally:
+                    c.close()
             elif u.path == '/api/route/size':
                 from poe2kit import campaign
                 data = campaign.set_size(body)

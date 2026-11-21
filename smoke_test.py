@@ -218,6 +218,26 @@ def waystone_check():
     check(mapmods.check_item(None, TEST_ITEM) is None, 'waystone check ignores other items')
 
 
+def prophecy_check():
+    """R14: timeline, omen, forecast, patch rules, farming oracle and unique history all answer."""
+    from poe2kit import prophecy, patchrules
+    try:
+        tl = prophecy.timeline()
+        from poe2kit import forecast
+        fc = forecast.forecast('Exalted Orb', day=3, current_price_div=0.004)
+        pp = prophecy.patch_prophecy('Increased the drop rate of Fracturing Orbs from Ritual.')
+        uh = prophecy.unique_history('Mageblood')
+        cd = prophecy.countdowns()
+    except FileNotFoundError as e:
+        check(True, f'prophecy skipped ({e})')
+        return
+    check(len(tl['events']) >= 15, f"league timeline ({len(tl['events'])} events)")
+    check(set(fc.get('horizons', {})) >= {1, 3, 7, 14} or set(fc.get('horizons', {})) >= {'1', '3', '7', '14'}, 'price forecast (4 horizons)')
+    check(pp['items'] and pp['items'][0]['calls'][0]['direction'] == 'down', 'patch prophecy: more drops -> price down')
+    check(uh.get('leagues'), 'chase unique history')
+    check(isinstance(cd, list), 'countdowns')
+
+
 def campaign_check():
     """R16 / R21: the rush route maps onto the game's zones, and a zone gives a route card."""
     from poe2kit import campaign
@@ -321,6 +341,7 @@ if __name__ == '__main__':
     oracle_extras_check()
     waystone_check()
     campaign_check()
+    prophecy_check()
     mcp()
     if '--pob' in sys.argv:
         pob_part()

@@ -363,6 +363,16 @@ input[type=checkbox] { accent-color: var(--eo-blood-hi); }
 #atlastree .eoff { stroke: #6b5733; stroke-width: 12; }
 #atlastree .k-notable.noff { stroke: #c9a45c; stroke-width: 14; } #atlastree .k-keystone.noff { stroke: #e8c987; stroke-width: 16; }
 #atlastree .dimimg { opacity: .85; filter: none; }
+.omen { border-color: var(--eo-gold-dim, #6b5a2a); background: radial-gradient(120% 140% at 0% 0%, rgba(201,164,92,.12), transparent 60%), var(--eo-panel, #17120d); }
+.omen .ot { font: 700 19px var(--eo-display); color: var(--eo-gold, #c9a45c); letter-spacing: .02em; }
+.omen .ok { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
+.omen .cd { border: 1px solid #3a2e22; border-radius: 4px; padding: 4px 10px; font-size: 12px; }
+.omen .cd b { font: 700 15px var(--eo-display); color: var(--eo-text, #e8dcc8); display: block; }
+.tlrow { position: relative; height: 22px; margin: 3px 0; }
+.tlbar { position: absolute; top: 2px; height: 18px; border-radius: 3px; font-size: 10.5px; line-height: 18px; padding: 0 5px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; cursor: help; border: 1px solid rgba(0,0,0,.4); }
+.tlbar.plan { background: #5a1e26; color: #f1d0d4; } .tlbar.market { background: #4a3c1c; color: #f0e1b8; }
+.tlbar.uniques { background: #3d2a4f; color: #e2d4f0; } .tlbar.farm { background: #1f3d2c; color: #cfe9d8; }
+.tlnow { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--eo-blood-hi, #dc3a4e); }
 .mmlvl { font: 700 10px var(--eo-display); letter-spacing: .1em; text-transform: uppercase; padding: 1px 7px; border-radius: 999px; border: 1px solid; }
 .mmlvl.deadly { color: #ff7b7b; border-color: #7a2a2a; } .mmlvl.risky { color: #e9c46a; border-color: #6b5a2a; } .mmlvl.fine { color: var(--eo-good); border-color: #3f5f33; }
 #mmtable td { vertical-align: top; } #mmtable .tiers { font-size: 12px; color: var(--eo-muted); }
@@ -419,6 +429,7 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
   <div class="ng">Oracle</div>
   <button data-tab="home" class="on">Home</button>
   <button data-tab="claude">From the Oracle</button>
+  <button data-tab="prophecy">Prophecy</button>
   <div class="ng">Market</div>
   <button data-tab="economy">Economy</button>
   <div class="ng">Farming</div>
@@ -449,6 +460,7 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
       <div class="card"><h2>Currency</h2><div class="sub">Live from GGG's currency exchange · 7-day change</div><div id="homecur"><div class="muted small">loading…</div></div></div>
       <div class="card"><h2>Alerts</h2><div class="sub">Price moves on your items, news, patch notes</div><div id="homealerts"><div class="muted small">loading…</div></div></div>
     </div>
+    <div class="card omen" id="homeomen" style="display:none"></div>
     <div class="card"><div class="lab-head"><h2 style="margin:0">The Oracle says</h2><span class="small muted" id="homeoraclesub"></span></div>
       <div id="homeoracle"><div class="muted small">reading three league launches…</div></div></div>
     <div class="card"><h2>Go to</h2><div class="quick">
@@ -586,6 +598,30 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
       <div class="grid2" style="margin-top:10px"><div><h2 style="font-size:14px">Sell on day 1 (lost most against the Divine by day 7)</h2><div id="pbsell"></div></div>
         <div><h2 style="font-size:14px">Rose against the Divine by day 7 (worth holding)</h2><div id="pbhold"></div></div></div>
       <div class="small muted" id="pbnote" style="margin-top:8px"></div></div>
+  </section>
+  <section id="prophecy">
+    <div class="card omen" id="pomen"><div class="muted small">reading the omens…</div></div>
+    <div class="card"><div class="lab-head"><h2 style="margin:0">League timeline</h2><span class="small muted" id="ptlsub"></span></div>
+      <div class="sub">What usually happens when, from day 0 to day 70+, built from three PoE 2 launches. Hover a bar to read it; the red line is where the league is now.</div>
+      <div id="ptl" style="margin-top:10px"></div><div id="ptlnow"></div></div>
+    <div class="card"><div class="lab-head"><h2 style="margin:0">Price forecast</h2><span style="flex:1"></span>
+      <input class="crin" id="pfitem" list="pfitems" placeholder="Item, e.g. Exalted Orb" style="min-width:260px"><datalist id="pfitems"></datalist>
+      <button class="btn" id="pfgo">Forecast</button></div>
+      <div class="sub">Faint lines: the same item in past launches, by league day. The gold fan: where it usually goes from today's price over 1, 3, 7 and 14 days (dark band: half the time, light band: 8 times in 10).</div>
+      <div id="pfchart" style="margin-top:10px"></div><div id="pfinfo"></div></div>
+    <div class="grid2">
+      <div class="card"><div class="lab-head"><h2 style="margin:0">Patch prophecy</h2><span style="flex:1"></span><select class="crin" id="ppsel" style="max-width:230px"></select></div>
+        <div class="sub">Patch notes in, price moves out: each line is read by a rulebook measured on 276 PoE 2 patches. Pick stored notes, or paste new ones (1.0's, the day they come out).</div>
+        <textarea class="crin" id="pptext" rows="4" style="width:100%;margin-top:8px" placeholder="Paste patch notes here…"></textarea>
+        <div style="margin-top:6px"><button class="btn" id="ppgo">Read these notes</button> <span class="small muted" id="ppsub"></span></div>
+        <div id="ppout" style="margin-top:8px"></div></div>
+      <div class="card"><div class="lab-head"><h2 style="margin:0">Farming oracle</h2><span style="flex:1"></span><select class="crin" id="pfbuild" style="max-width:240px"></select></div>
+        <div class="sub">Divines per hour for each strategy at this point of the league, checked against your build's damage and toughness from Path of Building. Ranges are wide: creators are fast and pick their best runs.</div>
+        <div id="pfarm" style="margin-top:8px"></div></div>
+    </div>
+    <div class="card"><div class="lab-head"><h2 style="margin:0">Chase uniques through a league</h2><span style="flex:1"></span><select class="crin" id="pusel" style="min-width:220px"></select></div>
+      <div class="sub">Prices by league day in past leagues (log scale). Chase uniques behave very differently from currency: some climb for weeks, some fall from day 1.</div>
+      <div id="puchart" style="margin-top:10px"></div><div id="puinfo"></div></div>
   </section>
   <section id="campaign">
     <div class="card"><div class="lab-head"><h2 style="margin:0">Campaign rush</h2><span class="small muted" id="cpver"></span></div>
@@ -771,11 +807,12 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   document.querySelectorAll('nav button').forEach(x => x.classList.toggle('on', x === b));
   document.querySelectorAll('section').forEach(s => s.classList.toggle('on', s.id === b.dataset.tab));
   setTimeout(() => pageAsks(b.dataset.tab));   // after the page's scripts have all loaded
-  if (b.dataset.tab === 'home') { loadHome(); loadHomeOracle(); }
+  if (b.dataset.tab === 'home') { loadHome(); loadHomeOracle(); loadOmen(); }
   if (b.dataset.tab === 'status') { loadConnectors(); loadLeagues(); }
   if (b.dataset.tab === 'lab') initLab();
   if (b.dataset.tab === 'atlas') { loadAtlas(); loadMapMods(); }
   if (b.dataset.tab === 'campaign') loadCampaign();
+  if (b.dataset.tab === 'prophecy') loadProphecy();
   if (b.dataset.tab === 'economy') { loadLeagues(); loadOverview(); loadMovers(); loadMarket(); loadOracle($('#ordaysel').value); }
   if (b.dataset.tab === 'builds') loadBuilds();
   if (b.dataset.tab === 'alerts') loadAlerts(true);
@@ -1137,6 +1174,9 @@ document.addEventListener('click', async e => {
 
 // ---------- ready-made questions on every page (click = copy, paste in your AI chat) ----------
 const PAGE_ASKS = {
+  prophecy: [['What will the market do this week?', 'Using the Oracle forecasts, what will the market do this week and what should I sell or hold?'],
+             ['Plan my first 72 hours of 1.0', 'Plan my first 72 hours of the 1.0 league: what to farm, sell, keep and buy, hour by hour.'],
+             ['Which farm suits my build now?', 'Which farming strategy suits my build right now, and what would let me run a better one?']],
   campaign: [['Plan my campaign rush', 'Plan my campaign rush for my league start build: which zones, which rewards, and when to do each trial.'],
              ['Which rewards can I still get?', 'Look at my campaign checklist: which permanent rewards am I missing and where are they?'],
              ['Am I ready for the next boss?', 'Am I ready for the next campaign boss with my current character? What should I fix first?']],
@@ -1191,6 +1231,149 @@ async function loadAtlas() {
   TREES['atlas'] = t; ATLAS_DRAWN = true;
   $('#atlassub').textContent = `${t.nodes.length} nodes · game files ${t.build}`;
   await drawTree({ tree: { version: 'atlas', allocated: [], jewel_nodes: [] } }, $('#atlastree'));
+}
+
+// ---------- Prophecy (R14): omen, timeline, forecasts, patch prophecy, farming oracle, chase uniques ----------
+const pnum = v => v == null ? '–' : v >= 100 ? Math.round(v).toLocaleString() : v >= 1 ? v.toFixed(2) : v.toPrecision(2);
+const fmtIn = h => h < 1 ? `${Math.round(h * 60)} min` : h < 48 ? `${h.toFixed(h < 10 ? 1 : 0)} h` : `${(h / 24).toFixed(h < 240 ? 1 : 0)} days`;
+function omenHtml(o, cds) {
+  if (!o) return '';
+  return `<div class="small muted sc">Today's omen${o.league ? ` · ${esc(o.league)}${o.day != null ? ' day ' + o.day : ''}` : ''}</div>
+    <div class="ot">${esc(o.title)}</div>${o.text ? `<div style="margin-top:4px">${esc(o.text)}</div>` : ''}
+    ${o.evidence ? `<div class="small muted" style="margin-top:4px">Evidence: ${esc(o.evidence)}${o.confidence ? ` · confidence ${esc(o.confidence)}` : ''} · history, not a promise</div>` : ''}
+    ${(cds || []).length ? `<div class="ok">${cds.map(c => `<div class="cd"><b>${fmtIn(c.in_hours)}</b>${esc(c.label)}${c.estimate ? ' (estimate)' : ''}</div>`).join('')}</div>` : ''}`;
+}
+async function loadOmen() {
+  try { const r = await get('/api/prophecy/omen'); const el = $('#homeomen'); el.innerHTML = omenHtml(r.omen, r.countdowns) +
+    `<div class="chips"><span class="chip-ask" style="border-style:solid" onclick="document.querySelector('nav [data-tab=prophecy]').click()">The full prophecy →</span></div>`; el.style.display = ''; } catch (e) {}
+}
+let PRO = null;
+async function loadProphecy() {
+  PRO = await get('/api/prophecy');
+  $('#pomen').innerHTML = omenHtml(PRO.omen, PRO.countdowns);
+  drawTimeline(PRO.timeline);
+  // forecast picker
+  if (!$('#pfitems').options.length) {
+    const r = await get('/api/forecast'); $('#pfitems').innerHTML = (r.items || []).map(n => `<option value="${esc(n)}">`).join('');
+    $('#pfgo').onclick = () => loadForecast($('#pfitem').value);
+    $('#pfitem').onkeydown = e => { if (e.key === 'Enter') loadForecast($('#pfitem').value); };
+    $('#pfitem').value = 'Exalted Orb';
+  }
+  loadForecast($('#pfitem').value);
+  loadPatchProphecy();
+  const sel = $('#pfbuild');
+  if (!sel.options.length) {
+    const b = await get('/api/builds');
+    sel.innerHTML = (b || []).map(x => `<option value="${x.id}">#${x.id} ${esc(x.label)}</option>`).join('');
+    sel.value = (LAB && LAB.build) ? LAB.build.id : (b && b.length ? b[b.length - 1].id : '');
+    sel.onchange = loadFarmOracle;
+  }
+  loadFarmOracle();
+  const us = $('#pusel');
+  if (!us.options.length) {
+    const u = await get('/api/prophecy/uniques');
+    us.innerHTML = (u.uniques || []).map(n => `<option>${esc(n)}</option>`).join('');
+    us.value = (u.uniques || []).includes('Mageblood') ? 'Mageblood' : (u.uniques || [])[0];
+    us.onchange = loadUniqueHistory;
+    $('#puinfo').dataset.rules = JSON.stringify(u.rules || []);
+  }
+  loadUniqueHistory();
+}
+function drawTimeline(tl) {
+  const max = 77, lanes = [['plan', 'First 72 hours'], ['market', 'Market'], ['uniques', 'Chase uniques'], ['farm', 'Best farm']];
+  const x = d => Math.min(100, 100 * Math.sqrt(Math.max(0, d) / max));   // square-root axis: the first days get room
+  const ticks = [0, 1, 3, 7, 14, 21, 28, 42, 56, 70];
+  let h = `<div style="position:relative;margin-left:110px">` + ticks.map(d => `<span class="small muted" style="position:absolute;left:${x(d)}%;transform:translateX(-50%)">${d}</span>`).join('') + '</div><div style="height:16px"></div>';
+  for (const [k, l] of lanes) {
+    const evs = tl.events.filter(e => e.kind === k);
+    const rows = [];   // stack overlapping bars
+    for (const e of evs) { let r = rows.find(r => r.every(o => o.to <= e.from || o.from >= e.to)); if (!r) rows.push(r = []); r.push(e); }
+    rows.forEach((r, i) => {
+      h += `<div style="display:flex;align-items:center"><div class="small muted" style="width:110px;flex:none">${i ? '' : l}</div><div class="tlrow" style="flex:1">` +
+        r.map(e => `<div class="tlbar ${k}" style="left:${x(e.from)}%;width:max(6px,${x(e.to) - x(e.from)}%)" title="${esc(e.title + ': ' + e.text + (e.why ? '\n\n' + e.why : ''))}">${esc(e.title)}</div>`).join('') +
+        (tl.day != null ? `<div class="tlnow" style="left:${x(tl.day)}%"></div>` : '') + '</div></div>';
+    });
+  }
+  $('#ptl').innerHTML = h;
+  $('#ptlsub').textContent = tl.day != null ? `${tl.league} · day ${tl.day.toFixed(1)}` : '';
+  const now = tl.day == null ? [] : tl.events.filter(e => e.from <= tl.day && tl.day < e.to);
+  const next = tl.day == null ? tl.events.slice(0, 4) : tl.events.filter(e => e.from > tl.day).slice(0, 4);
+  $('#ptlnow').innerHTML = (now.length ? `<div class="small muted" style="margin-top:10px">Now</div>` + now.map(e => `<div class="small">• <b>${esc(e.title)}:</b> ${esc(e.text)}</div>`).join('') : '') +
+    (next.length ? `<div class="small muted" style="margin-top:8px">Coming up</div>` + next.map(e => `<div class="small">• day ${e.from.toFixed(e.from < 3 ? 1 : 0)}: <b>${esc(e.title)}:</b> ${esc(e.text)}</div>`).join('') : '');
+}
+function logChart(series, opts) {   // series: [{name, pts: [[x, y]], color, w, dash}]; log-scale y
+  const W = 900, H = 300, L = 58, R = 12, T = 10, B = 26;
+  const all = series.flatMap(s => s.pts || (s.band || []).flatMap(b => [[b[0], b[1]], [b[0], b[2]]])).filter(p => p[1] > 0);
+  if (!all.length) return '<div class="small muted">No price history for this one yet.</div>';
+  const xs = all.map(p => p[0]), ys = all.map(p => Math.log10(p[1]));
+  const x0 = Math.min(0, ...xs), x1 = Math.max(...xs, opts.xmax || 0), y0 = Math.min(...ys) - 0.1, y1 = Math.max(...ys) + 0.1;
+  const X = v => L + (W - L - R) * (v - x0) / ((x1 - x0) || 1), Y = v => T + (H - T - B) * (1 - (Math.log10(v) - y0) / ((y1 - y0) || 1));
+  let g = '';
+  for (let e = Math.floor(y0); e <= Math.ceil(y1); e++) for (const m of [1, 3]) { const v = m * 10 ** e; if (Math.log10(v) < y0 || Math.log10(v) > y1) continue;
+    g += `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" stroke="#2a2219"/><text x="${L - 6}" y="${Y(v) + 4}" text-anchor="end" font-size="11" fill="#9a8a73">${v >= 1 ? v.toLocaleString() : v.toPrecision(1)}</text>`; }
+  for (const d of [0, 7, 14, 21, 28, 42, 56, 70, 84, 98].filter(d => d >= x0 && d <= x1)) g += `<text x="${X(d)}" y="${H - 8}" text-anchor="middle" font-size="11" fill="#9a8a73">d${d}</text>`;
+  for (const s of series) {
+    if (s.band) { g += `<path d="M${s.band.map(p => `${X(p[0])},${Y(p[1])}`).join('L')}L${s.band.slice().reverse().map(p => `${X(p[0])},${Y(p[2])}`).join('L')}Z" fill="${s.color}" opacity="${s.op || .25}"/>`; continue; }
+    const pts = s.pts.filter(p => p[1] > 0).sort((a, b) => a[0] - b[0]);
+    if (s.dot) { g += pts.map(p => `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="4.5" fill="${s.color}"/>`).join(''); continue; }
+    g += `<polyline fill="none" stroke="${s.color}" stroke-width="${s.w || 1.5}" ${s.dash ? 'stroke-dasharray="4 3"' : ''} opacity="${s.op || 1}" points="${pts.map(p => `${X(p[0])},${Y(p[1])}`).join(' ')}"/>`;
+  }
+  const leg = series.filter(s => s.name).map(s => `<span class="small" style="margin-right:12px"><span style="display:inline-block;width:14px;height:3px;background:${s.color};vertical-align:middle;margin-right:4px;opacity:${s.op || 1}"></span>${esc(s.name)}</span>`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block">${g}</svg><div>${leg}</div>`;
+}
+const LCOL = ['#6f8fb8', '#8a9a6a', '#a07ab8', '#b88a6a', '#6ab8a8', '#b86a7a'];
+async function loadForecast(item) {
+  if (!item) return;
+  $('#pfinfo').innerHTML = '<span class="spin"></span>';
+  const f = await get('/api/forecast?item=' + encodeURIComponent(item));
+  const series = Object.entries(f.past || {}).map(([lg, c], i) => ({ name: lg, color: LCOL[i % LCOL.length], op: .55, w: 1.3, pts: Object.entries(c).map(([d, v]) => [+d, v]) }));
+  if (f.horizons && f.price_div && f.day != null) {
+    const hs = [[0, f.price_div, f.price_div, f.price_div, f.price_div]].concat(Object.entries(f.horizons).map(([h, q]) => [f.day + +h, q.p10, q.p90, q.p25, q.p75, q.median]));
+    const d0 = f.day;
+    series.push({ band: [[d0, f.price_div, f.price_div], ...hs.slice(1).map(r => [r[0], r[1], r[2]])], color: '#c9a45c', op: .18 });
+    series.push({ band: [[d0, f.price_div, f.price_div], ...hs.slice(1).map(r => [r[0], r[3], r[4]])], color: '#c9a45c', op: .32 });
+    series.push({ name: 'forecast (median)', color: '#e8c97a', w: 2, dash: true, pts: [[d0, f.price_div], ...hs.slice(1).map(r => [r[0], r[5]])] });
+    series.push({ name: 'now', color: '#dc3a4e', dot: true, pts: [[d0, f.price_div]] });
+  }
+  $('#pfchart').innerHTML = logChart(series, { xmax: (f.day || 0) + 14 });
+  const hz = f.horizons ? Object.entries(f.horizons).map(([h, q]) => `<span class="res">+${h} d: <b>${pnum(q.median)} div</b> <span class="muted">(${q.change_pct > 0 ? '+' : ''}${q.change_pct}%, 8 in 10: ${pnum(q.p10)}–${pnum(q.p90)})</span></span>`).join('') : '';
+  const ho = f.honesty && f.honesty['7'] ? `Tested on past launches: the light band held the real price ${f.honesty['7'].range_holds_pct}% of the time; when it calls a move of 10%+ the direction was right ${f.honesty['7'].direction_right_pct}% of the time (7 days). Patches override it.` : '';
+  $('#pfinfo').innerHTML = `${f.error ? `<div class="small muted">${esc(f.error)}</div>` : ''}<div class="res-row" style="margin-top:6px">${hz}</div>
+    <div class="small muted" style="margin-top:6px">${esc(f.basis || '')}${f.confidence ? ` · confidence ${esc(f.confidence)}` : ''}</div><div class="small muted">${esc(ho)}</div>`;
+}
+const arrow = d => d === 'up' || d === 'buff' ? '<span style="color:var(--eo-good)">▲</span>' : d === 'down' || d === 'nerf' ? '<span style="color:#ff7b7b">▼</span>' : '<span class="muted">◆</span>';
+function drawPatch(r) {
+  $('#ppsub').textContent = r.error ? r.error : `${r.lines_hit} of ${r.lines_read} lines move prices`;
+  $('#ppout').innerHTML = (r.items || []).slice(0, 25).map(e => `<details style="margin-top:4px"><summary class="small">${arrow(e.calls[0].direction)} <b>${esc(e.item)}</b>
+      <span class="muted">${e.calls[0].move_pct != null ? `${e.calls[0].move_pct > 0 ? '+' : ''}${e.calls[0].move_pct}% in ${esc(e.calls[0].window || '')}` : esc(e.calls[0].direction)} · ${esc(e.calls[0].confidence || '')}${e.calls[0].cases ? `, ${e.calls[0].cases} past cases` : ''}</span></summary>
+      ${e.calls.map(c => `<div class="small" style="margin:3px 0 3px 18px">“${esc(c.line)}”<div class="muted">${esc(c.rule.replace(/_/g, ' '))}${c.spread ? ` · past range ${c.spread[0]}% to ${c.spread[1]}%` : ''}${c.second_order ? ' · then: ' + esc(c.second_order) : ''}</div></div>`).join('')}</details>`).join('') ||
+    '<div class="small muted">Nothing in these notes moves an exchange price (by the rulebook).</div>';
+}
+async function loadPatchProphecy(gid) {
+  const r = await get('/api/prophecy/patch' + (gid ? '?gid=' + encodeURIComponent(gid) : ''));
+  if (r.others && !$('#ppsel').options.length) {
+    $('#ppsel').innerHTML = r.others.map(o => `<option value="${esc(o.gid)}">${esc(o.title)}</option>`).join('');
+    $('#ppsel').onchange = () => loadPatchProphecy($('#ppsel').value);
+    $('#ppgo').onclick = async () => { if (!$('#pptext').value.trim()) return; $('#ppsub').textContent = 'reading…'; drawPatch(await post('/api/prophecy/patch', { text: $('#pptext').value })); };
+  }
+  drawPatch(r);
+}
+async function loadFarmOracle() {
+  const r = await get('/api/prophecy/farm?build=' + ($('#pfbuild').value || ''));
+  const row = s => `<tr><td><b>${esc(s.name)}</b><div class="small muted">${esc(s.needs || '')}</div></td>
+    <td style="white-space:nowrap"><b>${s.mid != null ? s.mid : '–'}</b> <span class="small muted">${s.low != null ? `${s.low}–${s.high}` : ''}</span></td>
+    <td class="small">${s.fits === true ? '<span style="color:var(--eo-good)">your build fits</span>' : s.fits === false ? `<span style="color:#e9c46a">needs ${s.dps_min ? (s.dps_min / 1e6).toFixed(1) + 'M DPS' : ''}${s.ehp_min ? ', ' + (s.ehp_min / 1000) + 'k EHP' : ''}</span>` : '<span class="muted">–</span>'}</td></tr>`;
+  const tbl = (rows, title) => rows.length ? `<div class="small muted" style="margin-top:8px">${esc(title)}</div><table class="up"><tr><th>Strategy</th><th>div / hour</th><th>For you</th></tr>${rows.slice(0, 8).map(row).join('')}</table>` : '';
+  $('#pfarm').innerHTML = (r.build ? `<div class="small muted">Your build: ${r.build.dps ? (r.build.dps / 1e6).toFixed(2) + 'M DPS' : '?'} · ${r.build.ehp ? Math.round(r.build.ehp / 1000) + 'k EHP' : '?'}</div>` : '') +
+    tbl(r.now, `Now: ${r.phase_name || ''}`) + tbl(r.next, `Next: ${r.next_phase || ''}`);
+}
+async function loadUniqueHistory() {
+  const n = $('#pusel').value; if (!n) return;
+  const r = await get('/api/prophecy/uniques?name=' + encodeURIComponent(n));
+  const series = Object.entries(r.leagues || {}).map(([lg, c], i) => ({ name: lg, color: LCOL[i % LCOL.length], w: 1.8, pts: Object.entries(c).map(([d, v]) => [+d, v]) }));
+  $('#puchart').innerHTML = logChart(series, {});
+  $('#puinfo').innerHTML = (r.patterns || []).map(p => `<div class="small" style="margin-top:4px">• <b>${esc(p.pattern)}</b> <span class="muted">${esc(p.confidence || '')}</span><div class="muted">${esc(p.evidence || '')}</div></div>`).join('') +
+    (r.rules || []).slice(0, 4).map(x => `<div class="small muted" style="margin-top:3px">· ${esc(x)}</div>`).join('');
 }
 
 // ---------- Campaign rush (R16) + route panel settings (R21) ----------
@@ -1358,7 +1541,7 @@ async function loadHome() {
     : '<div class="muted small">Nothing yet.</div>';
 }
 document.querySelectorAll('.quick [data-go]').forEach(b => b.onclick = () => document.querySelector(`nav [data-tab="${b.dataset.go}"]`).click());
-if (document.querySelector('#home.on')) { loadHome(); loadHomeOracle(); }
+if (document.querySelector('#home.on')) { loadHome(); loadHomeOracle(); loadOmen(); }
 pageAsks('home');
 $('#ordaysel').onchange = () => loadOracle($('#ordaysel').value);
 
