@@ -214,6 +214,10 @@ def pob_part():
                'nodes=""/></Tree><Skills/><Items/></PathOfBuilding2>')
         new_xml, warn = buildplan.apply_edits(xml, {'add_passives': ['Ritual Cadence']})
         check('nodes=""' not in new_xml and any("isn't connected" in w for w in warn), 'living plan: edits + connection check')
+        from poe2kit import route
+        spark = route.gem_level('Metadata/Items/Gems/SkillGemSpark')
+        check(spark == 1 and route.points_at(93) == 116 and route.levels(3) == [2, 3, 4],
+              f'levelling route maths (Spark from {spark}, points at 93: {route.points_at(93)})')
     except Exception as e:
         check(False, f'living plan edits: {e}')
     try:

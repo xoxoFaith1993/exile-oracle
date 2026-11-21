@@ -67,6 +67,7 @@ def followed(con):
 # ---------------- edits ----------------
 
 _gems = {}
+_names = {}
 
 
 def _gem_index():
@@ -83,6 +84,7 @@ def _gem_index():
         if f.get('name') and f.get('gameId'):
             f['support'] = 'SupportGem' in f['gameId']
             _gems.setdefault(f['name'].lower(), f)
+            _names[f['gameId']] = f['name'].lower()   # every version of a gem (e.g. a unique's Lightning Bolt)
     return _gems
 
 
@@ -186,17 +188,105 @@ def check(con, build_id, edits):
 
 # ---------------- writing, with level-aware notes ----------------
 
-def _level_notes(doc, level):
-    """Mark what's due at this level: passives whose level range starts soon get a 'next' note."""
+def deaths(con, name, hours=3):
+    """This character's deaths in the last few hours, from Client.txt, with the zone each happened in."""
+    from . import clientlog
+    since = time.time() - hours * 3600
+    rows = con.execute("SELECT ts FROM log_event WHERE kind='slain' AND lower(a)=lower(?) AND ts>? ORDER BY ts",
+                       (name, since)).fetchall()
+    out = []
+    names = clientlog.areas()
+    for r in rows:
+        z = con.execute("SELECT a FROM log_event WHERE kind='zone' AND ts<=? ORDER BY ts DESC LIMIT 1",
+                        (r['ts'],)).fetchone()
+        aid = z['a'] if z else None
+        out.append((names.get(aid) or {}).get('Name') or aid or 'unknown zone')
+    return out
+
+
+def _mark_next(entry, level):
+    iv = entry.get('level_interval') if isinstance(entry, dict) else None
+    if isinstance(iv, list) and level < iv[0] <= level + 10:
+        tag = f"<green>{{Next: from level {iv[0]}}}"
+        entry['additional_text'] = tag + ('\n' + entry['additional_text'] if entry.get('additional_text') else '')
+        return True
+    return False
+
+
+def _level_notes(doc, level, died=None):
+    """Mark what's due at this level: passives and gems whose level range starts in the next 10 levels get a
+    'Next' note; recent deaths go into the description."""
     if not level:
         return
-    nxt = [p for p in doc['passives'] if isinstance(p, dict) and isinstance(p.get('level_interval'), list)
-           and level < p['level_interval'][0] <= level + 10]
-    for p in nxt:
-        tag = f"<green>{{Next: from level {p['level_interval'][0]}}}"
-        p['additional_text'] = tag + ('\n' + p['additional_text'] if p.get('additional_text') else '')
-    extra = f"Level {level} now" + (f"; {len(nxt)} planned passives come in the next 10 levels" if nxt else '')
-    doc['description'] = (doc.get('description') or '') + f"\n{extra} (updated {time.strftime('%H:%M')})"
+    n_pass = sum(_mark_next(p, level) for p in doc['passives'])
+    n_gems = 0
+    for sk in doc.get('skills') or []:
+        n_gems += _mark_next(sk, level)
+        for sup in sk.get('support_skills') or []:
+            n_gems += _mark_next(sup, level) if isinstance(sup, dict) else 0
+    parts = [f"Level {level} now"]
+    if n_pass:
+        parts.append(f"{n_pass} planned passives in the next 10 levels")
+    if n_gems:
+        parts.append(f"{n_gems} gems to cut soon")
+    if died:
+        from collections import Counter
+        top = Counter(died).most_common(1)[0]
+        parts.append(f"{len(died)} deaths in the last 3 hours (most in {top[0]}): check resistances and life")
+    doc['description'] = (doc.get('description') or '') + '\n' + '; '.join(parts) + f" (updated {time.strftime('%H:%M')})"
+
+
+def _gem_id(name):
+    g = _gem_index().get(str(name).lower())
+    return g['gameId'] if g else None
+
+
+def _apply_skill_plan(doc, edits, rep):
+    """edits['levelling_skills']: skills used only while levelling, shown first with their level range:
+         [{"gem": "Spark", "from": 1, "to": 65, "supports": ["Lightning Attunement", {"gem": "Lightning
+           Penetration", "from": 14}], "note": "..."}]
+       edits['skill_levels']: level ranges for the build's own skills, e.g. {"Lightning Bolt": [65, 100]}."""
+    from . import route
+    unknown = []
+    lv_skills = []
+    for s in edits.get('levelling_skills') or []:
+        gid = _gem_id(s.get('gem'))
+        if not gid:
+            unknown.append(s.get('gem'))
+            continue
+        e = {'id': gid, 'level_interval': [int(s.get('from') or route.gem_level(gid) or 1), int(s.get('to') or 100)]}
+        if s.get('note'):
+            e['additional_text'] = buildplanner._note(s['note'])
+        sups = []
+        for sp in s.get('supports') or []:
+            sp = sp if isinstance(sp, dict) else {'gem': sp}
+            sid = _gem_id(sp.get('gem'))
+            if not sid:
+                unknown.append(sp.get('gem'))
+                continue
+            frm = int(sp.get('from') or route.gem_level(sid) or 1)
+            se = {'id': sid, 'level_interval': [frm, int(sp.get('to') or e['level_interval'][1])]}
+            if sp.get('note'):
+                se['additional_text'] = buildplanner._note(sp['note'])
+            sups.append(se)
+        if sups:
+            e['support_skills'] = sups
+        lv_skills.append(e)
+    _gem_index()
+    by_name = {}
+    for name, rng in (edits.get('skill_levels') or {}).items():
+        if str(name).lower() in _gems:
+            by_name[str(name).lower()] = rng
+        else:
+            unknown.append(name)
+    for sk in doc.get('skills') or []:
+        rng = by_name.get(_names.get(sk['id'], ''))
+        if rng:
+            sk['level_interval'] = [int(rng[0]), int(rng[1]) if len(rng) > 1 else 100]
+    have = {x['id'] for x in lv_skills}
+    doc['skills'] = lv_skills + [x for x in doc.get('skills') or [] if x['id'] not in have]
+    if unknown:
+        rep['unknown_gems'] = unknown
 
 
 def export(con, build_id, write=True, confirm=False, level=None, name=None):
@@ -212,8 +302,9 @@ def export(con, build_id, write=True, confirm=False, level=None, name=None):
         if st.get('edits'):
             doc2['passives'], doc2['skills'] = doc['passives'], doc['skills']
         doc, rep = doc2, dict(rep2, passives=rep['passives'], skills=rep['skills'])
+    _apply_skill_plan(doc, st.get('edits') or {}, rep)
     level = level or st.get('level')
-    _level_notes(doc, level)
+    _level_notes(doc, level, deaths(con, st['follow']) if st.get('follow') else None)
     rep['edit_warnings'] = warnings
     out = {'report': rep, 'doc': doc}
     if write:

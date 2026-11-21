@@ -93,7 +93,7 @@ def _levels(title):
     return 100 if re.search(r'end ?game|final|maps', title or '', re.I) else None
 
 
-def make(con, build_id=None, pob_code=None, notes=None, name=None, include_gear=True):
+def make(con, build_id=None, pob_code=None, notes=None, name=None, include_gear=True, auto_route=True):
     """notes (all optional, usually written by Claude):
          {'description': str,
           'passives': {node name or game id: text},
@@ -111,6 +111,7 @@ def make(con, build_id=None, pob_code=None, notes=None, name=None, include_gear=
     root = ET.fromstring(vault.decode(pob_code))
     ids = _ids()
     report = {'unmapped_passives': [], 'skipped_skills': [], 'stages': []}
+    b_el = root.find('Build')
 
     # ---- passives: the active tree; several trees titled with levels become a levelling route ----
     tree = root.find('Tree')
@@ -152,6 +153,24 @@ def make(con, build_id=None, pob_code=None, notes=None, name=None, include_gear=
             p = passive(num, [seen.get(num, 1), 100])
             if p:
                 passives.append(p)
+    elif active is not None and auto_route:
+        # one endgame tree: the automatic levelling route (route.py) decides the order and the level of each node
+        from . import route
+        have = [int(x) for x in (active.get('nodes') or '').split(',') if x]
+        cls = b_el.get('className') if b_el is not None else None
+        main, asc_nodes, _start = route.order(have, active.get('treeVersion') or '0_5', cls)
+        for num, lvl in zip(main, route.levels(len(main))):
+            p = passive(num, [lvl, 100])
+            if p:
+                passives.append(p)
+        trials = ['1st', '2nd', '3rd', '4th']
+        for i, (num, lvl) in enumerate(zip(asc_nodes, route.asc_levels(len(asc_nodes)))):
+            p = passive(num, [lvl, 100])
+            if p:
+                tag = f"<grey>{{Ascendancy: after your {trials[min(3, i // 2)]} trial}}"
+                p['additional_text'] = tag + ('\n' + p['additional_text'] if p.get('additional_text') else '')
+                passives.append(p)
+        report['route'] = 'automatic'
     elif active is not None:
         for num in (int(x) for x in (active.get('nodes') or '').split(',') if x):
             p = passive(num)
@@ -185,11 +204,21 @@ def make(con, build_id=None, pob_code=None, notes=None, name=None, include_gear=
                 text = '<grey>{Granted by your ascendancy or an item: cut only its supports}'
             if text:
                 sk['additional_text'] = _note(text)
+            from . import route
+            gl = route.gem_level(gid) if auto_route else None
+            if gl and gl > 1:   # when it can first be cut and used
+                sk['level_interval'] = [gl, 100]
             if i == 0 and supports:
                 sk['support_skills'] = []
                 for s in supports:
                     st = sn.get((s.get('nameSpec') or '').lower())
-                    sk['support_skills'].append({'id': s.get('gemId'), 'additional_text': _note(st)} if st else s.get('gemId'))
+                    sl = route.gem_level(s.get('gemId')) if auto_route else None
+                    e = {'id': s.get('gemId')}
+                    if sl and sl > 1:
+                        e['level_interval'] = [sl, 100]
+                    if st:
+                        e['additional_text'] = _note(st)
+                    sk['support_skills'].append(e if len(e) > 1 else s.get('gemId'))
             if not any(x['id'] == sk['id'] for x in skills):
                 skills.append(sk)
 
@@ -234,6 +263,12 @@ def make(con, build_id=None, pob_code=None, notes=None, name=None, include_gear=
            f"{b.get('ascendClassName') if b is not None else ''} level {b.get('level') if b is not None else '?'}, "
            f"exported by the PoE 2 Toolkit {time.strftime('%Y-%m-%d')}",
            'link': f'https://github.com/{config.REPO}'}
+    if auto_route and report.get('route') == 'automatic':   # the passive points quests (24 in all) are easy to skip
+        from . import route
+        qs = route.quest_reminders()
+        if qs:
+            doc['description'] += ('\nDon\'t skip the passive point quests (+2 each): ' +
+                                   '; '.join(f"Act {q['act']} {q['area']} ({q['who']})" for q in qs))
     if asc and asc != 'nil':
         doc['ascendancy'] = asc
     doc['passives'] = passives
