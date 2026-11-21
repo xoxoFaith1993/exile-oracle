@@ -323,6 +323,8 @@ footer { color: var(--text-muted); font-size: 11.5px; text-align: center; paddin
       <div class="small muted" id="pfpaths" style="margin-top:8px"></div></div>
     <div class="card"><h2>Connect to Claude <span class="pill">optional</span></h2><div class="sub">This toolkit is made to be used with Claude: connect it once, then ask things like "what should I farm", "how close am I to the top 1%" or "how do I craft this". Everything else works without it. <a href="https://github.com/xoxoFaith1993/poe2-toolkit/blob/main/CLAUDE-GUIDE.md" target="_blank" rel="noopener">How to use it with Claude ↗</a></div>
       <div id="cllink"></div></div>
+    <div class="card"><h2>Price-check overlay <span class="pill">Windows</span></h2><div class="sub">Press Ctrl+C on an item in game and a price popup appears by your mouse: poe.ninja, our craft estimate and, if you switch it on, live prices from the official trade site (one search per item you copy, like Exiled Exchange 2 does). Run the game in windowed fullscreen. The toolkit never presses keys in the game; it only reads what you copy.</div>
+      <div id="ovopts"></div></div>
     <div class="card"><h2>Monitor jobs</h2><div class="sub">What runs in the background, how often, and how it went last time.</div><div id="jobs"></div></div></section>
 </main>
 <div class="tip" id="tip"></div>
@@ -379,7 +381,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   if (b.dataset.tab === 'sessions') loadSessions();
   if (b.dataset.tab === 'top1') initTop1();
   if (b.dataset.tab === 'league') initLeague();
-  if (b.dataset.tab === 'status') { loadStatus(); loadProfile(); loadClaude(); }
+  if (b.dataset.tab === 'status') { loadStatus(); loadProfile(); loadClaude(); loadOverlay(); }
   try { localStorage.setItem('poe2tab', b.dataset.tab); } catch (e) {}
 });
 try { const t = location.hash.slice(1) || localStorage.getItem('poe2tab'); if (t) document.querySelector(`nav [data-tab="${t.replace(/[^a-z0-9]/gi, '')}"]`)?.click(); } catch (e) {}
@@ -1092,6 +1094,18 @@ async function loadClaude() {
   if (dis) dis.onclick = async () => { await post('/api/claude/disconnect', {}); loadClaude(); };
 }
 
+
+// ---------- price-check overlay ----------
+async function loadOverlay() {
+  const o = await get('/api/overlay/options');
+  if (!o.supported) { $('#ovopts').innerHTML = '<div class="small muted">The overlay is Windows-only for now.</div>'; return; }
+  $('#ovopts').innerHTML = `<label class="small" style="display:block;margin-top:8px"><input type="checkbox" id="ovon"${o.overlay ? ' checked' : ''}> Overlay on
+      <span class="muted">(${o.running ? '● running' : 'not running'})</span></label>
+    <label class="small" style="display:block;margin-top:6px"><input type="checkbox" id="ovtrade"${o.live_trade ? ' checked' : ''}> Live trade-site prices
+      <span class="muted">— uses GGG's trade site the way Exiled Exchange 2 does; it isn't an official public API, so it's your choice</span></label>`;
+  $('#ovon').onchange = async e => { await post('/api/overlay/options', { overlay: e.target.checked }); loadOverlay(); };
+  $('#ovtrade').onchange = async e => { await post('/api/overlay/options', { live_trade: e.target.checked }); loadOverlay(); };
+}
 
 // ---------- update banner ----------
 async function checkUpdate() {

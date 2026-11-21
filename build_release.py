@@ -27,7 +27,7 @@ ISCC = next((p for p in (r'F:\Tools\InnoSetup\ISCC.exe', r'C:\Program Files\Inno
                           r'C:\Program Files (x86)\Inno Setup 7\ISCC.exe') if os.path.exists(p)),
             r'C:\Program Files\Inno Setup 7\ISCC.exe')
 
-FILES = ['monitor.py', 'server.py', 'tray.pyw', 'launcher.py', 'cli.py', 'leaguestart_pull.py', 'make_datapack.py',
+FILES = ['monitor.py', 'server.py', 'tray.pyw', 'overlay.pyw', 'launcher.py', 'cli.py', 'leaguestart_pull.py', 'make_datapack.py',
          'launch_sweep.py', 'art_sweep.py', 'smoke_test.py']
 DIRS = {'poe2kit': ('.py',), 'dashboard': ('.html', '.ico', '.png'), 'pobhost': ('.lua', '.c'),
         'datapack': ('.json',), 'bin': ('.exe',)}

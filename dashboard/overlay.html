@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PoE2 price check</title>
+<style>
+:root {
+  --bg: #1b212b; --panel: #232b37; --panel-2: #2a3341; --row: #262f3c; --row-alt: #2c3644;
+  --border: #384354; --text: #dfe3ea; --text-2: #b4bcc9; --muted: #7f8a9c;
+  --accent: #c8283c; --accent-hi: #dc3a4e; --good: #46c46a; --afk: #e0913a; --off: #5d6779;
+  --unique: #e0904a; --rare: #ecd56a; --magic: #8f9cff; --gem: #3fb6a8; --currency: #c9b98a; --normal: #dfe3ea;
+  --tier: #e6b94a; --rune: #4f8df0; --pseudo: #5d6b82; --fract: #c7a76a; --desec: #a77fe0; --impl: #4bb3a6;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
+  font: 13px/1.35 "Segoe UI", system-ui, sans-serif; overflow: hidden; user-select: none; }
+.sc b { font-family: "Segoe UI", system-ui, sans-serif; font-variant: normal; letter-spacing: 0; }
+.sc { font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif; font-variant: small-caps; letter-spacing: .3px; }
+.app { height: 100%; display: flex; flex-direction: column; border: 1px solid var(--border); }
+.title { height: 24px; display: flex; align-items: center; justify-content: center; background: var(--panel);
+  border-bottom: 1px solid var(--border); color: var(--muted); font-size: 13px; position: relative; }
+.title::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: var(--accent); }
+.scroll { flex: 1; overflow-y: auto; padding: 10px 12px 12px; }
+.scroll::-webkit-scrollbar { width: 8px; } .scroll::-webkit-scrollbar-thumb { background: #3a4558; border-radius: 4px; }
+
+/* item header */
+.item { display: flex; gap: 10px; align-items: center; background: var(--panel); border: 1px solid var(--border);
+  border-radius: 6px; padding: 8px 10px; position: relative; overflow: hidden; }
+.item::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, var(--tint, transparent), transparent 60%);
+  opacity: .14; pointer-events: none; }
+.icon { width: 46px; height: 46px; flex: none; display: grid; place-items: center; background: #151a22;
+  border: 1px solid var(--border); border-radius: 4px; }
+.icon img { max-width: 42px; max-height: 42px; }
+.iname { font-size: 16px; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ibase { color: var(--text-2); font-size: 12px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hero { margin-left: auto; text-align: right; flex: none; z-index: 1; }
+.hero .v { font-size: 22px; font-weight: 650; display: flex; align-items: center; gap: 5px; justify-content: flex-end;
+  font-variant-numeric: tabular-nums; }
+.hero .v img { width: 26px; height: 26px; }
+.hero .l { color: var(--muted); font-size: 11px; }
+.flags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 4px; }
+
+/* pills row */
+.pills { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0 4px; }
+.pill { background: var(--panel); border: 1px solid var(--border); border-radius: 4px; padding: 3px 8px; font-size: 12.5px;
+  color: var(--text-2); white-space: nowrap; }
+.pill b { color: var(--text); font-weight: 600; }
+.pill.toggle { cursor: pointer; } .pill.toggle.on { border-color: #8a95a8; color: var(--text); }
+.pill.toggle:not(.on) { opacity: .55; }
+.pill.warn { color: var(--afk); }
+
+/* stat rows */
+.stats { margin-top: 6px; border-top: 1px solid var(--border); }
+.st { display: flex; align-items: center; gap: 8px; padding: 7px 2px; border-bottom: 1px solid var(--border); }
+.st input[type=checkbox] { width: 15px; height: 15px; accent-color: #9aa6ba; flex: none; margin: 0; cursor: pointer; }
+.st .txt { flex: 1; min-width: 0; }
+.st .t { font-size: 13.5px; color: var(--text); } .st .t b { font-weight: 700; color: #fff; }
+.st.off .t { color: var(--muted); }
+.tags { display: flex; gap: 4px; margin-top: 2px; }
+.tag { font-size: 10px; text-transform: uppercase; letter-spacing: .5px; padding: 0 5px; border-radius: 3px;
+  background: #343e4e; color: var(--muted); line-height: 15px; }
+.tag.tier { background: var(--tier); color: #2a2208; font-weight: 700; }
+.tag.rune { background: var(--rune); color: #fff; } .tag.pseudo { background: var(--pseudo); color: #e8ecf2; }
+.tag.fractured { background: var(--fract); color: #2a2208; } .tag.desecrated { background: var(--desec); color: #fff; }
+.tag.implicit { background: var(--impl); color: #08211e; } .tag.enchant { background: #6e7bd8; color: #fff; }
+.mm { display: flex; flex: none; }
+.mm input { width: 52px; height: 26px; background: #161b23; border: 1px solid var(--border); color: var(--text);
+  text-align: center; font: 600 13px "Segoe UI", sans-serif; outline: none; }
+.mm input:first-child { border-radius: 4px 0 0 4px; } .mm input:last-child { border-radius: 0 4px 4px 0; border-left: 0; }
+.mm input::placeholder { color: #566174; font-weight: 400; font-variant: small-caps; }
+.mm input:focus { border-color: #8a95a8; }
+.st.off .mm input { opacity: .5; }
+
+/* actions */
+.actions { display: flex; align-items: center; gap: 8px; margin: 10px 0 6px; }
+.btn { background: var(--panel-2); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 5px 12px;
+  font: 14px "Palatino Linotype", Georgia, serif; font-variant: small-caps; cursor: pointer; }
+.btn:hover { border-color: #8a95a8; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary:hover { background: var(--accent-hi); }
+.btn:disabled { opacity: .45; cursor: default; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+.seg button { background: transparent; color: var(--muted); border: 0; padding: 4px 8px; font: 12.5px "Palatino Linotype", Georgia, serif;
+  font-variant: small-caps; cursor: pointer; }
+.seg button.on { background: var(--panel-2); color: var(--text); }
+.grow { flex: 1; }
+
+/* results */
+.matched { display: flex; align-items: baseline; gap: 10px; color: var(--muted); margin: 8px 2px 4px; }
+.matched b { color: var(--text); }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+th { text-align: left; font-weight: 400; color: var(--text-2); padding: 4px 6px; font-size: 13.5px; }
+td { padding: 4px 6px; font-size: 13px; }
+tbody tr:nth-child(odd) td { background: var(--row); } tbody tr:nth-child(even) td { background: var(--row-alt); }
+td.p { display: flex; align-items: center; gap: 5px; font-weight: 600; }
+td.p img { width: 18px; height: 18px; }
+.dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; background: var(--off); }
+.dot.on { background: var(--good); } .dot.afk { background: var(--afk); }
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+.card { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 6px 9px; }
+.card .k { color: var(--muted); font-size: 12px; }
+.card .n { font-weight: 650; font-size: 15px; display: flex; align-items: center; gap: 4px; }
+.card .n img { width: 18px; height: 18px; }
+.up { color: #5aa7ff; } .down { color: #ff7b7b; }
+.note { color: var(--muted); font-size: 12px; margin-top: 8px; line-height: 1.45; }
+.note.warn { color: var(--afk); }
+.empty { color: var(--muted); padding: 30px 10px; text-align: center; }
+.spin { display: inline-block; width: 11px; height: 11px; border: 2px solid var(--muted); border-top-color: transparent;
+  border-radius: 50%; animation: s .8s linear infinite; vertical-align: -1px; margin-right: 6px; }
+@keyframes s { to { transform: rotate(360deg); } }
+svg.spark { display: block; }
+.foot { height: 22px; display: flex; align-items: center; justify-content: space-between; padding: 0 10px;
+  background: var(--panel); border-top: 1px solid var(--border); color: var(--muted); font-size: 11px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="title sc" id="title">PoE 2 Toolkit · price check</div>
+  <div class="scroll" id="main"><div class="empty sc">Press Ctrl+C on an item in game</div></div>
+  <div class="foot"><span id="limit"></span><span>Esc or move the mouse away to close</span></div>
+</div>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const COL = { UNIQUE: 'var(--unique)', RARE: 'var(--rare)', MAGIC: 'var(--magic)', GEM: 'var(--gem)', CURRENCY: 'var(--currency)', NORMAL: 'var(--normal)' };
+const SHORT = { exalted: 'ex', divine: 'div', chaos: 'chaos' };
+let ver = 0, cur = null, filters = null, filtersFor = -1;
+
+const img = u => u ? `/img?u=${encodeURIComponent(u)}` : '';
+function num(v) {
+  if (v == null) return '?';
+  const a = Math.abs(v), d = a >= 100 ? 0 : a >= 10 ? 1 : a >= 1 ? 2 : 3;
+  return (+v.toFixed(d)).toLocaleString();
+}
+function priceHtml(div, r, big) {   // ex below 1 div, else div; with the currency picture
+  if (div == null) return '?';
+  const ex = r.ex_per_div, useEx = ex && div < 1;
+  const icon = (r.icons || {})[useEx ? 'ex' : 'div'];
+  return `${num(useEx ? div * ex : div)}${icon ? `<img src="${img(icon)}" alt="">` : ' ' + (useEx ? 'ex' : 'div')}`;
+}
+function ago(iso) {
+  if (!iso) return '';
+  const m = (Date.now() - Date.parse(iso)) / 60000;
+  if (m < 60) return Math.max(1, Math.round(m)) + ' min. ago';
+  if (m < 1440) return Math.round(m / 60) + ' hr. ago';
+  if (m < 43200) { const d = Math.round(m / 1440); return d + (d === 1 ? ' day ago' : ' days ago'); }
+  return Math.round(m / 43200) + ' mo. ago';
+}
+function spark(vals) {
+  const v = (vals || []).filter(x => x != null);
+  if (v.length < 2) return '';
+  const w = 120, h = 26, lo = Math.min(...v), hi = Math.max(...v), rg = hi - lo || 1;
+  const pts = v.map((x, i) => `${(i / (v.length - 1) * w).toFixed(1)},${(h - 2 - (x - lo) / rg * (h - 4)).toFixed(1)}`);
+  const up = v[v.length - 1] >= v[0], c = up ? '#5aa7ff' : '#ff7b7b';
+  return `<svg class="spark" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><polyline fill="none" stroke="${c}" stroke-width="1.6" points="${pts.join(' ')}"/></svg>`;
+}
+function statText(s) {   // bold the numbers, like the game
+  return esc(s.text).replace(/([+-]?\d+(?:\.\d+)?%?)/g, '<b>$1</b>');
+}
+
+function render(st) {
+  const r = st.result || {};
+  cur = r;
+  if (st.status === 'pricing' && !r.item) { $('#main').innerHTML = '<div class="empty sc"><span class="spin"></span>Reading item…</div>'; return; }
+  if (st.status === 'error' || r.error) { $('#main').innerHTML = `<div class="empty">${esc(r.error)}</div>`; return; }
+  if (!r.item) return;
+  if (st.id !== filtersFor) { filters = r.filters ? JSON.parse(JSON.stringify(r.filters)) : null; filtersFor = st.id; }
+  $('#title').textContent = r.league || 'PoE 2 Toolkit';
+  const it = r.item, col = COL[it.rarity] || 'var(--text)';
+  const best = r.headline;
+  let h = `<div class="item" style="--tint:${col}">
+    <div class="icon">${it.icon ? `<img src="${img(it.icon)}" alt="">` : ''}</div>
+    <div style="min-width:0">
+      <div class="iname sc" style="color:${col}">${esc(it.name || it.base)}</div>
+      <div class="ibase">${esc([it.name && it.base && it.base !== it.name ? it.base : '', it.ilvl ? 'item level ' + it.ilvl : ''].filter(Boolean).join(' · '))}</div>
+      ${it.flags && it.flags.length ? `<div class="flags">${it.flags.map(f => `<span class="tag">${esc(f)}</span>`).join('')}</div>` : ''}
+    </div>
+    ${best ? `<div class="hero"><div class="v">${priceHtml(best.div, r)}</div><div class="l">${esc(best.label)}${best.qty > 1 ? ` · ×${best.qty} = ${num((best.div * best.qty) < 1 && r.ex_per_div ? best.div * best.qty * r.ex_per_div : best.div * best.qty)} ${(best.div * best.qty) < 1 ? 'ex' : 'div'}` : ''}</div></div>` : ''}
+  </div>`;
+
+  // quick facts: poe.ninja + craft
+  const cards = [];
+  const n = r.ninja;
+  if (n) cards.push(`<div class="card"><div class="k sc">poe.ninja${n.change_pct != null ? ` · <span class="${n.change_pct >= 0 ? 'up' : 'down'}">${n.change_pct >= 0 ? '▲' : '▼'} ${Math.abs(n.change_pct).toFixed(1)}% 7d</span>` : ''}</div>
+      <div class="n">${priceHtml(n.div, r)}</div>${spark(n.spark)}
+      ${n.roll_dependent ? `<div class="k" style="color:var(--afk)">depends on its roll (${n.roll_dependent} kinds)</div>` : ''}</div>`);
+  if (r.estimate && r.estimate.est_div != null) cards.push(`<div class="card"><div class="k sc">craft cost${r.estimate.kind === 'floor' ? ' (floor)' : ''}</div><div class="n">${priceHtml(r.estimate.est_div, r)}</div><div class="k">${esc(r.estimate.note || '')}</div></div>`);
+  if (cards.length) h += `<div class="cards" style="grid-template-columns:${cards.length > 1 ? '1fr 1fr' : '1fr'}">${cards.join('')}</div>`;
+
+  // search rows
+  const f = filters;
+  if (f) {
+    const on = (f.stats || []).filter(s => s.on).length, total = (f.stats || []).length;
+    h += `<div class="pills">
+      ${f.category ? `<span class="pill sc">category: <b>${esc(f.category)}</b></span>` : ''}
+      ${f.rarity !== 'GEM' ? `<span class="pill sc${f.corrupted ? ' warn' : ''}">${f.corrupted ? 'corrupted' : 'not corrupted'}</span>` : ''}
+      ${f.ilvl ? `<span class="pill sc toggle${f.ilvl.on ? ' on' : ''}" data-t="ilvl">item level: <b>${f.ilvl.value}</b></span>` : ''}
+      ${f.sockets ? `<span class="pill sc toggle${f.sockets.on ? ' on' : ''}" data-t="sockets">sockets: <b>${f.sockets.value}</b></span>` : ''}
+      ${f.gem_level ? `<span class="pill sc toggle${f.gem_level.on ? ' on' : ''}" data-t="gem_level">gem level: <b>${f.gem_level.value}</b></span>` : ''}
+      ${total ? `<span class="pill sc toggle on" data-t="mode">${f.mode === 'count' && on >= 3 ? `any ${on - 1} of ${on}` : `${on} of ${total}`}, stats</span>` : ''}
+    </div>`;
+    if (total) {
+      h += `<div class="stats">` + f.stats.map(s => `<div class="st${s.on ? '' : ' off'}" data-k="${esc(s.key)}">
+        <input type="checkbox"${s.on ? ' checked' : ''}>
+        <div class="txt"><div class="t">${statText(s)}</div><div class="tags">
+          <span class="tag ${esc(s.kind)}">${esc(s.kind)}${s.times > 1 ? ' ×' + s.times : ''}</span>
+          ${s.tier ? `<span class="tag tier">tier ${s.tier}</span>` : ''}</div></div>
+        <div class="mm"><input class="mn" inputmode="decimal" placeholder="min" value="${s.min ?? ''}"><input class="mx" inputmode="decimal" placeholder="max" value="${s.max ?? ''}"></div>
+      </div>`).join('') + `</div>`;
+    }
+    h += `<div class="actions">
+      <button class="btn primary" id="search">search</button>
+      <div class="seg"><button data-s="securable" class="${f.status !== 'online' ? 'on' : ''}">instant buyout</button><button data-s="online" class="${f.status === 'online' ? 'on' : ''}">online</button></div>
+      <span class="grow"></span>
+      <button class="btn" id="trade"${r.url ? '' : ' disabled'}>trade ↗</button>
+    </div>`;
+  }
+
+  // results
+  const t = r.trade;
+  if (t) {
+    if (t.state === 'pending' || st.status === 'pricing') h += `<div class="matched sc"><span class="spin"></span>searching the trade site…</div>`;
+    else if (t.state === 'off') h += `<div class="note">${esc(t.note)}</div>`;
+    else if (t.state === 'error') h += `<div class="note warn">${esc(t.error)}</div>`;
+    else if (t.state === 'done') {
+      h += `<div class="matched sc"><span>matched: <b>${(t.total ?? 0).toLocaleString()}</b></span>
+        ${t.prices.length >= 3 ? `<span>middle of ${t.prices.length}: <b>${priceHtml(t.median_div, r).replace(/<img[^>]*>/, m => m.replace('alt=""', 'alt="" style="width:15px;height:15px;vertical-align:-3px"'))}</b></span>` : ''}
+        ${t.cached ? '<span>(cached)</span>' : ''}</div>`;
+      if (t.prices.length) {
+        h += `<table><thead><tr class="sc"><th>price</th><th>ilvl</th><th>listed</th></tr></thead><tbody>` +
+          t.prices.map(p => `<tr><td class="p">${p.icon ? `<img src="${img(p.icon)}" alt="" title="${esc(p.name || p.currency)}">` : ''}${num(p.amount)} <span style="font-weight:400;color:var(--text-2)">${esc(SHORT[p.currency] || p.name || p.currency)}</span></td>
+            <td>${p.ilvl ?? ''}${p.corrupted ? ' <span class="tag" style="color:var(--afk)">corr.</span>' : ''}</td>
+            <td><span class="dot${p.afk ? ' afk' : p.online ? ' on' : ''}" title="${p.afk ? 'away' : p.online ? 'online' : 'offline'}"></span>${ago(p.listed)}</td></tr>`).join('') + `</tbody></table>`;
+      } else h += `<div class="note">Nothing listed with these stats. Untick a row or lower a minimum, then search again.</div>`;
+    }
+  }
+  for (const note of r.notes || []) h += `<div class="note">${esc(note)}</div>`;
+  const keepScroll = $('#main').scrollTop;
+  $('#main').innerHTML = h;
+  $('#main').scrollTop = keepScroll;
+  wire();
+}
+
+function wire() {
+  document.querySelectorAll('.st').forEach(row => {
+    const s = filters.stats.find(x => x.key === row.dataset.k);
+    const cb = row.querySelector('input[type=checkbox]');
+    cb.onchange = () => { s.on = cb.checked; row.classList.toggle('off', !s.on); };
+    row.querySelector('.mn').oninput = e => { s.min = e.target.value === '' ? null : +e.target.value; if (!s.on) { s.on = true; cb.checked = true; row.classList.remove('off'); } };
+    row.querySelector('.mx').oninput = e => { s.max = e.target.value === '' ? null : +e.target.value; };
+    row.querySelector('.txt').onclick = () => cb.click();
+  });
+  document.querySelectorAll('.pill.toggle').forEach(p => p.onclick = () => {
+    const k = p.dataset.t;
+    if (k === 'mode') filters.mode = filters.mode === 'count' ? 'all' : 'count';
+    else filters[k].on = !filters[k].on;
+    render({ ...lastState, result: { ...cur } });
+  });
+  document.querySelectorAll('.seg button').forEach(b => b.onclick = () => { filters.status = b.dataset.s; render({ ...lastState, result: { ...cur } }); });
+  const s = $('#search');
+  if (s) s.onclick = () => fetch('/api/overlay/search', { method: 'POST', body: JSON.stringify({ filters }) });
+  const tr = $('#trade');
+  if (tr) tr.onclick = () => { if (cur && cur.url) fetch('/api/open', { method: 'POST', body: JSON.stringify({ url: cur.url }) }); };
+}
+
+let lastState = {};
+async function poll() {
+  for (;;) {
+    try {
+      const st = await (await fetch('/api/overlay/latest?after=' + ver)).json();
+      if (st.ver !== ver) { ver = st.ver; lastState = st; render(st); }
+    } catch (e) { await new Promise(res => setTimeout(res, 2000)); }
+  }
+}
+poll();
+</script>
+</body>
+</html>

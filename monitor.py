@@ -508,7 +508,24 @@ class Handler(http.server.BaseHTTPRequestHandler):
         try:
             n = int(self.headers.get('Content-Length') or 0)
             body = json.loads(self.rfile.read(n) or b'{}')
-            data = craft_post(u.path, body)
+            if u.path == '/api/overlay/item':
+                from poe2kit import overlaysrv
+                data = {'id': overlaysrv.submit(body.get('text', ''))}
+            elif u.path == '/api/overlay/search':
+                from poe2kit import overlaysrv
+                data = overlaysrv.research(body.get('filters'))
+            elif u.path == '/api/overlay/options':
+                from poe2kit import overlaysrv
+                data = overlaysrv.set_options(body)
+            elif u.path == '/api/open':   # the overlay's "Open on trade" button: only the official trade site
+                url = str(body.get('url', ''))
+                if not url.startswith('https://www.pathofexile.com/trade2/'):
+                    return self._send(400, b'{"error":"only trade site links"}', 'application/json')
+                import webbrowser
+                webbrowser.open(url)
+                data = {'ok': True}
+            else:
+                data = craft_post(u.path, body)
             return self._send(200, json.dumps(data, default=str).encode('utf-8'), 'application/json')
         except Exception as e:
             return self._send(500, json.dumps({'error': f'{type(e).__name__}: {e}'}).encode(), 'application/json')
@@ -518,6 +535,17 @@ class Handler(http.server.BaseHTTPRequestHandler):
         if u.path in ('/', '/index.html'):
             with open(os.path.join(HERE, 'dashboard', 'index.html'), 'rb') as f:
                 return self._send(200, f.read(), 'text/html; charset=utf-8')
+        if u.path == '/overlay':
+            with open(os.path.join(HERE, 'dashboard', 'overlay.html'), 'rb') as f:
+                return self._send(200, f.read(), 'text/html; charset=utf-8')
+        if u.path == '/api/overlay/options':
+            from poe2kit import overlaysrv
+            return self._send(200, json.dumps(overlaysrv.options()).encode(), 'application/json')
+        if u.path == '/api/overlay/latest':
+            from poe2kit import overlaysrv
+            q = urllib.parse.parse_qs(u.query)
+            st = overlaysrv.wait(int(q.get('after', ['0'])[0] or 0))
+            return self._send(200, json.dumps(st, default=str).encode('utf-8'), 'application/json')
         if u.path.startswith('/art/'):
             from poe2kit import art
             fp = art.file_for(urllib.parse.unquote(u.path[5:]))
@@ -578,6 +606,11 @@ def main(argv):
     threading.Thread(target=scheduler, args=(stop,), daemon=True).start()
     srv = http.server.ThreadingHTTPServer(('127.0.0.1', PORT), Handler)
     log.info('dashboard on http://127.0.0.1:%d', PORT)
+    try:
+        from poe2kit import overlaysrv
+        overlaysrv.autostart()   # the price-check overlay, when it is switched on (Windows)
+    except Exception as e:
+        log.warning('overlay not started: %s', e)
     try:
         srv.serve_forever()
     finally:

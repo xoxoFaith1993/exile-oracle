@@ -90,10 +90,55 @@ def monitor(strict=False):
                     check(False, f'/api/{v}: {e.code} {body[:400].decode("utf-8", "replace")}')
             except Exception as e:
                 check(False, f'/api/{v}: {e}')
+        overlay_check()
     finally:
         launcher.stop()
         time.sleep(1)
         check(not launcher.up(), 'monitor stopped')
+
+
+# a plain Ctrl+C copy written for this test (not a real listing)
+TEST_ITEM = '''Item Class: Rings
+Rarity: Rare
+Test Loop
+Ruby Ring
+--------
+Requires: Level 40
+--------
+Item Level: 75
+--------
++25% to Fire Resistance (implicit)
+--------
++60 to maximum Life
++30% to Cold Resistance
+12% increased Rarity of Items found
+--------
+Corrupted'''
+
+
+def overlay_check():
+    from poe2kit import itemtext
+    it = itemtext.parse(TEST_ITEM)
+    check(it['rarity'] == 'RARE' and it['base'] == 'Ruby Ring' and len(it['explicits']) == 3 and it['corrupted']
+          and it['mods'][0]['kind'] == 'implicit', 'item text reader')
+    import launcher
+    code, body = get(launcher.URL + 'overlay')
+    check(code == 200, 'overlay page')
+    req = urllib.request.Request(launcher.URL + 'api/overlay/item', data=json.dumps({'text': TEST_ITEM}).encode(),
+                                 headers={'Content-Type': 'application/json'}, method='POST')
+    urllib.request.urlopen(req, timeout=10).read()
+    st = {}
+    for _ in range(20):
+        _, body = get(launcher.URL + 'api/overlay/latest?after=0')
+        st = json.loads(body)
+        if st.get('status') in ('done', 'error'):
+            break
+        time.sleep(0.5)
+    r = st.get('result') or {}
+    t = r.get('trade') or {}
+    check(st.get('status') == 'done' and (r.get('item') or {}).get('base') == 'Ruby Ring',
+          f"overlay price check ({st.get('status')}, trade: {t.get('state')})")
+    check(t.get('state') in (None, 'off'), 'live trade stays off unless switched on')
 
 
 def mcp():

@@ -82,11 +82,31 @@ Set your class once, connect Claude with one click.
 
 Updates: the dashboard shows a banner when a new version is out; one click downloads and installs it.
 
+## Price-check overlay (Windows)
+Press **Ctrl+C** on an item in game (plain or Ctrl+Alt+C) and a popup appears by your mouse:
+- **poe.ninja** price and 7-day trend for currency, gems, runes, fragments and uniques;
+- **live trade-site prices** for rares and rolled uniques (optional, see below):
+  - the stats come in as rows you can tick and edit, then **Search** again;
+  - the cheapest listings show with item level, how long ago they were listed, and an online dot;
+- our **craft-cost estimate** for rares, and **Trade ↗** to open the same search on pathofexile.com.
+
+Run the game in **windowed fullscreen** so the popup can show over it. Press Esc or move the mouse away to close
+it. Switch it on or off on the **Status** tab.
+
+**Live trade-site prices are off by default and are your choice.** They use GGG's trade site the way Exiled
+Exchange 2 and similar tools do, which is not a documented public API. The toolkit keeps it light:
+- one search each time you copy an item or press Search;
+- GGG's rate-limit headers are obeyed, and if a wait would be long it skips and says so;
+- no login, nothing in the background.
+
+The overlay only reads what you copy. It never presses keys in the game.
+
 ## What it uses (and what it never does)
 - **Public data only:** poe.ninja's economy data, GGG's public Currency Exchange history, Steam news, the community
   game-data export (RePoE), Path of Building (downloaded on first run), and the game's own log file on your PC.
-- **Read-only toward the game:** no input to the game, no memory reading, no changes to game files, no private
-  trade API, no logins handled by the toolkit (your GGG login stays inside Path of Building).
+- **Read-only toward the game:** no input to the game, no memory reading, no changes to game files, no logins
+  handled by the toolkit (your GGG login stays inside Path of Building). The trade site is used only by the
+  optional overlay setting above.
 - **Polite:** prices every 30 minutes, exchange history hourly.
 - **Nothing about you leaves your PC.**
 

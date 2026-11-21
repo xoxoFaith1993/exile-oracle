@@ -258,3 +258,8 @@ def newest_gamefiles(sub):
     """Newest game build folder's file or folder `sub` (e.g. 'tables\\worldareas.json'), or None."""
     hits = sorted(glob.glob(os.path.join(GAMEFILES_DIR, '*', sub)), key=os.path.getmtime)
     return hits[-1] if hits else None
+
+
+def is_dev_copy():
+    """the author's own development copy (F:\\PoE2Toolkit): never self-updates; some opt-in features default on."""
+    return os.path.normcase(os.path.normpath(HOME)) == os.path.normcase(r'F:\PoE2Toolkit')
