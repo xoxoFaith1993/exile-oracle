@@ -1,11 +1,18 @@
 # Exile Oracle
 
-A personal Path of Exile 2 companion: live economy, what to farm, a league-start playbook, a Top 1% check for your
-character, your play sessions, a craft lab and patch notes checked against your builds. It runs on your own PC and
-opens in your browser.
+A personal Path of Exile 2 companion. It runs on your own PC, in its own window:
+
+- **the Oracle:** a daily omen, price forecasts, patch prophecy and a league timeline;
+- **the Atlas war room:** strategies drawn on your atlas tree, map mods rated for your build;
+- **the campaign:** a rush guide and a route panel in game;
+- **your characters:** the Build Lab, a Top 1% check;
+- **the economy:** live prices, what to farm, the league-start playbook;
+- **a price-check overlay** (Ctrl+D) that also rates waystones.
+
+Also in it: your play sessions, a craft lab, and patch notes checked against your builds.
 
 ## Install
-1. Run `PoE2Toolkit-Setup.exe`. Windows may say "Windows protected your PC" because the installer isn't signed:
+1. Run `ExileOracle-Setup.exe`. Windows may say "Windows protected your PC" because the installer isn't signed:
    click **More info**, then **Run anyway**.
 2. It installs for your Windows user only (no admin needed) and starts. A red icon appears by the clock: click it to
    open the dashboard, right-click for **Start with Windows** and **Quit**.
@@ -13,15 +20,19 @@ opens in your browser.
    `%LOCALAPPDATA%\PoE2Toolkit`).
 
 ## First steps
-- **Status tab → Your profile:** pick your class and ascendancy and save. That sets the defaults everywhere.
+- **Settings → Your profile:** pick your class and ascendancy and save. That sets the defaults everywhere.
 - **Your characters:** install *Path of Building Community (PoE 2)* and sign in to your GGG account there once. The
   Builds tab can then import your characters (only when you press the button).
 - **Sessions:** start the game once; the toolkit reads the game's own log file to track maps, map time and deaths.
+- **Several characters?** Pick the one you're playing in **Playing** at the top. Every page follows it.
+- **Overlay:** Settings → Price-check overlay. Ctrl+D on an item (or a waystone) in game; the keys can be changed there.
+- **Campaign:** the route panel shows in a corner while you level (Ctrl+Alt+R hides it); tick rewards on the Campaign
+  page.
 
 ## Best with Claude
 This toolkit is meant to be used **with Claude**: the dashboard shows the numbers, Claude answers your questions
 about them ("what should I farm", "how close am I to the top 1%", "how do I craft this"). Connect it once from the
-**Status** tab → **Connect to Claude**, then restart Claude. Full guide: `CLAUDE-GUIDE.md` in the install folder
+**Settings** → **Connect to Claude**, then restart Claude. Full guide: `CLAUDE-GUIDE.md` in the install folder
 (also in the Start menu: *Using Exile Oracle with Claude*). Everything still works without Claude.
 
 ## The rules it follows (so your account stays safe)

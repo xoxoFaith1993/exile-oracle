@@ -49,10 +49,12 @@ Files in HOME:
 
 ## Overlay (Windows)
 
-Keys work only while Path of Exile 2 is the window in front:
-- Ctrl+D quick check;
+Keys work only while Path of Exile 2 is the window in front (all of them can be changed in the overlay settings or
+Settings → Price-check overlay; saved as `price_keys` in settings.json):
+- Ctrl+D quick check (on a waystone or tablet it also rates every mod for the active character);
 - Ctrl+Alt+D detailed;
 - Ctrl+Shift+D settings;
+- Ctrl+Alt+R shows / hides the campaign route panel;
 - F5 / F9 and others: chat commands.
 
 | Problem | Check | Fix |
@@ -64,6 +66,10 @@ Keys work only while Path of Exile 2 is the window in front:
 | Popup shows a browser title bar, or a grey strip at the top | Edge updated or scaling changed | restart the overlay; the window is measured again |
 | Popup shows an old layout after an update | the page is kept between restarts | it reloads itself when its file changes (0.3.1+); else restart the overlay |
 | Text too small/large in the popup | page zoom | zoom is blocked; delete the `127.0.0.1` entry under `per_host_zoom_levels` in `HOME\edge-overlay\Default\Preferences` while the overlay is off |
+| A key does nothing after changing it | the settings show "taken by another program" (`HOME\overlay_keys.json`) | pick another key or close the program holding it; Ctrl+C / Ctrl+Alt+C are refused (the overlay presses them itself) |
+| Waystone check says "could not rate for your build" | is there an own build in the vault? `poe2_status` active_character | import or save a build, pick it in **Playing**; the check needs Path of Building to run once |
+| Route panel never shows | Campaign page → "Route panel in game" ticked? `/api/route/state` shows the zone? | it shows only in campaign zones and towns while the game is in front (hidden in hideout and maps, or after Ctrl+Alt+R). The zone comes from Client.txt: check `poe2_doctor` finds it |
+| Route panel shows the wrong zone or act | `/api/route/state` | it follows the last "Generating level" line in Client.txt; new 1.0 zones need the refreshed `worldareas.json` (data pack update) |
 | No picture for an item | — | uses the game art from the toolkit when the trade site has none; magic items find their base inside the name |
 
 ## Prices

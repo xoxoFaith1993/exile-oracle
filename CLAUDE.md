@@ -44,10 +44,18 @@ you assume.
   - Path of Building: `pob.py`;
   - in-game Build Planner: `buildplanner.py`, `buildplan.py`, `route.py`;
   - game log: `clientlog.py`;
+  - the Oracle: `oracle.py` (market timing), `prophecy.py` (omen, timeline, countdowns, farming oracle, unique
+    history), `forecast.py` (price forecast), `patchrules.py` (patch prophecy);
+  - atlas: `atlas.py` (tree from the game files), `atlasplan.py` (strategies, setups, rolling, ROI), `mapmods.py`
+    (waystone / tablet mods, danger for a build, search strings, the overlay's waystone check);
+  - campaign: `campaign.py` (rush guide, checklist, the route panel's zone card);
+  - characters: `chars.py` (the active character every page follows);
   - platform differences: `osutil.py`;
   - checks: `doctor.py`.
-- `dashboard/`: `index.html` (dashboard) and `overlay.html` (popup).
-- `datapack/`: shipped data that doesn't need the game files.
+- `dashboard/`: `index.html` (dashboard), `overlay.html` (popup) and `route.html` (the campaign route panel).
+- `datapack/`: shipped data that doesn't need the game files, including the cleaned research results.
+- `research/`: the research behind the Oracle: a report, its data and its scripts per topic (index:
+  `research/README.md`). A new research topic gets a row there.
 - `pobhost/`: Lua scripts that run Path of Building headless.
 
 ## Testing
@@ -56,3 +64,13 @@ you assume.
 - `python smoke_test.py --pob`: also downloads Path of Building and runs real calculations, levelling-route edits
   and the route maths.
 - GitHub Actions runs both on Linux and Windows on every push, and builds and test-installs the Linux package.
+
+## Docs go with every change
+Players only see what the docs show. `build_release.py` refuses to build when a tool is missing from
+`CLAUDE-GUIDE.md`, a dashboard page is missing from `README.md`, a research folder is missing from
+`research/README.md`, or the README points at a screenshot that doesn't exist. When you add a feature, also update:
+- `README.md`: a section with a screenshot (add it to `release/readme_shots.py`);
+- `CLAUDE-GUIDE.md`: what to ask (it's the guide for Claude, ChatGPT and Gemini users);
+- the tool description and `INSTRUCTIONS` in `server.py` (what every AI app is told);
+- `TROUBLESHOOTING.md` when the feature can break;
+- `README-friends.md` for big changes.

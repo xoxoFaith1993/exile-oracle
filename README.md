@@ -2,9 +2,16 @@
 
 *(formerly PoE 2 Toolkit)*
 
-A free, personal **Path of Exile 2 companion** for Windows and Linux: live economy, what to farm, a league-start
-playbook, a Top 1% check for your character, play-session tracking, a craft lab, patch notes checked against your
-builds, a Build Lab and an in-game price-check overlay. It runs on your own PC in its own window, and it's built to be used
+A free, personal **Path of Exile 2 companion** for Windows and Linux:
+
+- **the Oracle:** a daily omen, a league timeline, price forecasts and patch prophecy, all from researched league history;
+- **the Atlas war room:** strategies, setups drawn on your atlas tree, map mods rated for your build;
+- **the campaign:** a rush guide, plus a route panel in game that follows your zone;
+- **your characters:** the Build Lab, a Top 1% check and upgrades;
+- **the economy:** live prices, what to farm, a league-start playbook;
+- **a price-check overlay** that also rates waystones for your build.
+
+Also in it: play-session tracking, a craft lab, and patch notes checked against your builds. It runs on your own PC in its own window, and it's built to be used
 **together with Claude**: connect it once and ask Claude anything about your character, the economy or your next
 craft.
 
@@ -59,6 +66,75 @@ The Oracle's workbench for one build: ask in chat, and what it works out shows h
 
 ![Boss readiness, history and the Oracle feed](docs/screenshots/build-lab-feed.jpg)
 
+### Prophecy (new in 0.6.0)
+The Oracle that tells the future, built from researched league history ([the research](research/README.md)):
+
+- a **daily omen** with its evidence;
+- **countdowns** to 1.0 and to each league phase;
+- a **league timeline** from day 0 to day 70+, with "you are here".
+
+![Prophecy: omen, countdowns and league timeline](docs/screenshots/prophecy.jpg)
+
+**Price forecasts** for 688 exchange items: past launches as faint lines, and a fan for the next 1, 3, 7 and 14 days.
+Tested on six launches, the range held the real price 79% of the time.
+
+![Price forecast](docs/screenshots/prophecy-forecast.jpg)
+
+**Patch prophecy** reads every new patch post the app picks up and says which items should move, and how much. Its
+rulebook is measured on 276 PoE 2 patches. The **farming oracle** gives div per hour per strategy, checked against
+your build.
+
+![Patch prophecy and farming oracle](docs/screenshots/prophecy-patch.jpg)
+
+**Chase uniques through a league:** Mageblood, Headhunter, Temporalis and 45 more, by league day.
+
+![Chase uniques](docs/screenshots/prophecy-uniques.jpg)
+
+### The Oracle's market timing
+What to sell, hold or buy at this point of the league, from three launches.
+
+![The Oracle's market timing](docs/screenshots/oracle.jpg)
+
+### Atlas war room (new in 0.6.0)
+- The atlas tree, read from your own game files.
+- **Show on tree** draws a strategy's whole setup: its key nodes and the path to them.
+
+![Atlas setup on the tree](docs/screenshots/atlas-plan.jpg)
+
+Eleven strategies with div per hour now and in the next league phase, the atlas points each takes, and when to switch.
+
+![Atlas strategies](docs/screenshots/atlas-strategies.jpg)
+
+Waystone rolling at live prices, a juicing calculator and every tablet type.
+
+![Rolling and the juicing calculator](docs/screenshots/atlas-roi.jpg)
+
+Every waystone mod rated deadly / risky / fine for **your** build, with our own in-game search strings.
+
+![Map modifiers for your build](docs/screenshots/atlas-mods.jpg)
+
+### Campaign + the route panel (new in 0.6.0)
+The fastest route act by act, every permanent reward with a checklist, the trials, and flask / boots / life breakpoints.
+
+![Campaign rush](docs/screenshots/campaign.jpg)
+![The route, act by act](docs/screenshots/campaign-route.jpg)
+
+**In game**, a small corner card follows your zone (read from the game's own log): where to go next, rewards not to
+skip, trials and tips. It's click-through, never takes focus, and hides in your hideout and in maps. Ctrl+Alt+R shows
+or hides it.
+
+<img src="docs/screenshots/route-panel.jpg" alt="Route panel" width="300">
+
+### Waystone check + your own keys (new in 0.6.0)
+Ctrl+D on a waystone or tablet: every mod rated for your build, the rewards, and a verdict. The price-check keys can be
+changed in the overlay settings, with a warning when a key clashes with the game or another program.
+
+<img src="docs/screenshots/overlay-waystone.jpg" alt="Waystone check" width="460">
+
+### Several characters
+**Playing** in the top bar picks your active character. The Build Lab, Atlas, waystone check, farming oracle, Top 1%
+and the AI tools all follow it.
+
 ### Other AI apps
 Exile Oracle's tools are a standard MCP server. Settings → **Other AI apps** connects them to the ChatGPT desktop app
 / Codex or Gemini CLI as well as Claude. ChatGPT is marked *untested* until a player confirms it.
@@ -92,6 +168,10 @@ You vs the top 1% of your ascendancy: level, DPS, toughness, gear value.
 
 ![Top 1% check](docs/screenshots/top1.jpg)
 
+**View profile** opens a top player's poe.ninja page inside Exile Oracle, with a **Save this build** button.
+
+![View profile](docs/screenshots/top1-links.jpg)
+
 ### From the Oracle
 Ask in chat and Claude puts the answer on your dashboard (here: your build vs a top-1% Blood Mage).
 
@@ -112,6 +192,11 @@ Any class, any ascendancy path: skills to cut, cheap leveling uniques, campaign 
 
 ![League start planner](docs/screenshots/league-start-planner.jpg)
 
+### Sessions
+Your play time from the game's own log file: maps per hour, average map time, deaths, and time per act.
+
+![Sessions](docs/screenshots/sessions.jpg)
+
 ### Craft lab
 Plan a craft, practise it step by step, record what really happened in game.
 
@@ -122,8 +207,8 @@ Every line of a patch that hits your builds, with buff / nerf tags.
 
 ![Patch notes](docs/screenshots/patch-notes.jpg)
 
-### Your profile + Connect to Claude
-Set your class once, connect Claude with one click.
+### Settings + Connect to Claude
+Your profile, league, text size, the overlay and its keys, and Claude (or another AI app) connected with one click.
 
 ![Your profile + Connect to Claude](docs/screenshots/status-claude.jpg)
 
