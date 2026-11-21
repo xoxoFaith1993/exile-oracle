@@ -3,7 +3,7 @@
 A personal Path of Exile 2 companion. It runs on your own PC, in its own window:
 
 - **the Oracle:** a daily omen, price forecasts, patch prophecy and a league timeline;
-- **the Atlas war room:** strategies drawn on your atlas tree, map mods rated for your build;
+- **Endgame (Atlas, Maps, Tablets):** atlas strategies drawn on your tree, waystone rolling and map mods rated for your build, tablets;
 - **the campaign:** a rush guide and a route panel in game;
 - **your characters:** the Build Lab, a Top 1% check;
 - **the economy:** live prices, what to farm, the league-start playbook;

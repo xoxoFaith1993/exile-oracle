@@ -441,7 +441,10 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
   <button data-tab="farm">What to farm</button>
   <button data-tab="league">League start</button>
   <button data-tab="campaign">Campaign</button>
+  <div class="ng">Endgame</div>
   <button data-tab="atlas">Atlas</button>
+  <button data-tab="maps">Maps</button>
+  <button data-tab="tablets">Tablets</button>
   <div class="ng">Character</div>
   <button data-tab="lab">Build Lab</button>
   <button data-tab="builds">Builds</button>
@@ -568,7 +571,7 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
         <label class="small">Your name (optional) <input class="crin rp-name" maxlength="24" style="width:180px"></label></div>
       <div style="margin-top:10px;display:flex;gap:8px;align-items:center"><button class="btn rp-send" style="border-color:var(--eo-blood-hi)">Send suggestion</button><span class="small muted rp-msg"></span></div></div></section>
   <section id="atlas">
-    <div class="card"><div class="lab-head"><h2 style="margin:0">Atlas</h2><span class="small muted" id="atlassub"></span></div>
+    <div class="card"><div class="lab-head"><h2 style="margin:0">Atlas tree</h2><span class="small muted" id="atlassub"></span></div>
       <div class="sub">The atlas passive tree, read from your game files. Pick a strategy below to see its setup drawn here (gold: the points to take).</div>
       <div class="lab-tree" id="atlastree" style="height:520px;margin-top:10px"><div class="zbtn"><button data-z="1.4">+</button><button data-z="0.7">−</button><button data-z="fit">⤢</button></div>
         <div class="legend">hover a node for its name · Ctrl + scroll (or click the tree, then scroll) to zoom · drag to move</div></div></div>
@@ -576,6 +579,8 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
       <div class="sub">Every farming strategy: what it pays per hour now and in the next league phase (our farming research at live exchange prices), how many atlas points its setup takes, and what to run it with. Click one to draw it on the tree.</div>
       <div id="asswitch" class="flag ok" style="margin:8px 0;display:none"></div>
       <table class="up" id="astable" style="margin-top:6px"></table><div id="asdetail"></div></div>
+  </section>
+  <section id="maps">
     <div class="grid2">
       <div class="card"><h2>Rolling waystones</h2><div class="sub">What each way of rolling costs today and what it adds on average (T16).</div><div id="arolling"></div></div>
       <div class="card"><h2>Juicing calculator</h2><div class="sub">What one map costs to set up vs what the strategy returns per map at this point of the league.</div>
@@ -588,9 +593,9 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
           <span class="small">Maps per hour</span><input class="crin" id="roimph" type="number" min="1" step="1" placeholder="auto" style="width:80px">
         </div><div id="roiout" style="margin-top:10px"></div></div>
     </div>
-    <div class="card"><h2>Tablets</h2><div class="sub">Each tablet type, its own modifiers, and what to pair with each strategy. Tablets aren't exchange items, so price them with the overlay (Ctrl+D) in game.</div><div id="atablets"></div></div>
-    <div class="card"><div class="lab-head"><h2 style="margin:0">Map modifiers</h2><span style="flex:1"></span>
-      <div class="eo-seg seg" id="mmkind"><button data-k="waystone" class="on">Waystones</button><button data-k="tablet">Tablets</button></div>
+    <div id="mmhome-maps">
+    <div class="card"><div class="lab-head"><h2 style="margin:0" id="mmtitle">Waystone modifiers</h2><span style="flex:1"></span>
+      <div class="eo-seg seg" id="mmkind" style="display:none"><button data-k="waystone" class="on">Waystones</button><button data-k="tablet">Tablets</button></div>
       <label class="small">Rate for <select class="crin" id="mmbuild" style="min-width:260px"></select></label></div>
       <div class="sub">Every modifier from your game files. Rated for your build by Path of Building's numbers (deadly / risky / fine). Tick what to avoid or want and paste the search into your stash or vendor (Ctrl+F).</div>
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px">
@@ -599,6 +604,11 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
       <div class="chips" id="mmquick"></div>
       <div id="mmout" class="flag ok" style="margin:10px 0;display:none"></div>
       <table class="up" id="mmtable" style="margin-top:6px"></table></div>
+    </div>
+  </section>
+  <section id="tablets">
+    <div class="card"><h2>Tablets</h2><div class="sub">Each tablet type, its own modifiers, and what to pair with each strategy. Tablets aren't exchange items, so price them with the overlay (Ctrl+D) in game.</div><div id="atablets"></div></div>
+    <div id="mmhome-tablets"></div>
   </section>
   <section id="character"><div id="charview"><div class="card empty">Pick a build on the Builds tab, or ask the Oracle to show one.</div></div></section>
   <section id="top1">
@@ -833,7 +843,9 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   if (b.dataset.tab === 'home') { loadHome(); loadHomeOracle(); loadOmen(); }
   if (b.dataset.tab === 'status') { loadConnectors(); loadLeagues(); }
   if (b.dataset.tab === 'lab') initLab();
-  if (b.dataset.tab === 'atlas') { loadAtlas(); loadMapMods(); loadAtlasPlan(); }
+  if (b.dataset.tab === 'atlas') { loadAtlas(); loadAtlasPlan(); }
+  if (b.dataset.tab === 'maps') { loadAtlasPlan(); mmPlace('waystone'); }
+  if (b.dataset.tab === 'tablets') { loadAtlasPlan(); mmPlace('tablet'); }
   if (b.dataset.tab === 'campaign') loadCampaign();
   if (b.dataset.tab === 'prophecy') loadProphecy();
   if (b.dataset.tab === 'economy') { loadLeagues(); loadOverview(); loadMovers(); loadMarket(); loadOracle($('#ordaysel').value); }
@@ -1197,9 +1209,13 @@ document.addEventListener('click', async e => {
 
 // ---------- ready-made questions on every page (click = copy, paste in your AI chat) ----------
 const PAGE_ASKS = {
+  maps: [['How should I roll my waystones?', 'How should I roll my waystones for my build and strategy, and is juicing worth it right now?'],
+         ['Which map mods should I avoid?', 'Which waystone modifiers are deadly for my build? Make me a search string that hides them.'],
+         ['Is juicing worth it for me?', 'With my build and the current prices, is juicing maps worth it? Use the juicing calculator numbers.']],
+  tablets: [['Which tablets for my strategy?', 'Which tablets and tablet modifiers should I run for my atlas strategy?'],
+            ['Make me a tablet search string', 'Make me an in-game search string that highlights the tablets worth running for my strategy.']],
   atlas: [['Which atlas strategy suits my build?', 'Which atlas farming strategy suits my build now, and draw its setup on the Atlas page.'],
-          ['How should I roll my waystones?', 'How should I roll my waystones for my build and strategy, and is juicing worth it right now?'],
-          ['Which map mods should I avoid?', 'Which waystone modifiers are deadly for my build? Make me a search string that hides them.']],
+          ['When should I switch strategy?', 'When in the league should I switch atlas strategy, and to what?']],
   prophecy: [['What will the market do this week?', 'Using the Oracle forecasts, what will the market do this week and what should I sell or hold?'],
              ['Plan my first 72 hours of 1.0', 'Plan my first 72 hours of the 1.0 league: what to farm, sell, keep and buy, hour by hour.'],
              ['Which farm suits my build now?', 'Which farming strategy suits my build right now, and what would let me run a better one?']],
@@ -1275,9 +1291,9 @@ async function loadAtlasPlan() {
   document.querySelectorAll('.asshow').forEach(b => b.onclick = () => showStrategy(AS.strategies[+b.dataset.i]));
   // rolling
   const r = await get('/api/atlas/rolling');
-  $('#arolling').innerHTML = `<table class="up"><tr><th>Method</th><th>Cost</th><th>When</th></tr>${r.methods.filter(m => m.when && m.method !== 'When re-rolling beats running').map(m => `<tr>
+  $('#arolling').innerHTML = `<table class="up" style="table-layout:fixed;width:100%"><colgroup><col style="width:38%"><col style="width:24%"><col style="width:38%"></colgroup><tr><th>Method</th><th>Cost</th><th>When</th></tr>${r.methods.filter(m => m.when && m.method !== 'When re-rolling beats running').map(m => `<tr>
     <td><b>${esc(m.method)}</b><div class="small muted">${esc(m.reward || '')}</div></td>
-    <td style="white-space:nowrap">${m.cost_ex != null ? `<b>${m.cost_ex} ex</b><div class="small muted">${m.spends.join(' + ') || 'free'}</div>` : `<span class="small muted">${esc(m.cost_note || '')}</span>`}</td>
+    <td style="overflow-wrap:anywhere">${m.cost_ex != null ? `<b style="white-space:nowrap">${m.cost_ex} ex</b><div class="small muted">${m.spends.join(' + ') || 'free'}</div>` : `<span class="small muted">${esc(m.cost_note || '')}</span>`}</td>
     <td class="small">${esc(m.when || '')}</td></tr>`).join('')}</table>`;
   // juicing calculator
   if (!$('#roistrat').options.length) {
@@ -1551,6 +1567,13 @@ function drawCpZone(z) {
 
 // ---------- Atlas: map modifiers + our own search strings (R15) ----------
 let MM = null, MMKIND = 'waystone';
+function mmPlace(kind) {
+  const card = $('#mmtitle').closest('.card');
+  $(kind === 'tablet' ? '#mmhome-tablets' : '#mmhome-maps').appendChild(card);
+  $('#mmtitle').textContent = kind === 'tablet' ? 'Tablet modifiers' : 'Waystone modifiers';
+  document.querySelectorAll('#mmkind button').forEach(b => b.classList.toggle('on', b.dataset.k === kind));
+  if (MMKIND !== kind || !MM) { MMKIND = kind; loadMapMods(); }
+}
 async function loadMapMods() {
   const sel = $('#mmbuild');
   if (!sel.options.length) {

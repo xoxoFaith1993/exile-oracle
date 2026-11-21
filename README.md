@@ -5,7 +5,7 @@
 A free, personal **Path of Exile 2 companion** for Windows and Linux:
 
 - **the Oracle:** a daily omen, a league timeline, price forecasts and patch prophecy, all from researched league history;
-- **the Atlas war room:** strategies, setups drawn on your atlas tree, map mods rated for your build;
+- **Endgame (Atlas, Maps, Tablets):** atlas strategies drawn on your tree, waystone rolling and juicing, map mods rated for your build, tablets;
 - **the campaign:** a rush guide, plus a route panel in game that follows your zone;
 - **your characters:** the Build Lab, a Top 1% check and upgrades;
 - **the economy:** live prices, what to farm, a league-start playbook;
@@ -95,7 +95,7 @@ What to sell, hold or buy at this point of the league, from three launches.
 
 ![The Oracle's market timing](docs/screenshots/oracle.jpg)
 
-### Atlas war room (new in 0.6.0)
+### Endgame: Atlas (new in 0.6.0)
 - The atlas tree, read from your own game files.
 - **Show on tree** draws a strategy's whole setup: its key nodes and the path to them.
 
@@ -105,13 +105,19 @@ Eleven strategies with div per hour now and in the next league phase, the atlas 
 
 ![Atlas strategies](docs/screenshots/atlas-strategies.jpg)
 
-Waystone rolling at live prices, a juicing calculator and every tablet type.
+### Endgame: Maps (new in 0.6.0)
+Waystone rolling at live prices, and a juicing calculator: what a map costs to set up vs what your strategy returns.
 
 ![Rolling and the juicing calculator](docs/screenshots/atlas-roi.jpg)
 
 Every waystone mod rated deadly / risky / fine for **your** build, with our own in-game search strings.
 
 ![Map modifiers for your build](docs/screenshots/atlas-mods.jpg)
+
+### Endgame: Tablets (new in 0.6.0)
+Every tablet type with its own modifiers, what to pair with each strategy, and tablet modifiers with search strings.
+
+![Tablets](docs/screenshots/tablets.jpg)
 
 ### Campaign + the route panel (new in 0.6.0)
 The fastest route act by act, every permanent reward with a checklist, the trials, and flask / boots / life breakpoints.

@@ -169,7 +169,7 @@ def rate(groups, stats):
 
 
 def overview(con=None, build_id=None, kind='waystone'):
-    """Everything the Atlas page shows: the mod groups (with tiers), each one's search token, and (with a build)
+    """Everything the Maps / Tablets pages show (modifier lists): the mod groups (with tiers), each one's search token, and (with a build)
     the danger rating for that build."""
     groups = mods(kind)
     toks = _tokens(kind)

@@ -788,7 +788,7 @@ TOOLS = [
      'they took it. Researched for 0.5: Acts 5-6 arrive in 1.0; say so.',
      S(part=STR, tick=STR, on=BOOL), t_campaign),
     ('poe2_atlas',
-     'Atlas war room: action="strategies" (default): 11 farming strategies with div/hour now and next league phase '
+     'Endgame (the Atlas, Maps and Tablets pages): action="strategies" (default): 11 farming strategies with div/hour now and next league phase '
      '(our farming research at live prices), atlas points each setup takes, tablets and waystone setup, plus when to '
      'switch. action="setup" + strategy: its key atlas nodes and the connecting path (the player can draw it with '
      'Show on tree on the Atlas page). action="rolling": what each waystone rolling method costs today. '

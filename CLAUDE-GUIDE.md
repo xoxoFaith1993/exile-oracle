@@ -56,7 +56,8 @@ for 15 minutes).
 
 **Atlas and maps**
 - "Which atlas strategy suits my build right now? Draw it on the Atlas page."
-- "How should I roll my waystones, and is juicing worth it?"
+- "How should I roll my waystones, and is juicing worth it?" (Maps page)
+- "Which tablets should I run for my strategy?" (Tablets page)
 - "Which waystone mods are deadly for my build? Make me a search string that hides them."
 - In game: **Ctrl+D on a waystone** rates every mod for your build.
 
@@ -153,7 +154,7 @@ The same tools work in Claude, ChatGPT / Codex and Gemini CLI.
 | `poe2_levelling` | Review a levelling route for a vault build BEFORE it goes into the in-game Build Planner (the automatic order is a rule of thumb; plans stay a plain endgame path until you switch the route on). |
 | `poe2_lab` | The Build Lab tab on the dashboard |
 | `poe2_campaign` | Campaign rush |
-| `poe2_atlas` | Atlas war room |
+| `poe2_atlas` | Endgame (the Atlas, Maps and Tablets pages) |
 | `poe2_oracle` | The Oracle |
 | `poe2_doctor` | Something in the toolkit is broken or acting odd (overlay, prices, dashboard, Build Planner, Path of Building, Claude connection)? Call this FIRST |
 | `poe2_from_overlay` | Items the player sent from the in-game price-check overlay (its Ask the Oracle button, called Ask Claude before 0.4.0), newest first |
