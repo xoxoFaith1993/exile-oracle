@@ -46,7 +46,7 @@ NEWS_WORDS = ['patch notes', 'hotfix', '1.0', 'league']   # plus the player's ow
 ALERT_MOVE_PCT = 15     # your build's items
 MARKET_MOVE_PCT = 40    # anything else, if it's worth >= 1 div
 JOBS = {'prices': 30, 'exchange': 60, 'news': 20, 'install': 10, 'gamedata': 720, 'pob': 720, 'ggg_apps': 10080,
-        'mybuilds': 2, 'clientlog': 1, 'update': 720}
+        'mybuilds': 2, 'clientlog': 1, 'update': 720, 'dataupdate': 360}
 
 log = logging.getLogger('monitor')
 
@@ -281,9 +281,19 @@ def job_update(con):
     return 'development copy (no updates)' if info.get('why') else f"latest {info.get('latest')}, you have {info.get('current')}"
 
 
+def job_dataupdate(con):
+    """R27: a newer data pack (no new app needed) is checked, verified and switched to by itself."""
+    from poe2kit import dataupdate
+    r = dataupdate.check(con)
+    if r.get('installed'):
+        alert(con, 'update', f"Game data updated to {r['installed']}", 'New data is in use: nothing to install.')
+        return f"installed data {r['installed']}"
+    return r.get('why') or ('up to date' if r.get('ok') else 'failed')
+
+
 JOB_FUNCS = {'prices': job_prices, 'exchange': job_exchange, 'news': job_news, 'install': job_install,
              'gamedata': job_gamedata, 'pob': job_pob, 'ggg_apps': job_ggg_apps, 'mybuilds': job_mybuilds,
-             'clientlog': job_clientlog, 'update': job_update}
+             'clientlog': job_clientlog, 'update': job_update, 'dataupdate': job_dataupdate}
 
 
 def run_job(con, name):
@@ -392,6 +402,9 @@ def api(path, q):
         if path == '/api/active':   # R17: the player's characters and the active one
             from poe2kit import chars
             return chars.characters(con)
+        if path == '/api/data/status':   # R27: which data version is in use
+            from poe2kit import dataupdate
+            return dataupdate.status(con)
         if path == '/api/campaign':   # R16: campaign rush guide + checklist + where you are now
             from poe2kit import campaign
             return campaign.guide(con)
@@ -733,6 +746,14 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 c = _db.connect()
                 try:
                     data = chars.set_active(c, body.get('build_id'))
+                finally:
+                    c.close()
+            elif u.path in ('/api/data/check', '/api/data/rollback'):   # R27: Settings buttons
+                from poe2kit import dataupdate, db as _db
+                c = _db.connect()
+                try:
+                    data = dataupdate.check(c) if u.path.endswith('check') else dataupdate.rollback()
+                    data['status'] = dataupdate.status(c)
                 finally:
                     c.close()
             elif u.path == '/api/route/size':

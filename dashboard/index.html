@@ -772,6 +772,9 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
       <div id="connlist"></div></div>
     <div class="card"><h2>Price-check overlay <span class="pill">Windows</span></h2><div class="sub">Press Ctrl+D on an item in game (Ctrl+Alt+D to keep it open and tick rows; both can be changed below) and a price popup appears: poe.ninja, our craft estimate and, if you switch it on, live prices from the official trade site (one search per item you copy, like Exiled Exchange 2 does). Run the game in windowed fullscreen. The only keys it ever sends are the ones you ask for: Ctrl+Alt+C to copy the item when you press Ctrl+D, and your own chat commands (F5 /hideout and so on).</div>
       <div id="ovopts"></div></div>
+    <div class="card"><h2>Game data <span class="pill">updates itself</span></h2><div class="sub">Exile Oracle keeps what it knows about the game (zones, atlas, campaign rewards, research) up to date by itself: after a patch, a small data update arrives within hours, with nothing to install. App updates still come with the banner.</div>
+      <div id="datastatus" class="small" style="margin-top:8px"></div>
+      <div style="margin-top:8px"><button class="btn" id="datacheck">Check now</button> <button class="btn" id="databack" title="Use the data from before the last update">Go back to the previous data</button> <span class="small muted" id="datamsg"></span></div></div>
     <div class="card"><h2>Monitor jobs</h2><div class="sub">What runs in the background, how often, and how it went last time.</div><div id="jobs"></div></div></section>
 </main>
 <div class="tip" id="tip"></div>
@@ -856,7 +859,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   if (b.dataset.tab === 'sessions') loadSessions();
   if (b.dataset.tab === 'top1') initTop1();
   if (b.dataset.tab === 'league') initLeague();
-  if (b.dataset.tab === 'status') { loadStatus(); loadProfile(); loadClaude(); loadOverlay(); }
+  if (b.dataset.tab === 'status') { loadStatus(); loadProfile(); loadClaude(); loadOverlay(); loadDataStatus(); }
   try { localStorage.setItem('poe2tab', b.dataset.tab); } catch (e) {}
 });
 // reopen the last tab only once every script on the page has loaded (newer pages are defined further down)
@@ -2500,6 +2503,19 @@ async function loadOverlay() {
   $('#ovtrade').onchange = async e => { await post('/api/overlay/options', { live_trade: e.target.checked }); loadOverlay(); };
 }
 let ovErr = '';
+
+// ---------- game data that updates itself (R27) ----------
+function drawDataStatus(s) {
+  const lc = s.last_check || {};
+  const when = s.built ? new Date(s.built * 1000).toLocaleString() : '';
+  $('#datastatus').innerHTML = (!s.version || s.version === '0' ? 'Using <b>the data that came with the app</b>' : `Data <b>${esc(s.version)}</b> <span class="muted">(${s.source === 'downloaded' ? 'downloaded update' : 'came with the app'}${when ? ', made ' + esc(when) : ''})</span>`) +
+    (lc.checked ? `<div class="muted">Last checked ${ago(lc.checked)}: ${esc(lc.installed ? 'installed ' + lc.installed : lc.why || (lc.ok ? 'up to date' : 'failed'))}</div>` : '');
+}
+async function loadDataStatus() {
+  drawDataStatus(await get('/api/data/status'));
+  $('#datacheck').onclick = async () => { $('#datamsg').textContent = 'checking…'; const r = await post('/api/data/check', {}); $('#datamsg').textContent = r.installed ? 'updated to ' + r.installed : (r.why || 'up to date'); drawDataStatus(r.status); };
+  $('#databack').onclick = async () => { const r = await post('/api/data/rollback', {}); $('#datamsg').textContent = r.ok ? 'now using ' + r.now : r.why; drawDataStatus(r.status); };
+}
 
 // ---------- update banner ----------
 async function checkUpdate() {

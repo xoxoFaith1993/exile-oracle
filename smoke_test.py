@@ -251,6 +251,20 @@ def atlasplan_check():
     check(len(names) >= 10 and not bad, f'atlas strategy setups ({len(names)} strategies' + (f'; broken: {bad})' if bad else ')'))
 
 
+def dataupdate_check():
+    """R27: data packs install, are used, and bad ones are refused (release/test_dataupdate.py, own temp folder)."""
+    import subprocess
+    test = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'release', 'test_dataupdate.py')
+    if not os.path.exists(test):
+        check(True, 'data update test skipped (not in this copy)')
+        return
+    env = dict(os.environ, EO_TEST_DIR=os.path.join(tempfile.mkdtemp(), 'dataupdate'))
+    env.pop('POE2KIT_HOME', None)
+    r = subprocess.run([sys.executable, test], capture_output=True, text=True, env=env, timeout=300)
+    check(r.returncode == 0, 'data that updates itself: install, use, refuse tampered, go back' +
+          ('' if r.returncode == 0 else ' -> ' + (r.stdout + r.stderr)[-400:]))
+
+
 def campaign_check():
     """R16 / R21: the rush route maps onto the game's zones, and a zone gives a route card."""
     from poe2kit import campaign
@@ -356,6 +370,7 @@ if __name__ == '__main__':
     campaign_check()
     prophecy_check()
     atlasplan_check()
+    dataupdate_check()
     mcp()
     if '--pob' in sys.argv:
         pob_part()

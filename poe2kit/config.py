@@ -10,6 +10,7 @@ A per-user profile (class, ascendancy, main build, watch words) replaces anythin
 import glob
 import json
 import os
+import time
 import re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -241,8 +242,32 @@ def poe2x():
 DATAPACK_DIR = os.path.join(ROOT, 'datapack')
 
 
+_live = {'at': 0, 'dir': None, 'built': 0}
+
+
+def _live_pack():
+    """(folder, built time) of the downloaded data pack in use (R27), checked at most once a minute."""
+    if time.time() - _live['at'] > 60:
+        _live['at'] = time.time()
+        try:
+            from . import dataupdate
+            cur = dataupdate.current()
+            _live['dir'] = cur['folder'] if cur.get('source') == 'downloaded' else None
+            _live['built'] = cur.get('built') or 0
+        except Exception:
+            _live['dir'] = None
+    return _live['dir'], _live['built']
+
+
 def data_file(name):
-    """A data file from this install's own data folder, else the shipped data pack, else None."""
+    """A data file: the downloaded data pack (R27) if it has it, unless this install's own data folder has a newer
+    copy (made from the player's own game files); else the own data folder; else the data pack that shipped."""
+    own = os.path.join(DATA_DIR, name)
+    live, built = _live_pack()
+    if live:
+        p = os.path.join(live, name)
+        if os.path.exists(p) and not (os.path.exists(own) and os.path.getmtime(own) > built):
+            return p
     for d in (DATA_DIR, DATAPACK_DIR):
         p = os.path.join(d, name)
         if os.path.exists(p):

@@ -128,6 +128,18 @@ by itself.
 - Game log not found: the doctor shows the folder it looked in. Steam, Flatpak Steam and SD-card libraries are
   searched; the game folder can also be set in Settings. The in-game Build Planner folder is found in the game's Proton prefix in any of those libraries.
 
+## Game data updates (R27)
+The app checks our GitHub for a newer **data pack** every 6 hours (Settings → Game data: version, last check, Check
+now, Go back). Packs are data only (JSON), never code.
+
+| Problem | Check | Fix |
+|---|---|---|
+| Something looks wrong right after a data update | Settings → Game data shows `downloaded update` | **Go back to the previous data** (or `/api/data/rollback`), then report it |
+| "needs app X: update the app first" | the pack needs a newer app | install the app update from the banner |
+| "could not check" | internet / GitHub reachable? | it tries again in 6 hours; Check now to retry |
+| Pack refused: "does not match the manifest" | the download was damaged or changed | nothing to do: the old data stays in use; it retries later |
+| Files | `HOME\datapack-live\current.txt` names the pack in use; the folder before it is kept for Go back | deleting `datapack-live` returns to the data that came with the app |
+
 ## Reporting a bug (help the player write it)
 
 Open an issue at https://github.com/xoxoFaith1993/exile-oracle/issues with:

@@ -1,0 +1,83 @@
+{
+ "data_version": "2026.11.21.0",
+ "built": 1795295792,
+ "min_app": "0.6.0",
+ "files": {
+  "atlas-strategies.json": {
+   "size": 91813,
+   "sha256": "889ecdde13507c99807ae64d6f87aee864fa01f68eebf3b487a2c677d196034f"
+  },
+  "atlas_tree.json": {
+   "size": 159426,
+   "sha256": "f709929aa809bdfa0e5c66a5d943d5227bda9834402dae82ce54742b76ccedcd"
+  },
+  "benchmarks.json": {
+   "size": 14465,
+   "sha256": "db8df26d3885102020ac26a84b8833a707fb1b5b8364aaad762b62550418cfad"
+  },
+  "boss-readiness.json": {
+   "size": 89633,
+   "sha256": "919b3abbbeab686a47a6b38ab5f862b5f01f74331878dcad61fbee546e19e8da"
+  },
+  "campaign.json": {
+   "size": 35375,
+   "sha256": "a3c4811b9698ca63e8865fd5ded3324ba5175ffa773d9c8e1deb29319ed9e7c2"
+  },
+  "currency_effects.json": {
+   "size": 187683,
+   "sha256": "f2bdb6ef52bfa1693100180016243c211c59235b91fef5346ca6e2d994c91178"
+  },
+  "essence_map.json": {
+   "size": 18326,
+   "sha256": "5e4ada778768171686ef5b17ec3dcf28b4724bc66e9de5f755fedbdb1eeba080"
+  },
+  "farming.json": {
+   "size": 118256,
+   "sha256": "d0c6733c504ead5fc0c7dbf084f96730c5384e3031cc397d3c78c92a412a4562"
+  },
+  "forecast-model.json": {
+   "size": 1635923,
+   "sha256": "2ae51ca7c3e66d810862f5365af44dab176491d03e0bc5bda573621ce523088e"
+  },
+  "league-start.json": {
+   "size": 151016,
+   "sha256": "37e45e7d95ca46a7ff8ac5dccc25f56b528c88d267b3e8265c02657d3cd2f8be"
+  },
+  "market-trends.json": {
+   "size": 71074,
+   "sha256": "b6d5dbcb938dcf129b3706057c0093a6d3dad2d34595d2d44a2401f020fbb02d"
+  },
+  "patch-impact.json": {
+   "size": 188313,
+   "sha256": "4f4c6978783bfb671b02259416b8ca24168dab47790b43cd6bc8455f7a71faed"
+  },
+  "patch_exchange_names.json": {
+   "size": 43415,
+   "sha256": "16f42821facdd3ff02e965a8daace1b3af46c61a16898da44e699ca719dc517c"
+  },
+  "patch_gem_names.json": {
+   "size": 70445,
+   "sha256": "4fbde0a683ba67aa64469e38099182debb362ecf787f96a0aef9c787345d1232"
+  },
+  "planner_ids.json": {
+   "size": 267295,
+   "sha256": "00327be990f9acfe8396df4d64c54d8289554c6293c23433642eb38aabb2af96"
+  },
+  "playbook.json": {
+   "size": 17940,
+   "sha256": "8e127bef9b80152338330c4da6966070c083df348501cd374ba51ac036121705"
+  },
+  "quest_rewards.json": {
+   "size": 5432,
+   "sha256": "9f9481258f25e15f03d5edd5b893ae6fe58d85ca81a8bb22ba836804263d37f4"
+  },
+  "unique-history.json": {
+   "size": 834014,
+   "sha256": "31befda1cdf93962edc1cb54ba3ca68852ca0a66f8062698b8bcbb0d2a0bab09"
+  },
+  "worldareas.json": {
+   "size": 60158,
+   "sha256": "37dbd192fbb11322863a2e7f9a7fb13524678855170196f471e6eb430b809625"
+  }
+ }
+}

@@ -213,6 +213,12 @@ Every line of a patch that hits your builds, with buff / nerf tags.
 
 ![Patch notes](docs/screenshots/patch-notes.jpg)
 
+### Game data that updates itself
+After a patch (1.0 included), what Exile Oracle knows about the game (zones, atlas, campaign rewards, research)
+updates by itself within hours: a small data update, checked file by file before it's used, with the previous data
+kept so it can go back. Nothing to install. New features still come as app updates with the banner. Settings shows
+the data version and has **Check now** and **Go back**.
+
 ### Settings + Connect to Claude
 Your profile, league, text size, the overlay and its keys, and Claude (or another AI app) connected with one click.
 

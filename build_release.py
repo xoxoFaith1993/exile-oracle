@@ -10,6 +10,7 @@ After staging, every text file is scanned for personal details; the build stops 
 
 import json
 import os
+import time
 import re
 import shutil
 import subprocess
@@ -94,6 +95,57 @@ def docs_check():
     print(f'docs check: {len(server.TOOLS)} tools in the guide, every page in the README, every research topic indexed')
 
 
+DATA_VERSION_FILE = os.path.join(HERE, 'release', 'data_version.txt')
+
+
+def data_version(bump=False):
+    """Data versions are YYYY.MM.DD.N (N counts packs made that day). The last one made is in release/data_version.txt;
+    bump=True makes the next one (for a new data pack)."""
+    today = time.strftime('%Y.%m.%d')
+    try:
+        last = open(DATA_VERSION_FILE, encoding='utf-8').read().strip()
+    except OSError:
+        last = ''
+    if not bump:
+        return last or today + '.0'
+    n = int(last.rsplit('.', 1)[1]) + 1 if last.startswith(today + '.') else 1
+    ver = f'{today}.{n}'
+    with open(DATA_VERSION_FILE, 'w', encoding='utf-8') as f:
+        f.write(ver)
+    return ver
+
+
+def data_pack():
+    """R27: a data-only pack (every datapack/*.json + manifest) for players' apps to pick up without a new release.
+    Writes OUT/data/<version>/{manifest.json, exile-oracle-data-<version>.zip}. Publishing it needs the author's OK:
+    the command to do it is printed, not run."""
+    import zipfile
+    from poe2kit import dataupdate
+    src = os.path.join(HERE, 'datapack')
+    for f in os.listdir(src):   # every file must be valid JSON before it goes out
+        if f.endswith('.json'):
+            json.load(open(os.path.join(src, f), encoding='utf-8'))
+    ver = data_version(bump=True)
+    man = dataupdate.make_manifest(src, ver, config.VERSION)
+    d = os.path.join(OUT, 'data', ver)
+    os.makedirs(d, exist_ok=True)
+    zname = f'exile-oracle-data-{ver}.zip'
+    zpath = os.path.join(d, zname)
+    with zipfile.ZipFile(zpath, 'w', zipfile.ZIP_DEFLATED) as z:
+        for name in man['files']:
+            z.write(os.path.join(src, name), name)
+        z.writestr('manifest.json', json.dumps(man, indent=1))
+    man['zip'], man['zip_size'] = zname, os.path.getsize(zpath)
+    with open(os.path.join(d, 'manifest.json'), 'w', encoding='utf-8') as f:
+        json.dump(man, f, indent=1)
+    soften_and_scan(d, skip_images=True)
+    print(f'data pack {ver}: {len(man["files"])} files, {man["zip_size"] // 1024} KB -> {d}')
+    print('publish (with the author\'s OK):')
+    print(f'  gh release create data-{ver} --prerelease --repo {config.REPO} --title "Data {ver}" '
+          f'--notes "Data update (no new app): the app picks it up by itself." "{zpath}" "{os.path.join(d, "manifest.json")}"')
+    return d
+
+
 def stage():
     shutil.rmtree(STAGE, ignore_errors=True)
     app = os.path.join(STAGE, 'toolkit')
@@ -106,6 +158,11 @@ def stage():
             if f.endswith(exts):
                 shutil.copy2(os.path.join(HERE, d, f), os.path.join(app, d, f))
     shutil.copytree(os.path.join(HERE, 'dashboard', 'fonts'), os.path.join(app, 'dashboard', 'fonts'))   # OFL fonts
+    # R27: the shipped data pack says which data version it is, so installs can tell when a newer one is out
+    from poe2kit import dataupdate
+    man = dataupdate.make_manifest(os.path.join(app, 'datapack'), data_version(), config.VERSION)
+    with open(os.path.join(app, 'datapack', 'manifest.json'), 'w', encoding='utf-8') as f:
+        json.dump(man, f, indent=1)
     os.makedirs(os.path.join(app, 'research'))
     for f in RESEARCH:
         shutil.copy2(os.path.join(HERE, 'research', f), os.path.join(app, 'research', f))
@@ -184,7 +241,7 @@ def setup():
 REPO_DIR = os.path.join(BUILD, 'repo')
 GITATTRIBUTES = '*.sh text eol=lf\n*.desktop.in text eol=lf\n'
 REPO_EXTRA = ['build_release.py', 'make_datapack.py']
-RELEASE_FILES = ['PoE2Toolkit.iss', 'LICENSES.md', 'README-friends.md', 'make_icon.py', 'icon.png', 'icon.ico']
+RELEASE_FILES = ['PoE2Toolkit.iss', 'LICENSES.md', 'README-friends.md', 'make_icon.py', 'icon.png', 'icon.ico', 'test_dataupdate.py']
 GITIGNORE = '''__pycache__/
 *.pyc
 /vault/
@@ -273,6 +330,9 @@ def gameart():
 
 
 if __name__ == '__main__':
+    if '--data' in sys.argv:   # a data-only pack (R27): no app build, no docs check needed
+        data_pack()
+        sys.exit(0)
     docs_check()
     stage()
     if '--setup' in sys.argv:

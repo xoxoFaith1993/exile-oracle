@@ -50,6 +50,7 @@ you assume.
     (waystone / tablet mods, danger for a build, search strings, the overlay's waystone check);
   - campaign: `campaign.py` (rush guide, checklist, the route panel's zone card);
   - characters: `chars.py` (the active character every page follows);
+  - data updates: `dataupdate.py` (data-only packs from our GitHub, checked, switched, rolled back; R27);
   - platform differences: `osutil.py`;
   - checks: `doctor.py`.
 - `dashboard/`: `index.html` (dashboard), `overlay.html` (popup) and `route.html` (the campaign route panel).
@@ -64,6 +65,13 @@ you assume.
 - `python smoke_test.py --pob`: also downloads Path of Building and runs real calculations, levelling-route edits
   and the route maths.
 - GitHub Actions runs both on Linux and Windows on every push, and builds and test-installs the Linux package.
+
+## Data updates (no new release)
+Data (anything in `datapack/`) can reach players without an app release: `python build_release.py --data` makes a
+pack (zip + manifest with every file's size and sha256) and prints the `gh release create data-<version>
+--prerelease` command. Publishing needs the author's OK, like a release. Apps pick it up within 6 hours, verify it,
+switch to it, and keep the previous one. `release/test_dataupdate.py` tests the whole path (part of smoke_test.py).
+Data only: never put code in a pack.
 
 ## Docs go with every change
 Players only see what the docs show. `build_release.py` refuses to build when a tool is missing from

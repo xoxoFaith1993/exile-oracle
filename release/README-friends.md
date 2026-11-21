@@ -35,6 +35,10 @@ about them ("what should I farm", "how close am I to the top 1%", "how do I craf
 **Settings** → **Connect to Claude**, then restart Claude. Full guide: `CLAUDE-GUIDE.md` in the install folder
 (also in the Start menu: *Using Exile Oracle with Claude*). Everything still works without Claude.
 
+## It keeps itself current
+After a game patch, what it knows about the game updates by itself within hours (Settings → Game data). App updates
+show a banner: one click installs them, and your settings and builds are kept.
+
 ## The rules it follows (so your account stays safe)
 - Read-only: it never sends input to the game, never reads game memory, never changes game files.
 - Only public data: poe.ninja's economy data, GGG's public Currency Exchange history, Steam news, and the game's own
