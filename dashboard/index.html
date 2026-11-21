@@ -623,11 +623,11 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
     <div class="card"><div class="lab-head"><h2 style="margin:0">League timeline</h2><span class="small muted" id="ptlsub"></span></div>
       <div class="sub">What usually happens when, from day 0 to day 70+, built from three PoE 2 launches. Hover a bar to read it; the red line is where the league is now.</div>
       <div id="ptl" style="margin-top:10px"></div><div id="ptlnow"></div></div>
-    <div class="card"><div class="lab-head"><h2 style="margin:0">Price forecast</h2><span style="flex:1"></span>
-      <select class="crin" id="pfcat" title="Category"></select>
-      <input class="crin" id="pfsearch" type="search" placeholder="Search all items…" style="width:170px">
-      <select class="crin" id="pfitem" style="min-width:230px" title="Item"></select></div>
-      <div class="chips" id="pfquick" style="margin-top:6px"></div>
+    <div class="card"><h2>Price forecast</h2>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 8px">
+        <label class="small">Category <select class="crin" id="pfcat"></select></label>
+        <label class="small">Item <select class="crin" id="pfitem" style="max-width:100%;min-width:220px"></select></label>
+        <input class="crin" id="pfsearch" type="search" placeholder="or search all items…" style="width:200px;max-width:100%"></div>
       <div class="sub">Faint lines: the same item in past launches, by league day. The gold fan: where it usually goes from today's price over 1, 3, 7 and 14 days (dark band: half the time, light band: 8 times in 10).</div>
       <div id="pfchart" style="margin-top:10px"></div><div id="pfinfo"></div></div>
     <div class="grid2">
@@ -1353,9 +1353,8 @@ async function loadProphecy() {
   // forecast picker
   if (!$('#pfcat').options.length) {
     const r = await get('/api/forecast'); PFG = r.groups || {};
-    $('#pfcat').innerHTML = `<option value="">All categories (${r.count})</option>` + Object.entries(PFG).map(([c, v]) => `<option value="${esc(c)}">${esc(c)} (${v.length})</option>`).join('');
-    $('#pfquick').innerHTML = '<span class="small muted" style="margin-right:4px">Quick picks:</span>' + (r.popular || []).slice(0, 14).map(n => `<span class="chip-ask pfq" style="border-style:solid">${esc(n)}</span>`).join('');
-    document.querySelectorAll('.pfq').forEach(c => c.onclick = () => pickForecast(c.textContent));
+    PFKEY = r.popular || [];
+    $('#pfcat').innerHTML = `<option value="">Key items first, then all (${r.count})</option>` + Object.entries(PFG).map(([c, v]) => `<option value="${esc(c)}">${esc(c)} (${v.length})</option>`).join('');
     $('#pfcat').onchange = () => { fillForecastItems(); loadForecast($('#pfitem').value); };
     $('#pfsearch').oninput = () => { if ($('#pfsearch').value.trim()) $('#pfcat').value = ''; fillForecastItems(); clearTimeout(PFT); PFT = setTimeout(() => { if ($('#pfitem').value) loadForecast($('#pfitem').value); }, 350); };
     $('#pfitem').onchange = () => loadForecast($('#pfitem').value);
@@ -1423,19 +1422,18 @@ function logChart(series, opts) {   // series: [{name, pts: [[x, y]], color, w, 
   return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block">${g}</svg><div>${leg}</div>`;
 }
 const LCOL = ['#6f8fb8', '#8a9a6a', '#a07ab8', '#b88a6a', '#6ab8a8', '#b86a7a'];
-let PFG = {}, PFT = null;
+let PFG = {}, PFT = null, PFKEY = [];
 function fillForecastItems(keep) {
   const cat = $('#pfcat').value, q = $('#pfsearch').value.trim().toLowerCase();
   const groups = Object.entries(PFG).filter(([c]) => !cat || c === cat);
+  if (!cat && PFKEY.length) groups.unshift(['Key items (the ones the Oracle watches)', PFKEY]);   // a group in the list, not buttons
   const html = groups.map(([c, v]) => { const f = v.filter(n => !q || n.toLowerCase().includes(q));
     return f.length ? `<optgroup label="${esc(c)}">${f.map(n => `<option>${esc(n)}</option>`).join('')}</optgroup>` : ''; }).join('');
   $('#pfitem').innerHTML = html || '<option value="">no match</option>';
   if (keep && [...$('#pfitem').options].some(o => o.value === keep)) $('#pfitem').value = keep;
 }
 function pickForecast(n) {
-  $('#pfsearch').value = '';
-  const cat = Object.keys(PFG).find(c => PFG[c].includes(n)) || '';
-  $('#pfcat').value = cat; fillForecastItems(n); loadForecast(n);
+  $('#pfsearch').value = ''; $('#pfcat').value = ''; fillForecastItems(n); loadForecast(n);
 }
 async function loadForecast(item) {
   if (!item) return;
