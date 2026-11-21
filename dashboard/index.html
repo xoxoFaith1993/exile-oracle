@@ -472,6 +472,7 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
   <button data-tab="maps">Maps</button>
   <button data-tab="tablets">Tablets</button>
   <div class="ng">Character</div>
+  <button data-tab="journey">League plan</button>
   <button data-tab="lab">Build Lab</button>
   <button data-tab="builds">Builds</button>
   <button data-tab="character">Character</button>
@@ -547,6 +548,15 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
         <button class="btn" id="vadd">Add to vault</button></div>
       <div class="small muted" id="vmsg" style="min-height:1.2em"></div>
       <div id="buildlist"></div></div></section>
+  <section id="journey">
+    <div class="card"><div class="lab-head" style="flex-wrap:wrap;gap:8px"><h2 style="margin:0">League plan</h2><span style="flex:1"></span>
+      <label class="small">For <select class="crin" id="jbuild" style="min-width:240px"></select></label></div>
+      <div class="sub">League start to min-max in six stages. Each stage has a goal and "ready to move on" checks that Path of Building measures on your build, against researched numbers (the source is on every check). It's a map with checkpoints, not a script: skip what you know, do it your way.</div>
+      <div id="jnow" style="margin-top:10px"></div></div>
+    <div id="jstages"></div>
+    <div class="card"><h2>What it's based on</h2><div id="jtheory" class="small"></div>
+      <details style="margin-top:8px"><summary class="small">Words used on this page</summary><div id="jgloss" class="small" style="margin-top:6px"></div></details></div>
+  </section>
   <section id="lab">
     <div class="card"><div class="lab-head"><h2 style="margin:0">Build Lab</h2>
       <select class="crin" id="labbuild" style="min-width:320px"></select><span id="labbadge"></span>
@@ -1021,6 +1031,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   if (b.dataset.tab === 'economy') { loadLeagues(); loadOverview(); loadMovers(); loadMarket(); loadOracle($('#ordaysel').value); loadSpreads(); }
   if (b.dataset.tab === 'builds') loadBuilds();
   if (b.dataset.tab === 'alerts') loadAlerts(true);
+  if (b.dataset.tab === 'journey') loadJourney();
   if (b.dataset.tab === 'wishlist') { loadWishlist(); loadWanted(); }
   if (b.dataset.tab === 'patches') loadPatches();
   if (b.dataset.tab === 'farm') { loadFarm(); loadPlaybook(); }
@@ -1423,6 +1434,9 @@ const PAGE_ASKS = {
   character: [['What is the weakest part of this character?', 'What is the weakest part of my character right now (damage, defence, resistances, gear) and how do I fix it cheaply?'],
               ['What should I upgrade next?', 'What should I upgrade next on my character for the most gain per divine? Put the options on the Build Lab.'],
               ['Am I ready for pinnacle bosses?', 'Is my character ready for pinnacle bosses? Which one should I do first, and what do I need?']],
+  journey: [['What should I fix first?', 'Using poe2_plan for my active character, what should I fix first, and what is the cheapest way to do it?'],
+            ['Plan my next week', 'Using poe2_plan, plan my next week of play: what to farm, what to buy, and which checkpoint to reach.'],
+            ['Plan a new league start from scratch', 'Plan a new league start from scratch with poe2_plan and poe2_league_plan: ask me what I like to play first, then build the plan stage by stage.']],
   lab: [],
   top1: [['What closes my gap fastest?', 'What closes my gap to the top 1% fastest and cheapest?'],
          ['Compare me with the top player', 'Compare me with the top player of my ascendancy: gear, skills, passives and numbers.'],
@@ -2143,6 +2157,54 @@ async function loadAlerts(markSeen) {
     loadAlertSettings();
   }
 }
+// ---------- League plan (poe2kit/journey.py) ----------
+const JPAGE = { league: 'League start', cpactsp: 'Campaign route', prophecy: 'Prophecy', campaign: 'Campaign', cprewardsp: 'Rewards', cptipsp: 'Tips',
+  atlas: 'Atlas', maps: 'Maps', farm: 'What to farm', tablets: 'Tablets', lab: 'Build Lab', top1: 'Top 1%', compare: 'Compare', character: 'Character' };
+async function loadJourney() {
+  const sel = $('#jbuild');
+  if (!sel.dataset.filled) {
+    let bs = [];
+    try { bs = await get('/api/builds'); } catch (e) {}
+    sel.innerHTML = '<option value="">my active character</option>' + bs.map(b => `<option value="${b.id}">${esc(b.label)} · ${esc(b.ascendancy || '')} ${b.level ? 'lv ' + b.level : ''}</option>`).join('') +
+      '<option value="scratch">from scratch (no build yet)</option>';
+    sel.dataset.filled = 1; sel.onchange = () => loadJourney();
+  }
+  const tok = (loadJourney.tok = (loadJourney.tok || 0) + 1);   // only the newest load draws (page start + clicks)
+  $('#jnow').innerHTML = '<span class="spin"></span> <span class="small muted">Path of Building is measuring your build…</span>';
+  const p = await get('/api/plan' + (sel.value ? '?build=' + encodeURIComponent(sel.value) : ''));
+  if (tok !== loadJourney.tok) return;
+  const nowSt = p.stages.find(s => s.state === 'now');
+  const fmt = v => typeof v === 'number' ? (Math.abs(v) >= 1000 ? Math.round(v).toLocaleString() : String(v)) : esc(v ?? '');
+  const ico = { ok: '<span style="color:var(--eo-good)">✓</span>', close: '<span style="color:#e3b341">≈</span>', no: '<span style="color:var(--accent)">✗</span>', unknown: '<span class="muted">?</span>' };
+  const fixes = p.stages.filter(s => s.state === 'now').flatMap(s => s.checks.filter(c => c.gate !== false && (c.state === 'no' || c.state === 'close')));
+  $('#jnow').innerHTML = (p.build ? `<div class="small muted">${esc(p.build.label)} · ${esc(p.ascendancy || p.class || '')}${p.measured && p.measured.level ? ' · level ' + p.measured.level : ''}${p.measured && p.measured.main_skill ? ' · ' + esc(p.measured.main_skill) : ''}</div>` :
+      `<div class="small muted">From scratch${p.class ? ': ' + esc(p.class) + (p.ascendancy ? ' / ' + esc(p.ascendancy) : '') : ''}. Pick or add a build and the checks get measured.</div>`) +
+    (p.not_measured && p.build ? `<div class="small" style="color:var(--accent);margin-top:4px">Not measured: ${esc(p.not_measured)}</div>` : '') +
+    `<div style="margin-top:8px;padding:10px 12px;border:1px solid var(--eo-gold-dim);border-radius:8px"><b>Next checkpoint: ${esc(nowSt ? nowSt.name : '')}</b>
+      ${fixes.length ? `<div class="small" style="margin-top:4px">To clear it: ${fixes.map(c => `${esc(c.what)} (${fmt(c.have)}${c.unit || ''} → ${esc(c.need)})`).join(' · ')}</div>` : ''}
+      ${p.build && p.measured && p.measured.level >= 65 && ['early', 'campaign'].includes(p.now) ? '<div class="small muted" style="margin-top:4px">Your level is past this stage: these are fundamentals worth fixing wherever you play now.</div>' : ''}</div>`;
+  $('#jstages').innerHTML = p.stages.map((s, i) => `<div class="card" style="${s.state === 'now' ? 'border-color:var(--eo-blood-hi)' : s.state === 'done' ? 'opacity:.8' : ''}">
+    <details ${s.state === 'now' || !p.build ? 'open' : ''}><summary class="lab-head" style="cursor:pointer;list-style:none"><h2 style="margin:0">${i + 1}. ${esc(s.name)}</h2><span style="flex:1"></span>
+      <span class="pill" style="${s.state === 'now' ? 'border-color:var(--eo-blood-hi);color:var(--eo-gold-hi)' : s.state === 'done' ? 'border-color:var(--eo-good);color:var(--eo-good)' : ''}">${s.state === 'now' ? 'next checkpoint' : s.state === 'done' ? 'cleared' : 'later'}</span></summary>
+    <div class="sub" style="margin-top:4px">${esc(s.goal)}</div>
+    ${s.checks.length ? `<table class="up" style="margin-top:8px;table-layout:fixed"><colgroup><col style="width:4%"><col style="width:34%"><col style="width:30%"><col style="width:12%"><col style="width:20%"></colgroup>
+      <tr><th></th><th>Check</th><th>Ready when</th><th class="num">You</th><th>Based on</th></tr>
+      ${s.checks.map(c => `<tr><td>${ico[c.state]}</td><td>${esc(c.what)}${c.gate === false ? ' <span class="small muted">(advice)</span>' : ''}${c.why ? `<div class="small muted">${esc(c.why)}</div>` : ''}</td><td class="small">${esc(c.need)}</td>
+        <td class="num">${c.have == null ? '<span class="small muted">not measured</span>' : fmt(c.have) + esc(c.unit || '')}</td><td class="small muted">${esc(c.source || c.sure || '')}${c.source && c.sure && c.sure !== '-' ? ' · ' + esc(c.sure) : ''}</td></tr>`).join('')}</table>` : ''}
+    ${(s.do || []).length ? `<div class="small" style="margin-top:8px"><b>What to do</b><ul style="margin:4px 0 0 18px;padding:0">${s.do.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}
+    ${(s.farm_now || []).length || (s.farm_next || []).length ? `<div class="small" style="margin-top:8px"><b>Farming</b>
+      ${(s.farm_now || []).length ? `<div style="margin-top:2px">You can run now: ${s.farm_now.map(f => `${esc(f.name)}${f.div_per_hour_mid != null ? ` <span class="muted">(about ${f.div_per_hour_mid} div/h)</span>` : ''}`).join(' · ')}</div>` : ''}
+      ${(s.farm_next || []).length ? `<div style="margin-top:2px">Closest next: ${s.farm_next.map(f => `${esc(f.name)} <span class="muted">(needs ${f.gap}x: ${Math.round(f.dps_min / 1000)}k DPS, ${Math.round(f.ehp_min / 1000)}k EHP)</span>`).join(' · ')}</div>` : ''}
+      <div class="muted" style="margin-top:2px">${esc(p.farm.note)}</div></div>` : ''}
+    ${(s.pages || []).length ? `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">${s.pages.map(pg => `<button class="btn jgo" data-p="${pg}" style="padding:1px 10px;font-size:11px">${esc(JPAGE[pg] || pg)} →</button>`).join('')}</div>` : ''}
+    </details></div>`).join('');
+  document.querySelectorAll('.jgo').forEach(b => b.onclick = () => document.querySelector(`nav [data-tab="${b.dataset.p}"]`)?.click());
+  $('#jtheory').innerHTML = `<div>${esc(p.note)}</div>` + (p.theory || []).map(t => `<div style="margin-top:4px">· ${esc(t)}</div>`).join('');
+  $('#jgloss').innerHTML = Object.entries(p.glossary || {}).map(([k, v]) => `<div style="margin-top:4px"><b>${esc(k)}</b>: ${esc(v)}</div>`).join('');
+  const lv = (p.experience || {}).level;
+  if (!lv || lv === 'new') $('#jgloss').closest('details').open = true;
+}
+
 // ---------- wanted items: saved trade searches, checked by hand ----------
 async function loadWanted() {
   const r = await get('/api/wanted');

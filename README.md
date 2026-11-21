@@ -43,6 +43,16 @@ Ctrl+Alt+D keeps it open so you can tick rows and search again. F5 / F9 and your
 
 <img src="docs/screenshots/overlay.jpg" alt="Price-check overlay" width="460">
 
+### League plan
+Your whole league on one page: league start, campaign, early maps, red maps, juicing and pinnacle bosses, min-max.
+Each stage has a goal and "ready to move on" checks that Path of Building measures on your build (resistances,
+life and energy shield, the biggest hit you survive, DPS, effective HP) against researched numbers, with the source
+on every check. It shows your next checkpoint, what clears it, which farming strategies your build can run now and
+which is closest next, and the pages that help. No build yet? Plan from scratch for any class. It's a map, not a
+script: skip what you know.
+
+![League plan](docs/screenshots/league-plan.jpg)
+
 ### Build Lab (new in 0.5.0)
 The Oracle's workbench for one build: ask in chat, and what it works out shows here.
 

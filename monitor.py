@@ -438,6 +438,11 @@ def api(path, q):
         if path == '/api/wishlist':   # R25: chase items with a target price
             from poe2kit import wishlist
             return wishlist.status(con)
+        if path == '/api/plan':   # the League plan page
+            from poe2kit import journey
+            bid = q.get('build')
+            return journey.plan(con, int(bid) if bid not in (None, '', 'scratch') else None,
+                                q.get('class') or None, q.get('asc') or None, scratch=bid == 'scratch')
         if path == '/api/wanted':   # Wishlist: saved trade searches, checked by hand
             from poe2kit import tradewatch
             return tradewatch.status(con)

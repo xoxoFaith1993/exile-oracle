@@ -660,6 +660,21 @@ def t_compare(a):
         con.close()
 
 
+def t_plan(a):
+    from poe2kit import journey
+    con = db.connect()
+    try:
+        r = journey.plan(con, a.get('build_id'), a.get('class_name'), a.get('ascendancy'), a.get('budget_div'),
+                         scratch=bool(a.get('class_name')) and not a.get('build_id'))
+        r.pop('glossary', None)   # the AI knows the terms; the dashboard shows them to the player
+        if a.get('show', True):
+            db.kv_set(con, 'plan:last', json.dumps({'build_id': (r.get('build') or {}).get('id')}))
+            con.commit()
+        return r
+    finally:
+        con.close()
+
+
 def t_wishlist(a):
     from poe2kit import wishlist
     con = db.connect()
@@ -861,6 +876,16 @@ TOOLS = [
      'item text, poe.ninja price, cheapest trade listings, what was searched, craft estimate. Call this when the '
      'player says they sent / just checked an item. limit (default 3), clear=true empties the list.',
      S(limit=NUM, clear=BOOL), t_from_overlay),
+    ('poe2_plan',
+     'League plan: league start -> campaign -> early maps -> red maps -> juicing / pinnacle bosses -> min-max, for '
+     "a vault build (default: the active character) or from scratch (class_name / ascendancy, no build). Each stage "
+     'has a goal, "ready to move on" checks measured on the build by Path of Building against researched thresholds '
+     '(each with its source and how sure it is), what to do, the dashboard pages for it, and the farming strategies '
+     'the build can run now / is closest to. now = the next checkpoint not cleared (a high-level character can still '
+     'have early fundamentals to fix: say so kindly). Use it for "plan my league", "what next", "what should I fix '
+     'first", and to start a fresh plan. Explain at the player\'s experience level, offer options, label theory. '
+     'The League plan page on the dashboard shows the same.',
+     S(build_id=NUM, class_name=STR, ascendancy=STR, budget_div=NUM), t_plan),
     ('poe2_wishlist',
      "The player's chase-item wishlist (its own Wishlist page under Market): items they want to buy (side=buy: tell me when it drops to the "
      'target) or sell (side=sell: when it rises to it) at a target price. action=list (default) shows each wish with '
@@ -909,6 +934,8 @@ INSTRUCTIONS = (
     '- A build: poe2_vault_list / poe2_vault_show -> poe2_pob_stats (real DPS / EHP / max hits) -> poe2_lab cards for '
     'options -> poe2_upgrades (DPS per divine) -> poe2_top1 (gap to the top 1%) -> poe2_compare. Their characters: '
     'poe2_my_characters / poe2_import_character, only when asked.\n'
+    '- Where am I / what next / a full plan: poe2_plan first (every stage with measured checks), then the tools '
+    'below.\n'
     '- A league start or a fresh start: poe2_league_plan (class + ascendancy chain: rewards, gems, ascendancy nodes, '
     'cheap levelling uniques) -> poe2_levelling (review the route) -> poe2_build_planner (into the game\'s planner) '
     '-> poe2_campaign (rush route, rewards checklist) -> poe2_league_start (sell / hold in days 1-7) -> poe2_farm and '
@@ -936,7 +963,7 @@ FEED_WORDS = {
     'poe2_compare': 'compared two builds (Compare page)', 'poe2_read_rare': 'read a rare item',
     'poe2_build_planner': 'worked on the in-game Build Planner', 'poe2_levelling': 'checked the levelling route',
     'poe2_lab': 'used the Build Lab', 'poe2_oracle': 'read the market history (the Oracle)', 'poe2_campaign': 'read the campaign guide', 'poe2_atlas': 'planned the atlas', 'poe2_doctor': 'checked the app for problems',
-    'poe2_wishlist': 'checked your wishlist', 'poe2_from_overlay': 'read the items you sent', 'poe2_trade_link': 'made a trade-site link',
+    'poe2_plan': 'made your league plan', 'poe2_wishlist': 'checked your wishlist', 'poe2_from_overlay': 'read the items you sent', 'poe2_trade_link': 'made a trade-site link',
     'poe2_status': 'checked the app status', 'poe2_refresh': 'refreshed prices', 'poe2_top1': 'ran the Top 1% check',
 }
 CLIENT = {'name': None}

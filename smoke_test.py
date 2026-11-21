@@ -309,6 +309,20 @@ def alerts_check():
     check(ok and alerts.wanted('news'), 'alert settings: switch kinds off, thresholds, mute')
 
 
+def journey_check():
+    """League plan: six stages from scratch (no build), each check says what it needs; a plan never crashes on a
+    fresh install."""
+    from poe2kit import journey, db
+    con = db.connect()
+    try:
+        p = journey.plan(con, None, 'Witch', 'Blood Mage', scratch=True)
+    finally:
+        con.close()
+    ok = len(p['stages']) == 6 and p['now'] == 'start' and all(c['need'] for s in p['stages'] for c in s['checks']) \
+        and p['stages'][0]['state'] == 'now' and p['class'] == 'Witch'
+    check(ok, 'league plan: six stages from scratch, every check says what it needs')
+
+
 def wishlist_check():
     """R25: a wish at its target alerts once, becomes the Home omen, and can be removed."""
     import time as _t
@@ -625,6 +639,7 @@ if __name__ == '__main__':
     alerts_check()
     patchwatch_check()
     wishlist_check()
+    journey_check()
     wanted_check()
     vault_paste_check()
     spreads_check()

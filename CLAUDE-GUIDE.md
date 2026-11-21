@@ -97,6 +97,7 @@ for 15 minutes).
 - "How did my last session go? Maps per hour, deaths, average map time?"
 
 **Planning a league (or starting over)**
+- "Where am I, and what should I fix first?" (the **League plan** page: every stage measured on your build)
 - "Plan my league start as a Lich then Blood Mage: campaign, first maps, first upgrades."
 - "I want to play <skill>. Is it a good league starter, and what would the first week look like?"
 - "Here's a build I like (PoB code / pobb.in link). Turn it into a league start I can actually afford."
@@ -190,6 +191,7 @@ The same tools work in Claude, ChatGPT / Codex and Gemini CLI.
 | `poe2_oracle` | The Oracle |
 | `poe2_doctor` | Something in the toolkit is broken or acting odd (overlay, prices, dashboard, Build Planner, Path of Building, Claude connection)? Call this FIRST |
 | `poe2_from_overlay` | Items the player sent from the in-game price-check overlay (its Ask the Oracle button, called Ask Claude before 0.4.0), newest first |
+| `poe2_plan` | League plan |
 | `poe2_wishlist` | The player's chase-item wishlist (its own Wishlist page under Market) |
 | `poe2_trade_link` | Make an official trade-site search link (by unique name and/or base type) to open in a browser. |
 <!-- /tools -->

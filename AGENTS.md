@@ -59,6 +59,7 @@ you assume.
   - Currency Exchange gaps: `spreads.py` (the same item priced differently vs Ex / Div / Chaos, strict filters; R24);
   - data updates: `dataupdate.py` (data-only packs from our GitHub, checked, switched, rolled back; R27);
   - alerts: `alerts.py` (the kinds the player picked, real-move filters, daily market digest, the Oracle's calls);
+  - league plan: `journey.py` (six stages, checks measured by Path of Building against researched thresholds with sources, the next checkpoint, farming you can run; from scratch without a build);
   - wanted items: `tradewatch.py` (saved trade searches checked by hand: new / re-priced / gone listings, pins);
   - wishlist: `wishlist.py` (chase items with a target price: hit / forecast heading there / patch call alerts, Home omen; R25);
   - platform differences: `osutil.py`;
