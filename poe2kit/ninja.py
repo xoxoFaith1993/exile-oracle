@@ -16,8 +16,10 @@ ITEM_TYPES = ['UniqueWeapons', 'UniqueArmours', 'UniqueAccessories', 'UniqueFlas
               'UniqueJewels', 'UniqueSanctumRelics', 'UniqueTablets', 'PrecursorTablets']
 
 
-def leagues(con=None):
-    return net.get_json(f'{BASE}/leagues', con, min_age_minutes=360)
+def leagues(con=None, fresh=False):
+    """poe.ninja's PoE 2 leagues, newest first. Re-read every 6 hours, or every hour around a game update / 1.0
+    (fresh=True from patch mode), so a new league is followed soon after it opens."""
+    return net.get_json(f'{BASE}/leagues', con, min_age_minutes=0 if fresh else 360)
 
 
 def current_league(con=None):

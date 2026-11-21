@@ -76,6 +76,10 @@ Data only: never put code in a pack.
 - **Patch mode** (`poe2kit/patchwatch.py`): the app reads the game's build id (Steam's appmanifest, else the size and
   time of `Bundles2/_.index.bin`); when it changes, it checks the community game data (conditional requests: only
   what changed downloads) and our data packs every hour for 48 hours.
+- **New league (1.0):** `patchwatch.new_leagues` reads poe.ninja's league list (every 6 h, hourly in patch mode and
+  around the 1.0 launch, which counts as patch mode by itself); a new trade league is followed in automatic mode,
+  the player is alerted (with how to switch if they picked a league by name), and its day 0 for the Oracle is the 1.0
+  launch time (else the earliest of first seen / first exchange hour).
 - **Patch day on the author's PC:** `python release/patch_day.py` reads the updated game (launch_sweep.py), rebuilds
   the data pack (make_datapack.py), makes a data update and lists what changed, then prints the publish command.
   The game-file reader (poe2x) is NOT shipped: its library (LibGGPK3) is AGPL and it needs Oodle (oo2core.dll),

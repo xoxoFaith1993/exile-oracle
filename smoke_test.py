@@ -370,6 +370,31 @@ def buildcheck_check():
           'Build check: tune weapon set + main skill, reset to as imported')
 
 
+def newleague_check():
+    """R27: a new league (1.0) on poe.ninja is followed, its day 0 is the 1.0 launch, and the player is told."""
+    from poe2kit import patchwatch, ninja, prophecy, db, oracle
+    con = db.connect()
+    lists = [['Forbidden Rites', 'Standard'], ['Test League One', 'HC Test League One', 'Forbidden Rites', 'Standard']]
+    keep, alerts = ninja.leagues, []
+    try:
+        ninja.leagues = lambda c=None, fresh=False: [{'id': x} for x in lists[0]]
+        db.kv_set(con, 'leagues:known', 'null')
+        first = patchwatch.new_leagues(con, lambda *a: alerts.append(a))
+        ninja.leagues = lambda c=None, fresh=False: [{'id': x} for x in lists[1]]
+        new = patchwatch.new_leagues(con, lambda *a: alerts.append(a))
+        patchwatch.set_league_start(con, 'Test League Two', prophecy.LAUNCH_1_0 + 3 * 3600)
+        day0_one = oracle.league_start(con, 'Test League One')
+        day0_two = oracle.league_start(con, 'Test League Two')
+    finally:
+        ninja.leagues = keep
+        con.execute("DELETE FROM ls_league WHERE league LIKE 'Test League%'")
+        db.kv_set(con, 'leagues:known', 'null')
+        con.commit()
+        con.close()
+    check(first is None and new == ['Test League One'] and len(alerts) == 1 and day0_one
+          and day0_two == prophecy.LAUNCH_1_0, 'a new league is followed, with day 0 at the 1.0 launch')
+
+
 def campaign_check():
     """R16 / R21: the rush route maps onto the game's zones, and a zone gives a route card."""
     from poe2kit import campaign
@@ -481,6 +506,7 @@ if __name__ == '__main__':
     vault_paste_check()
     weaponset_check()
     buildcheck_check()
+    newleague_check()
     mcp()
     if '--pob' in sys.argv:
         pob_part()
