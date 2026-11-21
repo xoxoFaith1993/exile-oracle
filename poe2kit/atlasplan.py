@@ -213,27 +213,59 @@ def tablets():
             'rules': t.get('rules'), 'pairing': t.get('pairing'), 'value_note': t.get('value_note')}
 
 
-def roi(con, strategy=None, method='Rare: Alchemy (4 mods) + Exalted to 6', tablets_per_map=0, tablet_cost_div=0.0,
-        extra_div=0.0, maps_per_hour=None, day=None):
-    """Map-juicing ROI: what one map costs to set up vs what the strategy returns per map at this point of the league."""
+def my_pace(con, min_maps=10):
+    """The player's own maps per hour from the game log (Sessions): all maps over all session time, so trading and
+    hideout time count too. None until there are at least `min_maps` map runs."""
+    try:
+        from . import clientlog
+        ss = clientlog.sessions(con, 60)['sessions']
+    except Exception:
+        return None
+    maps = sum(s.get('maps_run') or 0 for s in ss if (s.get('maps_run') or 0) >= 3)
+    hours = sum((s.get('minutes') or 0) / 60 for s in ss if (s.get('maps_run') or 0) >= 3)
+    if maps < min_maps or hours <= 0:
+        return None
+    avg = [s['avg_map_min'] for s in ss if s.get('avg_map_min')]
+    return {'maps_per_hour': round(maps / hours, 1), 'maps': maps, 'hours': round(hours, 1),
+            'avg_map_min': round(sum(avg) / len(avg), 1) if avg else None}
+
+
+def roi(con, strategy=None, maps_per_hour=None, extra_div=0.0, day=None, **_old):
+    """What a strategy earns per hour at this point of the league, honestly:
+    - the farming research's numbers are NET: the usual waystones, tablets and other inputs are already taken off;
+    - they come from one recorded creator session per strategy (drop counts = community claim), valued at GGG's
+      exchange prices over past leagues, then scaled for normal players: low = 45% of the worst league, mid = 70% of
+      the median league, high = 100% of the best league (research/farming);
+    - per hour is rescaled to YOUR maps per hour (game log) when known, else the creator's pace;
+    - extra_div = what you spend per map beyond the usual setup (it comes off)."""
     s = strategies(con, day)
     st = next((x for x in s['strategies'] if strategy and _key(strategy) in _key(x['name'])), None) or s['strategies'][0]
-    r = next((m for m in rolling(con)['methods'] if m['method'] == method), None)
-    roll = (r or {}).get('cost_div') or 0.0
+    if not st['now']:
+        return {'strategy': st['name'], 'error': 'No earnings data for this strategy at this point of the league.'}
     farm = _load('farming.json')
-    run = next((f for f in farm['strategies'] if st['now'] and f['name'] == st['now']['name']), None)
-    mph = maps_per_hour or ((run or {}).get('pace') or {}).get('maps_per_hour') or 10
-    per_hour = (st['now'] or {}).get('mid')
-    cost_map = roll + float(tablets_per_map) * float(tablet_cost_div) / 10.0 + float(extra_div)   # tablets: 10 uses
-    if per_hour is None:
-        return {'strategy': st['name'], 'error': 'no div / hour data for this strategy at this point of the league',
-                'cost_per_map_div': round(cost_map, 4)}
-    gross_map = per_hour / mph
-    return {'strategy': st['name'], 'run': st['now']['name'], 'phase': s['phase'], 'maps_per_hour': mph,
-            'method': method, 'roll_cost_div': round(roll, 4), 'cost_per_map_div': round(cost_map, 4),
-            'return_per_map_div': round(gross_map, 3), 'profit_per_map_div': round(gross_map - cost_map, 3),
-            'profit_per_hour_div': round((gross_map - cost_map) * mph, 2),
-            'range_per_hour_div': [st['now']['low'], st['now']['high']],
-            'break_even': round(cost_map / gross_map, 2) if gross_map else None,
-            'note': 'The div / hour already assumes the usual juice for that strategy; extra costs you add here come '
-                    'off it. Creators are fast: most players land in the lower half of the range.'}
+    run = next((f for f in farm['strategies'] if f['name'] == st['now']['name']), {})
+    creator = float(((run.get('pace') or {}).get('maps_per_hour')) or 10)
+    mine = my_pace(con)
+    if maps_per_hour:
+        mph, pace_src = float(maps_per_hour), 'the pace you typed'
+    elif mine:
+        mph, pace_src = mine['maps_per_hour'], f"your pace from the game log ({mine['maps']} maps over {mine['hours']} h)"
+    else:
+        mph, pace_src = creator, "the creator's pace (run about 10 maps and it uses yours)"
+    k = mph / creator
+    extra = float(extra_div or 0) * mph
+    per = {q: (st['now'][q] or 0) * k - extra for q in ('low', 'mid', 'high')}
+    src = run.get('source_session') or {}
+    return {
+        'strategy': st['name'], 'run': run.get('name'), 'phase': s['phase'],
+        'per_hour': {q: round(v, 1) for q, v in per.items()},
+        'per_map': {q: round((st['now'][q] or 0) / creator - float(extra_div or 0), 3) for q in ('low', 'mid', 'high')},
+        'maps_per_hour': round(mph, 1), 'pace_source': pace_src, 'creator_pace': creator, 'my_pace': mine,
+        'extra_div': float(extra_div or 0),
+        'basis': {'what': run.get('number_label'), 'sample': src.get('sample'), 'patch': src.get('patch'),
+                  'leagues': run.get('leagues_used'), 'confidence': run.get('confidence'),
+                  'scaling': 'low = 45% of the worst past league, mid = 70% of the typical one, high = 100% of the best'},
+        'net_note': 'Already net: the usual waystones, tablets and other inputs for this strategy are taken off.',
+        'honesty': 'From one recorded session per strategy, valued at real exchange prices from past leagues. A rough '
+                   'guide, not a promise; 1.0 prices and patches will move it. Your real profit comes with the '
+                   'currency tab reader.'}

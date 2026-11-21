@@ -56,7 +56,7 @@ for 15 minutes).
 
 **Atlas and maps**
 - "Which atlas strategy suits my build right now? Draw it on the Atlas page."
-- "How should I roll my waystones, and is juicing worth it?" (Maps page)
+- "How should I roll my waystones, and what would each strategy earn me per hour?" (Maps page)
 - "Which tablets should I run for my strategy?" (Tablets page)
 - "Which waystone mods are deadly for my build? Make me a search string that hides them."
 - In game: **Ctrl+D on a waystone** rates every mod for your build.

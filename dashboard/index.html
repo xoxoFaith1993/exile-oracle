@@ -581,18 +581,13 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
       <table class="up" id="astable" style="margin-top:6px"></table><div id="asdetail"></div></div>
   </section>
   <section id="maps">
-    <div class="grid2">
-      <div class="card"><h2>Rolling waystones</h2><div class="sub">What each way of rolling costs today and what it adds on average (T16).</div><div id="arolling"></div></div>
-      <div class="card"><h2>Juicing calculator</h2><div class="sub">What one map costs to set up vs what the strategy returns per map at this point of the league.</div>
+    <div class="card"><h2>What a strategy earns</h2><div class="sub">Divines per hour at this point of the league, already net of the usual waystones, tablets and other inputs. A rough guide from one recorded session per strategy: read the range, not one number.</div>
         <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center;margin-top:8px">
           <span class="small">Strategy</span><select class="crin" id="roistrat"></select>
-          <span class="small">Waystones</span><select class="crin" id="roimethod"></select>
-          <span class="small">Tablets per map</span><input class="crin" id="roitab" type="number" min="0" max="4" value="0" style="width:80px">
-          <span class="small">Tablet price (div)</span><input class="crin" id="roitabp" type="number" min="0" step="0.1" value="0" style="width:80px">
-          <span class="small">Other per map (div)</span><input class="crin" id="roiextra" type="number" min="0" step="0.05" value="0" style="width:80px">
-          <span class="small">Maps per hour</span><input class="crin" id="roimph" type="number" min="1" step="1" placeholder="auto" style="width:80px">
+          <span class="small">Maps per hour</span><span><input class="crin" id="roimph" type="number" min="1" step="1" placeholder="auto" style="width:80px"> <span class="small muted" id="roimphsrc"></span></span>
+          <span class="small">Extra cost per map (div)</span><span><input class="crin" id="roiextra" type="number" min="0" step="0.05" value="0" style="width:80px"> <span class="small muted">anything beyond the usual setup</span></span>
         </div><div id="roiout" style="margin-top:10px"></div></div>
-    </div>
+    <div class="card"><h2>Rolling waystones</h2><div class="sub">What each way of rolling costs today and what it adds on average (T16).</div><div id="arolling"></div></div>
     <div id="mmhome-maps">
     <div class="card"><div class="lab-head"><h2 style="margin:0" id="mmtitle">Waystone modifiers</h2><span style="flex:1"></span>
       <div class="eo-seg seg" id="mmkind" style="display:none"><button data-k="waystone" class="on">Waystones</button><button data-k="tablet">Tablets</button></div>
@@ -1231,7 +1226,7 @@ document.addEventListener('click', async e => {
 const PAGE_ASKS = {
   maps: [['How should I roll my waystones?', 'How should I roll my waystones for my build and strategy, and is juicing worth it right now?'],
          ['Which map mods should I avoid?', 'Which waystone modifiers are deadly for my build? Make me a search string that hides them.'],
-         ['Is juicing worth it for me?', 'With my build and the current prices, is juicing maps worth it? Use the juicing calculator numbers.']],
+         ['What would I earn per hour?', 'What would I earn per hour with my build on each strategy right now? Use the earnings numbers and give the ranges.']],
   tablets: [['Which tablets for my strategy?', 'Which tablets and tablet modifiers should I run for my atlas strategy?'],
             ['Make me a tablet search string', 'Make me an in-game search string that highlights the tablets worth running for my strategy.']],
   atlas: [['Which atlas strategy suits my build?', 'Which atlas farming strategy suits my build now, and draw its setup on the Atlas page.'],
@@ -1295,7 +1290,7 @@ async function loadAtlas() {
   await drawTree({ tree: { version: 'atlas', allocated: [], jewel_nodes: [] } }, $('#atlastree'));
 }
 
-// ---------- Atlas war room (R15): strategies, planner on the tree, rolling, juicing calculator, tablets ----------
+// ---------- Atlas war room (R15): strategies, planner on the tree, rolling, earnings per hour, tablets ----------
 let AS = null;
 const dv = v => v == null ? '–' : (+v).toFixed(v >= 10 ? 0 : 1);
 async function loadAtlasPlan() {
@@ -1315,11 +1310,10 @@ async function loadAtlasPlan() {
     <td><b>${esc(m.method)}</b><div class="small muted">${esc(m.reward || '')}</div></td>
     <td style="overflow-wrap:anywhere">${m.cost_ex != null ? `<b style="white-space:nowrap">${m.cost_ex} ex</b><div class="small muted">${m.spends.join(' + ') || 'free'}</div>` : `<span class="small muted">${esc(m.cost_note || '')}</span>`}</td>
     <td class="small">${esc(m.when || '')}</td></tr>`).join('')}</table>`;
-  // juicing calculator
+  // earnings per strategy
   if (!$('#roistrat').options.length) {
     $('#roistrat').innerHTML = AS.strategies.map(s => `<option>${esc(s.name)}</option>`).join('');
-    $('#roimethod').innerHTML = r.methods.filter(m => m.cost_div != null).map(m => `<option${m.method.startsWith('Rare') ? ' selected' : ''}>${esc(m.method)}</option>`).join('');
-    ['#roistrat', '#roimethod', '#roitab', '#roitabp', '#roiextra', '#roimph'].forEach(s => $(s).onchange = loadRoi);
+    ['#roistrat', '#roiextra', '#roimph'].forEach(s => $(s).onchange = loadRoi);
   }
   loadRoi();
   const tb = await get('/api/atlas/tablets');
@@ -1339,14 +1333,19 @@ async function showStrategy(s) {
   $('#atlastree').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 async function loadRoi() {
-  const q = new URLSearchParams({ strategy: $('#roistrat').value, method: $('#roimethod').value, tablets: $('#roitab').value || 0,
-    tablet_cost: $('#roitabp').value || 0, extra: $('#roiextra').value || 0, mph: $('#roimph').value || '' });
+  const q = new URLSearchParams({ strategy: $('#roistrat').value, extra: $('#roiextra').value || 0, mph: $('#roimph').value || '' });
   const r = await get('/api/atlas/roi?' + q);
   if (r.error) { $('#roiout').innerHTML = `<div class="small muted">${esc(r.error)}</div>`; return; }
-  const good = r.profit_per_hour_div > 0;
-  $('#roiout').innerHTML = `<div style="font:700 20px var(--eo-display);color:${good ? 'var(--eo-good)' : '#ff7b7b'}">${r.profit_per_hour_div} div / hour</div>
-    <div class="small">per map: costs <b>${r.cost_per_map_div}</b>, returns <b>${r.return_per_map_div}</b> → <b>${r.profit_per_map_div}</b> div · ${r.maps_per_hour} maps / hour</div>
-    <div class="small muted">Usual range for ${esc(r.run)}: ${dv(r.range_per_hour_div[0])}–${dv(r.range_per_hour_div[1])} div / hour (${esc(r.phase)}). ${esc(r.note)}</div>`;
+  const p = r.per_hour, b = r.basis || {};
+  $('#roimphsrc').textContent = $('#roimph').value ? '' : `auto: ${r.maps_per_hour} from ${r.pace_source}`;
+  const n = v => (v < 0 ? '−' : '') + Math.abs(v).toFixed(Math.abs(v) >= 10 ? 0 : 1);
+  $('#roiout').innerHTML = `<div class="small muted">Most players</div>
+    <div style="font:700 22px var(--eo-display);color:${p.mid > 0 ? 'var(--eo-good)' : '#ff7b7b'}">about ${n(p.low)}–${n(p.mid)} div / hour</div>
+    <div class="small">Very fast builds, good leagues: up to <b>${n(p.high)}</b> div / hour · at ${r.maps_per_hour} maps / hour (${esc(r.pace_source)})</div>
+    <div class="small muted" style="margin-top:6px">${esc(r.net_note)}${r.extra_div ? ` Your extra ${r.extra_div} div per map is taken off too.` : ''}</div>
+    <details class="small" style="margin-top:6px"><summary>What this is based on</summary>
+      <div class="muted" style="margin-top:4px">${esc(r.run || '')}: ${esc(b.what || '')}${b.sample ? ' (' + esc(b.sample) + ')' : ''}${b.patch ? ', patch ' + esc(b.patch) : ''}.
+      Priced with ${esc((b.leagues || []).join(', '))}. Confidence: ${esc(b.confidence || '?')}. ${esc(b.scaling || '')}. ${esc(r.honesty)}</div></details>`;
 }
 
 // ---------- several characters (R17): the active one, followed by every page ----------

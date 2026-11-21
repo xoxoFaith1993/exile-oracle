@@ -302,7 +302,7 @@ def t_campaign(a):
 
 
 def t_atlas(a):
-    """R15: atlas strategies, a strategy's setup (drawn on the Atlas page), rolling costs, tablets, juicing ROI."""
+    """R15: atlas strategies, a strategy's setup (drawn on the Atlas page), rolling costs, tablets, earnings per hour."""
     from poe2kit import atlasplan
     con = db.connect()
     act = (a.get('action') or 'strategies').lower()
@@ -315,9 +315,8 @@ def t_atlas(a):
     if act == 'tablets':
         return atlasplan.tablets()
     if act == 'roi':
-        return atlasplan.roi(con, a.get('strategy'), a.get('method') or 'Rare: Alchemy (4 mods) + Exalted to 6',
-                             a.get('tablets_per_map') or 0, a.get('tablet_cost_div') or 0, a.get('extra_div') or 0,
-                             a.get('maps_per_hour'))
+        return atlasplan.roi(con, a.get('strategy'), maps_per_hour=a.get('maps_per_hour'),
+                             extra_div=a.get('extra_div') or 0)
     r = atlasplan.strategies(con)
     for s in r['strategies']:
         s.pop('key_nodes', None)
@@ -792,11 +791,11 @@ TOOLS = [
      '(our farming research at live prices), atlas points each setup takes, tablets and waystone setup, plus when to '
      'switch. action="setup" + strategy: its key atlas nodes and the connecting path (the player can draw it with '
      'Show on tree on the Atlas page). action="rolling": what each waystone rolling method costs today. '
-     'action="tablets": tablet types, their mods, pairing. action="roi" + strategy (+ method, tablets_per_map, '
-     'tablet_cost_div, extra_div, maps_per_hour): profit per map and per hour. For map mod danger use the Atlas '
-     'page or the overlay (Ctrl+D on a waystone).',
-     S(action=STR, strategy=STR, method=STR, tablets_per_map=NUM, tablet_cost_div=NUM, extra_div=NUM,
-       maps_per_hour=NUM), t_atlas),
+     'action="tablets": tablet types, their mods, pairing. action="roi" + strategy (+ maps_per_hour, extra_div; '
+     'defaults: the own pace of the player from the game log, no extra cost): div/hour low / mid / high, already net of the '
+     'usual inputs. It is a rough guide from one recorded session per strategy: give the range and say so. For map mod '
+     'danger use the Maps page or the overlay (Ctrl+D on a waystone).',
+     S(action=STR, strategy=STR, extra_div=NUM, maps_per_hour=NUM), t_atlas),
     ('poe2_oracle',
      'The Oracle: market timing from the last three league launches (GGG exchange history, prices in Divines). '
      'mode="advice" (default): league day and phase, what to do now and next, and for 42 key items where they usually '
@@ -845,7 +844,7 @@ INSTRUCTIONS = (
     '(poe2_top1). Upgrades: poe2_upgrades (DPS per divine). Selling / holding / buying and league timing: '
     'poe2_oracle (patterns from the last three launches; mode omen / timeline / forecast / patch / farm / uniques for '
     'the prophecy: say how often it held, it is history not a promise).\n'
-    '- Atlas and maps: poe2_atlas (strategies, setups the player draws with Show on tree, rolling costs, juicing ROI). '
+    '- Atlas and maps: poe2_atlas (strategies, setups the player draws with Show on tree, rolling costs, earnings per hour as a range). '
     'Campaign: poe2_campaign (rush route, the rewards checklist, the zone the player is in).\n'
     '- Several characters: poe2_status names the ACTIVE character (picked in the dashboard top bar). Answer for it '
     'unless the player names another; build tools default to it.\n'

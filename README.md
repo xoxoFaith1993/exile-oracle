@@ -5,7 +5,7 @@
 A free, personal **Path of Exile 2 companion** for Windows and Linux:
 
 - **the Oracle:** a daily omen, a league timeline, price forecasts and patch prophecy, all from researched league history;
-- **Endgame (Atlas, Maps, Tablets):** atlas strategies drawn on your tree, waystone rolling and juicing, map mods rated for your build, tablets;
+- **Endgame (Atlas, Maps, Tablets):** atlas strategies drawn on your tree, what each strategy earns, waystone rolling, map mods rated for your build, tablets;
 - **the campaign:** a rush guide, plus a route panel in game that follows your zone;
 - **your characters:** the Build Lab, a Top 1% check and upgrades;
 - **the economy:** live prices, what to farm, a league-start playbook;
@@ -106,9 +106,9 @@ Eleven strategies with div per hour now and in the next league phase, the atlas 
 ![Atlas strategies](docs/screenshots/atlas-strategies.jpg)
 
 ### Endgame: Maps (new in 0.6.0)
-Waystone rolling at live prices, and a juicing calculator: what a map costs to set up vs what your strategy returns.
+What each strategy earns per hour at this point of the league, net of its usual inputs and at **your own** map pace (from the game log), shown as an honest range with what it is based on. Plus waystone rolling at live prices.
 
-![Rolling and the juicing calculator](docs/screenshots/atlas-roi.jpg)
+![What a strategy earns, and waystone rolling](docs/screenshots/atlas-roi.jpg)
 
 Every waystone mod rated deadly / risky / fine for **your** build, with our own in-game search strings.
 

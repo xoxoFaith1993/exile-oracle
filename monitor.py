@@ -409,11 +409,10 @@ def api(path, q):
         if path == '/api/atlas/tablets':
             from poe2kit import atlasplan
             return atlasplan.tablets()
-        if path == '/api/atlas/roi':   # R15: juicing calculator
+        if path == '/api/atlas/roi':   # earnings calculator (net of the usual inputs; your own map pace)
             from poe2kit import atlasplan
             fl = lambda k: float(q.get(k) or 0)
-            return atlasplan.roi(con, q.get('strategy'), q.get('method') or 'Rare: Alchemy (4 mods) + Exalted to 6',
-                                 fl('tablets'), fl('tablet_cost'), fl('extra'), fl('mph') or None)
+            return atlasplan.roi(con, q.get('strategy'), maps_per_hour=fl('mph') or None, extra_div=fl('extra'))
         if path == '/api/atlas/mods':   # R15: waystone / tablet mods, search tokens, danger for a build
             from poe2kit import mapmods
             return mapmods.overview(con, q.get('build') or None, q.get('kind') or 'waystone')
