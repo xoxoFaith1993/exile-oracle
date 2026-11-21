@@ -344,6 +344,9 @@ def t_oracle(a):
         return prophecy.farm_oracle(con, a.get('build_id') or mapmods.active_build(con), a.get('day'))
     if mode == 'uniques':
         return prophecy.unique_history(a.get('item'))
+    if mode == 'spreads':
+        from poe2kit import spreads
+        return spreads.find(con)
     r = oracle.advice(con, day=a.get('day'))
     if a.get('item'):
         want = a['item'].lower()
@@ -812,6 +815,8 @@ TOOLS = [
      'range held 79% of the time; direction calls right ~60%). mode="patch" (+ text = pasted notes, else the newest '
      'stored notes): which items a patch should move and how much, from 276 measured patches. mode="farm" '
      '(+ build_id): div/hour per strategy now and next phase, checked against the PoB damage and EHP of the build. '
+     'mode="spreads": Currency Exchange gaps (the same item cheaper vs one of Ex / Div / Chaos than vs another, held '
+     '3+ hours with real volume; past trades, check the live exchange, gold fee not counted). '
      'mode="uniques" (+ item): chase unique prices by league day in past leagues. item = one item; day = pretend '
      'another league day (e.g. plan day 0 of 1.0). Say it is history, not a promise, and that patches move prices.',
      S(mode=STR, day=NUM, item=STR, top=NUM, text=STR, build_id=NUM), t_oracle),

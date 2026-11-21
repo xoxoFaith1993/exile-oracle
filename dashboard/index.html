@@ -499,6 +499,9 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
   <section id="economy">
     <div style="display:flex;gap:10px;align-items:center;margin:0 0 12px;flex-wrap:wrap"><span class="small muted">Looking at</span>
       <select class="crin" id="econleague" style="min-width:240px"></select><span class="small muted" id="econleaguemsg"></span></div>
+    <div class="card"><div class="lab-head"><h2 style="margin:0">Exchange gaps</h2><span class="small muted" id="spsub"></span></div>
+      <div class="sub">The same item costing more against one currency than another on the Currency Exchange: buy it with the cheap one, sell it for the dear one. Only gaps that held 3+ hours with real volume on both sides.</div>
+      <div id="spreads" style="margin-top:8px"></div></div>
     <div class="card"><div class="lab-head"><h2 style="margin:0">League timing: the Oracle</h2><span style="flex:1"></span>
       <label class="small">Show <select class="crin" id="ordaysel"><option value="">today</option><option value="0">1.0 day 0 (launch)</option><option value="2">day 2</option><option value="5">day 5</option><option value="10">day 10</option><option value="21">day 21</option><option value="42">day 42</option></select></label></div>
       <div class="sub">What happened to prices in the last three launches (Fate of the Vaal, Runes of Aldur, Forbidden Rites), from GGG's exchange history, in Divines. History, not a promise: patches move prices.</div>
@@ -915,7 +918,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   if (b.dataset.tab === 'campaign') loadCampaign();
   if (b.dataset.tab === 'prophecy') loadProphecy();
   if (b.dataset.tab === 'compare') loadCompare();
-  if (b.dataset.tab === 'economy') { loadLeagues(); loadOverview(); loadMovers(); loadMarket(); loadOracle($('#ordaysel').value); }
+  if (b.dataset.tab === 'economy') { loadLeagues(); loadOverview(); loadMovers(); loadMarket(); loadOracle($('#ordaysel').value); loadSpreads(); }
   if (b.dataset.tab === 'builds') loadBuilds();
   if (b.dataset.tab === 'alerts') loadAlerts(true);
   if (b.dataset.tab === 'patches') loadPatches();
@@ -1303,7 +1306,8 @@ const PAGE_ASKS = {
          ['What changed in the market this week?', 'What changed in the Path of Exile 2 market this week, and does any of it matter for me?']],
   economy: [['What should I sell or hold right now?', 'Using the Oracle (poe2_oracle) and my characters, what should I sell, hold or buy right now?'],
             ['What is rising fastest, and why?', 'Which items are rising fastest right now, why, and will it last according to past leagues?'],
-            ['Best use of 10 divines right now?', 'What is the best thing to do with 10 divines right now: buy an upgrade, invest, or craft?']],
+            ['Best use of 10 divines right now?', 'What is the best thing to do with 10 divines right now: buy an upgrade, invest, or craft?'],
+            ['Any exchange gaps worth trading?', 'Using poe2_oracle mode spreads, which Currency Exchange gaps are worth trading right now, how much could I make per trade after the gold fee, and what should I check first?']],
   farm: [['What should I farm for the most currency per hour?', 'What should I farm right now for the most currency per hour, with my character as it is?'],
          ['Which farm suits my gear?', 'Which farming strategy suits my character\'s damage and toughness right now, and which ones should I avoid?'],
          ['How do I set up my atlas for it?', 'How do I set up my atlas and tablets for the best farm right now?']],
@@ -2779,6 +2783,20 @@ async function loadDataStatus() {
   drawDataStatus(await get('/api/data/status'));
   $('#datacheck').onclick = async () => { $('#datamsg').textContent = 'checking…'; const r = await post('/api/data/check', {}); $('#datamsg').textContent = r.installed ? 'updated to ' + r.installed : (r.why || 'up to date'); drawDataStatus(r.status); };
   $('#databack').onclick = async () => { const r = await post('/api/data/rollback', {}); $('#datamsg').textContent = r.ok ? 'now using ' + r.now : r.why; drawDataStatus(r.status); };
+}
+
+// ---------- Exchange gaps (R24) ----------
+async function loadSpreads() {
+  const r = await get('/api/spreads' + (typeof ECON_LEAGUE !== 'undefined' && ECON_LEAGUE ? '?league=' + encodeURIComponent(ECON_LEAGUE) : ''));
+  $('#spsub').textContent = r.hour ? `last hour of data: ${r.age_min} min ago` : '';
+  const g = r.gaps || [];
+  $('#spreads').innerHTML = (g.length ? `<table class="up"><tr><th>Item</th><th>Gap</th><th>Buy with</th><th>Sell for</th><th>Held</th></tr>${g.map(x => `<tr>
+      <td><b>${esc(x.item)}</b><div class="small muted">worth about ${x.value_ex >= 100 && x.value_div ? x.value_div.toFixed(2) + ' div' : Math.round(x.value_ex) + ' ex'}</div></td>
+      <td><b style="color:var(--eo-good)">+${x.gap_pct}%</b></td>
+      <td class="small">${esc(x.buy_with)}<div class="muted">${x.buy_ex} ex each · ${x.buy_units} traded</div></td>
+      <td class="small">${esc(x.sell_for)}<div class="muted">${x.sell_ex} ex each · ${x.sell_units} traded</div></td>
+      <td class="small">${x.held_hours} h</td></tr>`).join('')}</table>` : '<div class="small muted">No gaps right now that pass the checks (held 3+ hours, real volume on both sides).</div>') +
+    `<div class="small muted" style="margin-top:6px">${esc(r.note || '')}</div>`;
 }
 
 // ---------- update banner ----------

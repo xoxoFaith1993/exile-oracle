@@ -45,6 +45,7 @@ for 15 minutes).
 - "What should I farm right now, and why?"
 - "What's Mageblood / a Divine / Omen of Light worth, and where is it heading this week?"
 - "What are the biggest price movers in the last 24 hours?"
+- "Any Currency Exchange gaps worth trading right now?" (the same item cheaper in one currency than another; Economy page)
 - "It's day 1 of the league: what should I sell straight away and what should I hold?"
 
 **The Oracle (what happens next)**

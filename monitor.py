@@ -415,6 +415,9 @@ def api(path, q):
         if path == '/api/buildcheck':   # Character page: how this build is measured
             from poe2kit import vault, pob
             return dict(vault.check(con, int(q.get('id') or 0)), pob_version=pob.version())
+        if path == '/api/spreads':   # R24: Currency Exchange gaps between an item's Ex / Div / Chaos markets
+            from poe2kit import spreads
+            return spreads.find(con, q.get('league') or None)
         if path == '/api/campaign':   # R16: campaign rush guide + checklist + where you are now
             from poe2kit import campaign
             return campaign.guide(con)

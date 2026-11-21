@@ -334,6 +334,24 @@ def vault_paste_check():
           'Build Vault: paste a code or link, no duplicates, poe.ninja opens its page, delete')
 
 
+def spreads_check():
+    """Exchange pricing uses the market where the most value traded; the gap finder only shows strict gaps."""
+    from poe2kit import leaguestart as L, spreads, db
+    X = 'Metadata/Items/Currency/Test'
+    m = lambda a, b, va, vb: {'league': 'T', 'market_id': f'{a}|{b}', 'volume_traded': {a: va, b: vb}}
+    page = {'markets': [m(L.DIV, L.EX, 10, 4000),            # 1 div = 400 ex
+                        m(X, L.EX, 2, 34),                   # thin: 17 ex each
+                        m(X, L.DIV, 300, 37.5)]}             # busy: 0.125 div = 50 ex each
+    prices, epd = L.prices_from_page(page, 'T')
+    con = db.connect()
+    r = spreads.find(con)
+    con.close()
+    ok_rows = all(g['held_hours'] >= spreads.MIN_HELD and spreads.MIN_GAP <= g['gap_pct'] <= spreads.MAX_GAP
+                  and g['buy_ex'] < g['sell_ex'] for g in r.get('gaps', []))
+    check(epd == 400 and abs(prices[X][0] - 50) < 0.01 and ok_rows and r.get('note'),
+          f"exchange price from the busiest market; gap finder strict ({len(r.get('gaps', []))} gaps)")
+
+
 def weaponset_check():
     """A build whose weapons sit only in weapon set II is measured with set II (not with no weapon)."""
     from poe2kit import pob
@@ -504,6 +522,7 @@ if __name__ == '__main__':
     alerts_check()
     patchwatch_check()
     vault_paste_check()
+    spreads_check()
     weaponset_check()
     buildcheck_check()
     newleague_check()

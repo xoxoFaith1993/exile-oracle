@@ -85,12 +85,19 @@ def prices_from_page(d, league):
     out = {}
     items = {a for a, _ in pair}
     for it in items:
+        # the price from the market (vs Exalted, Divine or Chaos) where the most VALUE traded that hour: the same item
+        # can trade at very different prices per market (an Omen at 17 ex vs Exalts but 50 ex vs Divines, where 30x
+        # more value traded and poe.ninja agrees), so "Exalted first" was wrong for many items (fixed 2026-11-21)
+        best = None
         for base in (EX, DIV, CHAOS):
             if it != base and (it, base) in pair and base in ex_per:
                 rate, units = pair[(it, base)]
-                tot_units = sum(u for (x, _), (_, u) in pair.items() if x == it)
-                out[it] = (rate * ex_per[base], tot_units)
-                break
+                price = rate * ex_per[base]
+                traded = price * units
+                if best is None or traded > best[1]:
+                    best = (price, traded)
+        if best:
+            out[it] = (best[0], sum(u for (x, _), (_, u) in pair.items() if x == it))
     for base, v in ex_per.items():
         if base != EX:
             out[base] = (v, sum(u for (x, _), (_, u) in pair.items() if x == base))

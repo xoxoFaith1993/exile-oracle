@@ -154,6 +154,16 @@ Mirror, Divine and the league's chase items at a glance.
 
 ![Economy](docs/screenshots/economy.jpg)
 
+### Exchange gaps
+The same item can cost more against one currency than another on the Currency Exchange (an Omen cheaper
+paid in Divines than in Exalts, say). Exile Oracle checks each item's Exalted, Divine and Chaos markets every
+hour and lists the gaps worth a look: buy with the cheap one, sell for the dear one. Only gaps that held 3+
+hours in a row, under 100%, with at least 5 Divines traded on each side are shown, because the rest of the
+hourly history is thin-market noise. It is last hours' trades, not live orders, and the exchange's gold fee
+isn't counted, so check the exchange before you trade. Ask the Oracle too: "any exchange gaps right now?"
+
+![Exchange gaps](docs/screenshots/exchange-gaps.jpg)
+
 ### Market history
 Every Currency Exchange item: price, stock, 7-day trend.
 
