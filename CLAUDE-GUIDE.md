@@ -66,7 +66,7 @@ for 15 minutes).
 
 ## 4. Tips
 - Ask Claude to **"show it on the dashboard"**: it can put charts, tables, build costs, upgrades and compares on the
-  dashboard's *From Claude* tab while it explains in chat.
+  dashboard's *From the Oracle* tab while it explains in chat.
 - Prices follow poe.ninja and GGG's Currency Exchange; early in a league they move fast. Ask "refresh prices" first
   if it matters.
 - Uniques whose value depends on their roll (e.g. Prism of Belief) are priced at the cheapest roll: Claude will say

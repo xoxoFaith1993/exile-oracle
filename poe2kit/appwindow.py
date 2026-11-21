@@ -31,7 +31,10 @@ def mode():
 
 
 def _flags(prof):
-    f = [f'--app={URL}', f'--window-size={SIZE}', '--no-first-run', '--no-default-browser-check']
+    # no account sync and no extensions: Edge otherwise signs a new profile into the Windows account and syncs its
+    # extensions, which can then run in the background
+    f = [f'--app={URL}', f'--window-size={SIZE}', '--no-first-run', '--no-default-browser-check', '--disable-sync',
+         '--disable-extensions']
     return f + ([f'--user-data-dir={prof}'] if prof else [])
 
 

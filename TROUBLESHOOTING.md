@@ -80,7 +80,7 @@ Keys work only while Path of Exile 2 is the window in front:
   - uniques whose price depends on their roll are flagged, and poe.ninja's price for them is the cheapest roll.
 - **A unique has no poe.ninja price:** poe.ninja only lists items that trade often enough.
 
-## Ask Claude (the popup's button)
+## Ask the Oracle (the popup's button; called "Ask Claude" before 0.4.0)
 
 - **Target "Claude app":** the button saves the item and opens Claude desktop. The player pastes the copied
   question, and you read the item with `poe2_from_overlay`. If that tool is missing, Claude desktop needs a restart

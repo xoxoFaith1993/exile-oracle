@@ -20,7 +20,7 @@ The Divine rate and the main currencies with their 7-day change, your latest ale
 ![Home](docs/screenshots/home.jpg)
 
 ### Price-check overlay (Windows)
-Ctrl+D on an item in game: poe.ninja and live trade-site prices (optional), a craft estimate, and Ask Claude.
+Ctrl+D on an item in game: poe.ninja and live trade-site prices (optional), a craft estimate, and Ask the Oracle (sends the item to Claude).
 Ctrl+Alt+D keeps it open so you can tick rows and search again. F5 / F9 and your own chat commands work too.
 
 <img src="docs/screenshots/overlay.jpg" alt="Price-check overlay" width="460">
@@ -50,10 +50,10 @@ You vs the top 1% of your ascendancy: level, DPS, toughness, gear value.
 
 ![Top 1% check](docs/screenshots/top1.jpg)
 
-### From Claude
+### From the Oracle
 Ask in chat and Claude puts the answer on your dashboard (here: your build vs a top-1% Blood Mage).
 
-![From Claude](docs/screenshots/from-claude.jpg)
+![From the Oracle](docs/screenshots/from-claude.jpg)
 
 ### What to farm
 League mechanics ranked by what actually sells, with drop estimates from tracked runs.

@@ -259,6 +259,7 @@ class Popup:
         prof = os.path.join(config.HOME, 'edge-overlay')
         self.proc = subprocess.Popen([
             edge, f'--app={URL}overlay', f'--user-data-dir={prof}', '--no-first-run', '--no-default-browser-check',
+            '--disable-sync', '--disable-extensions',   # never sync the player's account extensions into this profile
             f'--window-size={W},{H}', '--window-position=-32000,-32000',
             '--disable-background-timer-throttling', '--disable-renderer-backgrounding',
             '--disable-backgrounding-occluded-windows',

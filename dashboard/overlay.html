@@ -243,12 +243,12 @@ async function renderSettings() {
     <div class="pills"><span class="pill sc">quick check: <b>${esc(hk.quick)}</b></span><span class="pill sc">detailed: <b>${esc(hk.detailed)}</b></span><span class="pill sc">settings: <b>${esc(hk.settings)}</b></span></div>
     <div class="stats">
       ${row('Live trade-site prices', tog('live_trade', o.live_trade), "Uses GGG's trade site like Exiled Exchange 2: one search per check.")}
-      ${row('Listings to search', seg('listing', o.listing, [['securable', 'instant buyout'], ['online', 'online']]))}
+      ${row('Listings to search', seg('listing', o.listing, [['securable', 'buyout'], ['online', 'online']]))}
       ${row('Match my rolls within', num('search_range_pct', o.search_range_pct, '%'), '10% = look for at least 90% of each roll.')}
       ${row('Quick check closes after the mouse moves', num('quick_close_px', o.quick_close_px, 'px'))}
       ${row('Popup position', seg('popup_position', o.popup_position, [['centre', 'centre'], ['mouse', 'by the mouse']]))}
       ${row('Also show a price when I press Ctrl+C myself', tog('overlay_on_copy', o.overlay_on_copy), 'Off: copying an item into chat stays quiet.')}
-      ${row('Ask Claude sends to', seg('ask_claude_target', o.ask_claude_target, [['app', 'claude app'], ['code', 'claude code chat']]), 'Claude Code chat: say "watch my overlay" there once; items then arrive in that chat.')}
+      ${row('Ask the Oracle sends to', seg('ask_claude_target', o.ask_claude_target, [['app', 'claude app'], ['code', 'claude code chat']]), 'Claude Code chat: say "watch my overlay" there once; items then arrive in that chat.')}
     </div>
     <div class="matched sc" style="margin-top:12px">chat commands <span style="text-transform:none;font-variant:normal;font:12px var(--eo-body);letter-spacing:0">(the key types the text in chat: Enter, text, Enter)</span></div>
     <div class="stats" id="cmds">${(o.chat_commands || []).map((c, i) => `<div class="st" data-i="${i}">
@@ -322,9 +322,9 @@ function render(st) {
     }
     h += `<div class="actions">
       <button class="btn primary" id="search">search</button>
-      <div class="seg"><button data-s="securable" class="${f.status !== 'online' ? 'on' : ''}">instant buyout</button><button data-s="online" class="${f.status === 'online' ? 'on' : ''}">online</button></div>
+      <div class="seg"><button data-s="securable" class="${f.status !== 'online' ? 'on' : ''}">buyout</button><button data-s="online" class="${f.status === 'online' ? 'on' : ''}">online</button></div>
       <span class="grow"></span>
-      <button class="btn" id="askclaude" title="Save this item for Claude and open the Claude app">ask claude</button>
+      <button class="btn" id="askclaude" title="Send this item to your AI (Claude) to ask about it">ask the oracle</button>
       <button class="btn" id="trade"${r.url ? '' : ' disabled'}>trade ↗</button>
     </div>`;
   }
