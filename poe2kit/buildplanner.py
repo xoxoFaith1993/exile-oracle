@@ -295,7 +295,7 @@ def make(con, build_id=None, pob_code=None, notes=None, name=None, include_gear=
     if report.get('route') == 'automatic':
         doc['description'] += '\nLevelling route reviewed with Claude: passives show 10 levels before they are due.'
     elif not staged:
-        doc['description'] += ('\nFull endgame path. Ask Claude to plan and review a levelling route for this build '
+        doc['description'] += ('\nFull endgame path. Ask the Oracle to plan and review a levelling route for this build '
                                '(passive order, early skills).')
     if True:   # the passive point quests (24 in all) are easy to skip: a fact, shown for every plan
         from . import route

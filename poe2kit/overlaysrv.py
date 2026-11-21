@@ -75,7 +75,7 @@ def wait(after, timeout=25):
         return {k: v for k, v in _state.items() if k != 'text'}
 
 
-# ---------------- "Ask Claude" (the popup's button) ----------------
+# ---------------- "Ask the Oracle" (the popup's button) ----------------
 
 INBOX = 'claude_inbox'
 

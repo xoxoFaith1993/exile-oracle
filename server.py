@@ -257,7 +257,7 @@ def t_doctor(a):
 
 
 def t_from_overlay(a):
-    """Items the player sent from the price-check overlay with its Ask Claude button (newest first)."""
+    """Items the player sent from the price-check overlay with its Ask the Oracle button (newest first)."""
     from poe2kit import overlaysrv
     items = overlaysrv.inbox(a.get('limit') or 3, bool(a.get('clear')))
     return {'items': items,
@@ -265,7 +265,7 @@ def t_from_overlay(a):
                            'trade listings and what was searched. For "is it an upgrade?" use poe2_whatif with '
                            'item_text and the slot; for rares, poe2_craft_* tools can tell what it would cost to make; '
                            'prices are in divines (ex_per_div converts).' if items else
-                           'Nothing sent yet: in game, price check an item and press Ask Claude in the popup.'}
+                           'Nothing sent yet: in game, price check an item and press Ask the Oracle in the popup.'}
 
 
 def t_trade_link(a):
@@ -663,7 +663,7 @@ TOOLS = [
      'rules). Then fix it with the player step by step.',
      S(with_guide=BOOL), t_doctor),
     ('poe2_from_overlay',
-     "Items the player sent from the in-game price-check overlay (its Ask Claude button), newest first: the exact "
+     "Items the player sent from the in-game price-check overlay (its Ask the Oracle button, called Ask Claude before 0.4.0), newest first: the exact "
      'item text, poe.ninja price, cheapest trade listings, what was searched, craft estimate. Call this when the '
      'player says they sent / just checked an item. limit (default 3), clear=true empties the list.',
      S(limit=NUM, clear=BOOL), t_from_overlay),

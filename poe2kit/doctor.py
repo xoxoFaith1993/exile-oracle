@@ -108,7 +108,7 @@ def run():
         add('overlay', True, 'Windows-only for now')
     add('live trade prices', True, 'on' if s.get('live_trade', False) else
         "off (the player's choice; Ctrl+Shift+D)")
-    add('ask claude', True, f"sends to {s.get('ask_claude_target') or 'app'}")
+    add('ask the oracle', True, f"sends to {s.get('ask_claude_target') or 'app'}")
 
     # build planner
     try:

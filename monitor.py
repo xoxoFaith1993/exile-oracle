@@ -194,7 +194,7 @@ def job_install(con):
     db.kv_set(con, 'install_state', st['state'])
     if st['state'] == 'installed' and was != 'installed':
         alert(con, 'install', 'PoE 2 is installed: ready for the game-file sweep',
-              'Close the game, then ask Claude to run launch_sweep.py (or run it yourself).')
+              'Close the game, then ask the Oracle to run launch_sweep.py (or run it yourself).')
     return json.dumps(st)
 
 
@@ -539,7 +539,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             elif u.path == '/api/overlay/options':
                 from poe2kit import overlaysrv
                 data = overlaysrv.set_options(body)
-            elif u.path == '/api/overlay/send_claude':   # popup's "Ask Claude": save it, bring Claude forward
+            elif u.path == '/api/overlay/send_claude':   # popup's "Ask the Oracle": save it, bring Claude forward
                 from poe2kit import overlaysrv, osutil
                 data = overlaysrv.send_to_claude()
                 data['target'] = config.settings().get('ask_claude_target') or 'app'

@@ -1,6 +1,6 @@
 """Command line for the PoE 2 toolkit:
     python cli.py status | refresh | price <name> | movers [hours] | builds
-    python cli.py watch-overlay [minutes]   wait for the next item sent with the overlay's Ask Claude button, print
+    python cli.py watch-overlay [minutes]   wait for the next item sent with the overlay's Ask the Oracle button, print
                                             it and exit (a Claude Code chat runs this in the background to get the
                                             item straight into the chat; default: wait up to 55 minutes)"""
 
@@ -34,7 +34,7 @@ def main(argv):
 
 
 def watch_overlay(minutes):
-    """Block until a new item arrives in the Ask Claude list, then print it for the waiting Claude chat."""
+    """Block until a new item arrives in the Ask the Oracle list, then print it for the waiting Claude chat."""
     import time
     from poe2kit import overlaysrv
     first = overlaysrv.inbox(1)
@@ -45,7 +45,7 @@ def watch_overlay(minutes):
         if items:
             it = items[0]
             t = it.get('trade') or {}
-            short = {'sent': 'from the PoE 2 price check overlay (Ask Claude)', 'item_text': it['item_text'],
+            short = {'sent': 'from the Exile Oracle price check overlay (Ask the Oracle)', 'item_text': it['item_text'],
                      'headline': it.get('headline'), 'poe_ninja': it.get('ninja'),
                      'trade': {k: t.get(k) for k in ('total', 'low_div', 'median_div', 'searched_for')} |
                               {'cheapest': [f"{l['amount']} {l['currency']} (ilvl {l.get('ilvl')})"

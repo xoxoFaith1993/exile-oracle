@@ -360,10 +360,10 @@ input[type=checkbox] { accent-color: var(--eo-blood-hi); }
       <div id="mhtable" style="overflow-x:auto"></div></div>
     <div class="card"><h2>Biggest movers</h2><div class="sub" id="moverssub">Last 24 hours, from the prices the monitor stored.</div><div id="movers"></div></div>
   </section>
-  <section id="builds"><div class="card"><h2>My characters</h2><div class="sub">Live from your account through Path of Building's GGG login, in the background. Only asks GGG when you press a button.</div><button class="btn" id="loadchars">Show my characters</button><div id="mychars"></div></div><div class="card"><h2>Build Vault</h2><div class="sub">Every build saved, kept forever. Ask Claude to cost, compare or upgrade any of them.</div><div id="buildlist"></div></div></section>
-  <section id="character"><div id="charview"><div class="card empty">Pick a build on the Builds tab, or ask Claude to show one.</div></div></section>
+  <section id="builds"><div class="card"><h2>My characters</h2><div class="sub">Live from your account through Path of Building's GGG login, in the background. Only asks GGG when you press a button.</div><button class="btn" id="loadchars">Show my characters</button><div id="mychars"></div></div><div class="card"><h2>Build Vault</h2><div class="sub">Every build saved, kept forever. Ask the Oracle to cost, compare or upgrade any of them.</div><div id="buildlist"></div></div></section>
+  <section id="character"><div id="charview"><div class="card empty">Pick a build on the Builds tab, or ask the Oracle to show one.</div></div></section>
   <section id="top1">
-    <div class="card"><h2>Top 1% check</h2><div class="sub">Your character against the top 1% of your ascendancy on poe.ninja: level, damage, toughness and gear value. Benchmarks are read on request (ask Claude to refresh them).</div>
+    <div class="card"><h2>Top 1% check</h2><div class="sub">Your character against the top 1% of your ascendancy on poe.ninja: level, damage, toughness and gear value. Benchmarks are read on request (ask the Oracle to refresh them).</div>
       <label class="small">Character <select class="crin" id="t1build"></select></label> <button class="btn" id="t1go">Check</button></div>
     <div id="t1view"></div>
   </section>
@@ -866,7 +866,7 @@ async function openCharacter(id) {
   const bar = document.createElement('div');
   bar.className = 'card small';
   bar.innerHTML = `<button class="btn" id="toplanner">Send to the in-game Build Planner</button>
-    <span class="muted" id="plmsg">Shows this build's passive path, skills + supports and gear hints inside Path of Exile 2 (open the passive tree, Build Planner icon). Ask Claude to add notes.</span>`;
+    <span class="muted" id="plmsg">Shows this build's passive path, skills + supports and gear hints inside Path of Exile 2 (open the passive tree, Build Planner icon). Ask the Oracle to add notes.</span>`;
   $('#charview').prepend(bar);
   $('#toplanner').onclick = async () => {
     let r = await post('/api/planner', { build_id: id });
@@ -884,7 +884,7 @@ async function openCharacter(id) {
   fw.style.marginTop = '8px';
   fw.innerHTML = `<label><input type="checkbox" id="plfollow"${plan.follow ? ' checked' : ''}> Keep the in-game plan updated as
     <input class="crin" id="plchar" value="${esc(plan.follow || c.label || '')}" style="width:180px"> levels up</label>
-    <span class="muted">${plan.level ? `last written at level ${plan.level}` : ''}${plan.edits ? ' · has edits made with Claude' : ''}</span>`;
+    <span class="muted">${plan.level ? `last written at level ${plan.level}` : ''}${plan.edits ? ' · has edits made with the Oracle' : ''}</span>`;
   bar.appendChild(fw);
   $('#plfollow').onchange = async e => {
     const r = await post('/api/planner', { build_id: id, follow: e.target.checked ? $('#plchar').value.trim() : '' });
