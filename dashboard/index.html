@@ -628,9 +628,8 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
       <div id="pfchart" style="margin-top:10px"></div><div id="pfinfo"></div></div>
     <div class="grid2">
       <div class="card"><div class="lab-head"><h2 style="margin:0">Patch prophecy</h2><span style="flex:1"></span><select class="crin" id="ppsel" style="max-width:230px"></select></div>
-        <div class="sub">Patch notes in, price moves out: each line is read by a rulebook measured on 276 PoE 2 patches. Pick stored notes, or paste new ones (1.0's, the day they come out).</div>
-        <textarea class="crin" id="pptext" rows="4" style="width:100%;margin-top:8px" placeholder="Paste patch notes here…"></textarea>
-        <div style="margin-top:6px"><button class="btn" id="ppgo">Read these notes</button> <span class="small muted" id="ppsub"></span></div>
+        <div class="sub">Every new patch post the app picks up is read line by line by a rulebook measured on 276 PoE 2 patches: which items should move, which way and how much. The newest notes show first; pick older ones above.</div>
+        <div class="small muted" id="ppsub" style="margin-top:6px"></div>
         <div id="ppout" style="margin-top:8px"></div></div>
       <div class="card"><div class="lab-head"><h2 style="margin:0">Farming oracle</h2><span style="flex:1"></span><select class="crin" id="pfbuild" style="max-width:240px"></select></div>
         <div class="sub">Divines per hour for each strategy at this point of the league, checked against your build's damage and toughness from Path of Building. Ranges are wide: creators are fast and pick their best runs.</div>
@@ -1428,7 +1427,6 @@ async function loadPatchProphecy(gid) {
   if (r.others && !$('#ppsel').options.length) {
     $('#ppsel').innerHTML = r.others.map(o => `<option value="${esc(o.gid)}">${esc(o.title)}</option>`).join('');
     $('#ppsel').onchange = () => loadPatchProphecy($('#ppsel').value);
-    $('#ppgo').onclick = async () => { if (!$('#pptext').value.trim()) return; $('#ppsub').textContent = 'reading…'; drawPatch(await post('/api/prophecy/patch', { text: $('#pptext').value })); };
   }
   drawPatch(r);
 }
