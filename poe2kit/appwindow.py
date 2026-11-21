@@ -12,7 +12,7 @@ import webbrowser
 
 from . import config, osutil
 
-URL = 'http://127.0.0.1:47830/'
+URL = f"http://127.0.0.1:{os.environ.get('POE2KIT_PORT', '47830')}/"
 TITLE = 'Exile Oracle'          # the dashboard page's <title>; the app window takes it as its own
 SIZE = '1400,950'
 WIN_BROWSERS = [r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe',
@@ -55,7 +55,7 @@ def _find_window():
             return True
         cls = ctypes.create_unicode_buffer(64)
         u32.GetClassNameW(hwnd, cls, 64)
-        if cls.value.startswith('Chrome_WidgetWin'):
+        if cls.value.startswith(('Chrome_WidgetWin', 'WindowsForms')):   # Edge app window / native window
             found.append(hwnd)
             return False
         return True
@@ -99,9 +99,19 @@ def command():
     return _linux_cmd(os.path.join(config.HOME, 'browser-app'))
 
 
+def native_command():
+    """pythonw app_window.pyw when pywebview is installed (Windows), else None."""
+    import importlib.util
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    script = os.path.join(here, 'app_window.pyw')
+    if not (osutil.IS_WIN and os.path.exists(script) and importlib.util.find_spec('webview')):
+        return None
+    return [osutil.background_python(), script]
+
+
 def open_dashboard():
     """Show the dashboard: bring the open window forward, or open a new app window (or a browser tab).
-    Returns 'raised', 'app' or 'browser'."""
+    Returns 'raised', 'native', 'app' or 'browser'."""
     if mode() == 'app':
         if osutil.IS_WIN:
             try:
@@ -111,6 +121,13 @@ def open_dashboard():
             if hwnd:
                 _raise(hwnd)
                 return 'raised'
+        native = native_command()
+        if native:   # the native Exile Oracle window (WebView2 through pywebview); it falls back to Edge by itself
+            try:
+                osutil.detached(native, cwd=os.path.dirname(native[-1]))
+                return 'native'
+            except OSError:
+                pass
         cmd = command()
         if cmd:
             try:

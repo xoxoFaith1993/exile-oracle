@@ -193,6 +193,16 @@ td.p { color: var(--eo-text); }
 </div>
 <script>
 const $ = s => document.querySelector(s);
+
+// ---------- feel like an app, not a web page ----------
+// no browser right-click menu (text boxes keep theirs for copy / paste), no print / save-page / view-source keys
+document.addEventListener('contextmenu', e => { if (!e.target.closest('input, textarea, select, [contenteditable]')) e.preventDefault(); });
+document.addEventListener('keydown', e => {
+  const k = e.key.toLowerCase();
+  if ((e.ctrlKey || e.metaKey) && ['p', 's', 'u', 'o', 'n', 't', 'j', 'h', 'd'].includes(k) && !e.shiftKey) e.preventDefault();
+  if (e.altKey && (k === 'arrowleft' || k === 'arrowright')) e.preventDefault();   // browser back / forward
+});
+
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const COL = { UNIQUE: 'var(--unique)', RARE: 'var(--rare)', MAGIC: 'var(--magic)', GEM: 'var(--gem)', CURRENCY: 'var(--currency)', NORMAL: 'var(--normal)' };
 const SHORT = { exalted: 'ex', divine: 'div', chaos: 'chaos' };

@@ -84,3 +84,12 @@ for 15 minutes).
 - *Claude doesn't list `poe2_` tools:* quit Claude completely and reopen it; check Settings says "Connected".
 - *"Monitor not running":* click the red tray icon (or start Exile Oracle from the Start menu).
 - *Disconnect:* Settings → **Disconnect**, then restart Claude.
+
+## Using ChatGPT or Gemini instead
+Exile Oracle's tools are a standard MCP server, so other AI apps can use them too:
+- **Settings → Other AI apps → Connect** next to *ChatGPT (desktop app / Codex)* or *Gemini CLI*, then restart that
+  app. ChatGPT is marked *untested* until a player confirms it works.
+- Every app gets the same built-in instructions when it connects: how to use the tools, the Build Lab, and the rules.
+  So you can ask the same questions as in this guide.
+- The Build Lab's *Oracle feed* shows which app is asking.
+- Gemini CLI on Windows: if PowerShell says "running scripts is disabled", start it with `gemini.cmd`.

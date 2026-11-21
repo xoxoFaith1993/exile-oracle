@@ -180,11 +180,15 @@ def make(con, build_id=None, pob_code=None, notes=None, name=None, include_gear=
                     tag += f"\n<orange>{{Use a Weapon Set I point ({ws[num]} quest)}}"
                 passives.append(due(p, lvl, tag))
         report['weapon_set_nodes'] = len(ws)
+        report['route_nodes'] = [{'node': n, 'level': l, 'ws': n in ws} for n, l in zip(main, lv_list)]   # Build Lab
+        report['route_start'] = _start
+        report['tree_version'] = active.get('treeVersion') or '0_5'
         trials = ['1st', '2nd', '3rd', '4th']
         for i, (num, lvl) in enumerate(zip(asc_nodes, route.asc_levels(len(asc_nodes)))):
             p = passive(num, [1, 100])
             if p:
                 passives.append(due(p, lvl, f"<grey>{{Ascendancy: after your {trials[min(3, i // 2)]} trial}}"))
+        report['asc_nodes'] = [{'node': n, 'level': l} for n, l in zip(asc_nodes, route.asc_levels(len(asc_nodes)))]
         report['route'] = 'automatic'
     elif active is not None:
         for num in (int(x) for x in (active.get('nodes') or '').split(',') if x):

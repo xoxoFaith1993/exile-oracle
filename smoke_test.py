@@ -168,6 +168,21 @@ def doctor_check():
           f"doctor runs ({len(r['checks'])} checks, guide attached)")
 
 
+
+def oracle_extras_check():
+    """0.5.0: Build Lab data, connectors, report preview (nothing is sent), native window script."""
+    import json as _j
+    from poe2kit import config, connectors, lab, report
+    p = config.data_file('boss-readiness.json')
+    d = _j.load(open(p, encoding='utf-8')) if p else {}
+    check(len(d.get('bosses') or []) >= 5 and all(c['stat'] in lab.STAT_OF for b in d['bosses'] for c in b['checks']),
+          f"boss readiness data ({len(d.get('bosses') or [])} bosses, every stat known)")
+    st = connectors.status()
+    check(set(st) == {'chatgpt', 'gemini'}, 'connectors: ChatGPT + Gemini')
+    pv = report.preview('issue', 'smoke test')
+    check(pv.startswith('smoke test') and os.path.expanduser('~') not in pv, 'report preview (scrubbed, not sent)')
+    check(os.path.exists(os.path.join(HERE, 'app_window.pyw')), 'native window script present')
+
 def appwindow_check():
     from poe2kit import appwindow
     cmd = appwindow.command()   # looks for Edge / Chrome / Chromium; opens nothing
@@ -250,6 +265,7 @@ if __name__ == '__main__':
     monitor()
     doctor_check()
     appwindow_check()
+    oracle_extras_check()
     mcp()
     if '--pob' in sys.argv:
         pob_part()

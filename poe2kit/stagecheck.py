@@ -64,7 +64,7 @@ def check(base_xml, level, skill, supports=()):
     st = pob.key_stats(res)
     return {'level': level, 'passives': n, 'skill': res.get('main_skill'),
             'dps': st.get('DPS (combined)') or st.get('DPS (main skill)'), 'life': st.get('life'),
-            'mana': st.get('mana'), 'es': st.get('energy shield')}
+            'mana': st.get('mana'), 'es': st.get('energy shield'), 'ehp': st.get('effective HP')}
 
 
 _cat = {}

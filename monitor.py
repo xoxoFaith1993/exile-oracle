@@ -312,6 +312,41 @@ def api(path, q):
     import server as tools  # reuse the MCP tool functions
     con = db.connect()
     try:
+        if path == '/api/lab/roadmap':   # Build Lab stage 1
+            from poe2kit import lab, buildplan
+            # the followed plan, else the newest build
+            bid = q.get('build') or next(iter(buildplan.followed(con).values()), None) \
+                or con.execute('SELECT MAX(id) FROM build').fetchone()[0]
+            return lab.roadmap(con, bid)
+        if path == '/api/lab/curves':   # Build Lab stage 2: ?build=<id>[&start=1]
+            from poe2kit import lab
+            if q.get('start'):
+                lab.start_curves(q['build'])
+            return lab.curves_state(con, q['build'])
+        if path == '/api/lab/cards':   # Build Lab stage 3: ?build=<id>[&retest=<card>|&remove=<card>]
+            from poe2kit import lab
+            if q.get('retest'):
+                lab.retest(con, q['build'], q['retest'])
+            if q.get('remove'):
+                lab.remove_card(con, q['build'], q['remove'])
+            return {'cards': lab.cards(con, q['build'])}
+        if path == '/api/lab/upgrades':   # Build Lab stage 4
+            from poe2kit import lab
+            return lab.upgrades(con, q['build'], float(q.get('budget') or 10))
+        if path == '/api/lab/defence':   # Build Lab stage 5
+            from poe2kit import lab
+            return lab.defence(con, q['build'])
+        if path == '/api/lab/history':   # Build Lab stage 7
+            from poe2kit import lab
+            return lab.history(con, q['build'])
+        if path == '/api/lab/feed':   # Build Lab stage 8: the Oracle's recent tool calls
+            return {'feed': json.loads(db.kv_get(con, 'oracle:feed') or '[]')[-30:]}
+        if path == '/api/connectors':
+            from poe2kit import connectors
+            return connectors.status()
+        if path == '/api/lab/bosses':   # Build Lab stage 6
+            from poe2kit import lab
+            return lab.readiness(con, q['build'])
         if path == '/api/pagever':   # the dashboard reloads itself when its files change (after an update or a fix)
             d = os.path.join(HERE, 'dashboard')
             return {'v': max(os.path.getmtime(os.path.join(d, f)) for f in ('index.html', 'theme.css') if os.path.exists(os.path.join(d, f)))}
@@ -450,6 +485,20 @@ def craft_post(path, b):
                 ch['poe2_dir'] = b['poe2_dir'] or None
             config.save_settings(ch)
             return {'ok': True, 'profile': config.profile(), 'poe2': config.poe2_dir()}
+        if path == '/api/report':   # Report an issue / Suggestions: to the developer (anonymous, see poe2kit/report.py)
+            from poe2kit import report
+            try:
+                return report.send(b.get('kind'), b.get('text') or '', b.get('name') or '', bool(b.get('attach', True)))
+            except ValueError as e:
+                return {'ok': False, 'why': str(e)}
+            except Exception as e:
+                return {'ok': False, 'why': f'Could not send ({type(e).__name__}). Check the internet connection, or use GitHub.'}
+        if path == '/api/report/preview':
+            from poe2kit import report
+            return {'text': report.preview(b.get('kind'), b.get('text') or '', bool(b.get('attach', True)))}
+        if path == '/api/connectors':   # other AI apps: {target: chatgpt|gemini, action: connect|disconnect}
+            from poe2kit import connectors
+            return connectors.connect(b.get('target')) if b.get('action') == 'connect' else connectors.disconnect(b.get('target'))
         if path == '/api/window':   # how the tray / shortcut open the dashboard: 'app' window or 'browser' tab
             config.save_settings({'dashboard_window': 'browser' if b.get('mode') == 'browser' else 'app'})
             from poe2kit import appwindow
@@ -694,6 +743,11 @@ def main(argv):
         con = db.connect()
         for name in ([a for a in argv if a in JOBS] or JOBS):
             run_job(con, name)
+        return 0
+    if '--serve' in argv:   # developer mode: only the dashboard (e.g. POE2KIT_PORT=47831), no jobs, no overlay, no lock,
+        srv = http.server.ThreadingHTTPServer(('127.0.0.1', PORT), Handler)   # so it runs beside the installed app
+        log.info('serve-only dashboard on http://127.0.0.1:%d', PORT)
+        srv.serve_forever()
         return 0
     if not take_lock():
         print('monitor already running')

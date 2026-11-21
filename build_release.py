@@ -28,7 +28,7 @@ ISCC = next((p for p in (r'F:\Tools\InnoSetup\ISCC.exe', r'C:\Program Files\Inno
                           r'C:\Program Files (x86)\Inno Setup 7\ISCC.exe') if os.path.exists(p)),
             r'C:\Program Files\Inno Setup 7\ISCC.exe')
 
-FILES = ['monitor.py', 'server.py', 'tray.pyw', 'overlay.pyw', 'launcher.py', 'cli.py', 'leaguestart_pull.py', 'make_datapack.py',
+FILES = ['monitor.py', 'server.py', 'tray.pyw', 'overlay.pyw', 'app_window.pyw', 'launcher.py', 'cli.py', 'leaguestart_pull.py', 'make_datapack.py',
          'launch_sweep.py', 'art_sweep.py', 'smoke_test.py', 'TROUBLESHOOTING.md']
 DIRS = {'poe2kit': ('.py',), 'dashboard': ('.html', '.ico', '.png', '.css', '.svg'), 'pobhost': ('.lua', '.c'),
         'datapack': ('.json',), 'bin': ('.exe',)}
@@ -76,7 +76,12 @@ def stage():
         z.extractall(py)
     pth = next(f for f in os.listdir(py) if f.endswith('._pth'))
     with open(os.path.join(py, pth), 'a', encoding='utf-8') as f:
-        f.write('\n..\\toolkit\n')
+        f.write('\n..\\toolkit\nLib\\site-packages\n')
+    # the native app window (app_window.pyw): pywebview + pythonnet, pure-Python wheels for this Python version
+    site = os.path.join(py, 'Lib', 'site-packages')
+    os.makedirs(site, exist_ok=True)
+    subprocess.run([sys.executable, '-m', 'pip', 'install', '--quiet', '--no-warn-script-location', '--target', site,
+                    'pywebview==6.2.1'], check=True)
     soften_and_scan(STAGE)
     print('staged', STAGE, f'{sum(os.path.getsize(os.path.join(r, f)) for r, _, fs in os.walk(STAGE) for f in fs) / 1e6:.1f} MB')
 
@@ -158,6 +163,16 @@ def repo():
     gh = os.path.join(HERE, 'release', 'github')
     if os.path.isdir(gh):   # README.md + docs/ for GitHub
         shutil.copytree(gh, REPO_DIR, dirs_exist_ok=True)
+    # the same repository notes for every coding AI: Claude reads CLAUDE.md, Codex (ChatGPT) AGENTS.md, Gemini GEMINI.md
+    cm = os.path.join(REPO_DIR, 'CLAUDE.md')
+    if os.path.exists(cm):
+        text = open(cm, encoding='utf-8').read()
+        for name, who in (('AGENTS.md', 'Codex / ChatGPT'), ('GEMINI.md', 'Gemini')):
+            body = text.replace('# Exile Oracle: notes for Claude working in this repository',
+                                f'# Exile Oracle: notes for {who} working in this repository', 1)
+            note = ('\n> The same notes are in CLAUDE.md, AGENTS.md and GEMINI.md (one per AI app); they are made from '
+                    'CLAUDE.md by build_release.py.\n')
+            open(os.path.join(REPO_DIR, name), 'w', encoding='utf-8').write(body.replace('\n', note, 1) if body.startswith('#') else body)
     open(os.path.join(REPO_DIR, '.gitignore'), 'w', encoding='utf-8').write(GITIGNORE)
     open(os.path.join(REPO_DIR, '.gitattributes'), 'w', encoding='utf-8').write(GITATTRIBUTES)
     soften_and_scan(REPO_DIR, skip_images=True)

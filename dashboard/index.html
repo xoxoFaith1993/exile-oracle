@@ -193,7 +193,7 @@ body {
   font: 15px/1.45 var(--eo-body); color: var(--eo-text);
   background: radial-gradient(ellipse at 60% -10%, #24190f 0%, var(--eo-stone) 40%, var(--eo-bg) 100%) fixed,
               var(--eo-grain), var(--eo-bg);
-  display: grid; grid-template-columns: 228px minmax(0, 1fr); grid-template-rows: auto 1fr auto; min-height: 100vh;
+  display: grid; grid-template-columns: 228px minmax(0, 1fr); grid-template-rows: auto 1fr auto; min-height: calc(100vh / var(--z, 1));
 }
 /* header across the content column */
 header { grid-column: 2; grid-row: 1; background: linear-gradient(180deg, #1d1611ee, #15110ee6); backdrop-filter: blur(4px);
@@ -203,7 +203,7 @@ header h1 { display: none; }
 .chip b { color: var(--eo-gold-hi); }
 header select { background: #100d0a !important; color: var(--eo-text) !important; border-color: var(--eo-line) !important; }
 /* side menu */
-nav#nav { grid-column: 1; grid-row: 1 / span 3; position: sticky; top: 0; height: 100vh; overflow-y: auto;
+nav#nav { grid-column: 1; grid-row: 1 / span 3; position: sticky; top: 0; height: calc(100vh / var(--z, 1)); overflow-y: auto;
   display: flex; flex-direction: column; flex-wrap: nowrap; gap: 0; padding: 0 0 18px;
   background: linear-gradient(180deg, #1b1510, #100c09), var(--eo-grain); border-right: 1px solid var(--eo-gold-dim);
   box-shadow: inset -8px 0 18px #0006; }
@@ -290,6 +290,102 @@ input[type=checkbox] { accent-color: var(--eo-blood-hi); }
   header { grid-column: 1; grid-row: 2; } main { grid-column: 1; grid-row: 3; } footer { grid-column: 1; grid-row: 4; }
 }
 
+/* ================= Build Lab (R9) ================= */
+.lab-head { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.lab-badge { font: 600 11px var(--eo-display); letter-spacing: .1em; text-transform: uppercase; padding: 3px 9px;
+  border-radius: 999px; border: 1px solid var(--eo-line); }
+.lab-badge.ok { color: var(--eo-good); border-color: #4f7a3f; } .lab-badge.draft { color: var(--eo-warn); border-color: #7a6427; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.chip-ask { font: 500 13px var(--eo-body); color: var(--eo-text-2); background: #17120e; border: 1px dashed var(--eo-gold-dim);
+  border-radius: 999px; padding: 4px 11px; cursor: pointer; }
+.chip-ask::before { content: "◈ "; color: var(--eo-blood-hi); }
+.chip-ask:hover { color: var(--eo-gold-hi); border-color: var(--eo-gold); }
+.lab-lvl { display: grid; grid-template-columns: auto 1fr auto; gap: 18px; align-items: center; }
+.lab-big { font: 700 54px/1 var(--eo-display); color: var(--eo-gold-hi); text-shadow: 0 0 20px #c9a45c40; min-width: 96px; text-align: center; }
+.lab-big small { display: block; font: 600 10.5px var(--eo-display); letter-spacing: .2em; color: var(--eo-muted); margin-top: 4px; }
+.lab-track { position: relative; padding: 18px 0 26px; }
+.lab-track input[type=range] { width: 100%; height: 24px; cursor: pointer; -webkit-appearance: none; appearance: none; background: transparent; }
+.lab-track input[type=range]::-webkit-slider-runnable-track { height: 6px; border-radius: 3px;
+  background: linear-gradient(90deg, var(--eo-blood-hi) var(--p, 0%), #2e251b var(--p, 0%)); box-shadow: inset 0 0 0 1px #0008; }
+.lab-track input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; margin-top: -8px; border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, var(--eo-gold-hi), var(--eo-gold) 55%, #6b5228); border: 2px solid #1a140e; box-shadow: 0 0 12px #c9a45c66; }
+.lab-tick { position: absolute; top: 2px; transform: translateX(-50%); font-size: 11px; color: var(--eo-gold-dim); cursor: default; }
+.lab-tick.q { color: #6fa8dc; } .lab-tick.t { color: var(--eo-blood-hi); }
+.lab-tick::after { content: ""; position: absolute; left: 50%; top: 15px; width: 1px; height: 22px; background: currentColor; opacity: .55; }
+.lab-scale { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; font-size: 11px; color: var(--eo-muted); }
+.lab-play { font-size: 22px; width: 52px; height: 52px; border-radius: 50%; }
+.lab-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(320px, 1fr); gap: 16px; }
+.lab-tree { position: relative; height: 620px; background: #070605; border: 1px solid var(--eo-gold-dim); border-radius: 3px; overflow: hidden; }
+.lab-tree svg { width: 100%; height: 100%; cursor: grab; }
+.lab-tree .nplan { fill: #2a2216; stroke: #c9a45c; stroke-width: 16; stroke-dasharray: 22 14; opacity: .8; }
+.lab-tree .eplan { stroke: #a08550; stroke-width: 30; fill: none; stroke-dasharray: 50 34; opacity: .7; }
+.lab-tree .eon { stroke: #f0c86a; stroke-width: 38; filter: drop-shadow(0 0 20px #e3b34188); }
+.lab-tree .non { stroke-width: 18; stroke: #f0c86a; fill: #5a4518; }
+.lab-tree .eoff { stroke: #2a2620; }
+.lab-tree .nnew { fill: #5a1520; stroke: #ff5a6e; stroke-width: 14; filter: drop-shadow(0 0 30px #ff5a6e); }
+.lab-tree .legend { position: absolute; left: 10px; bottom: 8px; font-size: 12px; color: var(--eo-muted); }
+.lab-side .stat { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #ffffff09; }
+.lab-side .stat b { color: var(--eo-gold-hi); font-family: var(--eo-display); }
+.lab-new { margin: 6px 0 0; padding: 0; list-style: none; }
+.lab-new li { padding: 3px 0; font-size: 14px; } .lab-new li.just { color: #ff8a98; }
+.lab-new li small { color: var(--eo-muted); }
+.lab-skill { border: 1px solid var(--eo-line); border-radius: 3px; padding: 7px 10px; margin: 6px 0; background: #17120e; }
+.lab-skill.off { opacity: .38; }
+.lab-skill b { color: var(--eo-text); } .lab-skill .sup { font-size: 12.5px; color: var(--eo-text-2); margin-top: 2px; }
+.lab-skill .sup span.off { opacity: .4; text-decoration: line-through; }
+.lab-gear { font-size: 13px; color: var(--eo-text-2); }
+.lab-gear div { padding: 4px 0; border-bottom: 1px solid #ffffff09; }
+.lab-gear b { color: var(--eo-gold); font-family: var(--eo-display); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; margin-right: 6px; }
+@media (max-width: 1100px) { .lab-grid { grid-template-columns: minmax(0, 1fr); } }
+.lab-curves { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.lab-chart svg { width: 100%; height: 230px; display: block; }
+.lab-chart h3 { font: 600 12px var(--eo-display); letter-spacing: .14em; text-transform: uppercase; color: var(--eo-gold); margin: 0 0 4px; }
+.lab-chart .now { font: 700 22px var(--eo-display); color: var(--eo-gold-hi); }
+.lab-chart .now small { font: 500 12px var(--eo-body); color: var(--eo-muted); margin-left: 6px; }
+@media (max-width: 1100px) { .lab-curves { grid-template-columns: 1fr; } }
+.lab-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 12px; }
+.wi { position: relative; border: 1px solid var(--eo-gold-dim); border-radius: 3px; padding: 12px 14px;
+  background: linear-gradient(180deg, #221b14, #17120e); box-shadow: inset 0 0 18px #0008; animation: wiIn .5s ease-out; }
+@keyframes wiIn { from { opacity: 0; transform: translateY(8px); box-shadow: 0 0 0 2px var(--eo-blood-hi); } to { opacity: 1; } }
+.wi h4 { margin: 0 0 4px; font: 600 15px var(--eo-display); letter-spacing: .04em; color: var(--eo-gold-hi); }
+.wi .why { font-size: 13px; color: var(--eo-text-2); margin-bottom: 8px; }
+.wi .deltas { display: flex; flex-wrap: wrap; gap: 6px; }
+.wi .d { font-size: 12.5px; padding: 2px 8px; border-radius: 999px; background: #0d0a08; border: 1px solid var(--eo-line); }
+.wi .d b { font-weight: 700; } .wi .d.up b { color: var(--eo-good); } .wi .d.down b { color: #ff7b7b; }
+.wi .d.big { border-color: var(--eo-gold); font-size: 14px; }
+.wi .foot { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 12px; color: var(--eo-muted); }
+.wi .foot .btn { padding: 3px 9px; font-size: 10px; }
+.wi .eff { margin-left: auto; font: 700 13px var(--eo-display); color: var(--eo-gold); }
+.wi.err { border-color: #7a2a2a; }
+.spin { display: inline-block; width: 12px; height: 12px; border: 2px solid var(--eo-gold-dim); border-top-color: transparent;
+  border-radius: 50%; animation: eoSpin .8s linear infinite; vertical-align: -1px; margin-right: 7px; }
+@keyframes eoSpin { to { transform: rotate(360deg); } }
+.boss-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; margin-top: 10px; }
+.boss { border: 1px solid var(--eo-line); border-left: 4px solid; border-radius: 3px; padding: 9px 12px; background: #17120e; }
+.boss.ready { border-left-color: var(--eo-good); } .boss.risky { border-left-color: var(--eo-warn); } .boss.not-yet { border-left-color: var(--eo-blood-hi); }
+.boss h4 { margin: 0; font: 600 13.5px var(--eo-display); letter-spacing: .03em; color: var(--eo-text); }
+.boss .st { font: 700 11px var(--eo-display); letter-spacing: .12em; text-transform: uppercase; }
+.boss.ready .st { color: var(--eo-good); } .boss.risky .st { color: var(--eo-warn); } .boss.not-yet .st { color: #ff7b7b; }
+.boss ul { margin: 6px 0 0; padding: 0; list-style: none; font-size: 12.5px; }
+.boss li { padding: 1px 0; color: var(--eo-text-2); } .boss li.not-yet { color: #ff9a9a; } .boss li.risky { color: #e9c46a; }
+.boss-sum { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+.lab-two { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 1100px) { .lab-two { grid-template-columns: 1fr; } }
+.up-path { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 8px 0 12px; font-size: 13px; }
+.up-path .step { background: #17120e; border: 1px solid var(--eo-line); border-radius: 3px; padding: 4px 8px; }
+.up-path .step b { color: var(--eo-gold-hi); } .up-path .arrow { color: var(--eo-gold-dim); }
+.up-total { font: 700 18px var(--eo-display); color: var(--eo-gold-hi); }
+table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-good); } table.up .neg { color: #ff7b7b; }
+.hitbar { display: grid; grid-template-columns: 86px 1fr 70px; gap: 8px; align-items: center; margin: 7px 0; font-size: 13.5px; }
+.hitbar .bar { height: 14px; background: #0d0a08; border: 1px solid var(--eo-line); border-radius: 2px; overflow: hidden; }
+.hitbar .bar > div { height: 100%; }
+.hitbar .v { text-align: right; font-variant-numeric: tabular-nums; color: var(--eo-text); }
+.res-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+.res { padding: 6px 10px; border: 1px solid var(--eo-line); border-radius: 3px; background: #17120e; font-size: 13px; }
+.res b { font: 700 16px var(--eo-display); margin-left: 4px; } .res.bad { border-color: #a33; } .res.bad b { color: #ff7b7b; }
+.res.ok b { color: var(--eo-good); }
+.flag { padding: 6px 10px; border-left: 3px solid; margin: 5px 0; background: #17120e; font-size: 13.5px; }
+.flag.bad { border-color: var(--eo-blood-hi); } .flag.warn { border-color: var(--eo-warn); } .flag.ok { border-color: var(--eo-good); }
 </style>
 </head>
 <body>
@@ -312,6 +408,7 @@ input[type=checkbox] { accent-color: var(--eo-blood-hi); }
   <button data-tab="farm">What to farm</button>
   <button data-tab="league">League start</button>
   <div class="ng">Character</div>
+  <button data-tab="lab">Build Lab</button>
   <button data-tab="builds">Builds</button>
   <button data-tab="character">Character</button>
   <button data-tab="top1">Top 1%</button>
@@ -323,6 +420,8 @@ input[type=checkbox] { accent-color: var(--eo-blood-hi); }
   <button data-tab="alerts">Alerts <span class="badge" id="badge" hidden></span></button>
   <div class="ng">Settings</div>
   <button data-tab="status">Settings</button>
+  <button data-tab="report">Report an issue</button>
+  <button data-tab="suggest">Suggestions</button>
 </nav>
 <main>
   <section id="home" class="on">
@@ -361,6 +460,69 @@ input[type=checkbox] { accent-color: var(--eo-blood-hi); }
     <div class="card"><h2>Biggest movers</h2><div class="sub" id="moverssub">Last 24 hours, from the prices the monitor stored.</div><div id="movers"></div></div>
   </section>
   <section id="builds"><div class="card"><h2>My characters</h2><div class="sub">Live from your account through Path of Building's GGG login, in the background. Only asks GGG when you press a button.</div><button class="btn" id="loadchars">Show my characters</button><div id="mychars"></div></div><div class="card"><h2>Build Vault</h2><div class="sub">Every build saved, kept forever. Ask the Oracle to cost, compare or upgrade any of them.</div><div id="buildlist"></div></div></section>
+  <section id="lab">
+    <div class="card"><div class="lab-head"><h2 style="margin:0">Build Lab</h2>
+      <select class="crin" id="labbuild" style="min-width:320px"></select><span id="labbadge"></span>
+      <span class="small muted" id="labinfo"></span></div>
+      <div class="sub" style="margin-top:6px">The Oracle's workbench for one build. Ask in chat; what it works out shows here. Drag the level to watch the build come together.</div>
+      <div class="chips" id="labchips"></div></div>
+    <div class="card"><div class="lab-lvl">
+      <div class="lab-big"><span id="lablvl">1</span><small>LEVEL</small></div>
+      <div class="lab-track"><div id="labticks"></div><input type="range" id="labslider" min="1" max="100" value="1">
+        <div class="lab-scale"><span>1</span><span>25</span><span>50</span><span>75</span><span>100</span></div></div>
+      <button class="btn lab-play" id="labplay" title="Play the levelling route">▶</button></div></div>
+    <div class="lab-grid">
+      <div class="card"><h2>Passive tree</h2><div class="sub" id="labtreesub"></div>
+        <div class="lab-tree" id="labtree"><div class="zbtn"><button data-z="1.4">+</button><button data-z="0.7">−</button><button data-z="fit">⤢</button></div>
+          <div class="legend">gold: taken · dashed: still to come · red: just taken</div></div></div>
+      <div class="lab-side">
+        <div class="card"><h2>At this level</h2><div id="labstats"></div><ul class="lab-new" id="labnew"></ul></div>
+        <div class="card"><h2>Skills &amp; supports</h2><div id="labskills"></div></div>
+        <div class="card"><h2>Gear to look for</h2><div class="lab-gear" id="labgear"></div></div>
+      </div></div>
+    <div class="card"><div class="lab-head"><h2 style="margin:0">Power curves</h2><span class="small muted" id="labcurvemsg"></span>
+      <span style="flex:1"></span><button class="btn" id="labcurvego">Run Path of Building</button></div>
+      <div class="sub" id="labcurvenote">Damage and toughness at each level, worked out by Path of Building.</div>
+      <div class="lab-curves" id="labcurves"></div></div>
+    <div class="card"><div class="lab-head"><h2 style="margin:0">What-if bench</h2><span class="small muted" id="labcardmsg"></span></div>
+      <div class="sub">The Oracle's suggestions, each measured by Path of Building: what it changes and what it costs. New ones appear here while you talk in chat.</div>
+      <div class="chips" id="labwichips"></div>
+      <div class="lab-cards" id="labcards" style="margin-top:12px"></div></div>
+    <div class="lab-two">
+      <div class="card"><div class="lab-head"><h2 style="margin:0">Upgrade ranking</h2><span style="flex:1"></span>
+        <label class="small">Budget <input class="crin" id="labbudget" value="10" style="width:64px"> div</label>
+        <button class="btn" id="labupgo">Find upgrades</button></div>
+        <div class="sub">Every unique you can afford, tried in each slot by Path of Building. Ranked by DPS per divine.</div>
+        <div id="labup"><div class="muted small" style="margin-top:8px">Press Find upgrades (a few seconds).</div></div></div>
+      <div class="card"><div class="lab-head"><h2 style="margin:0">Defence sheet</h2><span class="small muted" id="labdefmsg"></span></div>
+        <div class="sub">Your geared build: the biggest hit you survive per damage type, resistances, and the gaps.</div>
+        <div id="labdef"></div></div>
+    </div>
+    <div class="card"><div class="lab-head"><h2 style="margin:0">Boss readiness</h2><span class="small muted" id="labbossmsg"></span></div>
+      <div class="sub">Each pinnacle boss against researched minimums: resistances, life + ES, DPS for a sensible kill time and the biggest hit you survive. Green = ready, amber = risky, red = not yet.</div>
+      <div id="labboss"></div></div>
+    <div class="lab-two">
+      <div class="card"><h2>History</h2><div class="sub" id="labhistsub">This character over time: every snapshot you import, and the level-ups the game log saw.</div><div id="labhist"></div></div>
+      <div class="card"><h2>Oracle feed</h2><div class="sub">What the Oracle is doing right now, in any chat: each tool it runs shows up here.</div><div id="labfeed"></div></div>
+    </div>
+  </section>
+  <section id="report"><div class="card"><h2>Report an issue</h2>
+      <div class="sub">Something broken or odd? Tell the developer. No sign-in: your copy sends it anonymously, and only the developer can read it.</div>
+      <label class="small" style="display:block;margin-top:10px">What happened, and what did you expect?</label>
+      <textarea class="crin rp-text" data-kind="issue" rows="7" style="width:100%" maxlength="2400" placeholder="e.g. Ctrl+D shows the popup but no price for rings"></textarea>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:8px">
+        <label class="small">Your name (optional) <input class="crin rp-name" maxlength="24" style="width:180px"></label>
+        <label class="small"><input type="checkbox" class="rp-attach" checked> Attach a short app check (no account, character or folder names)</label></div>
+      <div style="margin-top:10px;display:flex;gap:8px;align-items:center"><button class="btn rp-preview">See exactly what is sent</button><button class="btn rp-send" style="border-color:var(--eo-blood-hi)">Send report</button><span class="small muted rp-msg"></span></div>
+      <pre class="rp-out small" style="white-space:pre-wrap;display:none;background:#100d0a;border:1px solid var(--eo-line);padding:10px;margin-top:10px"></pre>
+      <div class="small muted" style="margin-top:10px">Prefer GitHub? <a href="https://github.com/xoxoFaith1993/exile-oracle/issues/new?template=bug_report.md" target="_blank" rel="noopener">Open an issue there ↗</a></div></div></section>
+  <section id="suggest"><div class="card"><h2>Suggestions</h2>
+      <div class="sub">An idea for Exile Oracle? Something you wish the Oracle could do? Send it straight to the developer. No sign-in needed.</div>
+      <label class="small" style="display:block;margin-top:10px">Your idea</label>
+      <textarea class="crin rp-text" data-kind="suggestion" rows="7" style="width:100%" maxlength="2900" placeholder="e.g. show which map mods are worth running for my build"></textarea>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:8px">
+        <label class="small">Your name (optional) <input class="crin rp-name" maxlength="24" style="width:180px"></label></div>
+      <div style="margin-top:10px;display:flex;gap:8px;align-items:center"><button class="btn rp-send" style="border-color:var(--eo-blood-hi)">Send suggestion</button><span class="small muted rp-msg"></span></div></div></section>
   <section id="character"><div id="charview"><div class="card empty">Pick a build on the Builds tab, or ask the Oracle to show one.</div></div></section>
   <section id="top1">
     <div class="card"><h2>Top 1% check</h2><div class="sub">Your character against the top 1% of your ascendancy on poe.ninja: level, damage, toughness and gear value. Benchmarks are read on request (ask the Oracle to refresh them).</div>
@@ -462,9 +624,14 @@ input[type=checkbox] { accent-color: var(--eo-blood-hi); }
       <div style="display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap">
         <label class="small"><input type="radio" name="dwin" value="app"> Its own window (Edge or Chrome app mode)</label>
         <label class="small"><input type="radio" name="dwin" value="browser"> A tab in my browser</label>
+        <label class="small" style="margin-left:14px">Text size <select class="crin" id="eozoom">
+          <option value="auto">Automatic (bigger on wide screens)</option><option value="1">100%</option><option value="1.15">115%</option>
+          <option value="1.3">130%</option><option value="1.5">150%</option><option value="1.75">175%</option></select></label>
         <span class="small muted" id="dwinmsg"></span></div></div>
     <div class="card"><h2>Connect to Claude <span class="pill">optional</span></h2><div class="sub">Exile Oracle is made to be used with Claude: connect it once, then ask things like "what should I farm", "how close am I to the top 1%" or "how do I craft this". Everything else works without it. <a href="https://github.com/xoxoFaith1993/exile-oracle/blob/main/CLAUDE-GUIDE.md" target="_blank" rel="noopener">How to use it with Claude ↗</a></div>
       <div id="cllink"></div></div>
+    <div class="card"><h2>Other AI apps <span class="pill">connectors</span></h2><div class="sub">Exile Oracle's tools work in any app that speaks MCP, not just Claude. Connect one and ask it the same things. The Oracle feed in the Build Lab shows which app is asking.</div>
+      <div id="connlist"></div></div>
     <div class="card"><h2>Price-check overlay <span class="pill">Windows</span></h2><div class="sub">Press Ctrl+D on an item in game (Ctrl+Alt+D to keep it open and tick rows) and a price popup appears: poe.ninja, our craft estimate and, if you switch it on, live prices from the official trade site (one search per item you copy, like Exiled Exchange 2 does). Run the game in windowed fullscreen. The only keys it ever sends are the ones you ask for: Ctrl+Alt+C to copy the item when you press Ctrl+D, and your own chat commands (F5 /hideout and so on).</div>
       <div id="ovopts"></div></div>
     <div class="card"><h2>Monitor jobs</h2><div class="sub">What runs in the background, how often, and how it went last time.</div><div id="jobs"></div></div></section>
@@ -495,6 +662,17 @@ function imgFail(el) {
 }
 const ic = (u, sz = 30, n = '', b = '', k = '') => (u || n) ? `<img src="${u ? '/img?u=' + encodeURIComponent(u) : artFind(n, b, k)}"${n ? ` data-n="${esc(n)}" data-b="${esc(b)}" data-k="${esc(k)}"${u ? '' : ' data-tried="1"'}` : ''} onerror="imgFail(this)" width="${sz}" height="${sz}" alt="" loading="lazy" style="object-fit:contain;vertical-align:middle;margin-right:8px;flex:none">` : '';
 const pic = (o, sz = 30) => o && o.icon ? ic(o.icon, sz, o.name || o.item, o.base) : o && o.art ? `<img src="/art/${o.art.split('/').map(encodeURIComponent).join('/')}" width="${sz}" height="${sz}" alt="" loading="lazy" style="object-fit:contain;vertical-align:middle;margin-right:8px;flex:none">` : '';
+function applyZoom() {   // the dashboard grows on wide / full-screen windows; Settings -> Text size overrides it
+  let pref = 'auto';
+  try { pref = localStorage.getItem('eozoom') || 'auto'; } catch (e) {}
+  const w = window.innerWidth;
+  const auto = w >= 2400 ? 1.5 : w >= 1900 ? 1.3 : w >= 1600 ? 1.15 : 1;
+  const z = pref === 'auto' ? auto : +pref;
+  document.body.style.zoom = z;
+  document.body.style.setProperty('--z', z);   // full-height parts divide by it
+}
+window.addEventListener('resize', applyZoom);
+applyZoom();   // the script sits at the end of the page, so the body exists already
 let UNIT = 'auto';
 try { UNIT = localStorage.getItem('poe2unit') || 'auto'; } catch (e) {}
 const nf = x => x >= 100 ? Math.round(x).toLocaleString() : x >= 1 ? (+x.toFixed(1)).toString()
@@ -515,7 +693,8 @@ let LASTSHOW = null;
 const pct = v => v == null ? '' : `<span class="${v>=0?'pos':'neg'}">${v>=0?'+':''}${v}%</span>`;
 const tip = $('#tip');
 function showTip(e, html) { tip.innerHTML = html; tip.style.display = 'block';
-  const x = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 8); tip.style.left = x + 'px'; tip.style.top = (e.clientY + 14) + 'px'; }
+  const z = +document.body.style.zoom || 1;   // the tip lives inside the zoomed body: page pixels / zoom
+  const x = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth * z - 8) / z; tip.style.left = x + 'px'; tip.style.top = (e.clientY + 14) / z + 'px'; }
 function hideTip() { tip.style.display = 'none'; }
 
 // ---------- tabs ----------
@@ -523,6 +702,8 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   document.querySelectorAll('nav button').forEach(x => x.classList.toggle('on', x === b));
   document.querySelectorAll('section').forEach(s => s.classList.toggle('on', s.id === b.dataset.tab));
   if (b.dataset.tab === 'home') loadHome();
+  if (b.dataset.tab === 'status') loadConnectors();
+  if (b.dataset.tab === 'lab') initLab();
   if (b.dataset.tab === 'economy') { loadOverview(); loadMovers(); loadMarket(); }
   if (b.dataset.tab === 'builds') loadBuilds();
   if (b.dataset.tab === 'alerts') loadAlerts(true);
@@ -536,10 +717,320 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
 });
 try { const t = location.hash.slice(1) || localStorage.getItem('poe2tab'); if (t) document.querySelector(`nav [data-tab="${t.replace(/[^a-z0-9]/gi, '')}"]`)?.click(); } catch (e) {}
 
+// ---------- Build Lab (R9) ----------
+let LAB = null, LABL = 1, LABTIMER = null;
+const labAsk = (label, text) => `<span class="chip-ask" data-ask="${esc(text)}" title="Copies the question: paste it in your Claude chat">${esc(label)}</span>`;
+document.addEventListener('click', async e => {
+  const c = e.target.closest('.chip-ask'); if (!c) return;
+  try { await navigator.clipboard.writeText(c.dataset.ask); } catch (er) {}
+  const old = c.textContent; c.textContent = 'copied: paste it in your Claude chat'; setTimeout(() => c.textContent = old, 2200);
+});
+async function initLab() {
+  const sel = $('#labbuild');
+  if (!sel.options.length) {
+    const b = await get('/api/builds');
+    sel.innerHTML = (b || []).map(x => `<option value="${x.id}">#${x.id} ${esc(x.label)} (${esc(x.ascendancy)} ${x.level})</option>`).join('');
+    sel.onchange = () => loadLab(sel.value);
+  }
+  if (!LAB) loadLab('');
+}
+async function loadLab(id) {
+  $('#labinfo').textContent = 'working out the route…';
+  const r = await get('/api/lab/roadmap' + (id ? '?build=' + id : ''));
+  if (!r || r.error) { $('#labinfo').textContent = (r && r.error) || 'could not load'; return; }
+  LAB = r; $('#labbuild').value = r.build.id;
+  $('#labbadge').innerHTML = r.reviewed ? '<span class="lab-badge ok">route reviewed by the Oracle</span>'
+    : '<span class="lab-badge draft">draft route: not reviewed yet</span>';
+  $('#labinfo').textContent = `${r.build.ascendancy} · main skill ${r.build.main_skill || '?'}${r.follow ? ' · follows ' + r.follow : ''}`;
+  const n = r.build.label;
+  $('#labchips').innerHTML = [
+    r.reviewed ? labAsk('Re-check this route', `Re-check the levelling route of my build "${n}" (vault #${r.build.id}) and fix anything weak.`)
+      : labAsk('Review this route', `Review and approve the levelling route of my build "${n}" (vault #${r.build.id}).`),
+    labAsk('Plan my levelling gems', `Plan the levelling skills and supports for "${n}" (vault #${r.build.id}), tested in Path of Building.`),
+    labAsk('What should I change at this level?', `I'm level ${LABL} on "${n}" (vault #${r.build.id}). What should I change right now?`),
+    labAsk('Send to the in-game planner', `Send "${n}" (vault #${r.build.id}) to the in-game Build Planner.`),
+  ].join('');
+  const tk = [];
+  r.quests.forEach(q => tk.push(`<span class="lab-tick q" style="left:${(q.level - 1) / 99 * 100}%" title="+${q.points} passive points: ${esc(q.who || '')} (${esc(q.area || '')}, act ${q.act})">◆</span>`));
+  r.trials.forEach((t, i) => tk.push(`<span class="lab-tick t" style="left:${(t - 1) / 99 * 100}%" title="Ascendancy trial ${i + 1} (about level ${t}): 2 ascendancy points">✦</span>`));
+  $('#labticks').innerHTML = tk.join('');
+  const box = $('#labtree'); box.querySelector('svg')?.remove();
+  await drawTree({ tree: { version: r.tree_version, allocated: [r.start, ...r.route.map(x => x.node)].filter(Boolean), jewel_nodes: [] } }, box);
+  $('#labtreesub').textContent = `${r.route.length} passives in the order they're taken · ${r.asc.length} ascendancy points`;
+  labLevel(+$('#labslider').value || 1);
+  labCurves(false);
+  LABCARDS = ''; labCards();
+  labDefence(); labBosses(); labHistory(); labFeed(); $('#labup').innerHTML = '<div class="muted small" style="margin-top:8px">Press Find upgrades (a few seconds).</div>';
+  $('#labwichips').innerHTML = [
+    labAsk('Find my 3 best upgrades under 5 div', `Find my 3 best upgrades under 5 div for "${n}" (vault #${r.build.id}) and put them on the Build Lab.`),
+    labAsk('Make me tankier', `What makes "${n}" (vault #${r.build.id}) tankier for the least DPS? Put the options on the Build Lab.`),
+    labAsk('Test a different support', `Test support swaps for my main skill on "${n}" (vault #${r.build.id}) and put them on the Build Lab.`),
+  ].join('');
+}
+function labLevel(L) {
+  if (!LAB) return;
+  LABL = L; $('#lablvl').textContent = L; $('#labslider').value = L;
+  $('#labslider').style.setProperty('--p', ((L - 1) / 99 * 100) + '%');
+  if (typeof LABCURVES !== 'undefined' && LABCURVES) labDrawCurves();
+  const lvlOf = {}; LAB.route.forEach(x => lvlOf[x.node] = x.level); if (LAB.start) lvlOf[LAB.start] = 1;
+  const taken = n => lvlOf[n] !== undefined && lvlOf[n] <= L;
+  const box = $('#labtree');
+  box.querySelectorAll('g[data-n]').forEach(g => {
+    const id = +g.dataset.n; if (lvlOf[id] === undefined) return;
+    const sh = g.firstElementChild; const k = [...sh.classList].find(c => c.startsWith('k-')) || '';
+    sh.setAttribute('class', (lvlOf[id] === L && id !== LAB.start ? 'nnew' : taken(id) ? 'non' : 'nplan') + (k ? ' ' + k : ''));
+  });
+  box.querySelectorAll('path[data-a]').forEach(p => {
+    const a = +p.dataset.a, b = +p.dataset.b; if (lvlOf[a] === undefined || lvlOf[b] === undefined) return;
+    p.setAttribute('class', taken(a) && taken(b) ? 'eon' : 'eplan');
+  });
+  // side panels
+  const T = TREES[LAB.tree_version] || { nodes: [] }; const byId = {}; T.nodes.forEach(n => byId[n.id] = n);
+  const done = LAB.route.filter(x => x.level <= L); const asc = LAB.asc.filter(x => x.level <= L);
+  const nextQ = LAB.quests.find(q => q.level > L); const nextT = LAB.trials.find(t => t > L);
+  $('#labstats').innerHTML = [
+    ['Passive points', `${done.length} / ${LAB.route.length}`], ['Ascendancy points', `${asc.length} / ${LAB.asc.length}`],
+    ['Weapon-set points used', String(done.filter(x => x.ws).length)],
+    ['Next quest points', nextQ ? `level ${nextQ.level}: ${esc(nextQ.who || nextQ.area)}` : 'all done'],
+    ['Next trial', nextT ? `about level ${nextT}` : 'all done'],
+  ].map(([k, v]) => `<div class="stat"><span class="muted">${k}</span><b>${v}</b></div>`).join('');
+  const recent = done.slice(-6).reverse();
+  $('#labnew').innerHTML = '<div class="small muted" style="margin-top:8px">Newest passives</div>' + recent.map(x => {
+    const nd = byId[x.node] || {}; return `<li class="${x.level === L ? 'just' : ''}">${esc(nd.n || 'node ' + x.node)} <small>level ${x.level}${x.ws ? ' · weapon set I' : ''}</small></li>`;
+  }).join('');
+  $('#labskills').innerHTML = LAB.skills.map(s => {
+    const on = s.from <= L && L <= s.to;
+    return `<div class="lab-skill ${on ? '' : 'off'}"><b>${esc(s.name)}</b> <span class="small muted">levels ${s.from}–${s.to}</span>${s.supports.length ? `<div class="sup">${s.supports.map(x => `<span class="${x.from <= L && L <= x.to ? '' : 'off'}">${esc(x.name)}</span>`).join(' · ')}</div>` : ''}</div>`;
+  }).join('') || '<div class="muted small">No skills in this build.</div>';
+  const gear = LAB.gear.filter(g => g.from <= L && L <= g.to);
+  const slotName = s => ({ Weapon1: 'Weapon', Weapon2: 'Off-hand', BodyArmour1: 'Body armour', Helm1: 'Helmet', Gloves1: 'Gloves', Boots1: 'Boots', Amulet1: 'Amulet', Ring1: 'Ring', Ring2: 'Ring 2', Belt1: 'Belt' })[s] || String(s).replace(/(\d)$/, ' $1');
+  $('#labgear').innerHTML = gear.map(g => `<div><b>${esc(slotName(g.slot))}</b>${esc(g.lines.filter(l => !/^(Levelling|Look for these mods)/.test(l)).slice(0, 3).join(' · '))}</div>`).join('') || '<div class="muted">No gear notes at this level.</div>';
+}
+$('#labslider').addEventListener('input', e => labLevel(+e.target.value));
+$('#labplay').onclick = () => {
+  if (LABTIMER) { clearInterval(LABTIMER); LABTIMER = null; $('#labplay').textContent = '▶'; return; }
+  if (LABL >= 100) labLevel(1);
+  $('#labplay').textContent = '❚❚';
+  LABTIMER = setInterval(() => { if (LABL >= 100) { clearInterval(LABTIMER); LABTIMER = null; $('#labplay').textContent = '▶'; return; } labLevel(LABL + 1); }, 180);
+};
+
+// ---------- Build Lab stage 2: power curves ----------
+let LABCURVES = null, LABCPOLL = null;
+const fmtN = v => v >= 1e6 ? (v / 1e6).toFixed(v >= 1e7 ? 0 : 1) + 'M' : v >= 1e3 ? (v / 1e3).toFixed(v >= 1e4 ? 0 : 1) + 'k' : String(Math.round(v || 0));
+function labChart(title, pts, key, color, geared, L, unit) {
+  const W = 600, H = 230, pl = 52, pr = 14, pt = 12, pb = 26;
+  const vals = pts.map(p => Math.max(1, p[key] || 0)).concat(geared && geared[key] ? [geared[key]] : []);
+  const lo = Math.log10(Math.max(1, Math.min(...vals))), hi = (Math.log10(Math.max(...vals)) || 1) + 0.35;   // headroom for labels
+  const X = l => pl + (l - 1) / 99 * (W - pl - pr);
+  const Y = v => pt + (1 - (Math.log10(Math.max(1, v)) - lo) / Math.max(.5, hi - lo)) * (H - pt - pb);
+  const line = pts.map((p, i) => `${i ? 'L' : 'M'}${X(p.level).toFixed(1)},${Y(p[key] || 1).toFixed(1)}`).join('');
+  const area = line + `L${X(pts[pts.length - 1].level)},${H - pb}L${X(pts[0].level)},${H - pb}Z`;
+  const grid = [];
+  for (let e = Math.floor(lo); e <= Math.ceil(hi); e++) { const v = 10 ** e; if (Math.log10(v) < lo - .01 || Math.log10(v) > hi + .3) continue;
+    grid.push(`<line x1="${pl}" x2="${W - pr}" y1="${Y(v)}" y2="${Y(v)}" stroke="#ffffff10"/><text x="${pl - 6}" y="${Y(v) + 4}" text-anchor="end" font-size="11" fill="#85765e">${fmtN(v)}</text>`); }
+  [1, 25, 50, 75, 100].forEach(l => grid.push(`<text x="${X(l)}" y="${H - 6}" text-anchor="middle" font-size="11" fill="#85765e">${l}</text>`));
+  const spikes = pts.slice(1).map((p, i) => ({ p, prev: pts[i] })).filter(o => (o.p[key] || 0) > 3 * Math.max(1, o.prev[key] || 0));
+  const near = pts.reduce((a, p) => Math.abs(p.level - L) < Math.abs(a.level - L) ? p : a, pts[0]);
+  const g = geared && geared[key] ? `<g><circle cx="${X(geared.level)}" cy="${Y(geared[key])}" r="7" fill="${color}" stroke="#000" stroke-width="2"/>
+    <text x="${X(geared.level) - 12}" y="${Y(geared[key]) + 4}" text-anchor="end" font-size="12" fill="${color}">with your gear: ${fmtN(geared[key])}</text></g>` : '';
+  return `<div class="lab-chart"><h3>${title}</h3><div class="now">${fmtN(near[key])}<small>${unit} at level ${near.level}${near.skill && key === 'dps' ? ' · ' + esc(near.skill) : ''} · no gear</small></div>
+    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${grid.join('')}
+      <path d="${area}" fill="${color}" opacity=".10"/><path d="${line}" fill="none" stroke="${color}" stroke-width="2.5"/>
+      ${pts.map(p => `<circle cx="${X(p.level)}" cy="${Y(p[key] || 1)}" r="3.5" fill="${color}"><title>level ${p.level}: ${fmtN(p[key])}${p.skill ? ' (' + p.skill + ')' : ''}</title></circle>`).join('')}
+      ${spikes.map(o => `<text x="${X(o.p.level)}" y="${Y(o.p[key]) - 10}" text-anchor="middle" font-size="11" fill="#ff8a98">▲ ×${Math.round(o.p[key] / Math.max(1, o.prev[key]))}</text>`).join('')}
+      <line x1="${X(L)}" x2="${X(L)}" y1="${pt}" y2="${H - pb}" stroke="#c8283c" stroke-width="1.5" stroke-dasharray="4 3"/>${g}</svg></div>`;
+}
+function labDrawCurves() {
+  const c = LABCURVES, box = $('#labcurves');
+  if (!c || !c.points) { box.innerHTML = ''; return; }
+  const pts = c.points.map(p => Object.assign({}, p, { tough: p.ehp || (p.life || 0) + (p.es || 0) }));
+  const geared = c.geared ? Object.assign({}, c.geared, { tough: c.geared.ehp || (c.geared.life || 0) + (c.geared.es || 0) }) : null;
+  box.innerHTML = labChart('Damage (DPS)', pts, 'dps', '#e3b341', geared, LABL, 'DPS') + labChart('Toughness (effective HP)', pts, 'tough', '#6fa8dc', geared, LABL, 'EHP');
+  $('#labcurvenote').textContent = c.note || '';
+}
+async function labCurves(start) {
+  if (!LAB) return;
+  clearTimeout(LABCPOLL);
+  const r = await get(`/api/lab/curves?build=${LAB.build.id}${start ? '&start=1' : ''}`);
+  if (r.status === 'running') {
+    $('#labcurvemsg').textContent = `Path of Building is working: ${r.done} of ${r.total} steps…`; $('#labcurvego').disabled = true;
+    LABCPOLL = setTimeout(() => labCurves(false), 2500); return;
+  }
+  $('#labcurvego').disabled = false;
+  if (r.status === 'error') { $('#labcurvemsg').textContent = 'Could not run: ' + (r.error || ''); return; }
+  if (r.status === 'done') { LABCURVES = r; $('#labcurvemsg').textContent = 'worked out ' + ago(r.ts); $('#labcurvego').textContent = 'Run again'; labDrawCurves(); }
+  else { LABCURVES = null; labDrawCurves(); $('#labcurvemsg').textContent = 'not worked out yet for this build (takes about a minute)'; $('#labcurvego').textContent = 'Run Path of Building'; }
+}
+$('#labcurvego').onclick = () => labCurves(true);
+
+// ---------- Build Lab stage 3: what-if bench ----------
+let LABCARDS = '', LABCARDPOLL = null;
+const WI_MAIN = [['DPS (combined)', 'DPS'], ['DPS (main skill)', 'DPS'], ['effective HP', 'EHP'], ['life', 'life'], ['energy shield', 'ES']];
+function wiCard(c) {
+  if (c.error) return `<div class="wi err"><h4>${esc(c.title)}</h4><div class="why">${esc(c.why || '')}</div><div class="small" style="color:#ff7b7b">${esc(c.error)}</div>
+    <div class="foot"><span>${ago(c.ts)}</span><button class="btn" data-wiremove="${c.id}">remove</button></div></div>`;
+  const d = (c.result || {}).delta || {};
+  const seen = new Set(); const chips = [];
+  WI_MAIN.forEach(([k, l]) => { if (d[k] && !seen.has(l)) { seen.add(l); chips.push([k, l, true]); } });
+  Object.keys(d).forEach(k => { if (!WI_MAIN.some(m => m[0] === k)) chips.push([k, k, false]); });
+  const chip = ([k, l, big]) => { const x = d[k]; const up = (x.after || 0) >= (x.before || 0);
+    const res = /res$/.test(k); const v = x.pct != null && !res ? `${x.pct > 0 ? '+' : ''}${x.pct}%` : `${fmtN(x.before)} → ${fmtN(x.after)}`;
+    return `<span class="d ${up ? 'up' : 'down'} ${big ? 'big' : ''}" title="${esc(k)}: ${x.before} → ${x.after}">${esc(l)} <b>${v}</b></span>`; };
+  const dps = d['DPS (combined)'] || d['DPS (main skill)'];
+  const eff = c.cost_div && dps && dps.pct != null ? `<span class="eff">${(dps.pct / c.cost_div).toFixed(1)}% DPS per div</span>` : '';
+  return `<div class="wi"><h4>${esc(c.title)}</h4>${c.why ? `<div class="why">${esc(c.why)}</div>` : ''}
+    <div class="deltas">${chips.length ? chips.slice(0, 9).map(chip).join('') : '<span class="small muted">No change in Path of Building.</span>'}</div>
+    ${(c.result || {}).warnings && c.result.warnings.length ? `<div class="small muted" style="margin-top:6px">${esc(c.result.warnings[0])}</div>` : ''}
+    <div class="foot"><span>${c.cost_div != null ? 'costs about ' + esc(P(c.cost_div)) + ' · ' : ''}${ago(c.retested || c.ts)}</span>
+      <button class="btn" data-wiretest="${c.id}">retest</button><button class="btn" data-wiremove="${c.id}">remove</button>${eff}</div></div>`;
+}
+async function labCards(q) {
+  if (!LAB) return;
+  const r = await get(`/api/lab/cards?build=${LAB.build.id}${q || ''}`);
+  const cs = (r && r.cards) || []; const sig = JSON.stringify(cs.map(c => [c.id, c.retested, c.error]));
+  if (sig !== LABCARDS) {
+    LABCARDS = sig;
+    $('#labcards').innerHTML = cs.slice().reverse().map(wiCard).join('') || '<div class="muted small">No suggestions yet. Ask the Oracle for some: they show up here, measured.</div>';
+  }
+  $('#labcardmsg').textContent = cs.length ? `${cs.length} suggestion${cs.length > 1 ? 's' : ''}` : '';
+}
+document.addEventListener('click', async e => {
+  const t = e.target.closest('[data-wiretest]'), rm = e.target.closest('[data-wiremove]');
+  if (t) { t.textContent = 'testing…'; t.disabled = true; await labCards('&retest=' + t.dataset.wiretest); }
+  if (rm) await labCards('&remove=' + rm.dataset.wiremove);
+});
+setInterval(() => { if (document.querySelector('#lab.on') && document.visibilityState === 'visible') labCards(); }, 5000);
+
+// ---------- feel like an app, not a web page ----------
+// no browser right-click menu (text boxes keep theirs for copy / paste), no print / save-page / view-source keys
+document.addEventListener('contextmenu', e => { if (!e.target.closest('input, textarea, select, [contenteditable]')) e.preventDefault(); });
+document.addEventListener('keydown', e => {
+  const k = e.key.toLowerCase();
+  if ((e.ctrlKey || e.metaKey) && ['p', 's', 'u', 'o', 'n', 't', 'j', 'h', 'd'].includes(k) && !e.shiftKey) e.preventDefault();
+  if (e.altKey && (k === 'arrowleft' || k === 'arrowright')) e.preventDefault();   // browser back / forward
+});
+
+// ---------- Build Lab stages 4-5: upgrade ranking + defence sheet ----------
+async function labUpgrades() {
+  if (!LAB) return;
+  const b = +$('#labbudget').value || 10;
+  $('#labup').innerHTML = '<div class="muted small" style="margin-top:8px"><span class="spin"></span>Trying every unique in every slot…</div>';
+  const r = await get(`/api/lab/upgrades?build=${LAB.build.id}&budget=${b}`);
+  if (!r || r.error) { $('#labup').innerHTML = `<div class="muted small">${esc((r && r.error) || 'failed')}</div>`; return; }
+  const base = (r.baseline || {}).dps || 0, last = r.path[r.path.length - 1];
+  const pathHtml = r.path.length ? `<div class="up-path">${r.path.map((x, i) => `${i ? '<span class="arrow">→</span>' : ''}<span class="step">${esc(x.slot)}: <b>${esc(x.item.split(',')[0])}</b> +${x.dps_pct}%</span>`).join('')}</div>
+    <div class="up-total">${fmtN(base)} → ~${fmtN(last.dps_after)} DPS for ${esc(P(last.cost_so_far || 0.0001))}</div>
+    <div class="small muted">Best value pick per slot, in order. Multiplied together, so a rough projection.</div>` : '<div class="muted small">No damage upgrade in this budget that keeps your resistances.</div>';
+  const pct = v => v == null ? '' : `<span class="${v >= 0 ? 'pos' : 'neg'}">${v > 0 ? '+' : ''}${v}%</span>`;
+  const rows = r.rows.slice(0, 14).map(x => `<tr><td>${ic(x.icon, 26, x.item.split(',')[0])}<b>${esc(x.item.split(',')[0])}</b><div class="small muted">${esc(x.slot)} · replaces ${esc((x.replaces || 'nothing').split(',')[0])}</div></td>
+    <td class="num">${esc(x.price || P(x.price_div))}</td><td class="num">${pct(x.dps_pct)}</td><td class="num">${pct(x.lowest_max_hit_pct)}</td>
+    <td class="num">${x.dps_pct_per_div != null && x.price_div ? (x.dps_pct_per_div).toFixed(1) + '%' : '–'}</td>
+    <td class="small" style="color:#ff9a6b">${x.loses_res_cap && x.loses_res_cap.length ? 'loses ' + esc(x.loses_res_cap.join(', ')) + ' cap' : ''}</td></tr>`).join('');
+  $('#labup').innerHTML = pathHtml + `<table class="up" style="margin-top:12px"><tr><th>Item</th><th class="num">Price</th><th class="num">DPS</th><th class="num">Weakest hit</th><th class="num">DPS / div</th><th></th></tr>${rows}</table>
+    <div class="chips">${labAsk('Put the best 3 on the bench', `Put the 3 best upgrades under ${b} div for "${LAB.build.label}" (vault #${LAB.build.id}) on the Build Lab bench, with real item text.`)}${labAsk('What about rares?', `Which rare items would beat these uniques for "${LAB.build.label}" (vault #${LAB.build.id}), and what do they cost?`)}</div>`;
+}
+$('#labupgo').onclick = labUpgrades;
+async function labDefence() {
+  if (!LAB) return;
+  $('#labdef').innerHTML = '<div class="muted small" style="margin-top:8px"><span class="spin"></span>Path of Building is checking…</div>';
+  const d = await get(`/api/lab/defence?build=${LAB.build.id}`);
+  if (!d || d.error) { $('#labdef').innerHTML = `<div class="muted small">${esc((d && d.error) || 'failed')}</div>`; return; }
+  const col = { physical: '#c8c8c8', fire: '#e0603a', cold: '#5aa7ff', lightning: '#e3d34a', chaos: '#b06ad8' };
+  const mx = Math.max(...Object.values(d.max_hits), 1);
+  const bars = Object.entries(d.max_hits).map(([t, v]) => `<div class="hitbar"><span style="color:${col[t]}">${t}</span><div class="bar"><div style="width:${v / mx * 100}%;background:${col[t]};opacity:.75"></div></div><span class="v">${fmtN(v)}</span></div>`).join('');
+  const st = d.stats || {};
+  const res = ['fire', 'cold', 'lightning', 'chaos'].map(t => { const v = st[t + ' res']; if (v == null) return '';
+    const bad = t === 'chaos' ? v < 0 : v < 75; return `<span class="res ${bad ? 'bad' : 'ok'}">${t}<b>${v}%</b></span>`; }).join('');
+  const flags = d.flags.length ? d.flags.map(f => `<div class="flag ${f.level}">${esc(f.text)}</div>`).join('') : '<div class="flag ok">No gaps found: resistances capped and no weak spot.</div>';
+  $('#labdef').innerHTML = `<div class="small muted" style="margin:6px 0 2px">Biggest hit you survive</div>${bars}<div class="res-row">${res}</div>
+    <div class="res-row"><span class="res">EHP<b>${fmtN(st['effective HP'])}</b></span><span class="res">life<b>${fmtN(st.life)}</b></span><span class="res">ES<b>${fmtN(st['energy shield'])}</b></span><span class="res">spirit<b>${fmtN(st.spirit)}</b></span></div>
+    ${flags}<div class="chips">${labAsk('Fix my gaps cheaply', `Fix the defence gaps of "${LAB.build.label}" (vault #${LAB.build.id}) as cheaply as possible and put the options on the Build Lab.`)}</div>`;
+  $('#labdefmsg').textContent = d.main_skill ? `level ${d.level} · ${d.main_skill}` : '';
+}
+
+// ---------- Build Lab stage 7: history ----------
+async function labHistory() {
+  if (!LAB) return;
+  const h = await get(`/api/lab/history?build=${LAB.build.id}`);
+  if (!h || h.error) { $('#labhist').innerHTML = `<div class="muted small">${esc((h && h.error) || '')}</div>`; return; }
+  $('#labhistsub').textContent = `${h.character}: every snapshot you import, and the level-ups the game log saw.`;
+  const snap = h.snapshots.slice().reverse().map(x => `<div class="lab-skill"><b>${esc(x.label)}</b> <span class="small muted">level ${x.level} · ${new Date(x.ts * 1000).toLocaleDateString()}</span>
+    <div class="sup">${x.dps != null ? 'DPS <b>' + fmtN(x.dps) + '</b>' : ''}${x.ehp != null ? ' · EHP <b>' + fmtN(x.ehp) + '</b>' : ''}${x.change ? ` · <span style="color:var(--eo-gold-hi)">${esc(x.change)}</span>` : ''}</div></div>`).join('');
+  const lv = h.levels.slice(-12).reverse().map(x => `<li>level ${x.level} <small>${new Date(x.ts * 1000).toLocaleString()}</small></li>`).join('');
+  $('#labhist').innerHTML = (snap || '<div class="muted small" style="margin:8px 0">No snapshots of this character yet.</div>')
+    + (lv ? `<div class="small muted" style="margin-top:10px">Level-ups</div><ul class="lab-new">${lv}</ul>` : '')
+    + `<div class="chips">${labAsk('Take a snapshot now', `Import my character ${h.character} again so the Build Lab history gets a new snapshot.`)}${labAsk('What changed since last time?', `Compare the last two snapshots of ${h.character} and tell me what changed and why.`)}</div>`;
+}
+
+// ---------- Build Lab stage 8: the Oracle feed ----------
+let LABFEED = '';
+async function labFeed() {
+  const r = await get('/api/lab/feed'); const f = (r && r.feed) || [];
+  const sig = f.length ? f[f.length - 1].ts + ':' + f.length : '0';
+  if (sig === LABFEED) return; LABFEED = sig;
+  const live = f.length && Date.now() / 1000 - f[f.length - 1].ts < 60;
+  $('#labfeed').innerHTML = (live ? '<div class="flag ok" style="margin-top:6px"><span class="spin"></span>The Oracle is working…</div>' : '')
+    + (f.slice().reverse().slice(0, 14).map(x => `<div class="lab-skill" style="${x.ok ? '' : 'border-color:#7a2a2a'}">
+      <b>${esc(x.what)}</b> <span class="small muted">${ago(x.ts)}${x.ms > 1500 ? ' · ' + (x.ms / 1000).toFixed(1) + ' s' : ''}${x.client ? ' · ' + esc(x.client) : ''}</span>
+      ${x.detail ? `<div class="sup">${esc(x.detail)}</div>` : ''}${x.error ? `<div class="sup" style="color:#ff7b7b">${esc(x.error)}</div>` : ''}</div>`).join('')
+      || '<div class="muted small" style="margin-top:8px">Nothing yet. Ask the Oracle something in chat and watch it work here.</div>');
+}
+setInterval(() => { if (document.querySelector('#lab.on') && document.visibilityState === 'visible') labFeed(); }, 4000);
+
+// ---------- Report an issue / Suggestions ----------
+document.querySelectorAll('#report, #suggest').forEach(sec => {
+  const kind = sec.id === 'report' ? 'issue' : 'suggestion';
+  const val = () => ({ kind, text: sec.querySelector('.rp-text').value, name: (sec.querySelector('.rp-name') || {}).value || '',
+                       attach: !!(sec.querySelector('.rp-attach') || {}).checked });
+  const msg = t => sec.querySelector('.rp-msg').textContent = t;
+  const pv = sec.querySelector('.rp-preview');
+  if (pv) pv.onclick = async () => { msg('Checking…'); const r = await post('/api/report/preview', val()); const o = sec.querySelector('.rp-out'); o.style.display = 'block'; o.textContent = r.text || ''; msg(''); };
+  sec.querySelector('.rp-send').onclick = async e => {
+    const b = e.target; b.disabled = true; msg('Sending…');
+    const r = await post('/api/report', val());
+    b.disabled = false;
+    if (r.ok) { msg('Sent. Thank you!'); sec.querySelector('.rp-text').value = ''; } else msg(r.why || 'Could not send.');
+  };
+});
+
+// ---------- connectors (other AI apps) ----------
+async function loadConnectors() {
+  const st = await get('/api/connectors'); if (!st || st.error) return;
+  $('#connlist').innerHTML = Object.entries(st).map(([k, c]) => `<div class="lab-skill" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <b>${esc(c.name)}</b>${c.tested ? '' : ' <span class="pill" title="Built from the app\'s own documentation; not confirmed by a player yet">untested</span>'}
+    <span class="small muted">${c.connected ? 'connected' : c.found ? 'found on this PC, not connected' : 'not found on this PC'}</span>
+    <span style="flex:1"></span><button class="btn" data-conn="${k}" data-act="${c.connected ? 'disconnect' : 'connect'}">${c.connected ? 'Disconnect' : 'Connect'}</button>
+    ${c.connected ? `<div class="small muted" style="width:100%">${esc(c.how)}</div>` : ''}</div>`).join('');
+}
+document.addEventListener('click', async e => { const b = e.target.closest('[data-conn]'); if (!b) return;
+  b.disabled = true; const r = await post('/api/connectors', { target: b.dataset.conn, action: b.dataset.act });
+  if (!r.ok && r.why) alert(r.why); loadConnectors(); });
+
+// ---------- Build Lab stage 6: boss readiness ----------
+const STATNAME = { dps: 'DPS', effective_hp: 'EHP', life_es: 'life + ES', fire_res: 'fire res', cold_res: 'cold res', lightning_res: 'lightning res',
+  chaos_res: 'chaos res', max_hit_physical: 'max hit physical', max_hit_fire: 'max hit fire', max_hit_cold: 'max hit cold', max_hit_lightning: 'max hit lightning', max_hit_chaos: 'max hit chaos' };
+async function labBosses() {
+  if (!LAB) return;
+  $('#labboss').innerHTML = '<div class="muted small" style="margin-top:8px"><span class="spin"></span>Checking every boss…</div>';
+  const r = await get(`/api/lab/bosses?build=${LAB.build.id}`);
+  if (!r || r.error) { $('#labboss').innerHTML = `<div class="muted small">${esc((r && r.error) || 'failed')}</div>`; return; }
+  const n = st => r.bosses.filter(b => b.state === st).length;
+  const fmtV = c => c.unit === '%' ? `${c.value}%` : fmtN(c.value);
+  const fmtM = c => c.unit === '%' ? `${c.min}%` : fmtN(c.min);
+  $('#labboss').innerHTML = `<div class="boss-sum"><span class="res ok">ready<b>${n('ready')}</b></span><span class="res">risky<b style="color:#e9c46a">${n('risky')}</b></span><span class="res bad">not yet<b>${n('not yet')}</b></span></div>
+    <div class="boss-grid">${r.bosses.map(b => { const gaps = b.checks.filter(c => c.state === 'not yet' || c.state === 'risky');
+      return `<div class="boss ${b.state.replace(' ', '-')}" title="${esc(b.unlock || '')}"><div style="display:flex;justify-content:space-between;gap:8px"><h4>${esc(b.name)}${b.tier === 'uber' ? ' <span class="pill">harder</span>' : ''}</h4><span class="st">${esc(b.state)}</span></div>
+        <ul>${(gaps.length ? gaps : b.checks.slice(0, 2)).slice(0, 5).map(c => `<li class="${c.state.replace(' ', '-')}" title="${esc(c.why || '')}">${esc(STATNAME[c.stat] || c.stat)}: ${c.value == null ? '?' : fmtV(c)} / ${fmtM(c)}${c.estimated ? ' <span class="muted">(estimate)</span>' : ''}</li>`).join('')}</ul></div>`; }).join('')}</div>
+    <div class="small muted" style="margin-top:8px">${esc(r.version_note || '')}</div>
+    <div class="chips">${labAsk('What do I need for my next boss?', `Which pinnacle boss should "${LAB.build.label}" (vault #${LAB.build.id}) do next, and what's the cheapest way to be ready? Put the options on the Build Lab.`)}</div>`;
+  $('#labbossmsg').textContent = r.main_skill ? `level ${r.level} · ${r.main_skill}` : '';
+}
+
 // ---------- home ----------
 const HOME_CUR = ['Chaos Orb', 'Exalted Orb', 'Orb of Annulment', 'Vaal Orb', 'Regal Orb', 'Orb of Alchemy', "Artificer's Orb", 'Mirror of Kalandra'];
 async function loadHome() {
   const [st, mk, al] = await Promise.all([get('/api/status'), get('/api/market?cat=Currency'), get('/api/alerts')]);
+  if (st && !STATUS) STATUS = st;   // prices need the exchange rate: don't wait for the header's status call
   const rt = (st && st.rates) || {};
   $('#homesub').textContent = `${st.league || ''} · ${(st.items_tracked || 0).toLocaleString()} items tracked`;
   const by = Object.fromEntries((mk.items || []).map(i => [i.item, i]));
@@ -564,6 +1055,9 @@ if (document.querySelector('#home.on')) loadHome();
 
 // ---------- header ----------
 let STATUS = null;
+(() => { const z = document.getElementById('eozoom'); if (!z) return;
+  try { z.value = localStorage.getItem('eozoom') || 'auto'; } catch (e) {}
+  z.onchange = () => { try { localStorage.setItem('eozoom', z.value); } catch (e) {} applyZoom(); }; })();
 document.querySelectorAll('input[name=dwin]').forEach(r => r.onchange = async () => {
   const j = await post('/api/window', { mode: r.value });
   $('#dwinmsg').textContent = j && j.ok ? 'saved' : 'could not save';
@@ -817,7 +1311,7 @@ async function drawTree(c, box) {
     const a = byId[e[0]], b = byId[e[1]]; if (!a || !b || a.a || b.a) return '';
     const on = alloc.has(a.id) && alloc.has(b.id);
     const d = e.length > 2 ? `M${a.x},${a.y}A${e[2]},${e[2]} 0 0 ${e[3]} ${b.x},${b.y}` : `M${a.x},${a.y}L${b.x},${b.y}`;
-    return `<path d="${d}" class="${on ? 'eon' : 'eoff'}"/>`;
+    return `<path d="${d}" data-a="${a.id}" data-b="${b.id}" class="${on ? 'eon' : 'eoff'}"/>`;
   };
   const on = nodes.filter(n => alloc.has(n.id));
   const nodeSvg = n => {

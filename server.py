@@ -8,6 +8,7 @@ import datetime
 import json
 import os
 import sys
+import time
 import urllib.parse
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -245,6 +246,32 @@ def t_levelling(a):
         return {'level': lvl, 'skills': [{'name': g['name'], 'from': g['level'], 'tags': g['tags']} for g in cat.values()
                                          if not g['support'] and g['level'] and g['level'] <= lvl]}
     return {'error': 'mode: route | gems | test | rank_supports | rank_skills'}
+
+
+def t_lab(a):
+    """Build Lab (dashboard): roadmap, power curves and what-if cards the player sees while you explain in chat."""
+    from poe2kit import buildplan, lab
+    con = db.connect()
+    bid = a.get('build_id') or next(iter(buildplan.followed(con).values()), None) \
+        or con.execute('SELECT MAX(id) FROM build').fetchone()[0]
+    act = a.get('action') or 'cards'
+    if act == 'roadmap':
+        r = lab.roadmap(con, bid)
+        return dict(r, route=f"{len(r['route'])} passives (first: {r['route'][:3]})", note='Drawn on the Build Lab tab.')
+    if act == 'curves':
+        if a.get('start'):
+            lab.start_curves(bid)
+        return lab.curves_state(con, bid)
+    if act == 'suggest':
+        if not a.get('title') or not a.get('change'):
+            raise ValueError('suggest needs title and change ({"item": {"slot", "item_text"}} and/or {"edits": {...}})')
+        c = lab.suggest(con, bid, a['title'], a['change'], a.get('why') or '', a.get('cost_div'))
+        return {'card': c, 'note': 'Shown on the Build Lab tab with its before/after numbers.'}
+    if act == 'retest':
+        return lab.retest(con, bid, a['card_id'])
+    if act == 'remove':
+        return lab.remove_card(con, bid, a['card_id'])
+    return {'build_id': bid, 'cards': lab.cards(con, bid)}
 
 
 def t_doctor(a):
@@ -656,6 +683,16 @@ TOOLS = [
      '{"levelling_skills": [...]} and switch the route on with levelling_route=true.',
      S(build_id=NUM, mode=STR, level=NUM, up_to_level=NUM, skill=STR, supports={'type': 'array'},
        skills={'type': 'array'}, limit=NUM), t_levelling),
+    ('poe2_lab',
+     'The Build Lab tab on the dashboard: the player watches it while you work in chat. action="suggest" puts a '
+     'what-if card on it, measured by Path of Building right away: title, why, cost_div (optional) and change = '
+     '{"item": {"slot": "Amulet", "item_text": "<in-game Ctrl+C or PoB item text>"}} and/or {"edits": '
+     '{"add_passives": [...], "remove_passives": [...], "swap_gems": {"old": "new"}}}. The card shows DPS, EHP, life, '
+     'ES, max hits and res before/after. action="cards" lists them, "retest"/"remove" take card_id. '
+     'action="roadmap" = the levelling route the Lab draws; action="curves" (start=true runs ~1 min in the background) '
+     '= DPS/EHP by level. Use it whenever you compare options: the player sees the numbers, not just your words.',
+     S(build_id=NUM, action=STR, title=STR, why=STR, cost_div=NUM, change={'type': 'object'}, card_id=NUM, start=BOOL),
+     t_lab),
     ('poe2_doctor',
      'Something in the toolkit is broken or acting odd (overlay, prices, dashboard, Build Planner, Path of Building, '
      "Claude connection)? Call this FIRST: it checks every part (read-only) and returns what's wrong, which sections "
@@ -678,26 +715,79 @@ def send(obj):
     sys.stdout.buffer.flush()
 
 
+# ---------------- the Oracle feed (Build Lab): each tool call, in words, for the dashboard ----------------
+
+# Sent to every AI app that connects (Claude, ChatGPT / Codex, Gemini CLI, ...): how to use Exile Oracle well.
+INSTRUCTIONS = (
+    "Exile Oracle: the player's own Path of Exile 2 companion, used through you (any MCP app). In the app you are "
+    '"the Oracle". Start with poe2_status (league, data freshness, the profile class / ascendancy).\n'
+    '- Answer with real numbers from the tools and explain them plainly.\n'
+    '- Show your work: poe2_show puts views on the dashboard; for build questions use poe2_lab: every option you '
+    'compare goes on the Build Lab as a what-if card (Path of Building measures it), and the roadmap / power curves '
+    'live there too. The player watches the Lab while you talk.\n'
+    '- Characters: poe2_my_characters / poe2_import_character only when asked. Their usual goal: the top 1% '
+    '(poe2_top1). Upgrades: poe2_upgrades (DPS per divine).\n'
+    '- Levelling routes are a rule of thumb until you review them (poe2_levelling, then levelling_route=true in '
+    'poe2_build_planner).\n'
+    '- Rules: read-only toward the game. Data comes from the poe.ninja economy API, GGG public Currency Exchange '
+    "history, the player's Build Vault and game log. Never call poe.ninja builds / profile APIs. The trade site is "
+    'only used by the overlay when the player presses its key: for searches give a poe2_trade_link. Never send a '
+    'report or suggestion yourself (the player uses the forms). Roll-dependent uniques are priced at the cheapest '
+    'roll and rares at an estimated craft cost: say so.\n'
+    '- Something broken? Call poe2_doctor first and follow its guide.')
+
+FEED_WORDS = {
+    'poe2_price': 'looked up prices', 'poe2_history': 'read price history', 'poe2_movers': 'checked the market movers',
+    'poe2_vault_add': 'saved a build to the vault', 'poe2_vault_list': 'listed your builds',
+    'poe2_vault_show': 'opened a build', 'poe2_build_cost': 'priced a build',
+    'poe2_pob_stats': 'ran Path of Building', 'poe2_show': 'put a view on your dashboard',
+    'poe2_patch_notes': 'read the patch notes', 'poe2_league_plan': 'planned a league start',
+    'poe2_farm': 'ranked what to farm', 'poe2_league_start': 'read the league-start playbook',
+    'poe2_sessions': 'read your play sessions', 'poe2_craft': 'worked on a craft',
+    'poe2_my_characters': 'listed your characters', 'poe2_import_character': 'imported a character',
+    'poe2_upgrades': 'tried every unique in every slot', 'poe2_whatif': 'tested an item swap',
+    'poe2_compare': 'compared two builds', 'poe2_read_rare': 'read a rare item',
+    'poe2_build_planner': 'worked on the in-game Build Planner', 'poe2_levelling': 'checked the levelling route',
+    'poe2_lab': 'used the Build Lab', 'poe2_doctor': 'checked the app for problems',
+    'poe2_from_overlay': 'read the items you sent', 'poe2_trade_link': 'made a trade-site link',
+    'poe2_status': 'checked the app status', 'poe2_refresh': 'refreshed prices', 'poe2_top1': 'ran the Top 1% check',
+}
+CLIENT = {'name': None}
+
+
+def _feed(tool, args, ok, ms, err=None):
+    """Remember the call for the Build Lab's Oracle feed (last 60, local only; no item text)."""
+    try:
+        bits = []
+        for k in ('action', 'mode', 'build_id', 'item', 'name', 'slot', 'level', 'skill', 'title', 'budget_div'):
+            v = args.get(k)
+            if v not in (None, ''):
+                v = str(v)[:60]
+                bits.append({'build_id': f'build #{v}', 'budget_div': f'budget {v} div', 'level': f'level {v}',
+                             'slot': f'slot {v}', 'skill': v, 'action': v, 'mode': v}.get(k, v))
+        con = db.connect()
+        try:
+            feed = json.loads(db.kv_get(con, 'oracle:feed') or '[]')
+            feed.append({'ts': time.time(), 'tool': tool, 'what': FEED_WORDS.get(tool, tool), 'detail': ' · '.join(bits),
+                         'ok': ok, 'ms': ms, 'error': (err or '')[:160] or None, 'client': CLIENT['name']})
+            db.kv_set(con, 'oracle:feed', json.dumps(feed[-60:]))
+        finally:
+            con.close()
+    except Exception:
+        pass
+
+
 def handle(msg):
     method, mid = msg.get('method'), msg.get('id')
     if mid is None:
         return
     if method == 'initialize':
+        CLIENT['name'] = (((msg.get('params') or {}).get('clientInfo') or {}).get('name')) or None   # Claude, Codex, Gemini...
         send({'jsonrpc': '2.0', 'id': mid, 'result': {
             'protocolVersion': (msg.get('params') or {}).get('protocolVersion') or PROTOCOL_VERSION,
             'capabilities': {'tools': {}},
             'serverInfo': {'name': 'poe2', 'version': config.VERSION},
-            'instructions': (
-                "Exile Oracle (formerly PoE 2 Toolkit): the player's own Path of Exile 2 companion, meant to be used through you. Start with "
-                'poe2_status (league, data freshness) and read their profile defaults (class / ascendancy) from it. '
-                'Answer with real numbers from the tools, explain them plainly, and put the matching view on their '
-                'dashboard with poe2_show (charts, tables, build cost, upgrades, compares, character pages) while you '
-                'explain. Their characters: poe2_my_characters / poe2_import_character (only when asked; reuses an '
-                'import for 15 min). Goal they usually care about: reaching the top 1% (poe2_top1). '
-                'Rules: read-only toward the game; data from poe.ninja economy, GGG public exchange history, their '
-                'Build Vault, their game log. Never call poe.ninja builds/profile APIs or the trade API; use '
-                'poe2_trade_link for trade searches. Roll-dependent uniques are priced at the cheapest roll and rares '
-                'at an estimated craft cost: say so.')}})
+            'instructions': INSTRUCTIONS}})
     elif method == 'tools/list':
         send({'jsonrpc': '2.0', 'id': mid, 'result': {'tools': [
             {'name': n, 'description': d, 'inputSchema': s} for n, d, s, _ in TOOLS]}})
@@ -707,12 +797,14 @@ def handle(msg):
         if not tool:
             send({'jsonrpc': '2.0', 'id': mid, 'error': {'code': -32602, 'message': 'Unknown tool'}})
             return
+        t0 = time.time()
         try:
             text, err = json.dumps(tool[3](p.get('arguments') or {}), indent=1, ensure_ascii=False, default=str), False
         except net.NetError as e:
             text, err = str(e), True
         except Exception as e:
             text, err = f'{type(e).__name__}: {e}', True
+        _feed(p.get('name'), p.get('arguments') or {}, not err, int((time.time() - t0) * 1000), text if err else None)
         send({'jsonrpc': '2.0', 'id': mid, 'result': {'content': [{'type': 'text', 'text': text}], 'isError': err}})
     elif method == 'ping':
         send({'jsonrpc': '2.0', 'id': mid, 'result': {}})

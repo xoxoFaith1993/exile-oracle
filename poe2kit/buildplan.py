@@ -293,7 +293,7 @@ def _apply_skill_plan(doc, edits, rep):
         rep['unknown_gems'] = unknown
 
 
-def export(con, build_id, write=True, confirm=False, level=None, name=None):
+def export(con, build_id, write=True, confirm=False, level=None, name=None, route=None):
     """Make the .build from the build + its saved plan (edits, notes, level) and write it."""
     st = get(con, build_id)
     r = con.execute('SELECT label, pob_code FROM build WHERE id=?', (int(build_id),)).fetchone()
@@ -301,6 +301,8 @@ def export(con, build_id, write=True, confirm=False, level=None, name=None):
         raise ValueError('no such build in the vault')
     xml, warnings = apply_edits(vault.decode(r['pob_code']), st.get('edits'))
     route_on = bool(st.get('levelling_route'))   # only after Claude reviewed it (the order is a rule of thumb)
+    if route is not None:   # the Build Lab draws the route either way (and says whether it was reviewed)
+        route_on = bool(route)
     doc, rep = buildplanner.make(con, None, vault.encode(xml), st.get('notes'), name or st.get('name') or r['label'],
                                  auto_route=route_on)
     if rep.get('slots') == 0:   # gear prices need the vault build id

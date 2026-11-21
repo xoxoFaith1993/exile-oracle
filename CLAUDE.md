@@ -27,6 +27,10 @@ you assume.
 - **The game's `BuildPlanner` folder:** only files named `Exile Oracle - *.build` are written or removed. The first
   write asks the player.
 - **Exiled Exchange 2:** don't copy its code. Its AI policy asks for no AI-written code; read it for facts only.
+- **Reports and suggestions** (`poe2kit/report.py`) are sent only when the player presses Send, scrubbed, and
+  anonymous. Never send one on your own.
+- **Build Lab** (`poe2kit/lab.py`, tool `poe2_lab`): put what-if cards on it whenever you compare options, so the
+  player sees Path of Building's numbers.
 - **No personal details in commits.** `build_release.py` runs a privacy scan before anything is published.
 
 ## Layout

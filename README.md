@@ -4,7 +4,7 @@
 
 A free, personal **Path of Exile 2 companion** for Windows and Linux: live economy, what to farm, a league-start
 playbook, a Top 1% check for your character, play-session tracking, a craft lab, patch notes checked against your
-builds, and an in-game price-check overlay. It runs on your own PC in its own window, and it's built to be used
+builds, a Build Lab and an in-game price-check overlay. It runs on your own PC in its own window, and it's built to be used
 **together with Claude**: connect it once and ask Claude anything about your character, the economy or your next
 craft.
 
@@ -24,6 +24,40 @@ Ctrl+D on an item in game: poe.ninja and live trade-site prices (optional), a cr
 Ctrl+Alt+D keeps it open so you can tick rows and search again. F5 / F9 and your own chat commands work too.
 
 <img src="docs/screenshots/overlay.jpg" alt="Price-check overlay" width="460">
+
+### Build Lab (new in 0.5.0)
+The Oracle's workbench for one build: ask in chat, and what it works out shows here.
+
+- **Living roadmap.** Drag the level from 1 to 100 and the passive tree lights up in the order you take nodes, with the
+  skills, supports and gear for that level, plus quest points and trials on the slider.
+- **Power curves.** Real Path of Building runs at each level, for DPS and toughness, with your geared build marked.
+
+![Build Lab roadmap](docs/screenshots/build-lab.jpg)
+
+- **What-if bench.** The Oracle's suggestions as cards, each measured by Path of Building (DPS, EHP, max hits,
+  resistances) with its cost.
+
+![Power curves and what-if bench](docs/screenshots/build-lab-curves.jpg)
+
+- **Upgrade ranking and defence sheet.** Every affordable unique in every slot ranked by DPS per divine, with a
+  "budget path", next to the biggest hit you survive per damage type and the gaps in red.
+
+![Upgrades and defence](docs/screenshots/build-lab-gear.jpg)
+
+- **Boss readiness, history and the Oracle feed.**
+  - Ready / risky / not yet for every pinnacle boss, against researched minimums with their sources.
+  - Your character over time.
+  - A live feed of what the Oracle is doing in any chat.
+
+![Boss readiness, history and the Oracle feed](docs/screenshots/build-lab-feed.jpg)
+
+### Other AI apps
+Exile Oracle's tools are a standard MCP server. Settings → **Other AI apps** connects them to the ChatGPT desktop app
+/ Codex or Gemini CLI as well as Claude. ChatGPT is marked *untested* until a player confirms it.
+
+### Report an issue / Suggestions
+Two forms in the menu send your words straight to the developer. There's no sign-in: your copy reports anonymously,
+and you can see exactly what is sent first.
 
 ### Economy
 Mirror, Divine and the league's chase items at a glance.
