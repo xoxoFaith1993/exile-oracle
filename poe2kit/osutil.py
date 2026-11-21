@@ -6,14 +6,35 @@ import subprocess
 import sys
 
 IS_WIN = os.name == 'nt'
+# console programs started from the windowless toolkit (pythonw) would flash a command window without this
+NO_WINDOW = 0x08000000 if IS_WIN else 0
+
+
+def _win_exe(pid):
+    """Full path of a running process's program, or '' if it isn't running (no command window involved)."""
+    import ctypes
+    import ctypes.wintypes as wt
+    k32 = ctypes.windll.kernel32
+    k32.OpenProcess.restype = wt.HANDLE
+    h = k32.OpenProcess(0x1000, False, int(pid))   # PROCESS_QUERY_LIMITED_INFORMATION
+    if not h:
+        return ''
+    try:
+        code = wt.DWORD()
+        if not k32.GetExitCodeProcess(h, ctypes.byref(code)) or code.value != 259:   # STILL_ACTIVE
+            return ''
+        buf, n = ctypes.create_unicode_buffer(520), wt.DWORD(520)
+        return buf.value if k32.QueryFullProcessImageNameW(h, 0, buf, ctypes.byref(n)) else '?'
+    finally:
+        k32.CloseHandle(h)
 
 
 def pid_alive(pid):
     if not pid:
         return False
     if IS_WIN:
-        out = subprocess.run(['tasklist', '/FI', f'PID eq {pid}', '/NH'], capture_output=True, text=True).stdout
-        return str(pid) in out and 'python' in out.lower()
+        exe = _win_exe(pid)
+        return bool(exe) and 'python' in os.path.basename(exe).lower()
     try:
         os.kill(pid, 0)
     except OSError:
@@ -29,7 +50,7 @@ def kill(pid):
     if not pid:
         return
     if IS_WIN:
-        subprocess.run(['taskkill', '/PID', str(pid), '/F'], capture_output=True)
+        subprocess.run(['taskkill', '/PID', str(pid), '/F'], capture_output=True, creationflags=NO_WINDOW)
     else:
         try:
             os.kill(pid, signal.SIGTERM)
@@ -67,7 +88,7 @@ def process_running(fragment):
     """Is a program whose name or command line contains `fragment` running? (e.g. 'Path of Building')"""
     frag = fragment.lower()
     if IS_WIN:
-        out = subprocess.run(['tasklist', '/NH'], capture_output=True, text=True).stdout.lower()
+        out = subprocess.run(['tasklist', '/NH'], capture_output=True, text=True, creationflags=NO_WINDOW).stdout.lower()
         return frag in out
     for pid in os.listdir('/proc'):
         if pid.isdigit():

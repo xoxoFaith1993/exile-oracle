@@ -47,7 +47,9 @@ def run(script, env=None, timeout=300):
     cmd, extra = r
     e = dict(os.environ, POB_RUNTIME=os.path.join(POB, 'runtime'), **extra, **(env or {}))
     e.pop('CI', None)   # PoB skips its mod cache when CI is set (its own test mode): slow and not what we want
+    from . import osutil
     return subprocess.run(cmd + [script], cwd=os.path.join(POB, 'src'), env=e, capture_output=True, text=True,
+                          creationflags=osutil.NO_WINDOW,
                           encoding='utf-8', errors='replace', timeout=timeout, stdin=subprocess.DEVNULL)
 
 # The numbers people actually compare, in a sensible order (PoB mainOutput keys).

@@ -150,27 +150,44 @@ def t_vault_show(a):
 
 
 def t_build_planner(a):
-    """Export a build to the game's own Build Planner (.build file the game reads and watches)."""
-    from poe2kit import buildplanner as bp
+    """Export a build to the game's own Build Planner (.build file the game reads and watches).
+    With build_id the build keeps a saved plan (notes, edits, followed character) that every rewrite uses."""
+    from poe2kit import buildplanner as bp, buildplan
     if a.get('list'):
         return {'folder': bp.folder(), 'files': bp.files()}
     if a.get('remove'):
         return bp.remove(a['remove'])
     con = db.connect()
     try:
-        doc, rep = bp.make(con, a.get('build_id'), a.get('pob_code'), a.get('notes'), a.get('name'),
-                           a.get('include_gear', True) is not False)
-    finally:
-        con.close()
-    out = {'report': rep, 'folder': bp.folder()}
-    if a.get('write'):
-        out['write'] = bp.write(doc, bool(a.get('confirm')))
-        if out['write'].get('needs_ok'):
+        bid = a.get('build_id')
+        if bid is None:   # a pasted PoB code: one-off export, nothing saved
+            doc, rep = bp.make(con, None, a.get('pob_code'), a.get('notes'), a.get('name'),
+                               a.get('include_gear', True) is not False)
+            out = {'report': rep, 'folder': bp.folder()}
+            if a.get('write'):
+                out['write'] = bp.write(doc, bool(a.get('confirm')))
+            else:
+                out['preview'] = doc
+        else:
+            if a.get('check'):   # Path of Building before/after for the given edits; nothing saved
+                return buildplan.check(con, bid, a.get('edits') or {})
+            if a.get('forget'):
+                db.kv_set(con, buildplan.KEY + str(int(bid)), '{}')
+            follow = a.get('follow')
+            buildplan.save(con, bid, notes=a.get('notes'), edits=a.get('edits'), name=a.get('name'),
+                           follow=(follow or None) if follow != '' else '')
+            res = buildplan.export(con, bid, write=bool(a.get('write')), confirm=bool(a.get('confirm')))
+            out = {'report': res['report'], 'plan': buildplan.get(con, bid), 'folder': bp.folder()}
+            if a.get('write'):
+                out['write'] = res['write']
+            else:
+                out['preview'] = res['doc']
+        if (out.get('write') or {}).get('needs_ok'):
             out['ask_player'] = ("Ask the player first: this puts a file in their game's BuildPlanner folder. "
                                  'Then call again with write=true, confirm=true.')
-    else:
-        out['preview'] = doc
-    return out
+        return out
+    finally:
+        con.close()
 
 
 def t_trade_link(a):
@@ -536,14 +553,18 @@ TOOLS = [
     ('poe2_build_planner',
      "Put a build into Path of Exile 2's in-game Build Planner (GGG's documented .build file; the game shows the "
      'passive path, skills + supports to cut and gear-slot hints, and reloads the file by itself when it changes). '
-     'Give build_id (vault) or pob_code. notes (optional object) adds hover text in game: {"description": str, '
-     '"passives": {node name: text}, "skills": {gem name: text}, "slots": {"Helmet"|"Ring 1"|...: text}}; text may '
-     'use the game markup e.g. "<green>{take before maps}". Without write it returns a preview; write=true saves '
-     '"PoE2 Toolkit - <name>.build" (the first write ever needs confirm=true after asking the player). '
-     "list=true shows the folder; remove=<file> deletes one of the toolkit's own files. Tip: several PoB trees "
-     'titled "Level 30", "Level 60"... become a levelling route.',
-     S(build_id=NUM, pob_code=STR, name=STR, notes={'type': 'object'}, include_gear=BOOL, write=BOOL, confirm=BOOL,
-       list=BOOL, remove=STR), t_build_planner),
+     'Give build_id (vault) or pob_code. With build_id the build keeps a SAVED PLAN that every rewrite uses: '
+     'notes {"description": str, "passives": {node name: text}, "skills": {gem name: text}, "slots": {"Helmet"|'
+     '"Ring 1"|...: text}} (text may use game markup like "<green>{take before maps}"); edits {"add_passives": '
+     '[node names or game ids], "remove_passives": [...], "swap_gems": {"old gem": "new gem"}}; follow = the '
+     "character name whose level-ups (from the game log) rewrite the file with 'next' notes ('' stops following). "
+     'Before saving edits, call with check=true + edits: Path of Building shows DPS/life/res before vs after and warns '
+     "about unconnected nodes; tell the player, then save. write=true saves 'PoE2 Toolkit - <name>.build' (the "
+     'first write ever needs confirm=true after asking the player); without write you get a preview. forget=true '
+     "clears the saved plan. list=true shows the folder; remove=<file> deletes one of the toolkit's own files. "
+     'Several PoB trees titled "Level 30", "Level 60", "Endgame" become a levelling route.',
+     S(build_id=NUM, pob_code=STR, name=STR, notes={'type': 'object'}, edits={'type': 'object'}, follow=STR,
+       check=BOOL, forget=BOOL, include_gear=BOOL, write=BOOL, confirm=BOOL, list=BOOL, remove=STR), t_build_planner),
     ('poe2_trade_link', 'Make an official trade-site search link (by unique name and/or base type) to open in a browser.',
      S(name=STR, type=STR, league=STR), t_trade_link),
 ]

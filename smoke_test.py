@@ -152,6 +152,13 @@ def planner_check():
     check(ids['ascendancies'].get('Blood Mage') == 'Witch2' and len(ids['passives']) > 5000,
           f"Build Planner id map ({len(ids['passives'])} passives)")
     check(buildplanner._levels('Level 30') == 30 and buildplanner._levels('Endgame') == 100, 'Build Planner stage titles')
+    from poe2kit import buildplan
+    doc = {'description': 'x', 'passives': ['a', {'id': 'b', 'level_interval': [31, 100]},
+                                           {'id': 'c', 'level_interval': [60, 100]}]}
+    buildplan._level_notes(doc, 25)
+    check('Next: from level 31' in doc['passives'][1].get('additional_text', '') and
+          'additional_text' not in doc['passives'][2] and 'Level 25 now' in doc['description'],
+          'living plan: level notes')
 
 
 def mcp():
@@ -201,6 +208,14 @@ def pob_part():
               f'({time.time() - t0:.1f} s)')
     except Exception as e:
         check(False, f'PoB calculation: {e}')
+    try:   # living plan edits on PoB's own tree: a far-away keystone must be flagged as not connected
+        from poe2kit import buildplan
+        xml = ('<PathOfBuilding2><Build level="90" className="Witch"/><Tree activeSpec="1"><Spec treeVersion="0_5" '
+               'nodes=""/></Tree><Skills/><Items/></PathOfBuilding2>')
+        new_xml, warn = buildplan.apply_edits(xml, {'add_passives': ['Ritual Cadence']})
+        check('nodes=""' not in new_xml and any("isn't connected" in w for w in warn), 'living plan: edits + connection check')
+    except Exception as e:
+        check(False, f'living plan edits: {e}')
     try:
         cl = leagueplan.classes()
         check(any(c['name'] == 'Witch' for c in cl), f'passive tree read through PoB: {len(cl)} classes')

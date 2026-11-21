@@ -697,6 +697,20 @@ async function openCharacter(id) {
     $('#plmsg').textContent = w.ok ? `Saved: ${r.report.passives} passives, ${r.report.skills} skills, ${r.report.slots} gear hints. In game: open the passive tree and pick it in the Build Planner.`
       : (w.error || r.error || 'Could not save.');
   };
+  // B2: follow a character: its level-ups (from the game log) rewrite the plan with "next" notes
+  const plan = await get('/api/planner?build_id=' + id);
+  const fw = document.createElement('div');
+  fw.style.marginTop = '8px';
+  fw.innerHTML = `<label><input type="checkbox" id="plfollow"${plan.follow ? ' checked' : ''}> Keep the in-game plan updated as
+    <input class="crin" id="plchar" value="${esc(plan.follow || c.label || '')}" style="width:180px"> levels up</label>
+    <span class="muted">${plan.level ? `last written at level ${plan.level}` : ''}${plan.edits ? ' · has edits made with Claude' : ''}</span>`;
+  bar.appendChild(fw);
+  $('#plfollow').onchange = async e => {
+    const r = await post('/api/planner', { build_id: id, follow: e.target.checked ? $('#plchar').value.trim() : '' });
+    const w = r.write || {};
+    $('#plmsg').textContent = w.needs_ok ? 'Send it to the Build Planner once first (button above).' :
+      e.target.checked ? `Following ${$('#plchar').value.trim()}: the plan updates on each level-up.` : 'Stopped following.';
+  };
 }
 document.addEventListener('click', e => { const tr = e.target.closest('tr[data-build]'); if (tr) openCharacter(tr.dataset.build); });
 

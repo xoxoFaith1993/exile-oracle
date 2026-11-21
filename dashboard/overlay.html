@@ -27,8 +27,6 @@ html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
 /* item header */
 .item { display: flex; gap: 10px; align-items: center; background: var(--panel); border: 1px solid var(--border);
   border-radius: 6px; padding: 8px 10px; position: relative; overflow: hidden; }
-.item::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, var(--tint, transparent), transparent 60%);
-  opacity: .14; pointer-events: none; }
 .icon { width: 46px; height: 46px; flex: none; display: grid; place-items: center; background: #151a22;
   border: 1px solid var(--border); border-radius: 4px; }
 .icon img { max-width: 42px; max-height: 42px; }
@@ -118,7 +116,7 @@ svg.spark { display: block; }
 <div class="app">
   <div class="title sc" id="title">PoE 2 Toolkit · price check</div>
   <div class="scroll" id="main"><div class="empty sc">Press Ctrl+C on an item in game</div></div>
-  <div class="foot"><span id="limit"></span><span>Esc or click the game to close</span></div>
+  <div class="foot"><span id="limit"></span><span>Ctrl+D quick · Ctrl+Alt+D stays open · Esc closes</span></div>
 </div>
 <script>
 const $ = s => document.querySelector(s);
@@ -159,7 +157,46 @@ function statText(s) {   // bold the numbers, like the game
   return esc(s.text).replace(/([+-]?\d+(?:\.\d+)?%?)/g, '<b>$1</b>');
 }
 
+// ---------- overlay settings (Ctrl+Shift+D) ----------
+async function renderSettings() {
+  const o = await (await fetch('/api/overlay/options')).json();
+  $('#title').textContent = 'Overlay settings';
+  const hk = o.hotkeys || {};
+  const row = (label, ctl, sub) => `<div class="st"><div class="txt"><div class="t">${label}</div>${sub ? `<div class="k" style="color:var(--muted);font-size:11.5px">${sub}</div>` : ''}</div>${ctl}</div>`;
+  const tog = (k, on) => `<input type="checkbox" data-k="${k}"${on ? ' checked' : ''}>`;
+  const seg = (k, val, opts) => `<div class="seg">${opts.map(([v, l]) => `<button data-k="${k}" data-v="${v}" class="${val === v ? 'on' : ''}">${l}</button>`).join('')}</div>`;
+  const num = (k, v, unit) => `<div class="mm"><input data-n="${k}" value="${v}" style="width:60px;border-radius:4px"></div><span class="k" style="color:var(--muted);margin-left:4px">${unit}</span>`;
+  $('#main').innerHTML = `
+    <div class="pills"><span class="pill sc">quick check: <b>${esc(hk.quick)}</b></span><span class="pill sc">detailed: <b>${esc(hk.detailed)}</b></span><span class="pill sc">settings: <b>${esc(hk.settings)}</b></span></div>
+    <div class="stats">
+      ${row('Live trade-site prices', tog('live_trade', o.live_trade), "Uses GGG's trade site like Exiled Exchange 2: one search per check.")}
+      ${row('Listings to search', seg('listing', o.listing, [['securable', 'instant buyout'], ['online', 'online']]))}
+      ${row('Match my rolls within', num('search_range_pct', o.search_range_pct, '%'), '10% = look for at least 90% of each roll.')}
+      ${row('Quick check closes after the mouse moves', num('quick_close_px', o.quick_close_px, 'px'))}
+      ${row('Popup position', seg('popup_position', o.popup_position, [['centre', 'centre'], ['mouse', 'by the mouse']]))}
+      ${row('Also show a price when I press Ctrl+C myself', tog('overlay_on_copy', o.overlay_on_copy), 'Off: copying an item into chat stays quiet.')}
+    </div>
+    <div class="matched sc" style="margin-top:12px">chat commands <span style="text-transform:none;font-variant:normal">(the key types the text in chat: Enter, text, Enter)</span></div>
+    <div class="stats" id="cmds">${(o.chat_commands || []).map((c, i) => `<div class="st" data-i="${i}">
+        <div class="txt"><input class="ctext" value="${esc(c.text)}" style="width:100%;height:24px;background:#161b23;border:1px solid var(--border);color:var(--text);border-radius:4px;padding:0 6px;font:13px 'Segoe UI'"></div>
+        <div class="mm"><input class="ckey" value="${esc(c.key)}" placeholder="no key" style="width:86px;border-radius:4px"></div>
+        <button class="btn cdel" title="remove" style="padding:2px 8px">×</button></div>`).join('')}</div>
+    <div class="actions" style="margin-top:6px"><button class="btn" id="cadd">+ add command</button><span class="k" style="color:var(--muted);font-size:11.5px">keys: F1–F12, or Ctrl/Alt/Shift + a key</span></div>
+    <div class="actions">${cur && cur.item ? '<button class="btn" id="back">back to the item</button>' : ''}<span class="grow"></span><span class="k sc" id="saved" style="color:var(--muted)"></span></div>`;
+  const save = async b => { await fetch('/api/overlay/options', { method: 'POST', body: JSON.stringify(b) }); $('#saved').textContent = 'saved'; setTimeout(renderSettings, 150); };
+  document.querySelectorAll('input[type=checkbox][data-k]').forEach(c => c.onchange = () => save({ [c.dataset.k]: c.checked }));
+  document.querySelectorAll('.seg button[data-k]').forEach(b => b.onclick = () => save({ [b.dataset.k]: b.dataset.v }));
+  document.querySelectorAll('input[data-n]').forEach(i => i.onchange = () => save({ [i.dataset.n]: +i.value }));
+  const back = $('#back'); if (back) back.onclick = () => render({ ...lastState, view: 'item' });
+  const cmdList = () => [...document.querySelectorAll('#cmds .st')].map(r => ({ text: r.querySelector('.ctext').value, key: r.querySelector('.ckey').value }));
+  document.querySelectorAll('#cmds .ctext, #cmds .ckey').forEach(i => i.onchange = () => save({ chat_commands: cmdList() }));
+  document.querySelectorAll('#cmds .cdel').forEach(b => b.onclick = () => { b.closest('.st').remove(); save({ chat_commands: cmdList() }); });
+  $('#cadd').onclick = () => save({ chat_commands: [...cmdList(), { text: '/', key: '' }] });
+  reportSize();
+}
+
 function render(st) {
+  if (st.view === 'settings') { renderSettings(); return; }
   const r = st.result || {};
   cur = r;
   if (st.status === 'pricing' && !r.item) { $('#main').innerHTML = '<div class="empty sc"><span class="spin"></span>Reading item…</div>'; return; }

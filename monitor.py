@@ -219,8 +219,9 @@ def job_pob(con):
         # fresh install: no git checkout; make sure PoB + the launcher are in place (downloads once)
         return 'bootstrap: ' + ', '.join(f'{k} {v}' for k, v in bootstrap.run(con).items())
     bootstrap.ensure_poblua(con)
+    from poe2kit import osutil
     p = subprocess.run(['git', '-C', config.POB_DIR, 'pull', '--ff-only', '--depth', '1'],
-                       capture_output=True, text=True, timeout=600)
+                       capture_output=True, text=True, timeout=600, creationflags=osutil.NO_WINDOW)
     out = (p.stdout + p.stderr).strip().splitlines()
     msg = out[-1] if out else 'no output'
     if p.returncode == 0 and 'Already up to date' not in msg:
@@ -250,7 +251,20 @@ def job_clientlog(con):
     from poe2kit import clientlog
     if not clientlog.log_path():
         return 'no Client.txt yet (play once after installing)'
-    return f'{clientlog.sync(con)} new log events'
+    since = float(db.kv_get(con, 'planner_levelup_ts', '0') or 0)
+    n = clientlog.sync(con)
+    msg = f'{n} new log events'
+    if n:   # B2: a followed character levelled up -> rewrite its in-game Build Planner file (the game reloads it)
+        from poe2kit import buildplan
+        last = con.execute("SELECT MAX(ts) FROM log_event WHERE kind='levelup'").fetchone()[0] or since
+        try:
+            done = buildplan.on_levelups(con, since)
+            if done:
+                msg += '; plan updated: ' + ', '.join(done)
+        except Exception as e:
+            msg += f'; plan update failed: {e}'
+        db.kv_set(con, 'planner_levelup_ts', str(last))
+    return msg
 
 
 def job_update(con):
@@ -517,13 +531,18 @@ class Handler(http.server.BaseHTTPRequestHandler):
             elif u.path == '/api/overlay/options':
                 from poe2kit import overlaysrv
                 data = overlaysrv.set_options(body)
+            elif u.path == '/api/overlay/settings_open':
+                from poe2kit import overlaysrv
+                data = overlaysrv.open_settings()
             elif u.path == '/api/overlay/size':
                 from poe2kit import overlaysrv
                 data = overlaysrv.set_size(body)
             elif u.path == '/api/planner':   # character page: send this build to the game's Build Planner
                 import server as tools
-                data = tools.t_build_planner({'build_id': body.get('build_id'), 'write': True,
-                                              'confirm': bool(body.get('confirm'))})
+                args = {'build_id': body.get('build_id'), 'write': True, 'confirm': bool(body.get('confirm'))}
+                if 'follow' in body:
+                    args['follow'] = str(body.get('follow') or '')
+                data = tools.t_build_planner(args)
                 data.pop('preview', None)
             elif u.path == '/api/open':   # the overlay's "Open on trade" button: only the official trade site
                 url = str(body.get('url', ''))
@@ -546,6 +565,14 @@ class Handler(http.server.BaseHTTPRequestHandler):
         if u.path == '/overlay':
             with open(os.path.join(HERE, 'dashboard', 'overlay.html'), 'rb') as f:
                 return self._send(200, f.read(), 'text/html; charset=utf-8')
+        if u.path == '/api/planner':   # the saved in-game plan of a vault build (followed character, notes, edits)
+            from poe2kit import buildplan, db as _db
+            c = _db.connect()
+            try:
+                bid = int(urllib.parse.parse_qs(u.query).get('build_id', ['0'])[0] or 0)
+                return self._send(200, json.dumps(buildplan.get(c, bid)).encode(), 'application/json')
+            finally:
+                c.close()
         if u.path == '/api/overlay/options':
             from poe2kit import overlaysrv
             return self._send(200, json.dumps(overlaysrv.options()).encode(), 'application/json')

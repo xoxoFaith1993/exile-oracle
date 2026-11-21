@@ -1,10 +1,14 @@
 """PoE 2 Toolkit price-check overlay (Windows).
 
-Press Ctrl+C on an item in Path of Exile 2 (the game copies the item's text). This program sees PoE item text on the
-clipboard while the game is the window in front, sends it to the toolkit's monitor to be priced, and shows a small
-always-on-top popup in the middle of the screen. Click back into the game, or press Esc, and it hides.
-
-It never sends keys or clicks to the game and never reads the game's memory: it only reads the clipboard.
+Hover an item in Path of Exile 2 and press
+  Ctrl+D       quick check: the popup closes when you move the mouse away
+  Ctrl+Alt+D   detailed: the popup stays so you can tick stats and search again (click the game or Esc to close)
+  Ctrl+Shift+D overlay settings
+  F5, F9, ...  chat commands (/hideout, /exit, ...: Enter, the text, Enter; edit them in the settings)
+The hotkeys exist only while the game is in front. Each press makes this program press Ctrl+Alt+C once in the game
+(the game copies the item's text, the way Exiled Exchange 2 does it; the author's choice, 2026-11-20); it then reads the
+clipboard, sends the text to the toolkit's monitor to be priced and shows the popup in the middle of the screen.
+It never reads the game's memory. A plain Ctrl+C of your own shows nothing unless the setting overlay_on_copy is on.
 The popup is a borderless Edge app window showing http://127.0.0.1:47830/overlay. The game must run in windowed
 fullscreen (borderless) for a popup to show over it.
 
@@ -44,6 +48,10 @@ GWL_STYLE, GWL_EXSTYLE = -16, -20
 WS_CAPTION, WS_THICKFRAME, WS_SYSMENU = 0x00C00000, 0x00040000, 0x00080000
 WS_EX_TOOLWINDOW, WS_EX_APPWINDOW = 0x80, 0x40000
 VK_ESCAPE, HOTKEY_ESC = 0x1B, 1
+HOTKEY_QUICK, HOTKEY_DETAIL, HOTKEY_SETTINGS = 2, 3, 4   # Ctrl+D, Ctrl+Alt+D, Ctrl+Shift+D (game in front only)
+MOD_ALT, MOD_CONTROL, MOD_SHIFT, MOD_NOREPEAT = 0x1, 0x2, 0x4, 0x4000
+VK_D, VK_C, VK_CONTROL, VK_MENU = 0x44, 0x43, 0x11, 0x12
+AWAY = 150   # quick check default: hides when the mouse moves this far (px at 100%); setting quick_close_px
 TIMER_ID = 7
 
 WNDPROC = ctypes.WINFUNCTYPE(ctypes.c_ssize_t, wt.HWND, wt.UINT, wt.WPARAM, wt.LPARAM)
@@ -63,6 +71,85 @@ u32.MonitorFromWindow.restype = wt.HANDLE
 u32.MonitorFromWindow.argtypes = [wt.HWND, wt.DWORD]
 u32.SetWindowRgn.argtypes = [wt.HWND, wt.HANDLE, wt.BOOL]
 ctypes.windll.gdi32.CreateRectRgn.restype = wt.HANDLE
+
+
+class KEYBDINPUT(ctypes.Structure):
+    _fields_ = [('wVk', wt.WORD), ('wScan', wt.WORD), ('dwFlags', wt.DWORD), ('time', wt.DWORD),
+                ('dwExtraInfo', ctypes.c_size_t)]
+
+
+class INPUT(ctypes.Structure):
+    class _U(ctypes.Union):
+        _fields_ = [('ki', KEYBDINPUT), ('pad', ctypes.c_byte * 32)]
+    _anonymous_ = ('u',)
+    _fields_ = [('type', wt.DWORD), ('u', _U)]
+
+
+VK_RETURN = 0x0D
+CMD_BASE = 100   # hotkey ids for chat commands: 100, 101, ...
+
+
+def parse_key(spec):
+    """'F5' / 'Ctrl+F1' / 'Alt+K' -> (modifiers, virtual key) for RegisterHotKey, or None."""
+    mods, vk = 0, None
+    for part in (spec or '').split('+'):
+        p = part.strip().upper()
+        if p == 'CTRL':
+            mods |= MOD_CONTROL
+        elif p == 'ALT':
+            mods |= MOD_ALT
+        elif p == 'SHIFT':
+            mods |= MOD_SHIFT
+        elif len(p) > 1 and p[0] == 'F' and p[1:].isdigit() and 1 <= int(p[1:]) <= 12:
+            vk = 0x6F + int(p[1:])          # F1 = 0x70
+        elif len(p) == 1 and p.isalnum():
+            vk = ord(p)
+    return (mods, vk) if vk else None
+
+
+def _send(events):
+    arr = (INPUT * len(events))()
+    for i, (vk, scan, fl) in enumerate(events):
+        arr[i].type = 1
+        arr[i].ki = KEYBDINPUT(vk, scan, fl, 0, 0)
+    u32.SendInput(len(events), arr, ctypes.sizeof(INPUT))
+
+
+def type_in_chat(text):
+    """One chat command, the way Exiled Exchange 2 does it: Enter (open chat), Ctrl+A (replace anything half-typed),
+    the text, Enter. Waits for the player to let go of the hotkey's modifier keys first."""
+    for _ in range(50):
+        if not any(u32.GetAsyncKeyState(vk) & 0x8000 for vk in (VK_CONTROL, VK_MENU, 0x10)):
+            break
+        time.sleep(0.02)
+    ev = [(VK_RETURN, 0, 0), (VK_RETURN, 0, 2),                               # open chat
+          (VK_CONTROL, 0, 0), (0x41, 0, 0), (0x41, 0, 2), (VK_CONTROL, 0, 2)]  # Ctrl+A: replace half-typed text
+    for ch in text:
+        ev += [(0, ord(ch), 4), (0, ord(ch), 4 | 2)]                         # KEYEVENTF_UNICODE (+ KEYUP)
+    ev += [(VK_RETURN, 0, 0), (VK_RETURN, 0, 2)]                             # send
+    _send(ev)   # one burst, no pauses: the chat box is open for a frame or two at most
+
+
+def press_copy(advanced):
+    """One copy key press in the game, the way Exiled Exchange 2 does it (the author chose Ctrl+D, 2026-11-20):
+    Ctrl+C, or Ctrl+Alt+C for the detailed text. Modifiers the player is still holding are left as they are."""
+    keys = []
+    held = lambda vk: u32.GetAsyncKeyState(vk) & 0x8000
+    mods = [VK_CONTROL] + ([VK_MENU] if advanced else [])
+    add = [vk for vk in mods if not held(vk)]
+    drop = [VK_MENU] if not advanced and held(VK_MENU) else []
+    for vk in drop:
+        keys.append((vk, 2))
+    for vk in add:
+        keys.append((vk, 0))
+    keys += [(VK_C, 0), (VK_C, 2)]
+    for vk in reversed(add):
+        keys.append((vk, 2))
+    arr = (INPUT * len(keys))()
+    for i, (vk, fl) in enumerate(keys):
+        arr[i].type = 1                      # INPUT_KEYBOARD
+        arr[i].ki = KEYBDINPUT(vk, 0, fl, 0, 0)   # fl 2 = KEYEVENTF_KEYUP
+    u32.SendInput(len(keys), arr, ctypes.sizeof(INPUT))
 
 
 class WNDCLASS(ctypes.Structure):
@@ -253,6 +340,12 @@ class Popup:
         w, h = cw + 2 * bx, int(by + bar + content + bx)
         x = m.left + (m.right - m.left - cw) // 2 - bx
         y = m.top + (m.bottom - m.top - content) // 2 - int(by + bar)
+        if config.settings().get('popup_position') == 'mouse' and getattr(self, 'origin', None):
+            gap = int(28 * dip)
+            px, py = self.origin
+            x = px + gap if px + gap + cw <= m.right else px - gap - cw
+            x = max(m.left, min(x, m.right - cw)) - bx
+            y = max(m.top, min(py - content // 3, m.bottom - content)) - int(by + bar)
         u32.SetWindowPos(self.hwnd, HWND_TOPMOST, x, y, w, h, SWP_NOACTIVATE | SWP_SHOWWINDOW | SWP_FRAMECHANGED)
         rgn = ctypes.windll.gdi32.CreateRectRgn(bx, int(by + bar), bx + cw, int(by + bar) + content)
         u32.SetWindowRgn(self.hwnd, rgn, True)   # Windows owns the region from here
@@ -267,6 +360,19 @@ class Popup:
         if self.alive():
             u32.ShowWindow(self.hwnd, SW_HIDE)
         self.shown = False
+
+    def moved_away(self):
+        """Quick check: the mouse left the spot where the hotkey was pressed (and isn't on the popup)."""
+        if not getattr(self, 'origin', None):
+            return False
+        pt, r = wt.POINT(), wt.RECT()
+        u32.GetCursorPos(ctypes.byref(pt))
+        u32.GetWindowRect(self.hwnd, ctypes.byref(r))
+        if r.left <= pt.x < r.right and r.top <= pt.y < r.bottom:
+            return False
+        scale = (u32.GetDpiForWindow(self.hwnd) or 96) / 96
+        away = config.settings().get('quick_close_px') or AWAY
+        return max(abs(pt.x - self.origin[0]), abs(pt.y - self.origin[1])) > float(away) * scale
 
     def clicked_outside(self):
         """A mouse click anywhere that isn't the popup: the player went back to the game."""
@@ -287,6 +393,11 @@ class Popup:
 
 
 # ---------------- main loop ----------------
+
+def overlaysrv_defaults():
+    from poe2kit import overlaysrv
+    return overlaysrv.CHAT_DEFAULTS
+
 
 def take_lock():
     try:
@@ -312,6 +423,37 @@ def main(argv):
     popup.start()
     esc = {'on': False}
     down = {'n': 0, 'last': time.time()}
+    hk = {'on': False, 'mode': None, 'at': 0, 'origin': None}
+
+    cmds = {'on': [], 'sig': None, 'list': []}
+
+    def set_commands(on):
+        """Chat command keys from the settings (F5 /hideout, F9 /exit, ...), only while the game is in front."""
+        lst = [c for c in (config.settings().get('chat_commands') or overlaysrv_defaults()) if c.get('key')]
+        sig = json.dumps(lst)
+        if cmds['on'] and (not on or sig != cmds['sig']):
+            for i in cmds['on']:
+                u32.UnregisterHotKey(hwnd_main, i)
+            cmds['on'] = []
+        if on and not cmds['on']:
+            for n, c in enumerate(lst):
+                k = parse_key(c['key'])
+                if k and u32.RegisterHotKey(hwnd_main, CMD_BASE + n, k[0] | MOD_NOREPEAT, k[1]):
+                    cmds['on'].append(CMD_BASE + n)
+            cmds['sig'], cmds['list'] = sig, lst
+
+    def set_hotkeys(on):
+        """Ctrl+D / Ctrl+Alt+D exist only while the game is the window in front: other programs keep their Ctrl+D."""
+        if on and not hk['on']:
+            a = u32.RegisterHotKey(hwnd_main, HOTKEY_QUICK, MOD_CONTROL | MOD_NOREPEAT, VK_D)
+            b = u32.RegisterHotKey(hwnd_main, HOTKEY_DETAIL, MOD_CONTROL | MOD_ALT | MOD_NOREPEAT, VK_D)
+            c = u32.RegisterHotKey(hwnd_main, HOTKEY_SETTINGS, MOD_CONTROL | MOD_SHIFT | MOD_NOREPEAT, VK_D)
+            hk['on'] = bool(a or b or c)
+        elif not on and hk['on']:
+            u32.UnregisterHotKey(hwnd_main, HOTKEY_QUICK)
+            u32.UnregisterHotKey(hwnd_main, HOTKEY_DETAIL)
+            u32.UnregisterHotKey(hwnd_main, HOTKEY_SETTINGS)
+            hk['on'] = False
 
     def set_esc(on):
         if on and not esc['on']:
@@ -329,10 +471,18 @@ def main(argv):
     def on_copy():
         if not game_in_front():
             return
+        mode = hk['mode'] if time.time() - hk['at'] < 2 else None
+        hk['mode'] = None
+        if not mode and not config.settings().get('overlay_on_copy'):
+            return
         text = clipboard_text(hwnd_main)
         if not looks_like_item(text):
             return
         threading.Thread(target=priced, args=(text,), daemon=True).start()
+        popup.quick = mode == 'quick'
+        pt = wt.POINT()
+        u32.GetCursorPos(ctypes.byref(pt))
+        popup.origin = (pt.x, pt.y)
         popup.show()
         set_esc(True)
 
@@ -346,6 +496,26 @@ def main(argv):
         if msg == WM_HOTKEY and wp == HOTKEY_ESC:
             popup.hide()
             set_esc(False)
+            return 0
+        if msg == WM_HOTKEY and wp >= CMD_BASE:
+            n = wp - CMD_BASE
+            if game_in_front() and n < len(cmds['list']):
+                threading.Thread(target=type_in_chat, args=(cmds['list'][n]['text'],), daemon=True).start()
+            return 0
+        if msg == WM_HOTKEY and wp == HOTKEY_SETTINGS:
+            if game_in_front():
+                threading.Thread(target=lambda: post('api/overlay/settings_open', {}), daemon=True).start()
+                popup.quick = False
+                popup.show()
+                set_esc(True)
+            return 0
+        if msg == WM_HOTKEY and wp in (HOTKEY_QUICK, HOTKEY_DETAIL):
+            if game_in_front():
+                hk.update(mode='quick' if wp == HOTKEY_QUICK else 'detail', at=time.time())
+                try:
+                    press_copy(advanced=True)   # the detailed copy gives the better search in both modes
+                except Exception as e:
+                    log(f'copy key failed: {e}')
             return 0
         if msg == WM_TIMER:
             down['tick'] = down.get('tick', 0) + 1
@@ -361,6 +531,13 @@ def main(argv):
                     popup.refit()
                 except Exception as e:
                     log(f'refit failed: {e}')
+            front = game_in_front()
+            set_hotkeys(front)
+            if down['tick'] % 5 == 0 or not front:   # re-read the command list twice a second (settings edits)
+                set_commands(front)
+            if popup.shown and popup.alive() and getattr(popup, 'quick', False) and popup.moved_away()                     and time.time() - popup.since > 0.3:
+                popup.hide()
+                set_esc(False)
             if popup.shown and popup.alive() and popup.clicked_outside() and time.time() - popup.since > 0.4:
                 popup.hide()
                 set_esc(False)

@@ -24,7 +24,14 @@ SITE = 'https://www.pathofexile.com'
 STATS_FILE = os.path.join(config.DATA_DIR, 'trade-stats.json')
 MAX_WAIT = 4.0          # seconds we are willing to wait for the rate limit before giving up on this copy
 CACHE_S = 300
-ROLL_SLACK = 0.10       # search for at least 90% of each roll (EE2's default range is 10% too)
+ROLL_SLACK = 0.10       # default: search for at least 90% of each roll (overlay setting search_range_pct)
+
+
+def _slack():
+    try:
+        return max(0.0, min(0.5, float(config.settings().get('search_range_pct', 10)) / 100))
+    except (TypeError, ValueError):
+        return ROLL_SLACK
 LOCAL_CLASSES = ('Bows', 'Crossbows', 'Wands', 'Staves', 'Quarterstaves', 'Sceptres', 'Spears', 'Flails',
                  'One Hand Maces', 'Two Hand Maces', 'One Hand Swords', 'Two Hand Swords', 'One Hand Axes',
                  'Two Hand Axes', 'Daggers', 'Claws', 'Talismans', 'Body Armours', 'Helmets', 'Gloves', 'Boots',
@@ -183,8 +190,8 @@ def _fmin(v, whole=None):
         return None
     whole = float(v).is_integer() if whole is None else whole
     if whole:
-        return int(v) if v <= 5 else math.floor(v * (1 - ROLL_SLACK))
-    return round(v * (1 - ROLL_SLACK), 2)
+        return int(v) if v <= 5 else math.floor(v * (1 - _slack()))
+    return round(v * (1 - _slack()), 2)
 
 
 def _n(x):
@@ -197,7 +204,7 @@ def _min_for(rar, m, value, text):
         if not rr or rr[0][1] <= rr[0][0]:
             return None
         lo, hi = (sum(x[0] for x in rr) / len(rr), sum(x[1] for x in rr) / len(rr))
-        mn = value - (hi - lo) * ROLL_SLACK
+        mn = value - (hi - lo) * _slack()
         return math.floor(mn) if all(float(v).is_integer() for v in m['values']) else round(mn, 2)
     return _fmin(value, all(float(v).is_integer() for v in m['values']) or text.startswith('Adds'))
 
@@ -209,7 +216,7 @@ def default_filters(it):
     rar = it.get('rarity')
     if rar not in ('RARE', 'UNIQUE', 'MAGIC', 'NORMAL', 'GEM'):
         return None
-    f = {'rarity': rar, 'status': 'securable', 'stats': [], 'mode': 'all',
+    f = {'rarity': rar, 'status': config.settings().get('listing') or 'securable', 'stats': [], 'mode': 'all',
          'base': it.get('name') if rar in ('UNIQUE', 'GEM') else it.get('base'),
          'name': it.get('name') if rar == 'UNIQUE' else None,
          'type': it.get('base') if rar != 'GEM' else it.get('name'),
@@ -246,7 +253,7 @@ def default_filters(it):
                 res[key + '_n'] = res.get(key + '_n', 0) + (3 if am else 1)
                 continue
         mn = _min_for(rar, m, value, text) if value > 0 else None
-        mx = math.ceil(value * (1 - ROLL_SLACK)) if value < 0 and rar != 'UNIQUE' else None   # "reduced" mods
+        mx = math.ceil(value * (1 - _slack())) if value < 0 and rar != 'UNIQUE' else None   # "reduced" mods
         if rar == 'UNIQUE' and mn is None:
             continue   # fixed unique lines are on every copy
         on = m['kind'] == 'explicit' and (mn is not None or mx is not None)

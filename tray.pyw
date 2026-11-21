@@ -66,7 +66,7 @@ def stop_monitor():
     try:
         pid = int(open(config.LOCK_PATH).read().strip() or 0)
         if pid:
-            subprocess.run(['taskkill', '/PID', str(pid), '/F'], capture_output=True)
+            subprocess.run(['taskkill', '/PID', str(pid), '/F'], capture_output=True, creationflags=0x08000000)
         os.remove(config.LOCK_PATH)
     except (OSError, ValueError):
         pass

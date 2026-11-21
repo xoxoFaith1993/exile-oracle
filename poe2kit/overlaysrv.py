@@ -7,7 +7,7 @@ import time
 import traceback
 
 _lock = threading.Condition()
-_state = {'ver': 0, 'id': 0, 'ts': 0, 'status': 'idle', 'result': None, 'text': ''}
+_state = {'ver': 0, 'id': 0, 'ts': 0, 'status': 'idle', 'result': None, 'text': '', 'view': 'item'}
 
 
 def _bump(**kv):
@@ -25,7 +25,7 @@ def submit(text):
         if same:   # the clipboard fires twice for one copy now and then
             return _state['id']
         cid = _state['id'] + 1
-    _bump(id=cid, ts=time.time(), status='pricing', result=None, text=text)
+    _bump(id=cid, ts=time.time(), status='pricing', result=None, text=text, view='item')
     threading.Thread(target=_work, args=(cid, text), daemon=True).start()
     return cid
 
@@ -108,12 +108,45 @@ def running():
     return bool(pid) and osutil.pid_alive(pid)
 
 
+CHAT_DEFAULTS = [   # Exiled Exchange 2's defaults: one chat command per key press (Enter, the text, Enter)
+    {'text': '/hideout', 'key': 'F5'}, {'text': '/exit', 'key': 'F9'}, {'text': '@last ty', 'key': ''},
+    {'text': '/invite @last', 'key': ''}, {'text': '/tradewith @last', 'key': ''}, {'text': '/hideout @last', 'key': ''}]
+DEFAULTS = {'listing': 'securable', 'search_range_pct': 10, 'quick_close_px': 150, 'popup_position': 'centre',
+            'overlay_on_copy': False, 'chat_commands': CHAT_DEFAULTS}
+KEY_RX = __import__('re').compile(r'^((Ctrl|Alt|Shift)\+){0,3}(F([1-9]|1[0-2])|[A-Z0-9])$')
+
+
+def clean_commands(cmds):
+    """Keep valid rows: text up to 120 characters on one line, key like F5 / Ctrl+F1 / Alt+H (or none)."""
+    out = []
+    for c in (cmds or [])[:20]:
+        text = ' '.join(str((c or {}).get('text') or '').split())[:120]
+        key = str((c or {}).get('key') or '').replace(' ', '')
+        parts = [p.capitalize() if p.lower() in ('ctrl', 'alt', 'shift') else p.upper() for p in key.split('+')] if key else []
+        key = '+'.join(parts)
+        if not text:
+            continue
+        out.append({'text': text, 'key': key if KEY_RX.match(key) else ''})
+    return out
+
+
+HOTKEYS = {'quick': 'Ctrl+D', 'detailed': 'Ctrl+Alt+D', 'settings': 'Ctrl+Shift+D'}
+
+
 def options():
     from . import config, osutil
     s = config.settings()
-    return {'overlay': bool(s.get('overlay', config.is_dev_copy())),
-            'live_trade': bool(s.get('live_trade', config.is_dev_copy())),
-            'supported': osutil.IS_WIN, 'running': running()}
+    out = {'overlay': bool(s.get('overlay', config.is_dev_copy())),
+           'live_trade': bool(s.get('live_trade', config.is_dev_copy())),
+           'supported': osutil.IS_WIN, 'running': running(), 'hotkeys': HOTKEYS}
+    out.update({k: s.get(k, v) for k, v in DEFAULTS.items()})
+    return out
+
+
+def open_settings():
+    """Ctrl+Shift+D in game: the popup shows the overlay settings."""
+    _bump(view='settings')
+    return {'ok': True}
 
 
 def start():
@@ -134,7 +167,19 @@ def stop():
 
 def set_options(b):
     from . import config
-    ch = {k: bool(b[k]) for k in ('overlay', 'live_trade') if k in b}
+    ch = {k: bool(b[k]) for k in ('overlay', 'live_trade', 'overlay_on_copy') if k in b}
+    if b.get('listing') in ('securable', 'online'):
+        ch['listing'] = b['listing']
+    if b.get('popup_position') in ('centre', 'mouse'):
+        ch['popup_position'] = b['popup_position']
+    if isinstance(b.get('chat_commands'), list):
+        ch['chat_commands'] = clean_commands(b['chat_commands'])
+    for k, lo, hi in (('search_range_pct', 0, 50), ('quick_close_px', 50, 800)):
+        if k in b:
+            try:
+                ch[k] = int(max(lo, min(hi, float(b[k]))))
+            except (TypeError, ValueError):
+                pass
     config.save_settings(ch)
     if 'overlay' in ch:
         start() if ch['overlay'] else stop()
