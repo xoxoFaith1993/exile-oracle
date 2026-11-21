@@ -45,7 +45,7 @@ for 15 minutes).
 - "What should I farm right now, and why?"
 - "What's Mageblood / a Divine / Omen of Light worth, and where is it heading this week?"
 - "What are the biggest price movers in the last 24 hours?"
-- "Put Mageblood on my wishlist at 90 div" / "what's on my wishlist, and is anything close?" (Alerts page)
+- "Put Mageblood on my wishlist at 90 div" / "what's on my wishlist, and is anything close?" (Wishlist page)
 - "Any Currency Exchange gaps worth trading right now?" (the same item cheaper in one currency than another; Economy page)
 - "It's day 1 of the league: what should I sell straight away and what should I hold?"
 
@@ -166,6 +166,6 @@ The same tools work in Claude, ChatGPT / Codex and Gemini CLI.
 | `poe2_oracle` | The Oracle |
 | `poe2_doctor` | Something in the toolkit is broken or acting odd (overlay, prices, dashboard, Build Planner, Path of Building, Claude connection)? Call this FIRST |
 | `poe2_from_overlay` | Items the player sent from the in-game price-check overlay (its Ask the Oracle button, called Ask Claude before 0.4.0), newest first |
-| `poe2_wishlist` | The player's chase-item wishlist (Alerts page) |
+| `poe2_wishlist` | The player's chase-item wishlist (its own Wishlist page under Market) |
 | `poe2_trade_link` | Make an official trade-site search link (by unique name and/or base type) to open in a browser. |
 <!-- /tools -->

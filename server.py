@@ -849,7 +849,7 @@ TOOLS = [
      'player says they sent / just checked an item. limit (default 3), clear=true empties the list.',
      S(limit=NUM, clear=BOOL), t_from_overlay),
     ('poe2_wishlist',
-     "The player's chase-item wishlist (Alerts page): items they want to buy (side=buy: tell me when it drops to the "
+     "The player's chase-item wishlist (its own Wishlist page under Market): items they want to buy (side=buy: tell me when it drops to the "
      'target) or sell (side=sell: when it rises to it) at a target price. action=list (default) shows each wish with '
      'its live price, how far from the target, next week\'s likely range from the price forecast (heading = likely / '
      'maybe) and calls from the newest patch notes. action=add needs item (the poe.ninja name), target and unit '

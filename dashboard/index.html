@@ -451,6 +451,7 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
   <button data-tab="prophecy">Prophecy</button>
   <div class="ng">Market</div>
   <button data-tab="economy">Economy</button>
+  <button data-tab="wishlist">Wishlist</button>
   <div class="ng">Farming</div>
   <button data-tab="farm">What to farm</button>
   <button data-tab="league">League start</button>
@@ -786,21 +787,23 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
         <button class="btn" id="pnanalyze" style="margin-top:6px">Analyse</button></details></div>
     <div id="pnview"></div>
   </section>
-  <section id="alerts">
-    <div class="card"><div class="lab-head"><h2 style="margin:0">Alerts</h2><span style="flex:1"></span>
-      <button class="btn" id="alread">Mark all read</button> <button class="btn" id="alclear" title="Delete alerts you've already seen">Clear read</button></div>
-      <div class="sub">Only what you asked for (choose below). Shown here and on Home: never in game.</div>
-      <div class="eo-seg seg" id="alfilter" style="margin-top:8px"><button data-f="" class="on">All</button><button data-f="mine">My items</button><button data-f="wishlist">Wishlist</button><button data-f="oracle">Oracle</button><button data-f="market">Market</button><button data-f="patch">Patch notes</button><button data-f="news">News</button><button data-f="updates">Updates</button></div>
-      <div id="alertlist" style="margin-top:8px"></div></div>
+  <section id="wishlist">
     <div class="card"><div class="lab-head"><h2 style="margin:0">Wishlist</h2><span class="small muted" id="wlsub"></span></div>
-      <div class="sub">Items you want at a price. You get an alert when one reaches your target, when the price forecast says it's heading there this week, or when new patch notes call a move for it. An item at your target also becomes the omen on Home.</div>
+      <div class="sub">Chase items you want to buy or sell at a price. You get an alert when one reaches your target, when the price forecast says it's heading there this week, or when new patch notes call a move for it. An item at your target also becomes the omen on Home. The alerts land on the Alerts page (filter: Wishlist).</div>
       <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px">
         <input class="crin" id="wlname" list="wlsugg" placeholder="Item name, e.g. Mageblood or Omen of Light" style="flex:1;min-width:240px" autocomplete="off"><datalist id="wlsugg"></datalist>
         <select class="crin" id="wlside"><option value="buy">buy at or under</option><option value="sell">sell at or over</option></select>
         <input class="crin" id="wltarget" type="number" min="0" step="any" placeholder="price" style="width:90px">
         <select class="crin" id="wlunit"><option value="div">div</option><option value="ex">ex</option></select>
         <button class="btn" id="wladd">Add to wishlist</button> <span class="small muted" id="wlmsg"></span></div>
-      <div id="wishlist" style="margin-top:10px"></div></div>
+      <div id="wlitems" style="margin-top:10px"></div></div>
+  </section>
+  <section id="alerts">
+    <div class="card"><div class="lab-head"><h2 style="margin:0">Alerts</h2><span style="flex:1"></span>
+      <button class="btn" id="alread">Mark all read</button> <button class="btn" id="alclear" title="Delete alerts you've already seen">Clear read</button></div>
+      <div class="sub">Only what you asked for (choose below). Shown here and on Home: never in game.</div>
+      <div class="eo-seg seg" id="alfilter" style="margin-top:8px"><button data-f="" class="on">All</button><button data-f="mine">My items</button><button data-f="wishlist">Wishlist</button><button data-f="oracle">Oracle</button><button data-f="market">Market</button><button data-f="patch">Patch notes</button><button data-f="news">News</button><button data-f="updates">Updates</button></div>
+      <div id="alertlist" style="margin-top:8px"></div></div>
     <div class="card"><h2>What to alert me about</h2><div class="sub">Market moves only count when they're real: the item trades, the move held for 2+ hours (not one spike), and it's worth at least the minimum.</div>
       <div id="alsettings"></div></div>
   </section>
@@ -929,7 +932,8 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   if (b.dataset.tab === 'compare') loadCompare();
   if (b.dataset.tab === 'economy') { loadLeagues(); loadOverview(); loadMovers(); loadMarket(); loadOracle($('#ordaysel').value); loadSpreads(); }
   if (b.dataset.tab === 'builds') loadBuilds();
-  if (b.dataset.tab === 'alerts') { loadAlerts(true); loadWishlist(); }
+  if (b.dataset.tab === 'alerts') loadAlerts(true);
+  if (b.dataset.tab === 'wishlist') loadWishlist();
   if (b.dataset.tab === 'patches') loadPatches();
   if (b.dataset.tab === 'farm') { loadFarm(); loadPlaybook(); }
   if (b.dataset.tab === 'sessions') loadSessions();
@@ -1317,6 +1321,8 @@ const PAGE_ASKS = {
             ['What is rising fastest, and why?', 'Which items are rising fastest right now, why, and will it last according to past leagues?'],
             ['Best use of 10 divines right now?', 'What is the best thing to do with 10 divines right now: buy an upgrade, invest, or craft?'],
             ['Any exchange gaps worth trading?', 'Using poe2_oracle mode spreads, which Currency Exchange gaps are worth trading right now, how much could I make per trade after the gold fee, and what should I check first?']],
+  wishlist: [['Is anything on my wishlist close?', 'Using poe2_wishlist, which items on my wishlist are close to my target, which are heading there this week, and should I change any target?'],
+             ['What should I add to my wishlist?', 'Using the Oracle and my builds, which chase items or upgrades should I put on my wishlist, and at what target price? Add them with poe2_wishlist once I say yes.']],
   farm: [['What should I farm for the most currency per hour?', 'What should I farm right now for the most currency per hour, with my character as it is?'],
          ['Which farm suits my gear?', 'Which farming strategy suits my character\'s damage and toughness right now, and which ones should I avoid?'],
          ['How do I set up my atlas for it?', 'How do I set up my atlas and tablets for the best farm right now?']],
@@ -2056,7 +2062,7 @@ async function loadWishlist() {
   const state = e => e.hit ? `<span class="pill" style="border-color:var(--eo-good);color:var(--eo-good)">at your target</span>`
     : e.heading === 'likely' ? '<span class="pill" style="border-color:var(--accent)">heading there</span>'
     : e.heading === 'maybe' ? '<span class="pill">could reach it this week</span>' : '<span class="small muted">waiting</span>';
-  $('#wishlist').innerHTML = !it.length ? '<div class="empty">Nothing on your wishlist yet. Add a chase item above.</div>' :
+  $('#wlitems').innerHTML = !it.length ? '<div class="empty">Nothing on your wishlist yet. Add a chase item above.</div>' :
     `<table class="up" style="table-layout:fixed"><colgroup><col style="width:30%"><col style="width:13%"><col style="width:13%"><col style="width:19%"><col style="width:15%"><col style="width:10%"></colgroup>
       <tr><th>Item</th><th>Now</th><th>Target</th><th>Next week (likely)</th><th>Status</th><th></th></tr>${it.map(e => `<tr>
       <td><div style="display:flex;gap:8px;align-items:center">${e.icon ? `<img src="${esc(e.icon)}" alt="" style="width:28px;height:28px;object-fit:contain">` : ''}<div style="min-width:0"><b>${esc(e.name)}</b>

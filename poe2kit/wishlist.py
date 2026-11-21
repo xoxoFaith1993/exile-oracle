@@ -207,7 +207,7 @@ def omen(con):
         e = hits[0]
         return {'kind': 'wish', 'title': f"{'Buy' if e['side'] == 'buy' else 'Sell'} {e['name']}: it's at your target",
                 'text': f"Now {e['price']}, your target {e['target']}.",
-                'evidence': 'From your wishlist (Alerts page). Check the trade site or exchange first.', 'confidence': 'high',
+                'evidence': 'From your wishlist (Wishlist page). Check the trade site or exchange first.', 'confidence': 'high',
                 'item': e['name']}
     near = [e for e in st['items'] if e.get('heading') == 'likely']
     if near:
