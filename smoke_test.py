@@ -218,6 +218,24 @@ def waystone_check():
     check(mapmods.check_item(None, TEST_ITEM) is None, 'waystone check ignores other items')
 
 
+def campaign_check():
+    """R16 / R21: the rush route maps onto the game's zones, and a zone gives a route card."""
+    from poe2kit import campaign
+    try:
+        st = campaign.steps()
+        card = campaign.zone_card(None, {'area': 'G1_11', 'level': 10})
+        town = campaign.zone_card(None, {'area': 'G1_town', 'level': 15, 'last_campaign': 'G1_4'})
+        hide = campaign.zone_card(None, {'area': 'HideoutCave', 'level': 20})
+    except FileNotFoundError as e:
+        check(True, f'campaign guide skipped ({e})')
+        return
+    matched = sum(1 for s in st if s['areas'])
+    check(len(st) >= 40 and matched >= 35, f'campaign route ({matched} of {len(st)} stops matched to game zones)')
+    check(card.get('show') and card.get('rewards') and card.get('next'), 'route card: rewards and next stops in a zone')
+    check(town.get('show') and (town.get('step') or {}).get('label', '').startswith('Grelwood'), 'route card in town carries on')
+    check(not hide.get('show'), 'route panel hidden in the hideout')
+
+
 def appwindow_check():
     from poe2kit import appwindow
     cmd = appwindow.command()   # looks for Edge / Chrome / Chromium; opens nothing
@@ -302,6 +320,7 @@ if __name__ == '__main__':
     appwindow_check()
     oracle_extras_check()
     waystone_check()
+    campaign_check()
     mcp()
     if '--pob' in sys.argv:
         pob_part()

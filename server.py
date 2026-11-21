@@ -274,6 +274,22 @@ def t_lab(a):
     return {'build_id': bid, 'cards': lab.cards(con, bid)}
 
 
+def t_campaign(a):
+    """R16: the campaign rush guide, the rewards checklist and where the player is now (from the game log)."""
+    from poe2kit import campaign
+    con = db.connect()
+    g = campaign.guide(con)
+    part = (a.get('part') or 'summary').lower()
+    if a.get('tick'):
+        campaign.set_done(con, str(a['tick']), bool(a.get('on', True)))
+        g = campaign.guide(con)
+    if part == 'summary':
+        return {'progress': g['progress'], 'zone': g['zone'], 'missing': [r for r in g['rewards'] if not r['done']],
+                'trials': g['trials'], 'breakpoints': g['breakpoints'], 'version': g['meta']}
+    return {k: g[k] for k in ('acts', 'rewards', 'progress', 'zone', 'trials', 'tips', 'mistakes', 'times', 'watch',
+                              'breakpoints', 'rush_vs_full', 'meta') if k in g}
+
+
 def t_oracle(a):
     """The Oracle's market advice from three league launches: phase, what to do now, item outlook."""
     from poe2kit import oracle
@@ -708,6 +724,13 @@ TOOLS = [
      '= DPS/EHP by level. Use it whenever you compare options: the player sees the numbers, not just your words.',
      S(build_id=NUM, action=STR, title=STR, why=STR, cost_div=NUM, change={'type': 'object'}, card_id=NUM, start=BOOL),
      t_lab),
+    ('poe2_campaign',
+     'Campaign rush: the researched fastest route act by act, every permanent reward (passive points, spirit, '
+     'resistances, life) with a checklist the player ticks, the ascendancy trials, flask / boots / life breakpoints, '
+     'common mistakes, and the zone the player is in now (from the game log). part="summary" (default: progress, '
+     'missing rewards, current zone) or "full". tick=<reward key> (on=false to untick) only when the player says '
+     'they took it. Researched for 0.5: Acts 5-6 arrive in 1.0; say so.',
+     S(part=STR, tick=STR, on=BOOL), t_campaign),
     ('poe2_oracle',
      'The Oracle: market timing from the last three league launches (GGG exchange history, prices in Divines). '
      'Gives the league day and phase (day 1-3 / week 1 / week 2-3 / week 4+), what to do now and what comes next '
@@ -772,7 +795,7 @@ FEED_WORDS = {
     'poe2_upgrades': 'tried every unique in every slot', 'poe2_whatif': 'tested an item swap',
     'poe2_compare': 'compared two builds', 'poe2_read_rare': 'read a rare item',
     'poe2_build_planner': 'worked on the in-game Build Planner', 'poe2_levelling': 'checked the levelling route',
-    'poe2_lab': 'used the Build Lab', 'poe2_oracle': 'read the market history (the Oracle)', 'poe2_doctor': 'checked the app for problems',
+    'poe2_lab': 'used the Build Lab', 'poe2_oracle': 'read the market history (the Oracle)', 'poe2_campaign': 'read the campaign guide', 'poe2_doctor': 'checked the app for problems',
     'poe2_from_overlay': 'read the items you sent', 'poe2_trade_link': 'made a trade-site link',
     'poe2_status': 'checked the app status', 'poe2_refresh': 'refreshed prices', 'poe2_top1': 'ran the Top 1% check',
 }

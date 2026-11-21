@@ -365,6 +365,9 @@ def api(path, q):
                     out.setdefault(_up.unquote(p).rpartition('/')[2], p)
                 league = league or lg
             return {'league': league, 'links': out}
+        if path == '/api/campaign':   # R16: campaign rush guide + checklist + where you are now
+            from poe2kit import campaign
+            return campaign.guide(con)
         if path == '/api/atlas/mods':   # R15: waystone / tablet mods, search tokens, danger for a build
             from poe2kit import mapmods
             return mapmods.overview(con, q.get('build') or None, q.get('kind') or 'waystone')
@@ -671,6 +674,22 @@ class Handler(http.server.BaseHTTPRequestHandler):
             elif u.path == '/api/overlay/size':
                 from poe2kit import overlaysrv
                 data = overlaysrv.set_size(body)
+            elif u.path == '/api/route/zone':   # R21: overlay.pyw saw a zone change in Client.txt
+                from poe2kit import campaign
+                data = {'ver': campaign.set_zone(str(body.get('area') or '')[:80] or None, body.get('level'))}
+            elif u.path == '/api/route/size':
+                from poe2kit import campaign
+                data = campaign.set_size(body)
+            elif u.path == '/api/route/toggle':   # R21: the route panel's show / hide key
+                from poe2kit import campaign
+                data = {'hidden': campaign.toggle_hidden()}
+            elif u.path == '/api/campaign/done':   # R16: tick a permanent reward on the checklist
+                from poe2kit import campaign, db as _db
+                c = _db.connect()
+                try:
+                    data = {'done': campaign.set_done(c, str(body.get('key') or ''), bool(body.get('on')))}
+                finally:
+                    c.close()
             elif u.path == '/api/planner':   # character page: send this build to the game's Build Planner
                 import server as tools
                 args = {'build_id': body.get('build_id'), 'write': True, 'confirm': bool(body.get('confirm'))}
@@ -713,6 +732,26 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(body)
             return
+        if u.path == '/route':   # R21: the route panel page
+            with open(os.path.join(HERE, 'dashboard', 'route.html'), 'rb') as f:
+                return self._send(200, f.read(), 'text/html; charset=utf-8')
+        if u.path == '/api/route/size':
+            from poe2kit import campaign
+            return self._send(200, json.dumps(campaign.size()).encode(), 'application/json')
+        if u.path == '/api/route/state':   # R21: long poll, returns when the zone changes
+            from poe2kit import campaign, db as _db
+            q = urllib.parse.parse_qs(u.query)
+            c = _db.connect()
+            try:
+                st = campaign.zone_state(int(q.get('after', ['-1'])[0] or -1),
+                                         min(25, int(q.get('wait', ['25'])[0] or 25)), c)
+            except FileNotFoundError as e:
+                st = {'show': False, 'error': str(e), 'ver': 0}
+            finally:
+                c.close()
+            st['page'] = os.path.getmtime(os.path.join(HERE, 'dashboard', 'route.html'))
+            st['on'] = bool(config.settings().get('route_overlay', True))
+            return self._send(200, json.dumps(st, default=str).encode('utf-8'), 'application/json')
         if u.path == '/overlay':
             with open(os.path.join(HERE, 'dashboard', 'overlay.html'), 'rb') as f:
                 return self._send(200, f.read(), 'text/html; charset=utf-8')

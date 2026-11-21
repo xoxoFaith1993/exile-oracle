@@ -48,6 +48,10 @@ SW_HIDE = 0
 GWL_STYLE, GWL_EXSTYLE = -16, -20
 WS_CAPTION, WS_THICKFRAME, WS_SYSMENU = 0x00C00000, 0x00040000, 0x00080000
 WS_EX_TOOLWINDOW, WS_EX_APPWINDOW = 0x80, 0x40000
+WS_EX_TRANSPARENT, WS_EX_LAYERED, WS_EX_NOACTIVATE = 0x20, 0x80000, 0x08000000
+HOTKEY_ROUTE = 5   # campaign route panel show / hide (R21)
+ROUTE_TITLE = 'Exile Oracle route'
+ROUTE_W = 300      # route panel width at 100% Windows scaling
 VK_ESCAPE, HOTKEY_ESC = 0x1B, 1
 HOTKEY_QUICK, HOTKEY_DETAIL, HOTKEY_SETTINGS = 2, 3, 4   # Ctrl+D, Ctrl+Alt+D, Ctrl+Shift+D (game in front only)
 MOD_ALT, MOD_CONTROL, MOD_SHIFT, MOD_NOREPEAT = 0x1, 0x2, 0x4, 0x4000
@@ -239,6 +243,8 @@ def looks_like_item(t):
 # ---------------- the popup window (Edge app mode) ----------------
 
 class Popup:
+    title, page, width, size_api = TITLE, 'overlay', W, 'api/overlay/size'
+
     def __init__(self):
         self.proc = None
         self.hwnd = None
@@ -259,9 +265,9 @@ class Popup:
             return
         prof = os.path.join(config.HOME, 'edge-overlay')
         self.proc = subprocess.Popen([
-            edge, f'--app={URL}overlay', f'--user-data-dir={prof}', '--no-first-run', '--no-default-browser-check',
+            edge, f'--app={URL}{self.page}', f'--user-data-dir={prof}', '--no-first-run', '--no-default-browser-check',
             '--disable-sync', '--disable-extensions',   # never sync the player's account extensions into this profile
-            f'--window-size={W},{H}', '--window-position=-32000,-32000',
+            f'--window-size={self.width},{H}', '--window-position=-32000,-32000',
             '--disable-background-timer-throttling', '--disable-renderer-backgrounding',
             '--disable-backgrounding-occluded-windows',
             '--disable-direct-composition'])   # DirectComposition ignores window regions: the title bar would stay
@@ -289,7 +295,7 @@ class Popup:
         def cb(h, _):
             buf = ctypes.create_unicode_buffer(256)
             u32.GetWindowTextW(h, buf, 256)
-            if buf.value.startswith(TITLE) and u32.IsWindow(h):
+            if buf.value.startswith(self.title) and u32.IsWindow(h):
                 found.append(h)
                 return False
             return True
@@ -311,7 +317,7 @@ class Popup:
     def _measure(self):
         """What the page reported about itself: need (panel height), chrome/sides (Edge's frame), dpr, in CSS px."""
         try:
-            with urllib.request.urlopen(URL + 'api/overlay/size', timeout=1) as r:
+            with urllib.request.urlopen(URL + self.size_api, timeout=1) as r:
                 return json.loads(r.read())
         except Exception:
             return {}
@@ -408,6 +414,88 @@ class Popup:
                 pass
 
 
+class RoutePanel(Popup):
+    """R21: the campaign route card in a corner of the game's screen. Click-through, never takes focus, shown only
+    while the game is in front, in a campaign zone or town, and not hidden with its key."""
+    title, page, width, size_api = ROUTE_TITLE, 'route', ROUTE_W, 'api/route/size'
+
+    def _style(self):
+        st = u32.GetWindowLongPtrW(self.hwnd, GWL_STYLE)
+        u32.SetWindowLongPtrW(self.hwnd, GWL_STYLE, st & ~(WS_CAPTION | WS_THICKFRAME | WS_SYSMENU))
+        ex = u32.GetWindowLongPtrW(self.hwnd, GWL_EXSTYLE)
+        ex = (ex | WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT | WS_EX_LAYERED | WS_EX_NOACTIVATE) & ~WS_EX_APPWINDOW
+        u32.SetWindowLongPtrW(self.hwnd, GWL_EXSTYLE, ex)
+        u32.SetLayeredWindowAttributes(self.hwnd, 0, 232, 2)   # LWA_ALPHA: a touch see-through
+
+    def layout(self, f=None):
+        f = f if f is not None else self._measure()
+        self.size_ver = f.get('ver')
+        dpi = u32.GetDpiForWindow(self.hwnd) or 96
+        dip = dpi / 96
+        dpr = f.get('dpr') or dip
+        r, o, c = wt.RECT(), wt.POINT(0, 0), wt.RECT()
+        u32.GetWindowRect(self.hwnd, ctypes.byref(r))
+        u32.ClientToScreen(self.hwnd, ctypes.byref(o))
+        u32.GetClientRect(self.hwnd, ctypes.byref(c))
+        bx, by = o.x - r.left, o.y - r.top
+        bar = c.bottom - f['innerH'] * dpr if f.get('innerH') else -1
+        if not 0 <= bar <= 120 * dip:
+            bar = getattr(self, 'bar', None) or self._bar(dpi)
+        self.bar = bar
+        mi = MONITORINFO(cbSize=ctypes.sizeof(MONITORINFO))
+        u32.GetMonitorInfoW(u32.MonitorFromWindow(u32.GetForegroundWindow(), 2), ctypes.byref(mi))
+        m = mi.rcMonitor
+        content = int(min((f.get('need') or 160) * dpr, (m.bottom - m.top) * 0.6))
+        cw = int(self.width * dip)
+        w, h = cw + 2 * bx, int(by + bar + content + bx)
+        corner = config.settings().get('route_corner') or 'right'
+        pad = int(12 * dip)
+        if corner in ('left', 'top-left'):
+            x = m.left + pad
+        else:
+            x = m.right - cw - pad
+        if corner == 'top-left':
+            y = m.top + pad
+        else:   # under the minimap (right) / middle of the left edge (left): clear of globes, skill bar and buffs
+            y = m.top + int((m.bottom - m.top) * 0.30)
+        x, y = x - bx, y - int(by + bar)
+        u32.SetWindowPos(self.hwnd, HWND_TOPMOST, x, y, w, h, SWP_NOACTIVATE | SWP_SHOWWINDOW | SWP_FRAMECHANGED)
+        rgn = ctypes.windll.gdi32.CreateRectRgn(bx, int(by + bar), bx + cw, int(by + bar) + content)
+        u32.SetWindowRgn(self.hwnd, rgn, True)
+
+
+class ZoneTail:
+    """Reads the game's own log (Client.txt) as it grows, read-only, for zone changes: the route panel's input."""
+    RX = __import__('re').compile(r'Generating level (\d+) area "([^"]+)"')
+
+    def __init__(self):
+        self.path, self.pos = None, None
+
+    def poll(self):
+        """Returns (area id, level) of the newest zone line since last time, or None."""
+        try:
+            from poe2kit import clientlog
+            path = clientlog.log_path()
+        except Exception:
+            return None
+        if not path or not os.path.exists(path):
+            return None
+        size = os.path.getsize(path)
+        first = self.path != path or self.pos is None or size < self.pos
+        if first:   # start at the end, but pick up the zone you're in from the last bit of the log
+            self.path, self.pos = path, max(0, size - 256 * 1024)
+        if size == self.pos:
+            return None
+        with open(path, 'rb') as f:
+            f.seek(self.pos)
+            chunk = f.read(min(size - self.pos, 4 * 1024 * 1024))
+        self.pos += len(chunk)
+        found = None
+        for m in self.RX.finditer(chunk.decode('utf-8', errors='replace')):
+            found = (m.group(2), int(m.group(1)))
+        return found
+
+
 # ---------------- main loop ----------------
 
 def overlaysrv_defaults():
@@ -437,6 +525,30 @@ def main(argv):
         return
     popup = Popup()
     popup.start()
+    route = RoutePanel()
+    rstate = {'show': False, 'started': False}
+    if config.settings().get('route_overlay', True) and not test:
+        route.start()   # now, at start-up: creating the window later could take focus from the game
+        rstate['started'] = True
+
+    def route_worker():
+        """Every second: new zone lines -> the monitor; then what the panel should do."""
+        tail = ZoneTail()
+        while True:
+            try:
+                z = tail.poll()
+                if z:
+                    post('api/route/zone', {'area': z[0], 'level': z[1]})
+                with urllib.request.urlopen(URL + 'api/route/state?after=-1&wait=0', timeout=5) as r:
+                    s = json.loads(r.read())
+                rstate['show'] = bool(s.get('on') and s.get('show') and not s.get('hidden'))
+            except Exception as e:
+                rstate['show'] = False
+                if not rstate.get('err'):
+                    log(f'route panel: {e}')
+                rstate['err'] = True
+            time.sleep(1)
+    threading.Thread(target=route_worker, daemon=True).start()
     esc = {'on': False}
     down = {'n': 0, 'last': time.time()}
     hk = {'on': False, 'mode': None, 'at': 0, 'origin': None}
@@ -465,7 +577,7 @@ def main(argv):
             return overlaysrv.price_keys()
         except Exception as e:
             log(f'price keys unreadable, using defaults: {e}')
-            return {'quick': 'Ctrl+D', 'detailed': 'Ctrl+Alt+D', 'settings': 'Ctrl+Shift+D'}
+            return {'quick': 'Ctrl+D', 'detailed': 'Ctrl+Alt+D', 'settings': 'Ctrl+Shift+D', 'route': 'Ctrl+Alt+R'}
 
     def report_keys(failed):
         """Tell the settings page which keys Windows refused (another program holds them)."""
@@ -481,12 +593,13 @@ def main(argv):
         keys = keys or hk.get('keys') or price_keys()
         sig = json.dumps(keys, sort_keys=True)
         if hk['on'] and (not on or sig != hk.get('sig')):
-            for i in (HOTKEY_QUICK, HOTKEY_DETAIL, HOTKEY_SETTINGS):
+            for i in (HOTKEY_QUICK, HOTKEY_DETAIL, HOTKEY_SETTINGS, HOTKEY_ROUTE):
                 u32.UnregisterHotKey(hwnd_main, i)
             hk['on'] = False
         if on and not hk['on']:
             failed = {}
-            for name, hid in (('quick', HOTKEY_QUICK), ('detailed', HOTKEY_DETAIL), ('settings', HOTKEY_SETTINGS)):
+            for name, hid in (('quick', HOTKEY_QUICK), ('detailed', HOTKEY_DETAIL), ('settings', HOTKEY_SETTINGS),
+                              ('route', HOTKEY_ROUTE)):
                 k = parse_key(keys.get(name))
                 if not (k and u32.RegisterHotKey(hwnd_main, hid, k[0] | MOD_NOREPEAT, k[1])):
                     failed[name] = keys.get(name)
@@ -544,6 +657,10 @@ def main(argv):
             if game_in_front() and n < len(cmds['list']):
                 threading.Thread(target=type_in_chat, args=(cmds['list'][n]['text'],), daemon=True).start()
             return 0
+        if msg == WM_HOTKEY and wp == HOTKEY_ROUTE:
+            if game_in_front():
+                threading.Thread(target=lambda: post('api/route/toggle', {}), daemon=True).start()
+            return 0
         if msg == WM_HOTKEY and wp == HOTKEY_SETTINGS:
             if game_in_front():
                 threading.Thread(target=lambda: post('api/overlay/settings_open', {}), daemon=True).start()
@@ -583,6 +700,18 @@ def main(argv):
                 elif popup.shown and not esc['on']:
                     set_esc(True)
             front = game_in_front()
+            if down['tick'] % 3 == 0:   # R21 route panel: only over the game, in the campaign, not hidden
+                want = front and rstate['show']
+                if not route.alive() and not front and (not rstate['started'] or down['tick'] % 600 == 0):
+                    rstate['started'] = True   # (re)made only while the game is NOT in front: never steals focus
+                    threading.Thread(target=route.start, daemon=True).start()
+                elif want and route.alive():
+                    if not route.shown:
+                        route.show()
+                    else:
+                        route.refit()
+                elif route.shown:
+                    route.hide()
             if down['tick'] % 5 == 0 or 'keys' not in hk:   # re-read the price-check keys twice a second
                 hk['keys'] = price_keys()
             set_hotkeys(front, hk['keys'])
@@ -625,6 +754,7 @@ def main(argv):
     finally:
         u32.RemoveClipboardFormatListener(hwnd_main)
         popup.stop()
+        route.stop()
         if not test:
             try:
                 os.remove(LOCK)

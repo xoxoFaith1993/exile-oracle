@@ -269,7 +269,7 @@ async function renderSettings(err) {
   $('#main').innerHTML = `
     <div class="matched sc">price-check keys <span style="text-transform:none;font-variant:normal;font:12px var(--eo-body);letter-spacing:0">(click a box, then press the keys you want)</span></div>
     <div class="stats" id="pkeys">
-      ${[['quick', 'Quick check', 'closes when the mouse moves away'], ['detailed', 'Detailed check', 'stays open to tick rows'], ['settings', 'These settings', '']].map(([k, l, s]) =>
+      ${[['quick', 'Quick check', 'closes when the mouse moves away'], ['detailed', 'Detailed check', 'stays open to tick rows'], ['settings', 'These settings', ''], ['route', 'Route panel', 'campaign: show / hide']].map(([k, l, s]) =>
         row(l, `<div class="mm"><input class="pkey" data-pk="${k}" value="${esc(hk[k])}" readonly style="width:118px;border-radius:4px;cursor:pointer;text-align:center"></div><button class="btn pkdef" data-pk="${k}" title="back to ${esc((o.default_hotkeys || {})[k])}" style="padding:2px 8px;margin-left:4px">↺</button>`, s)).join('')}
     </div>
     ${(o.key_warnings || []).length || o.error ? `<div class="kwarn" style="margin:6px 0 2px;padding:6px 9px;border:1px solid var(--afk);border-radius:4px;color:var(--afk);font-size:12.5px">${[o.error, ...(o.key_warnings || [])].filter(Boolean).map(esc).join('<br>')}</div>` : ''}

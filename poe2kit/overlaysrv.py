@@ -179,7 +179,8 @@ CHAT_DEFAULTS = [   # Exiled Exchange 2's defaults: one chat command per key pre
     {'text': '/hideout', 'key': 'F5'}, {'text': '/exit', 'key': 'F9'}, {'text': '@last ty', 'key': ''},
     {'text': '/invite @last', 'key': ''}, {'text': '/tradewith @last', 'key': ''}, {'text': '/hideout @last', 'key': ''}]
 DEFAULTS = {'listing': 'securable', 'search_range_pct': 10, 'quick_close_px': 150, 'popup_position': 'centre',
-            'overlay_on_copy': False, 'chat_commands': CHAT_DEFAULTS, 'ask_claude_target': 'app'}
+            'overlay_on_copy': False, 'chat_commands': CHAT_DEFAULTS, 'ask_claude_target': 'app',
+            'route_overlay': True, 'route_corner': 'right'}
 KEY_RX = __import__('re').compile(r'^((Ctrl|Alt|Shift)\+){0,3}(F([1-9]|1[0-2])|[A-Z0-9])$')
 
 
@@ -205,8 +206,9 @@ def clean_commands(cmds):
     return out
 
 
-HOTKEYS = {'quick': 'Ctrl+D', 'detailed': 'Ctrl+Alt+D', 'settings': 'Ctrl+Shift+D'}
-KEY_NAMES = {'quick': 'quick check', 'detailed': 'detailed check', 'settings': 'overlay settings'}
+HOTKEYS = {'quick': 'Ctrl+D', 'detailed': 'Ctrl+Alt+D', 'settings': 'Ctrl+Shift+D', 'route': 'Ctrl+Alt+R'}
+KEY_NAMES = {'quick': 'quick check', 'detailed': 'detailed check', 'settings': 'overlay settings',
+             'route': 'campaign route panel'}
 # keys the game itself (or Windows) already uses by default: taking them would break that action in game
 GAME_KEYS = {'Ctrl+C': "the game's copy-item key", 'Ctrl+Alt+C': "the game's detailed copy-item key",
              'Ctrl+V': 'paste in chat', 'Ctrl+A': 'select all in chat', 'Ctrl+X': 'cut in chat',
@@ -291,7 +293,9 @@ def stop():
 
 def set_options(b):
     from . import config
-    ch = {k: bool(b[k]) for k in ('overlay', 'live_trade', 'overlay_on_copy') if k in b}
+    ch = {k: bool(b[k]) for k in ('overlay', 'live_trade', 'overlay_on_copy', 'route_overlay') if k in b}
+    if b.get('route_corner') in ('right', 'left', 'top-left'):
+        ch['route_corner'] = b['route_corner']
     if b.get('listing') in ('securable', 'online'):
         ch['listing'] = b['listing']
     if b.get('ask_claude_target') in ('app', 'code'):

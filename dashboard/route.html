@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exile Oracle route</title>
+<link rel="stylesheet" href="/static/theme.css">
+<style>
+:root { --bg: #120e0b; --panel: #1b1510; --border: #3a2e22; --text: #e8dcc8; --muted: #9a8a73; --gold: #c9a45c;
+  --blood: #c8283c; --good: #6fbf73; --warn: #e0a44a; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text); overflow: hidden; user-select: none;
+  font: 13px/1.35 var(--eo-body, "Segoe UI"), system-ui, sans-serif; }
+.app { border: 1px solid var(--border); border-top: 2px solid var(--blood); background: linear-gradient(180deg, #1a130e, #110d0a); padding: 7px 10px 8px; }
+.top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.zone { font-family: var(--eo-display, "Palatino Linotype"), serif; font-variant: small-caps; color: var(--gold); font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.prog { color: var(--muted); font-size: 11px; white-space: nowrap; }
+.h { margin-top: 6px; color: var(--muted); font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em; }
+.row { margin-top: 2px; }
+.row b { color: var(--text); }
+.note { color: var(--muted); font-size: 12px; }
+.rw { margin-top: 3px; padding: 3px 6px; border-left: 3px solid var(--warn); background: #22190f; font-size: 12.5px; }
+.rw.done { border-left-color: var(--good); opacity: .6; }
+.rw .k { color: var(--warn); font-size: 10px; font-weight: 700; letter-spacing: .06em; margin-right: 4px; }
+.rw.done .k { color: var(--good); }
+.tip { font-size: 12px; color: #d7c7ad; margin-top: 2px; }
+.tip::before { content: "· "; color: var(--gold); }
+.trial { margin-top: 5px; padding: 4px 6px; border: 1px solid var(--gold); border-radius: 3px; font-size: 12.5px; }
+.foot { margin-top: 6px; color: var(--muted); font-size: 10.5px; text-align: right; }
+</style>
+</head>
+<body>
+<div class="app" id="app"><div class="note">Waiting for the game…</div></div>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+document.addEventListener('contextmenu', e => e.preventDefault());
+let ver = -1, page = null, lastSize = '';
+
+function draw(s) {
+  if (!s.show) { $('#app').innerHTML = `<div class="note">${esc(s.area && s.area.name || 'Not in the campaign')}</div>`; return; }
+  const st = s.step || {};
+  let h = `<div class="top"><div class="zone">${esc(s.area.name)}</div><div class="prog">${esc(s.progress || '')}</div></div>`;
+  if (s.kind === 'town') h += `<div class="row note">Town · carry on from ${esc(st.label || 'the route')}</div>`;
+  else if (st.note) h += `<div class="row note">${s.off_route ? 'Side zone. Route: ' + esc(st.label) + ' · ' : ''}${esc(st.note)}</div>`;
+  else if (s.off_route) h += `<div class="row note">Side zone, not on the rush route</div>`;
+  for (const r of s.rewards || []) h += `<div class="rw${r.done ? ' done' : ''}"><span class="k">${r.done ? 'DONE' : "DON'T SKIP"}</span>${esc(r.reward)} <span class="note">· ${esc((r.where.split(':')[1] || '').trim())}</span></div>`;
+  if (s.trial) h += `<div class="trial"><b>${esc(s.trial.trial)}</b> · ascendancy ${esc(s.trial.points)}<div class="note">${esc(s.trial.key || '')}</div></div>`;
+  if ((s.next || []).length) h += `<div class="h">next</div>` + s.next.map((n, i) => `<div class="row">${i ? '<span class="note">then </span>' : '→ '}<b>${esc(n.label)}</b>${n.note ? ` <span class="note">(${esc(n.note)})</span>` : ''}${n.act !== s.act ? ` <span class="note">· ${esc(n.act)}</span>` : ''}</div>`).join('');
+  if ((s.tips || []).length) h += `<div class="h">tips</div>` + s.tips.map(t => `<div class="tip">${esc(t)}</div>`).join('');
+  h += `<div class="foot">${s.points ? `${s.points.got} of ${s.points.of} points ticked · ` : ''}${esc(s.key || 'Ctrl+Alt+R')} hides</div>`;
+  $('#app').innerHTML = h;
+}
+
+function reportSize() {
+  requestAnimationFrame(() => {
+    const s = { need: Math.ceil($('#app').getBoundingClientRect().height), innerH: innerHeight, innerW: innerWidth, dpr: devicePixelRatio };
+    const k = JSON.stringify(s);
+    if (k !== lastSize) { lastSize = k; fetch('/api/route/size', { method: 'POST', body: k }).catch(() => {}); }
+  });
+}
+addEventListener('resize', reportSize);
+
+async function poll() {
+  for (;;) {
+    try {
+      const s = await (await fetch('/api/route/state?after=' + ver)).json();
+      if (page && s.page && s.page !== page) { location.reload(); return; }
+      page = s.page; ver = s.ver;
+      draw(s); reportSize();
+    } catch (e) { await new Promise(r => setTimeout(r, 3000)); }
+  }
+}
+fetch('/api/overlay/options').then(r => r.json()).then(o => { window.KEY = (o.hotkeys || {}).route; }).catch(() => {});
+poll();
+</script>
+</body>
+</html>

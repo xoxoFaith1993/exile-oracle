@@ -424,6 +424,7 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
   <div class="ng">Farming</div>
   <button data-tab="farm">What to farm</button>
   <button data-tab="league">League start</button>
+  <button data-tab="campaign">Campaign</button>
   <button data-tab="atlas">Atlas</button>
   <div class="ng">Character</div>
   <button data-tab="lab">Build Lab</button>
@@ -585,6 +586,30 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
       <div class="grid2" style="margin-top:10px"><div><h2 style="font-size:14px">Sell on day 1 (lost most against the Divine by day 7)</h2><div id="pbsell"></div></div>
         <div><h2 style="font-size:14px">Rose against the Divine by day 7 (worth holding)</h2><div id="pbhold"></div></div></div>
       <div class="small muted" id="pbnote" style="margin-top:8px"></div></div>
+  </section>
+  <section id="campaign">
+    <div class="card"><div class="lab-head"><h2 style="margin:0">Campaign rush</h2><span class="small muted" id="cpver"></span></div>
+      <div class="sub">The fastest way through the campaign without missing anything that lasts: every passive point, spirit, resistance and life reward, the ascendancy trials, and what's safe to skip. Tick rewards as you take them; the route panel in game shows the same thing zone by zone.</div>
+      <div class="grid2" id="cpstats" style="margin-top:10px"></div></div>
+    <div class="grid2">
+      <div class="card"><h2>Where you are now</h2><div class="sub">From the game's own log: updates as you change zones.</div><div id="cpzone"></div>
+        <label class="small" style="display:block;margin-top:10px"><input type="checkbox" id="cproute"> Route panel in game <span class="muted">(a small card in a corner, campaign only; it never takes the mouse or keyboard)</span></label>
+        <label class="small" style="display:block;margin-top:6px">Panel position <select class="crin" id="cpcorner"><option value="right">right, under the minimap</option><option value="left">left edge</option><option value="top-left">top left</option></select></label></div>
+      <div class="card"><h2>Rewards checklist</h2><div class="sub">Permanent rewards from the campaign. Tick each one you've taken.</div><div id="cprewards"></div></div>
+    </div>
+    <div class="card"><h2>The route, act by act</h2><div class="sub">Researched for 0.5. 1.0 (December 11) adds Acts 5 and 6 and removes the Interludes: this updates when it's out.</div><div id="cpacts"></div></div>
+    <div class="grid2">
+      <div class="card"><h2>Ascendancy trials</h2><div id="cptrials"></div></div>
+      <div class="card"><h2>Level breakpoints</h2><div id="cpbreaks"></div></div>
+    </div>
+    <div class="grid2">
+      <div class="card"><h2>Rush tips</h2><div id="cptips"></div></div>
+      <div class="card"><h2>Common mistakes</h2><div id="cpmistakes"></div></div>
+    </div>
+    <div class="grid2">
+      <div class="card"><h2>How long it takes</h2><div id="cptimes"></div></div>
+      <div class="card"><h2>Coming in 1.0</h2><div id="cpwatch"></div></div>
+    </div>
   </section>
   <section id="league">
     <div class="card"><h2>League start planner</h2><div class="sub">Any class, any chain of ascendancies (you can change ascendancy any time). Aim it at one of your builds to rank the skills and nodes you'll want.</div>
@@ -750,6 +775,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   if (b.dataset.tab === 'status') { loadConnectors(); loadLeagues(); }
   if (b.dataset.tab === 'lab') initLab();
   if (b.dataset.tab === 'atlas') { loadAtlas(); loadMapMods(); }
+  if (b.dataset.tab === 'campaign') loadCampaign();
   if (b.dataset.tab === 'economy') { loadLeagues(); loadOverview(); loadMovers(); loadMarket(); loadOracle($('#ordaysel').value); }
   if (b.dataset.tab === 'builds') loadBuilds();
   if (b.dataset.tab === 'alerts') loadAlerts(true);
@@ -1111,6 +1137,9 @@ document.addEventListener('click', async e => {
 
 // ---------- ready-made questions on every page (click = copy, paste in your AI chat) ----------
 const PAGE_ASKS = {
+  campaign: [['Plan my campaign rush', 'Plan my campaign rush for my league start build: which zones, which rewards, and when to do each trial.'],
+             ['Which rewards can I still get?', 'Look at my campaign checklist: which permanent rewards am I missing and where are they?'],
+             ['Am I ready for the next boss?', 'Am I ready for the next campaign boss with my current character? What should I fix first?']],
   home: [['What should I do today for the most currency?', 'Using the Oracle and my characters, what should I do today to make the most currency?'],
          ['How close am I to the top 1%?', 'How close is my main character to the top 1% of my ascendancy, and what closes the gap fastest?'],
          ['What changed in the market this week?', 'What changed in the Path of Exile 2 market this week, and does any of it matter for me?']],
@@ -1162,6 +1191,64 @@ async function loadAtlas() {
   TREES['atlas'] = t; ATLAS_DRAWN = true;
   $('#atlassub').textContent = `${t.nodes.length} nodes · game files ${t.build}`;
   await drawTree({ tree: { version: 'atlas', allocated: [], jewel_nodes: [] } }, $('#atlastree'));
+}
+
+// ---------- Campaign rush (R16) + route panel settings (R21) ----------
+let CP = null, cpTimer = null;
+const cpConf = c => c ? `<span class="pill" title="confidence">${esc(c)}</span>` : '';
+async function loadCampaign() {
+  CP = await get('/api/campaign');
+  if (!CP || CP.error) { $('#cpacts').innerHTML = `<div class="muted">${esc((CP && CP.error) || 'failed')}</div>`; return; }
+  $('#cpver').textContent = `researched ${CP.meta.researched} · ${CP.meta.game_version.split(';')[0]}`;
+  const p = CP.progress;
+  const bar = (a, b) => `<div style="height:6px;background:#2a2219;border-radius:3px;margin-top:4px"><div style="height:6px;width:${Math.min(100, 100 * a / (b || 1))}%;background:var(--eo-gold);border-radius:3px"></div></div>`;
+  $('#cpstats').innerHTML = [['Passive points', p.points, p.points_total], ['Spirit', p.spirit, p.spirit_total], ['Rewards ticked', p.done, p.of]]
+    .map(([l, a, b]) => `<div><div class="small muted">${l}</div><div style="font:700 20px var(--eo-display)">${a} <span class="muted small">of ${b}</span></div>${bar(a, b)}</div>`).join('');
+  drawCpZone(CP.zone);
+  // rewards checklist, grouped by act
+  const acts = [...new Set(CP.rewards.map(r => r.act))];
+  $('#cprewards').innerHTML = acts.map(a => `<div class="small muted" style="margin-top:8px">${esc(a)}</div>` + CP.rewards.filter(r => r.act === a).map(r =>
+    `<label class="small" style="display:flex;gap:8px;align-items:baseline;margin-top:3px"><input type="checkbox" class="cprw" data-k="${r.key}"${r.done ? ' checked' : ''}>
+      <span><b>${esc(r.reward)}</b> <span class="muted">· ${esc(r.where)}</span>${r.required ? ' <span class="pill">needed</span>' : ''}</span></label>`).join('')).join('');
+  document.querySelectorAll('.cprw').forEach(c => c.onchange = async () => { await post('/api/campaign/done', { key: c.dataset.k, on: c.checked }); loadCampaign(); });
+  // the route
+  $('#cpacts').innerHTML = CP.acts.map(a => `<details${a.route.some(s => CP.zone && CP.zone.step && s.label === CP.zone.step.label) ? ' open' : ''} style="margin-top:8px">
+    <summary><b>${esc(a.act)}</b> <span class="muted small">levels ${esc(a.levels || '')}${a.minutes ? ` · racer ${a.minutes.racer} min, good ${a.minutes.good} min` : ''}</span></summary>
+    <ol style="margin:6px 0 0 18px;padding:0">${a.route.map(s => `<li class="small" style="margin:2px 0"><b>${esc(s.label)}</b>${s.note ? ` <span class="muted">(${esc(s.note)})</span>` : ''}</li>`).join('')}</ol>
+    <div class="grid2" style="margin-top:6px">
+      <div><div class="small muted">Don't skip</div>${a.keep.map(x => `<div class="small">✔ ${esc(x.text)} ${cpConf(x.confidence)}</div>`).join('')}</div>
+      <div><div class="small muted">Safe to skip</div>${a.skip.map(x => `<div class="small">✗ ${esc(x.text)} ${cpConf(x.confidence)}</div>`).join('')}
+        ${a.tips.length ? `<div class="small muted" style="margin-top:6px">Tips</div>` + a.tips.map(x => `<div class="small">· ${esc(x.text)}</div>`).join('') : ''}</div>
+    </div></details>`).join('');
+  $('#cptrials').innerHTML = CP.trials.map(t => `<div class="small" style="margin-top:6px"><b>Points ${esc(t.points)}: ${esc(t.trial)}</b> ${cpConf(t.confidence)}<div class="muted">key: ${esc(t.key || '')} · when: ${esc(t.timing || '')}</div></div>`).join('');
+  const bp = CP.breakpoints;
+  $('#cpbreaks').innerHTML = `<div class="small"><b>Flask upgrades</b> at levels ${bp.flasks.join(', ')}</div>
+    <div class="small" style="margin-top:6px"><b>Boots</b> ${bp.boots.map(([l, s]) => `${s}% by ${l}`).join(' · ')}</div>
+    <div class="small" style="margin-top:6px"><b>Life (with ES)</b> ${Object.entries(bp.life).map(([a, v]) => `about ${v} at the end of Act ${a}`).join(' · ')}</div>
+    ${CP.rush_vs_full.recommended ? `<div class="small" style="margin-top:10px"><b>Rush or clear?</b> ${esc(CP.rush_vs_full.recommended)}</div>` : ''}`;
+  $('#cptips').innerHTML = CP.tips.map(x => `<div class="small" style="margin-top:4px">· ${esc(x.text)} ${cpConf(x.confidence)}</div>`).join('');
+  $('#cpmistakes').innerHTML = CP.mistakes.map(x => `<div class="small" style="margin-top:4px">✗ ${esc(x.text)} ${cpConf(x.confidence)}</div>`).join('');
+  $('#cptimes').innerHTML = CP.times.map(x => `<div class="small" style="margin-top:4px"><b>${esc(x.time)}</b> ${esc(x.who)} <span class="muted">${esc(x.version ? 'patch ' + x.version : '')}</span></div>`).join('');
+  $('#cpwatch').innerHTML = CP.watch.map(x => `<div class="small" style="margin-top:4px"><b>${esc(x.item)}:</b> ${esc(x.known)} ${cpConf(x.confidence)}</div>`).join('');
+  const o = await get('/api/overlay/options');
+  $('#cproute').checked = !!o.route_overlay; $('#cpcorner').value = o.route_corner || 'right';
+  $('#cproute').onchange = e => post('/api/overlay/options', { route_overlay: e.target.checked });
+  $('#cpcorner').onchange = e => post('/api/overlay/options', { route_corner: e.target.value });
+  clearInterval(cpTimer);
+  cpTimer = setInterval(async () => {   // follow the zone while the page is open
+    if (!document.querySelector('#campaign.on') || document.hidden) return;
+    try { const s = await get('/api/route/state?after=-1&wait=0'); drawCpZone(s); } catch (e) {}
+  }, 4000);
+}
+function drawCpZone(z) {
+  if (!z || !z.area || !z.area.id) { $('#cpzone').innerHTML = '<div class="small muted">No zone yet: play once and it shows up here.</div>'; return; }
+  if (!z.show) { $('#cpzone').innerHTML = `<div class="small">${esc(z.area.name)} <span class="muted">(${esc(z.kind)}: the route panel stays hidden here)</span></div>`; return; }
+  const st = z.step || {};
+  $('#cpzone').innerHTML = `<div style="font:700 17px var(--eo-display);color:var(--eo-gold)">${esc(z.area.name)} <span class="small muted">${esc(z.progress || '')}</span></div>
+    ${st.note ? `<div class="small muted">${esc(st.note)}</div>` : ''}
+    ${(z.rewards || []).map(r => `<div class="small" style="margin-top:4px">${r.done ? '✔' : '⚠'} <b>${esc(r.reward)}</b> <span class="muted">${esc(r.where)}</span></div>`).join('')}
+    ${(z.next || []).length ? `<div class="small" style="margin-top:6px">Next: ${z.next.map(n => `<b>${esc(n.label)}</b>${n.note ? ` (${esc(n.note)})` : ''}`).join(' → ')}</div>` : ''}
+    ${(z.tips || []).map(t => `<div class="small muted">· ${esc(t)}</div>`).join('')}`;
 }
 
 // ---------- Atlas: map modifiers + our own search strings (R15) ----------
@@ -2053,7 +2140,7 @@ async function loadOverlay() {
   const hk = o.hotkeys || {}, dk = o.default_hotkeys || {};
   $('#ovopts').insertAdjacentHTML('beforeend', `<div class="small" style="margin-top:12px"><b>Keys</b> <span class="muted">(click a box, then press the keys you want; they only work while the game is in front)</span></div>
     <div style="display:grid;grid-template-columns:auto auto auto;gap:6px 10px;align-items:center;margin-top:6px;max-width:460px">
-      ${[['quick', 'Quick check'], ['detailed', 'Detailed check (stays open)'], ['settings', 'Overlay settings']].map(([k, l]) =>
+      ${[['quick', 'Quick check'], ['detailed', 'Detailed check (stays open)'], ['settings', 'Overlay settings'], ['route', 'Campaign route panel (show / hide)']].map(([k, l]) =>
         `<span class="small">${l}</span><input class="ovkey" data-pk="${k}" value="${esc(hk[k])}" readonly style="width:130px;text-align:center;cursor:pointer"><button class="btn ovkdef" data-pk="${k}" title="back to ${esc(dk[k])}">↺ ${esc(dk[k])}</button>`).join('')}
     </div>
     ${(o.key_warnings || []).length || ovErr ? `<div class="small" style="margin-top:8px;color:var(--warning)">⚠ ${[ovErr, ...(o.key_warnings || [])].filter(Boolean).map(esc).join('<br>⚠ ')}</div>` : ''}`);
