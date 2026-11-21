@@ -15,7 +15,7 @@ import re
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)                      # the app folder (code, dashboard, pobhost)
 
-VERSION = '0.2.0'
+VERSION = '0.3.0'
 REPO = 'xoxoFaith1993/poe2-toolkit'   # GitHub: releases + update check
 
 
