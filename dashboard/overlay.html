@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PoE2 price check</title>
+<title>Exile Oracle price check</title>
 <style>
 :root {
   --bg: #1b212b; --panel: #232b37; --panel-2: #2a3341; --row: #262f3c; --row-alt: #2c3644;
@@ -114,7 +114,7 @@ svg.spark { display: block; }
 </head>
 <body>
 <div class="app">
-  <div class="title sc" id="title">PoE 2 Toolkit · price check</div>
+  <div class="title sc" id="title">Exile Oracle · price check</div>
   <div class="scroll" id="main"><div class="empty sc">Press Ctrl+C on an item in game</div></div>
   <div class="foot"><span id="limit"></span><span>Ctrl+D quick · Ctrl+Alt+D stays open · Esc closes</span></div>
 </div>
@@ -204,7 +204,7 @@ function render(st) {
   if (st.status === 'error' || r.error) { $('#main').innerHTML = `<div class="empty">${esc(r.error)}</div>`; return; }
   if (!r.item) return;
   if (st.id !== filtersFor) { filters = r.filters ? JSON.parse(JSON.stringify(r.filters)) : null; filtersFor = st.id; }
-  $('#title').textContent = r.league || 'PoE 2 Toolkit';
+  $('#title').textContent = r.league || 'Exile Oracle';
   const it = r.item, col = COL[it.rarity] || 'var(--text)';
   const best = r.headline;
   let h = `<div class="item" style="--tint:${col}">

@@ -1,4 +1,4 @@
-# PoE 2 Toolkit
+# Exile Oracle
 
 A personal Path of Exile 2 companion: live economy, what to farm, a league-start playbook, a Top 1% check for your
 character, your play sessions, a craft lab and patch notes checked against your builds. It runs on your own PC and
@@ -22,7 +22,7 @@ opens in your browser.
 This toolkit is meant to be used **with Claude**: the dashboard shows the numbers, Claude answers your questions
 about them ("what should I farm", "how close am I to the top 1%", "how do I craft this"). Connect it once from the
 **Status** tab → **Connect to Claude**, then restart Claude. Full guide: `CLAUDE-GUIDE.md` in the install folder
-(also in the Start menu: *Using PoE 2 Toolkit with Claude*). Everything still works without Claude.
+(also in the Start menu: *Using Exile Oracle with Claude*). Everything still works without Claude.
 
 ## The rules it follows (so your account stays safe)
 - Read-only: it never sends input to the game, never reads game memory, never changes game files.

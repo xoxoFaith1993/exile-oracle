@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Name=PoE 2 Toolkit
+Name=Exile Oracle
 Comment=Path of Exile 2 prices, farming, builds and crafting
 Exec="@APP@/python/bin/python3" "@APP@/toolkit/launcher.py"
 Icon=@APP@/toolkit/dashboard/poe2kit.png

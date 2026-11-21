@@ -79,7 +79,7 @@ def run():
 
     # overlay
     if osutil.IS_WIN:
-        on = s.get('overlay', config.is_dev_copy())
+        on = s.get('overlay', False)
         try:
             from . import overlaysrv
             running = overlaysrv.running()
@@ -106,7 +106,7 @@ def run():
             pass
     else:
         add('overlay', True, 'Windows-only for now')
-    add('live trade prices', True, 'on' if s.get('live_trade', config.is_dev_copy()) else
+    add('live trade prices', True, 'on' if s.get('live_trade', False) else
         "off (the player's choice; Ctrl+Shift+D)")
     add('ask claude', True, f"sends to {s.get('ask_claude_target') or 'app'}")
 

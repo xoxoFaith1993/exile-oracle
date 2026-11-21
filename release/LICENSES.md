@@ -1,6 +1,6 @@
-# PoE 2 Toolkit: licences and credits
+# Exile Oracle: licences and credits
 
-**PoE 2 Toolkit** is a personal, free tool shared between friends. Use at your own risk; no warranty.
+**Exile Oracle** is a personal, free tool shared between friends. Use at your own risk; no warranty.
 It isn't affiliated with or endorsed by Grinding Gear Games. Path of Exile, its names and all of its artwork are
 © Grinding Gear Games. This free, non-commercial fan tool uses one piece of game art (the Blood Mage "Sanguimancy"
 ascendancy art) as its icon; it will be replaced on request (an original icon is ready in `release\icon.png`).

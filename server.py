@@ -637,7 +637,7 @@ TOOLS = [
      '[node names or game ids], "remove_passives": [...], "swap_gems": {"old gem": "new gem"}}; follow = the '
      "character name whose level-ups (from the game log) rewrite the file with 'next' notes ('' stops following). "
      'Before saving edits, call with check=true + edits: Path of Building shows DPS/life/res before vs after and warns '
-     "about unconnected nodes; tell the player, then save. write=true saves 'PoE2 Toolkit - <name>.build' (the "
+     "about unconnected nodes; tell the player, then save. write=true saves 'Exile Oracle - <name>.build' (the "
      'first write ever needs confirm=true after asking the player); without write you get a preview. forget=true '
      "clears the saved plan. list=true shows the folder; remove=<file> deletes one of the toolkit's own files. "
      'Several PoB trees titled "Level 30", "Level 60", "Endgame" become a levelling route. levelling_route=true '
@@ -688,7 +688,7 @@ def handle(msg):
             'capabilities': {'tools': {}},
             'serverInfo': {'name': 'poe2', 'version': config.VERSION},
             'instructions': (
-                "PoE 2 Toolkit: the player's own Path of Exile 2 companion, meant to be used through you. Start with "
+                "Exile Oracle (formerly PoE 2 Toolkit): the player's own Path of Exile 2 companion, meant to be used through you. Start with "
                 'poe2_status (league, data freshness) and read their profile defaults (class / ascendancy) from it. '
                 'Answer with real numbers from the tools, explain them plainly, and put the matching view on their '
                 'dashboard with poe2_show (charts, tables, build cost, upgrades, compares, character pages) while you '

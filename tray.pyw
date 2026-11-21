@@ -1,4 +1,4 @@
-"""PoE 2 Toolkit tray icon (for installed copies). Starts the monitor if it isn't running, puts an icon by the clock:
+"""Exile Oracle tray icon (for installed copies). Starts the monitor if it isn't running, puts an icon by the clock:
   Open dashboard | Start with Windows (on/off) | Quit (stops the monitor too)
 Plain Windows API through ctypes, so the installer needs nothing beyond Python itself."""
 
@@ -105,7 +105,7 @@ def menu(hwnd):
     u32.AppendMenuW(m, MF_STRING, ID_OPEN, 'Open dashboard')
     u32.AppendMenuW(m, MF_STRING | (MF_CHECKED if autostart() else 0), ID_AUTOSTART, 'Start with Windows')
     u32.AppendMenuW(m, MF_SEPARATOR, 0, None)
-    u32.AppendMenuW(m, MF_STRING, ID_QUIT, 'Quit PoE 2 Toolkit')
+    u32.AppendMenuW(m, MF_STRING, ID_QUIT, 'Quit Exile Oracle')
     pt = wt.POINT()
     u32.GetCursorPos(ctypes.byref(pt))
     u32.SetForegroundWindow(hwnd)
@@ -143,14 +143,14 @@ def main():
     wc.hInstance = hinst
     wc.lpszClassName = 'PoE2ToolkitTray'
     u32.RegisterClassW(ctypes.byref(wc))
-    hwnd = u32.CreateWindowExW(0, wc.lpszClassName, 'PoE 2 Toolkit', 0, 0, 0, 0, 0, None, None, hinst, None)
+    hwnd = u32.CreateWindowExW(0, wc.lpszClassName, 'Exile Oracle', 0, 0, 0, 0, 0, None, None, hinst, None)
     hicon = u32.LoadImageW(None, ICON, IMAGE_ICON, 16, 16, LR_LOADFROMFILE) if os.path.exists(ICON) else None
     nid.cbSize = ctypes.sizeof(NOTIFYICONDATA)
     nid.hWnd, nid.uID = hwnd, 1
     nid.uFlags = NIF_MESSAGE | NIF_ICON | NIF_TIP
     nid.uCallbackMessage = WM_TRAY
     nid.hIcon = hicon or u32.LoadIconW(None, ctypes.c_void_p(32512))  # IDI_APPLICATION
-    nid.szTip = 'PoE 2 Toolkit'
+    nid.szTip = 'Exile Oracle'
     s32.Shell_NotifyIconW(NIM_ADD, ctypes.byref(nid))
     if '--background' not in sys.argv:
         open_dashboard()

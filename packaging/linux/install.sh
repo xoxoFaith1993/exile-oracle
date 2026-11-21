@@ -1,5 +1,5 @@
 #!/bin/sh
-# PoE 2 Toolkit for Linux and the Steam Deck: installs for your user only (no sudo, nothing system-wide).
+# Exile Oracle (formerly PoE 2 Toolkit) for Linux and the Steam Deck: installs for your user only (no sudo, nothing system-wide).
 #
 #   sh install.sh               install (or reinstall) and open the dashboard
 #   sh install.sh --autostart   also start it in the background when you log in
@@ -25,7 +25,7 @@ for a in "$@"; do
   esac
 done
 
-[ -x "$SRC/app/python/bin/python3" ] || { echo "This folder doesn't look like the unpacked PoE 2 Toolkit download." >&2; exit 1; }
+[ -x "$SRC/app/python/bin/python3" ] || { echo "This folder doesn't look like the unpacked Exile Oracle download." >&2; exit 1; }
 
 # 1. stop a running copy (the update button runs this script while the toolkit is running)
 if [ -x "$APP/python/bin/python3" ]; then
@@ -44,14 +44,16 @@ chmod +x "$APP/python/bin/"* "$APP/toolkit/linux/bin/luajit" 2>/dev/null || true
 
 # 3. app menu entry (on a Steam Deck: Desktop Mode menu; right-click it there to "Add to Steam")
 mkdir -p "$APPS"
-sed "s|@APP@|$APP|g" "$SRC/poe2-toolkit.desktop.in" > "$APPS/poe2-toolkit.desktop"
+rm -f "$APPS/poe2-toolkit.desktop"   # menu entry from before the rename
+sed "s|@APP@|$APP|g" "$SRC/exile-oracle.desktop.in" > "$APPS/exile-oracle.desktop"
 command -v update-desktop-database >/dev/null 2>&1 && update-desktop-database -q "$APPS" 2>/dev/null || true
 
 # 4. start at login (only when asked, or kept if it was already on)
-if [ "$AUTOSTART" = 1 ] || [ -f "$AUTOSTART_DIR/poe2-toolkit.desktop" ]; then
+if [ -f "$AUTOSTART_DIR/poe2-toolkit.desktop" ]; then rm -f "$AUTOSTART_DIR/poe2-toolkit.desktop"; AUTOSTART=1; fi
+if [ "$AUTOSTART" = 1 ] || [ -f "$AUTOSTART_DIR/exile-oracle.desktop" ]; then
   mkdir -p "$AUTOSTART_DIR"
   sed -e "s|@APP@|$APP|g" -e 's|launcher.py"$|launcher.py" --background|' \
-    "$SRC/poe2-toolkit.desktop.in" > "$AUTOSTART_DIR/poe2-toolkit.desktop"
+    "$SRC/exile-oracle.desktop.in" > "$AUTOSTART_DIR/exile-oracle.desktop"
 fi
 
 # 5. start it
@@ -66,8 +68,8 @@ fi
 if [ "$UPDATE" = 0 ]; then
   cat <<EOF
 
-PoE 2 Toolkit is installed.
-  Open it:      "PoE 2 Toolkit" in your app menu, or http://127.0.0.1:47830 in your browser
+Exile Oracle is installed.
+  Open it:      "Exile Oracle" in your app menu, or http://127.0.0.1:47830 in your browser
   Your data:    $DATA
   Remove it:    sh "$SRC/uninstall.sh"   (keeps your data unless you add --purge)
 

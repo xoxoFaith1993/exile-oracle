@@ -72,7 +72,7 @@ jobs:
         if: github.event_name == 'release'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release download "${{ github.event.release.tag_name }}" -p 'poe2-toolkit-gameart-*.tar.gz' -O art.tar.gz
+        run: gh release download "${{ github.event.release.tag_name }}" -p '*-gameart-*.tar.gz' -O art.tar.gz
       - name: Build the package
         run: sh tools/build_linux_package.sh rt out ${{ github.event_name == 'release' && 'art.tar.gz' || '' }}
       - name: Install, test and uninstall it like a player
@@ -81,16 +81,16 @@ jobs:
           export HOME="$RUNNER_TEMP/player"
           mkdir -p "$HOME" pkg
           tar -xzf out/*.tar.gz -C pkg
-          sh pkg/poe2-toolkit-linux/install.sh --no-start
+          sh pkg/exile-oracle-linux/install.sh --no-start
           A="$HOME/.local/share/poe2toolkit/app"
           test -x "$A/python/bin/python3"
-          grep -q "$A/toolkit/launcher.py" "$HOME/.local/share/applications/poe2-toolkit.desktop"
+          grep -q "$A/toolkit/launcher.py" "$HOME/.local/share/applications/exile-oracle.desktop"
           "$A/python/bin/python3" "$A/toolkit/smoke_test.py" --installed --pob
-          sh pkg/poe2-toolkit-linux/install.sh --update --no-start
+          sh pkg/exile-oracle-linux/install.sh --update --no-start
           test -f "$HOME/.local/share/poe2toolkit/data/poe2kit.db"
-          sh pkg/poe2-toolkit-linux/uninstall.sh --purge
+          sh pkg/exile-oracle-linux/uninstall.sh --purge
           test ! -e "$HOME/.local/share/poe2toolkit"
-          test ! -e "$HOME/.local/share/applications/poe2-toolkit.desktop"
+          test ! -e "$HOME/.local/share/applications/exile-oracle.desktop"
       - uses: actions/upload-artifact@v4
         if: github.event_name != 'release'
         with:

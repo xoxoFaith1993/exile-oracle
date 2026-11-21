@@ -1,4 +1,4 @@
-# Using PoE 2 Toolkit with Claude
+# Using Exile Oracle with Claude
 
 **This is how the toolkit is meant to be used.** The dashboard shows you the numbers; Claude reads the same data and
 answers your questions about it, does the maths, compares builds, and puts the right view on your dashboard while it
@@ -11,7 +11,7 @@ explains. The toolkit works without Claude, but the best of it is a conversation
 2. Go to the **Status** tab → **Connect to Claude** → click **Connect to Claude desktop**.
    (It adds the toolkit to Claude's settings file and keeps a backup of the old one.)
 3. Fully quit Claude (right-click its tray icon → Quit) and open it again.
-4. In a new chat, ask: *"What PoE 2 Toolkit tools do you have?"* Claude should list tools starting with `poe2_`.
+4. In a new chat, ask: *"What Exile Oracle tools do you have?"* Claude should list tools starting with `poe2_`.
 
 **Claude Code (terminal)**
 On the Status tab, open *"Using Claude Code instead?"* and run the one command it shows, e.g.
@@ -82,5 +82,5 @@ for 15 minutes).
 
 ## Troubleshooting
 - *Claude doesn't list `poe2_` tools:* quit Claude completely and reopen it; check the Status tab says "Connected".
-- *"Monitor not running":* click the red tray icon (or start PoE 2 Toolkit from the Start menu).
+- *"Monitor not running":* click the red tray icon (or start Exile Oracle from the Start menu).
 - *Disconnect:* Status tab → **Disconnect**, then restart Claude.

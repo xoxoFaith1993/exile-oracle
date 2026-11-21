@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PoE 2 Toolkit</title>
+<title>Exile Oracle</title>
 <style>
 :root {
   color-scheme: dark;
@@ -1143,7 +1143,7 @@ async function checkUpdate() {
   const bar = document.createElement('div');
   bar.id = 'updbar';
   bar.style.cssText = 'background:#3a0d14;border-bottom:1px solid #C8283C;padding:8px 16px;font-size:13px;display:flex;gap:10px;align-items:center;flex-wrap:wrap';
-  bar.innerHTML = `<b>Update available: PoE 2 Toolkit ${esc(u.latest)}</b> <span class="muted">(you have ${esc(u.current)})</span>
+  bar.innerHTML = `<b>Update available: Exile Oracle ${esc(u.latest)}</b> <span class="muted">(you have ${esc(u.current)})</span>
     <button class="btn" id="updgo">Download &amp; install</button> <a class="small" href="${esc(u.page)}" target="_blank" rel="noopener">what's new ↗</a> <span class="small muted" id="updmsg"></span>`;
   document.body.prepend(bar);
   $('#updgo').onclick = async () => { $('#updmsg').textContent = 'Downloading… the installer opens when it is ready.'; const r = await post('/api/update/install', {}); $('#updmsg').textContent = r.ok ? 'Installer started: follow it, the toolkit restarts after.' : ('Could not update: ' + (r.why || '')); };

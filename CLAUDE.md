@@ -1,4 +1,4 @@
-# PoE 2 Toolkit: notes for Claude working in this repository
+# Exile Oracle: notes for Claude working in this repository
 
 This toolkit is made to be used with Claude. Players ask Claude about prices, farming, builds and crafting, and when
 something breaks they ask Claude to fix it. The project is at an early stage, so expect rough edges and verify before
@@ -24,7 +24,7 @@ you assume.
   - nothing else calls it.
 - **Other GGG / poe.ninja data:** only documented public data (poe.ninja economy API, GGG's Currency Exchange
   history, the Build Planner file format). No undocumented endpoints beyond the trade site above, and no scraping.
-- **The game's `BuildPlanner` folder:** only files named `PoE2 Toolkit - *.build` are written or removed. The first
+- **The game's `BuildPlanner` folder:** only files named `Exile Oracle - *.build` are written or removed. The first
   write asks the player.
 - **Exiled Exchange 2:** don't copy its code. Its AI policy asks for no AI-written code; read it for facts only.
 - **No personal details in commits.** `build_release.py` runs a privacy scan before anything is published.

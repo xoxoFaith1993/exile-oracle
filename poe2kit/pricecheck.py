@@ -81,7 +81,7 @@ def check(con, text, league=None, progress=None, filters=None):
         except Exception as ex:   # bases our crafting data doesn't know
             res['notes'].append(f'No craft estimate: {ex}')
     if wants_trade:
-        if not config.settings().get('live_trade', config.is_dev_copy()):
+        if not config.settings().get('live_trade', False):
             res['trade'] = {'state': 'off', 'note': 'Live trade prices are off. Switch them on in the dashboard '
                                                     '(Status → Overlay) or use Open on trade.'}
         else:

@@ -1,10 +1,10 @@
 #!/bin/sh
-# Build the Linux download: poe2-toolkit-linux-x86_64-<version>.tar.gz
+# Build the Linux download: exile-oracle-linux-x86_64-<version>.tar.gz
 #   sh tools/build_linux_package.sh <linux runtime dir> <out dir> [game art .tar.gz]
 # Run from the repository root (GitHub Actions does). Contents:
-#   poe2-toolkit-linux/install.sh, uninstall.sh, poe2-toolkit.desktop.in, README.txt
-#   poe2-toolkit-linux/app/python/   portable CPython (python-build-standalone, PSF licence)
-#   poe2-toolkit-linux/app/toolkit/  the toolkit + linux/ (LuaJIT, lua-utf8, lcurl) + gameart/ (when given)
+#   exile-oracle-linux/install.sh, uninstall.sh, exile-oracle.desktop.in, README.txt
+#   exile-oracle-linux/app/python/   portable CPython (python-build-standalone, PSF licence)
+#   exile-oracle-linux/app/toolkit/  the toolkit + linux/ (LuaJIT, lua-utf8, lcurl) + gameart/ (when given)
 set -eu
 RT=$(realpath "$1")
 OUT=$(realpath -m "$2")
@@ -13,7 +13,7 @@ PY_URL='https://github.com/astral-sh/python-build-standalone/releases/download/2
 VER=$(python3 -c "import re;print(re.search(r\"VERSION = '([^']+)'\", open('poe2kit/config.py').read()).group(1))")
 W=$(mktemp -d)
 trap 'rm -rf "$W"' EXIT
-P="$W/poe2-toolkit-linux"
+P="$W/exile-oracle-linux"
 mkdir -p "$P/app/toolkit" "$OUT"
 
 # the toolkit: the repository's tracked files, minus build/publishing files and Windows-only binaries
@@ -36,11 +36,11 @@ if [ -n "$ART" ] && [ -f "$ART" ]; then
   tar -xzf "$ART" -C "$P/app/toolkit/gameart"
 fi
 
-cp packaging/linux/install.sh packaging/linux/uninstall.sh packaging/linux/poe2-toolkit.desktop.in "$P/"
+cp packaging/linux/install.sh packaging/linux/uninstall.sh packaging/linux/exile-oracle.desktop.in "$P/"
 cp packaging/linux/README.txt "$P/README.txt"
 cp release/LICENSES.md "$P/LICENSES.md"
 chmod +x "$P/install.sh" "$P/uninstall.sh"
 
-NAME="poe2-toolkit-linux-x86_64-$VER.tar.gz"
-tar -C "$W" -czf "$OUT/$NAME" poe2-toolkit-linux
+NAME="exile-oracle-linux-x86_64-$VER.tar.gz"
+tar -C "$W" -czf "$OUT/$NAME" exile-oracle-linux
 echo "$OUT/$NAME $(du -h "$OUT/$NAME" | cut -f1)"

@@ -195,8 +195,8 @@ HOTKEYS = {'quick': 'Ctrl+D', 'detailed': 'Ctrl+Alt+D', 'settings': 'Ctrl+Shift+
 def options():
     from . import config, osutil
     s = config.settings()
-    out = {'overlay': bool(s.get('overlay', config.is_dev_copy())),
-           'live_trade': bool(s.get('live_trade', config.is_dev_copy())),
+    out = {'overlay': bool(s.get('overlay', False)),
+           'live_trade': bool(s.get('live_trade', False)),
            'supported': osutil.IS_WIN, 'running': running(), 'hotkeys': HOTKEYS}
     out.update({k: s.get(k, v) for k, v in DEFAULTS.items()})
     return out

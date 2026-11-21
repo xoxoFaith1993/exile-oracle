@@ -1,4 +1,4 @@
-"""PoE 2 Toolkit price-check overlay (Windows).
+"""Exile Oracle price-check overlay (Windows).
 
 Hover an item in Path of Exile 2 and press
   Ctrl+D       quick check: the popup closes when you move the mouse away
@@ -33,7 +33,7 @@ PORT = int(os.environ.get('POE2KIT_PORT', '47830'))
 URL = f'http://127.0.0.1:{PORT}/'
 LOCK = os.path.join(config.HOME, 'overlay.lock')
 QUIT = os.path.join(config.HOME, 'overlay.quit')
-TITLE = 'PoE2 price check'
+TITLE = ('Exile Oracle price check', 'PoE2 price check')   # page title (new, old)
 W, H = 460, 720          # popup size at 100% Windows scaling
 EDGE = [r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe',
         r'C:\Program Files\Microsoft\Edge\Application\msedge.exe']
@@ -578,7 +578,7 @@ def main(argv):
     wndproc = WNDPROC(proc)
     wc = WNDCLASS(lpfnWndProc=wndproc, hInstance=k32.GetModuleHandleW(None), lpszClassName='PoE2ToolkitOverlay')
     u32.RegisterClassW(ctypes.byref(wc))
-    hwnd_main = u32.CreateWindowExW(0, 'PoE2ToolkitOverlay', 'PoE2 Toolkit overlay', 0, 0, 0, 0, 0, None, None,
+    hwnd_main = u32.CreateWindowExW(0, 'PoE2ToolkitOverlay', 'Exile Oracle overlay', 0, 0, 0, 0, 0, None, None,
                                     wc.hInstance, None)
     u32.AddClipboardFormatListener(hwnd_main)
     u32.SetTimer(hwnd_main, TIMER_ID, 100, None)

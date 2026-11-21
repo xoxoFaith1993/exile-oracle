@@ -16,7 +16,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)                      # the app folder (code, dashboard, pobhost)
 
 VERSION = '0.3.0'
-REPO = 'xoxoFaith1993/poe2-toolkit'   # GitHub: releases + update check
+APP_NAME = 'Exile Oracle'
+REPO = 'xoxoFaith1993/exile-oracle'   # GitHub: releases + update check (was poe2-toolkit; GitHub redirects)
 
 
 def _home():
@@ -26,7 +27,7 @@ def _home():
     if os.name != 'nt':   # Linux / Steam Deck: XDG data folder
         base = os.environ.get('XDG_DATA_HOME') or os.path.join(os.path.expanduser('~'), '.local', 'share')
         return os.path.join(base, 'poe2toolkit')
-    if os.path.isdir(r'F:\PoE2Toolkit'):
+    if os.path.isdir(r'F:\PoE2Toolkit'):   # the author's data folder (kept on F: for disk space), installed or not
         return r'F:\PoE2Toolkit'
     return os.path.join(os.environ.get('LOCALAPPDATA') or os.path.expanduser('~'), 'PoE2Toolkit')
 
@@ -94,7 +95,7 @@ def save_settings(changes):
 
 def user_agent():
     s = settings()
-    ua = f'poe2-toolkit/{VERSION}'
+    ua = f'exile-oracle/{VERSION}'
     extra = [x for x in (s.get('homepage'), (f"contact: {s['contact']}" if s.get('contact') else None)) if x]
     if extra:
         ua += f' ({"; ".join(extra)})'
@@ -111,11 +112,6 @@ def profile():
     p = settings().get('profile')
     if p:
         return p
-    if os.path.normcase(os.path.normpath(HOME)) == os.path.normcase(r'F:\PoE2Toolkit'):
-        return {'name': 'the author', 'class': 'Witch', 'ascendancy': 'Blood Mage', 'path': ['Lich', 'Blood Mage'],
-                'watch': ['blood mage', 'witch', 'corrupted blood', 'sanguimancy', 'life remnants', 'spell critical',
-                          'critical hit chance', 'eldritch battery', 'mind over matter', 'energy shield', 'spirit',
-                          'lightning', 'cast on critical'], 'configured': True}
     return {'name': None, 'class': None, 'ascendancy': None, 'path': [], 'watch': [], 'configured': False}
 
 
@@ -261,5 +257,7 @@ def newest_gamefiles(sub):
 
 
 def is_dev_copy():
-    """the author's own development copy (F:\\PoE2Toolkit): never self-updates; some opt-in features default on."""
-    return os.path.normcase(os.path.normpath(HOME)) == os.path.normcase(r'F:\PoE2Toolkit')
+    """The author's development source (it has the private release files, which never ship): it never updates
+    itself. Decided by the CODE folder, not the data folder, so an installed copy using the same data behaves
+    exactly like a friend's install."""
+    return os.path.exists(os.path.join(ROOT, 'release', 'private_patterns.txt'))

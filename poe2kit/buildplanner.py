@@ -6,11 +6,11 @@ so a new or changed file shows up in game by itself: the passive tree path with 
 to cut, and hints on gear slots.
 
   make(con, build_id | pob_code, notes)  -> the .build document + a report of what was left out
-  write(doc, confirm)                    -> saves "PoE2 Toolkit - <name>.build" (the first write ever needs confirm)
+  write(doc, confirm)                    -> saves "Exile Oracle - <name>.build" (the first write ever needs confirm)
 
 Ids: PoB passive numbers -> PassiveSkills Id and ascendancy names -> Ascendancy Id come from planner_ids.json (data
 pack, made from the game's own tables); PoB's gems already carry their BaseItemTypes id.
-The toolkit only ever writes and deletes its own files (the "PoE2 Toolkit - " prefix) in that folder."""
+The toolkit only ever writes and deletes its own files (the "Exile Oracle - " prefix, or "PoE2 Toolkit - " from before the rename) in that folder."""
 
 import json
 import os
@@ -20,7 +20,8 @@ import xml.etree.ElementTree as ET
 
 from . import config, osutil, vault
 
-PREFIX = 'PoE2 Toolkit - '
+PREFIX = 'Exile Oracle - '
+OLD_PREFIXES = ('PoE2 Toolkit - ',)   # files from before the rename are still ours
 ENDGAME_FROM = 55   # levelling plans: endgame gear hints show from this level, levelling hints before it
 SLOTS = {'Weapon 1': 'Weapon1', 'Weapon 2': 'Offhand1', 'Weapon 1 Swap': 'Weapon2', 'Weapon 2 Swap': 'Offhand2',
          'Helmet': 'Helm1', 'Body Armour': 'BodyArmour1', 'Gloves': 'Gloves1', 'Boots': 'Boots1',
@@ -286,10 +287,10 @@ def make(con, build_id=None, pob_code=None, notes=None, name=None, include_gear=
     b = root.find('Build')
     asc = (active.get('ascendancyInternalId') if active is not None else None) or \
         ids['ascendancies'].get(b.get('ascendClassName') if b is not None else '')
-    doc = {'name': _clean(name or label)[:60] or 'PoE 2 Toolkit build', 'author': 'PoE 2 Toolkit',
+    doc = {'name': _clean(name or label)[:60] or 'Exile Oracle build', 'author': 'Exile Oracle',
            'description': _clean(notes.get('description')) or
            f"{b.get('ascendClassName') if b is not None else ''} level {b.get('level') if b is not None else '?'}, "
-           f"exported by the PoE 2 Toolkit {time.strftime('%Y-%m-%d')}",
+           f"exported by Exile Oracle {time.strftime('%Y-%m-%d')}",
            'link': f'https://github.com/{config.REPO}'}
     if report.get('route') == 'automatic':
         doc['description'] += '\nLevelling route reviewed with Claude: passives show 10 levels before they are due.'
@@ -334,6 +335,13 @@ def write(doc, confirm=False):
     with open(tmp, 'w', encoding='utf-8', newline='\n') as f:
         json.dump(doc, f, indent=2, ensure_ascii=False)
     os.replace(tmp, path)   # one step, so the game's file watcher never sees half a file
+    for old in OLD_PREFIXES:   # the same plan saved under the old name: remove it so the game lists it once
+        stale = os.path.join(d, old + os.path.basename(path)[len(PREFIX):])
+        if os.path.exists(stale):
+            try:
+                os.remove(stale)
+            except OSError:
+                pass
     return {'ok': True, 'path': path, 'size': os.path.getsize(path)}
 
 
@@ -341,13 +349,13 @@ def files():
     d = folder()
     if not d or not os.path.isdir(d):
         return []
-    return [{'file': f, 'mine': f.startswith(PREFIX), 'modified': os.path.getmtime(os.path.join(d, f))}
+    return [{'file': f, 'mine': f.startswith((PREFIX,) + OLD_PREFIXES), 'modified': os.path.getmtime(os.path.join(d, f))}
             for f in sorted(os.listdir(d)) if f.endswith('.build')]
 
 
 def remove(file):
     d = folder()
-    if not d or not file.startswith(PREFIX) or os.sep in file or '/' in file:
+    if not d or not file.startswith((PREFIX,) + OLD_PREFIXES) or os.sep in file or '/' in file:
         return {'ok': False, 'error': "only the toolkit's own .build files can be removed here"}
     try:
         os.remove(os.path.join(d, file))

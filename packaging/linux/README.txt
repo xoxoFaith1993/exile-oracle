@@ -1,11 +1,11 @@
-PoE 2 Toolkit for Linux and the Steam Deck
-==========================================
+Exile Oracle for Linux and the Steam Deck
+=========================================
 
 Install (no sudo, only for your user):
     sh install.sh
     sh install.sh --autostart     same, and start it in the background when you log in
 
-Then open "PoE 2 Toolkit" from your app menu, or http://127.0.0.1:47830 in your browser.
+Then open "Exile Oracle" from your app menu, or http://127.0.0.1:47830 in your browser.
 On a Steam Deck: do this in Desktop Mode. To open it from Game Mode, right-click the menu entry
 in Desktop Mode and choose "Add to Steam".
 

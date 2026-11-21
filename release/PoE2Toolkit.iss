@@ -1,4 +1,4 @@
-; PoE 2 Toolkit installer (Inno Setup 7). Built by build_release.py --setup, which passes:
+; Exile Oracle installer (formerly PoE 2 Toolkit) (Inno Setup 7). Built by build_release.py --setup, which passes:
 ;   /DAppVersion=x.y.z  /DStage=<folder with python\ and toolkit\>  /O<output folder>
 ; Installs per user (no admin), into %LOCALAPPDATA%\Programs\PoE 2 Toolkit. Data lives in %LOCALAPPDATA%\PoE2Toolkit.
 
@@ -11,15 +11,16 @@
 
 [Setup]
 AppId={{6B0F2D2E-7B1C-4E1A-9F2B-2E5C0A9D4F21}
-AppName=PoE 2 Toolkit
+AppName=Exile Oracle
 AppVersion={#AppVersion}
-AppVerName=PoE 2 Toolkit {#AppVersion}
-AppPublisher=PoE 2 Toolkit
+AppVerName=Exile Oracle {#AppVersion}
+AppPublisher=Exile Oracle
 DefaultDirName={localappdata}\Programs\PoE 2 Toolkit
-DefaultGroupName=PoE 2 Toolkit
+DefaultGroupName=Exile Oracle
+UsePreviousGroup=no
 DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
-OutputBaseFilename=PoE2Toolkit-Setup-{#AppVersion}
+OutputBaseFilename=ExileOracle-Setup-{#AppVersion}
 SetupIconFile={#Stage}\toolkit\dashboard\poe2kit.ico
 UninstallDisplayIcon={app}\toolkit\dashboard\poe2kit.ico
 Compression=lzma2/ultra
@@ -32,7 +33,7 @@ InfoBeforeFile={#Stage}\README.md
 
 [Tasks]
 Name: "desktopicon"; Description: "Create a desktop shortcut"; GroupDescription: "Shortcuts:"
-Name: "autostart"; Description: "Start PoE 2 Toolkit with Windows (keeps prices and alerts up to date)"; GroupDescription: "Background:"; Flags: unchecked
+Name: "autostart"; Description: "Start Exile Oracle with Windows (keeps prices and alerts up to date)"; GroupDescription: "Background:"; Flags: unchecked
 
 [Files]
 Source: "{#Stage}\python\*"; DestDir: "{app}\python"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -41,17 +42,22 @@ Source: "{#Stage}\README.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#Stage}\LICENSES.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#Stage}\CLAUDE-GUIDE.md"; DestDir: "{app}"; Flags: ignoreversion
 
+[InstallDelete]
+; shortcuts from before the rename (PoE 2 Toolkit)
+Type: filesandordirs; Name: "{userprograms}\PoE 2 Toolkit"
+Type: files; Name: "{autodesktop}\PoE 2 Toolkit.lnk"
+
 [Icons]
-Name: "{group}\PoE 2 Toolkit"; Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\toolkit\tray.pyw"""; WorkingDir: "{app}\toolkit"; IconFilename: "{app}\toolkit\dashboard\poe2kit.ico"
-Name: "{group}\Using PoE 2 Toolkit with Claude"; Filename: "https://github.com/xoxoFaith1993/poe2-toolkit/blob/main/CLAUDE-GUIDE.md"
-Name: "{group}\Uninstall PoE 2 Toolkit"; Filename: "{uninstallexe}"
-Name: "{autodesktop}\PoE 2 Toolkit"; Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\toolkit\tray.pyw"""; WorkingDir: "{app}\toolkit"; IconFilename: "{app}\toolkit\dashboard\poe2kit.ico"; Tasks: desktopicon
+Name: "{group}\Exile Oracle"; Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\toolkit\tray.pyw"""; WorkingDir: "{app}\toolkit"; IconFilename: "{app}\toolkit\dashboard\poe2kit.ico"
+Name: "{group}\Using Exile Oracle with Claude"; Filename: "https://github.com/xoxoFaith1993/exile-oracle/blob/main/CLAUDE-GUIDE.md"
+Name: "{group}\Uninstall Exile Oracle"; Filename: "{uninstallexe}"
+Name: "{autodesktop}\Exile Oracle"; Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\toolkit\tray.pyw"""; WorkingDir: "{app}\toolkit"; IconFilename: "{app}\toolkit\dashboard\poe2kit.ico"; Tasks: desktopicon
 
 [Registry]
 Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "PoE2Toolkit"; ValueData: """{app}\python\pythonw.exe"" ""{app}\toolkit\tray.pyw"" --background"; Flags: uninsdeletevalue; Tasks: autostart
 
 [Run]
-Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\toolkit\tray.pyw"""; WorkingDir: "{app}\toolkit"; Description: "Start PoE 2 Toolkit now"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\toolkit\tray.pyw"""; WorkingDir: "{app}\toolkit"; Description: "Start Exile Oract now"; Flags: nowait postinstall skipifsilent
 
 [UninstallRun]
 Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -Command ""Get-CimInstance Win32_Process -Filter \""Name like 'python%'\"" | Where-Object {{ $_.CommandLine -like '*{app}*' } | ForEach-Object {{ Stop-Process -Id $_.ProcessId -Force }"""; Flags: runhidden; RunOnceId: "StopToolkit"
@@ -78,7 +84,7 @@ begin
   begin
     Data := ExpandConstant('{localappdata}\PoE2Toolkit');
     if DirExists(Data) then
-      if MsgBox('Also delete your PoE 2 Toolkit data (prices, builds, settings, downloaded Path of Building)?' + #13#10 +
+      if MsgBox('Also delete your Exile Oracle data (prices, builds, settings, downloaded Path of Building)?' + #13#10 +
                 Data, mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDYES then
         DelTree(Data, True, True, True);
   end;

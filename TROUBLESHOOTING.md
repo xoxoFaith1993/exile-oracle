@@ -1,6 +1,6 @@
-# PoE 2 Toolkit: troubleshooting (written for Claude)
+# Exile Oracle: troubleshooting (written for Claude)
 
-You are helping a player whose PoE 2 Toolkit isn't working. This project is at an early stage: assume bugs are
+You are helping a player whose Exile Oracle isn't working. This project is at an early stage: assume bugs are
 possible and check before you guess. **Start with the `poe2_doctor` tool**: it runs every check below and names the
 sections of this guide that apply. Then follow those sections. Tell the player what you found in plain words.
 
@@ -8,7 +8,7 @@ sections of this guide that apply. Then follow those sections. Tell the player w
 - Read-only toward the game. Never read its memory or change its files.
 - The only keys the toolkit ever sends are Ctrl+Alt+C, when the player presses an overlay hotkey, and the chat
   command keys they set up.
-- Never touch files in the game's `BuildPlanner` folder unless their name starts with `PoE2 Toolkit - `.
+- Never touch files in the game's `BuildPlanner` folder unless their name starts with `Exile Oracle - `.
 - Live trade-site prices stay within GGG's rate limits: one search per check, never retry in a loop.
 - Don't put the player's account name, email or character names into anything you post or send anywhere.
 
@@ -31,7 +31,7 @@ Files in HOME:
 
 - **Monitor:**
   1. Stop the process whose id is in `HOME\monitor.lock` and delete the lock.
-  2. Start it again. Windows: the tray icon (Quit, then start PoE 2 Toolkit from the Start menu), or run
+  2. Start it again. Windows: the tray icon (Quit, then start Exile Oracle from the Start menu), or run
      `start-monitor.bat`. Linux: `python launcher.py --stop`, then `python launcher.py`.
   3. Check that http://127.0.0.1:47830/api/status answers.
 - **Overlay:** create the empty file `HOME\overlay.quit`. The overlay closes within a second. Then switch it back on:
@@ -124,7 +124,7 @@ by itself.
 
 ## Reporting a bug (help the player write it)
 
-Open an issue at https://github.com/xoxoFaith1993/poe2-toolkit/issues with:
+Open an issue at https://github.com/xoxoFaith1993/exile-oracle/issues with:
 - toolkit version (Status tab or `poe2_status`), Windows or Linux;
 - what they did and what happened;
 - the last ~30 lines of the relevant log, **with account names, character names and email removed**.

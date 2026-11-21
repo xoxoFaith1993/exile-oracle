@@ -1,9 +1,9 @@
 """Build the friend release: a clean app folder (embedded Python + toolkit) and, with Inno Setup, the installer.
 
     python build_release.py            stage only            -> F:\\Tools\\poe2kit-build\\stage
-    python build_release.py --setup    stage + installer     -> F:\\Tools\\poe2kit-build\\out\\PoE2Toolkit-Setup-<ver>.exe
+    python build_release.py --setup    stage + installer     -> F:\\Tools\\poe2kit-build\\out\\ExileOracle-Setup-<ver>.exe
     python build_release.py --repo     stage + GitHub source copy -> F:\\Tools\\poe2kit-build\\repo (a git working tree)
-    python build_release.py --gameart  stage + game art for the Linux package -> out/poe2-toolkit-gameart-<build>.tar.gz
+    python build_release.py --gameart  stage + game art for the Linux package -> out/exile-oracle-gameart-<build>.tar.gz
 
 Only an ALLOW-LIST of files is copied, so the author's vault, settings, screenshots, notes and database can never ship.
 After staging, every text file is scanned for personal details; the build stops if any are found."""
@@ -165,7 +165,7 @@ def repo():
 
 def gameart():
     """The game art as its own download for the Linux package (GitHub Actions adds it on a release):
-    out/poe2-toolkit-gameart-<build>.tar.gz holding <build>/art-index.json + <build>/art/. Pictures only."""
+    out/exile-oracle-gameart-<build>.tar.gz holding <build>/art-index.json + <build>/art/. Pictures only."""
     import tarfile
     src_root = os.path.join(STAGE, 'toolkit', 'gameart')
     builds = os.listdir(src_root) if os.path.isdir(src_root) else []
@@ -173,7 +173,7 @@ def gameart():
         print('no game art staged (needs your own game-file extraction)')
         sys.exit(3)
     os.makedirs(OUT, exist_ok=True)
-    path = os.path.join(OUT, f'poe2-toolkit-gameart-{builds[0]}.tar.gz')
+    path = os.path.join(OUT, f'exile-oracle-gameart-{builds[0]}.tar.gz')
     with tarfile.open(path, 'w:gz', compresslevel=6) as t:
         t.add(os.path.join(src_root, builds[0]), arcname=builds[0])
     print('game art', path, f'{os.path.getsize(path) / 1e6:.0f} MB')

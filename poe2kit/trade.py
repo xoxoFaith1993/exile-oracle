@@ -144,7 +144,7 @@ def _note(name, headers, status):
 
 
 def enabled():
-    return bool(config.settings().get('live_trade', config.is_dev_copy()))
+    return bool(config.settings().get('live_trade', False))
 
 
 def _req(path, data=None, limiter='search'):

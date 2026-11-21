@@ -1,4 +1,4 @@
-"""PoE 2 Toolkit live monitor + dashboard server (one light background process).
+"""Exile Oracle live monitor + dashboard server (one light background process).
 
     python monitor.py            run forever: jobs on a schedule + dashboard at http://127.0.0.1:47830
     python monitor.py --once     run every job once and exit (for testing)
@@ -271,7 +271,7 @@ def job_update(con):
     from poe2kit import updates
     info = updates.check(con)
     if info.get('available'):
-        alert(con, 'update', f"Update available: PoE 2 Toolkit {info['latest']}", 'Open the dashboard to install it.')
+        alert(con, 'update', f"Update available: Exile Oracle {info['latest']}", 'Open the dashboard to install it.')
     return 'development copy (no updates)' if info.get('why') else f"latest {info.get('latest')}, you have {info.get('current')}"
 
 

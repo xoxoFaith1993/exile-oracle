@@ -1,4 +1,6 @@
-# PoE 2 Toolkit
+# Exile Oracle
+
+*(formerly PoE 2 Toolkit)*
 
 A free, personal **Path of Exile 2 companion** for Windows: live economy, what to farm, a league-start playbook, a
 Top 1% check for your character, play-session tracking, a craft lab and patch notes checked against your builds.
@@ -79,7 +81,7 @@ This is a young project: things can break. If something doesn't work:
 - **Still stuck?** **[Open an issue](../../issues/new?template=bug_report.md)**.
 
 ## Install
-1. Download `PoE2Toolkit-Setup-<version>.exe` from **[Releases](../../releases/latest)** and run it.
+1. Download `ExileOracle-Setup-<version>.exe` from **[Releases](../../releases/latest)** and run it.
    Windows may say *"Windows protected your PC"* (the installer isn't code-signed): **More info → Run anyway**.
 2. It installs for your Windows user (no admin) and starts; a red icon appears by the clock. Click it for the
    dashboard; right-click for *Start with Windows* and *Quit*.
@@ -90,11 +92,11 @@ This is a young project: things can break. If something doesn't work:
 Updates: the dashboard shows a banner when a new version is out; one click downloads and installs it.
 
 ### Linux and Steam Deck
-1. Download `poe2-toolkit-linux-x86_64-<version>.tar.gz` from **[Releases](../../releases/latest)** and unpack it.
+1. Download `exile-oracle-linux-x86_64-<version>.tar.gz` from **[Releases](../../releases/latest)** and unpack it.
 2. In a terminal in that folder: `sh install.sh` (add `--autostart` to start it when you log in). It installs
    for your user only, with no sudo and nothing system-wide, and it brings its own Python and Lua, so it works on
    SteamOS's read-only system too.
-3. Open **PoE 2 Toolkit** from the app menu, or `http://127.0.0.1:47830` in your browser.
+3. Open **Exile Oracle** from the app menu, or `http://127.0.0.1:47830` in your browser.
    On a Steam Deck, do this in Desktop Mode. Right-click the menu entry and choose *Add to Steam* to open it from
    Game Mode.
 

@@ -19,7 +19,7 @@ def _ver(s):
 
 
 def dev_copy():
-    return os.path.normcase(os.path.normpath(config.HOME)) == os.path.normcase(r'F:\PoE2Toolkit')
+    return config.is_dev_copy()
 
 
 def check(con):
