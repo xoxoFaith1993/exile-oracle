@@ -392,6 +392,23 @@ def api(path, q):
         if path == '/api/campaign':   # R16: campaign rush guide + checklist + where you are now
             from poe2kit import campaign
             return campaign.guide(con)
+        if path == '/api/atlas/strategies':   # R15: strategies with div / hour now and next phase
+            from poe2kit import atlasplan
+            return atlasplan.strategies(con)
+        if path == '/api/atlas/setup':   # R15: a strategy's setup on the atlas tree
+            from poe2kit import atlasplan
+            return atlasplan.setup(q.get('name') or '')
+        if path == '/api/atlas/rolling':
+            from poe2kit import atlasplan
+            return atlasplan.rolling(con)
+        if path == '/api/atlas/tablets':
+            from poe2kit import atlasplan
+            return atlasplan.tablets()
+        if path == '/api/atlas/roi':   # R15: juicing calculator
+            from poe2kit import atlasplan
+            fl = lambda k: float(q.get(k) or 0)
+            return atlasplan.roi(con, q.get('strategy'), q.get('method') or 'Rare: Alchemy (4 mods) + Exalted to 6',
+                                 fl('tablets'), fl('tablet_cost'), fl('extra'), fl('mph') or None)
         if path == '/api/atlas/mods':   # R15: waystone / tablet mods, search tokens, danger for a build
             from poe2kit import mapmods
             return mapmods.overview(con, q.get('build') or None, q.get('kind') or 'waystone')

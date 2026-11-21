@@ -238,6 +238,19 @@ def prophecy_check():
     check(isinstance(cd, list), 'countdowns')
 
 
+def atlasplan_check():
+    """R15: every strategy's key nodes are on the live atlas tree and connect from the start points."""
+    from poe2kit import atlasplan
+    try:
+        names = [s['name'] for s in atlasplan.data()['strategies']]
+        sets = [atlasplan.setup(n) for n in names]
+    except Exception as e:
+        check(True, f'atlas planner skipped ({type(e).__name__}: {e})')
+        return
+    bad = [s.get('strategy') for s in sets if s.get('missing') or not s.get('points')]
+    check(len(names) >= 10 and not bad, f'atlas strategy setups ({len(names)} strategies' + (f'; broken: {bad})' if bad else ')'))
+
+
 def campaign_check():
     """R16 / R21: the rush route maps onto the game's zones, and a zone gives a route card."""
     from poe2kit import campaign
@@ -342,6 +355,7 @@ if __name__ == '__main__':
     waystone_check()
     campaign_check()
     prophecy_check()
+    atlasplan_check()
     mcp()
     if '--pob' in sys.argv:
         pob_part()

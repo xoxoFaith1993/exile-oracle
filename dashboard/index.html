@@ -564,9 +564,26 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
       <div style="margin-top:10px;display:flex;gap:8px;align-items:center"><button class="btn rp-send" style="border-color:var(--eo-blood-hi)">Send suggestion</button><span class="small muted rp-msg"></span></div></div></section>
   <section id="atlas">
     <div class="card"><div class="lab-head"><h2 style="margin:0">Atlas</h2><span class="small muted" id="atlassub"></span></div>
-      <div class="sub">The atlas passive tree, read from your game files. Next: strategies, map modifiers rated for your build, map rolling and in-game search strings, all in here.</div>
+      <div class="sub">The atlas passive tree, read from your game files. Pick a strategy below to see its setup drawn here (gold: the points to take).</div>
       <div class="lab-tree" id="atlastree" style="height:720px;margin-top:10px"><div class="zbtn"><button data-z="1.4">+</button><button data-z="0.7">−</button><button data-z="fit">⤢</button></div>
         <div class="legend">hover a node for its name · scroll to zoom · drag to move</div></div></div>
+    <div class="card"><div class="lab-head"><h2 style="margin:0">Strategies</h2><span class="small muted" id="asphase"></span></div>
+      <div class="sub">Every farming strategy: what it pays per hour now and in the next league phase (our farming research at live exchange prices), how many atlas points its setup takes, and what to run it with. Click one to draw it on the tree.</div>
+      <div id="asswitch" class="flag ok" style="margin:8px 0;display:none"></div>
+      <table class="up" id="astable" style="margin-top:6px"></table><div id="asdetail"></div></div>
+    <div class="grid2">
+      <div class="card"><h2>Rolling waystones</h2><div class="sub">What each way of rolling costs today and what it adds on average (T16).</div><div id="arolling"></div></div>
+      <div class="card"><h2>Juicing calculator</h2><div class="sub">What one map costs to set up vs what the strategy returns per map at this point of the league.</div>
+        <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center;margin-top:8px">
+          <span class="small">Strategy</span><select class="crin" id="roistrat"></select>
+          <span class="small">Waystones</span><select class="crin" id="roimethod"></select>
+          <span class="small">Tablets per map</span><input class="crin" id="roitab" type="number" min="0" max="4" value="0" style="width:80px">
+          <span class="small">Tablet price (div)</span><input class="crin" id="roitabp" type="number" min="0" step="0.1" value="0" style="width:80px">
+          <span class="small">Other per map (div)</span><input class="crin" id="roiextra" type="number" min="0" step="0.05" value="0" style="width:80px">
+          <span class="small">Maps per hour</span><input class="crin" id="roimph" type="number" min="1" step="1" placeholder="auto" style="width:80px">
+        </div><div id="roiout" style="margin-top:10px"></div></div>
+    </div>
+    <div class="card"><h2>Tablets</h2><div class="sub">Each tablet type, its own modifiers, and what to pair with each strategy. Tablets aren't exchange items, so price them with the overlay (Ctrl+D) in game.</div><div id="atablets"></div></div>
     <div class="card"><div class="lab-head"><h2 style="margin:0">Map modifiers</h2><span style="flex:1"></span>
       <div class="eo-seg seg" id="mmkind"><button data-k="waystone" class="on">Waystones</button><button data-k="tablet">Tablets</button></div>
       <label class="small">Rate for <select class="crin" id="mmbuild" style="min-width:260px"></select></label></div>
@@ -810,7 +827,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   if (b.dataset.tab === 'home') { loadHome(); loadHomeOracle(); loadOmen(); }
   if (b.dataset.tab === 'status') { loadConnectors(); loadLeagues(); }
   if (b.dataset.tab === 'lab') initLab();
-  if (b.dataset.tab === 'atlas') { loadAtlas(); loadMapMods(); }
+  if (b.dataset.tab === 'atlas') { loadAtlas(); loadMapMods(); loadAtlasPlan(); }
   if (b.dataset.tab === 'campaign') loadCampaign();
   if (b.dataset.tab === 'prophecy') loadProphecy();
   if (b.dataset.tab === 'economy') { loadLeagues(); loadOverview(); loadMovers(); loadMarket(); loadOracle($('#ordaysel').value); }
@@ -1174,6 +1191,9 @@ document.addEventListener('click', async e => {
 
 // ---------- ready-made questions on every page (click = copy, paste in your AI chat) ----------
 const PAGE_ASKS = {
+  atlas: [['Which atlas strategy suits my build?', 'Which atlas farming strategy suits my build now, and draw its setup on the Atlas page.'],
+          ['How should I roll my waystones?', 'How should I roll my waystones for my build and strategy, and is juicing worth it right now?'],
+          ['Which map mods should I avoid?', 'Which waystone modifiers are deadly for my build? Make me a search string that hides them.']],
   prophecy: [['What will the market do this week?', 'Using the Oracle forecasts, what will the market do this week and what should I sell or hold?'],
              ['Plan my first 72 hours of 1.0', 'Plan my first 72 hours of the 1.0 league: what to farm, sell, keep and buy, hour by hour.'],
              ['Which farm suits my build now?', 'Which farming strategy suits my build right now, and what would let me run a better one?']],
@@ -1231,6 +1251,60 @@ async function loadAtlas() {
   TREES['atlas'] = t; ATLAS_DRAWN = true;
   $('#atlassub').textContent = `${t.nodes.length} nodes · game files ${t.build}`;
   await drawTree({ tree: { version: 'atlas', allocated: [], jewel_nodes: [] } }, $('#atlastree'));
+}
+
+// ---------- Atlas war room (R15): strategies, planner on the tree, rolling, juicing calculator, tablets ----------
+let AS = null;
+const dv = v => v == null ? '–' : (+v).toFixed(v >= 10 ? 0 : 1);
+async function loadAtlasPlan() {
+  AS = await get('/api/atlas/strategies');
+  if (!AS || AS.error) { $('#astable').innerHTML = `<tr><td>${esc((AS && AS.error) || 'failed')}</td></tr>`; return; }
+  $('#asphase').textContent = AS.phase ? `now: ${AS.phase}${AS.next_phase ? ' · next: ' + AS.next_phase : ''}` : '';
+  $('#asswitch').style.display = AS.switch ? '' : 'none'; $('#asswitch').textContent = AS.switch || '';
+  $('#astable').innerHTML = `<tr><th>Strategy</th><th>div / hour now</th><th>next phase</th><th>Atlas points</th><th></th></tr>` + AS.strategies.map((s, i) => `<tr>
+    <td><b>${esc(s.name)}</b><div class="small muted">${esc((s.mechanics || []).join(' · '))}</div></td>
+    <td>${s.now ? `<b>${dv(s.now.mid)}</b> <span class="small muted">${dv(s.now.low)}–${dv(s.now.high)}</span><div class="small muted">${esc(s.now.name)}</div>` : '<span class="muted small">–</span>'}</td>
+    <td>${s.next ? `<b>${dv(s.next.mid)}</b>` : '<span class="muted small">–</span>'}</td>
+    <td>${s.points ?? '–'}</td><td><button class="btn asshow" data-i="${i}">Show on tree</button></td></tr>`).join('');
+  document.querySelectorAll('.asshow').forEach(b => b.onclick = () => showStrategy(AS.strategies[+b.dataset.i]));
+  // rolling
+  const r = await get('/api/atlas/rolling');
+  $('#arolling').innerHTML = `<table class="up"><tr><th>Method</th><th>Cost</th><th>When</th></tr>${r.methods.filter(m => m.when && m.method !== 'When re-rolling beats running').map(m => `<tr>
+    <td><b>${esc(m.method)}</b><div class="small muted">${esc(m.reward || '')}</div></td>
+    <td style="white-space:nowrap">${m.cost_ex != null ? `<b>${m.cost_ex} ex</b><div class="small muted">${m.spends.join(' + ') || 'free'}</div>` : `<span class="small muted">${esc(m.cost_note || '')}</span>`}</td>
+    <td class="small">${esc(m.when || '')}</td></tr>`).join('')}</table>`;
+  // juicing calculator
+  if (!$('#roistrat').options.length) {
+    $('#roistrat').innerHTML = AS.strategies.map(s => `<option>${esc(s.name)}</option>`).join('');
+    $('#roimethod').innerHTML = r.methods.filter(m => m.cost_div != null).map(m => `<option${m.method.startsWith('Rare') ? ' selected' : ''}>${esc(m.method)}</option>`).join('');
+    ['#roistrat', '#roimethod', '#roitab', '#roitabp', '#roiextra', '#roimph'].forEach(s => $(s).onchange = loadRoi);
+  }
+  loadRoi();
+  const tb = await get('/api/atlas/tablets');
+  $('#atablets').innerHTML = `<div class="grid2">${tb.types.map(x => `<div><b>${esc(x.name)}</b><div class="small muted">${esc(x.implicit || '')}</div>${x.mods.map(m => `<div class="small">· <b>${esc(m.affix || '')}</b> ${esc(m.text || '')}</div>`).join('')}</div>`).join('')}</div>
+    ${tb.pairing ? `<div class="small muted" style="margin-top:10px">Pairing</div>` + Object.entries(tb.pairing).map(([k, v]) => `<div class="small"><b>${esc(k)}:</b> ${esc(v)}</div>`).join('') : ''}`;
+}
+async function showStrategy(s) {
+  const su = await get('/api/atlas/setup?name=' + encodeURIComponent(s.name));
+  const box = $('#atlastree'); const old = box.querySelector('svg'); if (old) old.remove();
+  await drawTree({ tree: { version: 'atlas', allocated: su.allocated || [], jewel_nodes: [] } }, box);
+  $('#atlassub').textContent = `${su.strategy}: ${su.points} points`;
+  $('#asdetail').innerHTML = `<div class="card" style="margin-top:10px"><h2>${esc(s.name)} <span class="pill">${su.points} points</span></h2>
+    <div class="grid2"><div><div class="small muted">Key nodes</div>${(su.key_nodes || []).map(k => `<div class="small">• <b>${esc(k.name)}</b> <span class="muted">${esc(k.why || '')}</span></div>`).join('')}</div>
+    <div><div class="small muted">Tablets</div>${(s.tablets || []).map(x => `<div class="small">${esc(x)}</div>`).join('')}
+      <div class="small muted" style="margin-top:6px">Waystones</div><div class="small">${esc(s.waystones || '')}</div>
+      ${s.now ? `<div class="small muted" style="margin-top:6px">Needs about</div><div class="small">${s.now.dps_min ? (s.now.dps_min / 1e6).toFixed(1) + 'M DPS' : ''}${s.now.ehp_min ? ', ' + s.now.ehp_min / 1000 + 'k EHP' : ''}</div>` : ''}</div></div></div>`;
+  $('#atlastree').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+async function loadRoi() {
+  const q = new URLSearchParams({ strategy: $('#roistrat').value, method: $('#roimethod').value, tablets: $('#roitab').value || 0,
+    tablet_cost: $('#roitabp').value || 0, extra: $('#roiextra').value || 0, mph: $('#roimph').value || '' });
+  const r = await get('/api/atlas/roi?' + q);
+  if (r.error) { $('#roiout').innerHTML = `<div class="small muted">${esc(r.error)}</div>`; return; }
+  const good = r.profit_per_hour_div > 0;
+  $('#roiout').innerHTML = `<div style="font:700 20px var(--eo-display);color:${good ? 'var(--eo-good)' : '#ff7b7b'}">${r.profit_per_hour_div} div / hour</div>
+    <div class="small">per map: costs <b>${r.cost_per_map_div}</b>, returns <b>${r.return_per_map_div}</b> → <b>${r.profit_per_map_div}</b> div · ${r.maps_per_hour} maps / hour</div>
+    <div class="small muted">Usual range for ${esc(r.run)}: ${dv(r.range_per_hour_div[0])}–${dv(r.range_per_hour_div[1])} div / hour (${esc(r.phase)}). ${esc(r.note)}</div>`;
 }
 
 // ---------- Prophecy (R14): omen, timeline, forecasts, patch prophecy, farming oracle, chase uniques ----------

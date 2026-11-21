@@ -290,6 +290,29 @@ def t_campaign(a):
                               'breakpoints', 'rush_vs_full', 'meta') if k in g}
 
 
+def t_atlas(a):
+    """R15: atlas strategies, a strategy's setup (drawn on the Atlas page), rolling costs, tablets, juicing ROI."""
+    from poe2kit import atlasplan
+    con = db.connect()
+    act = (a.get('action') or 'strategies').lower()
+    if act == 'setup':
+        r = atlasplan.setup(a.get('strategy') or '')
+        r.pop('allocated', None)
+        return r
+    if act == 'rolling':
+        return atlasplan.rolling(con)
+    if act == 'tablets':
+        return atlasplan.tablets()
+    if act == 'roi':
+        return atlasplan.roi(con, a.get('strategy'), a.get('method') or 'Rare: Alchemy (4 mods) + Exalted to 6',
+                             a.get('tablets_per_map') or 0, a.get('tablet_cost_div') or 0, a.get('extra_div') or 0,
+                             a.get('maps_per_hour'))
+    r = atlasplan.strategies(con)
+    for s in r['strategies']:
+        s.pop('key_nodes', None)
+    return r
+
+
 def t_oracle(a):
     """The Oracle's market advice from three league launches: phase, what to do now, item outlook."""
     from poe2kit import oracle, prophecy, mapmods
@@ -748,6 +771,16 @@ TOOLS = [
      'missing rewards, current zone) or "full". tick=<reward key> (on=false to untick) only when the player says '
      'they took it. Researched for 0.5: Acts 5-6 arrive in 1.0; say so.',
      S(part=STR, tick=STR, on=BOOL), t_campaign),
+    ('poe2_atlas',
+     'Atlas war room: action="strategies" (default): 11 farming strategies with div/hour now and next league phase '
+     '(our farming research at live prices), atlas points each setup takes, tablets and waystone setup, plus when to '
+     'switch. action="setup" + strategy: its key atlas nodes and the connecting path (the player can draw it with '
+     'Show on tree on the Atlas page). action="rolling": what each waystone rolling method costs today. '
+     'action="tablets": tablet types, their mods, pairing. action="roi" + strategy (+ method, tablets_per_map, '
+     'tablet_cost_div, extra_div, maps_per_hour): profit per map and per hour. For map mod danger use the Atlas '
+     'page or the overlay (Ctrl+D on a waystone).',
+     S(action=STR, strategy=STR, method=STR, tablets_per_map=NUM, tablet_cost_div=NUM, extra_div=NUM,
+       maps_per_hour=NUM), t_atlas),
     ('poe2_oracle',
      'The Oracle: market timing from the last three league launches (GGG exchange history, prices in Divines). '
      'mode="advice" (default): league day and phase, what to do now and next, and for 42 key items where they usually '
@@ -816,7 +849,7 @@ FEED_WORDS = {
     'poe2_upgrades': 'tried every unique in every slot', 'poe2_whatif': 'tested an item swap',
     'poe2_compare': 'compared two builds', 'poe2_read_rare': 'read a rare item',
     'poe2_build_planner': 'worked on the in-game Build Planner', 'poe2_levelling': 'checked the levelling route',
-    'poe2_lab': 'used the Build Lab', 'poe2_oracle': 'read the market history (the Oracle)', 'poe2_campaign': 'read the campaign guide', 'poe2_doctor': 'checked the app for problems',
+    'poe2_lab': 'used the Build Lab', 'poe2_oracle': 'read the market history (the Oracle)', 'poe2_campaign': 'read the campaign guide', 'poe2_atlas': 'planned the atlas', 'poe2_doctor': 'checked the app for problems',
     'poe2_from_overlay': 'read the items you sent', 'poe2_trade_link': 'made a trade-site link',
     'poe2_status': 'checked the app status', 'poe2_refresh': 'refreshed prices', 'poe2_top1': 'ran the Top 1% check',
 }
