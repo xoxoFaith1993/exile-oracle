@@ -24,7 +24,8 @@ you assume.
   (`poe2kit/tradewatch.py`):
   - one search per check (plus fetches of the listings), GGG's `X-Rate-Limit` headers obeyed, never retried in a
     loop, never in the background (the same wanted item at most once a minute);
-  - no login, no seller names stored;
+  - no login, no seller account names stored (only the trade site's whisper text for the listings on screen);
+  - Open this listing: one search for that listing's exact stats and price, when the player presses it;
   - a trade link's search id is the gzip-compressed search itself, read locally (no request);
   - nothing else calls it.
 - **Other GGG / poe.ninja data:** only documented public data (poe.ninja economy API, GGG's Currency Exchange

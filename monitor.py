@@ -797,7 +797,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
             elif u.path == '/api/ask/open':   # a question chip: open the AI app with the question typed in
                 from poe2kit import overlaysrv
                 data = overlaysrv.open_question(body.get('text'))
-            elif u.path in ('/api/wanted/add', '/api/wanted/check', '/api/wanted/remove', '/api/wanted/pin'):
+            elif u.path in ('/api/wanted/add', '/api/wanted/check', '/api/wanted/remove', '/api/wanted/pin',
+                            '/api/wanted/open'):
                 from poe2kit import db as _db, tradewatch
                 c = _db.connect()
                 try:
@@ -805,6 +806,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     data = tradewatch.add(c, body.get('text'), body.get('name'), body.get('target'), body.get('unit') or 'div') \
                         if act == 'add' else tradewatch.check(c, body.get('id')) if act == 'check' \
                         else tradewatch.remove(c, body.get('id')) if act == 'remove' \
+                        else tradewatch.open_listing(c, body.get('id'), body.get('listing')) if act == 'open' \
                         else tradewatch.pin(c, body.get('id'), body.get('listing'))
                 finally:
                     c.close()

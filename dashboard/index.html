@@ -2077,8 +2077,9 @@ async function loadWanted() {
         ${l.was ? `<div class="small" style="color:var(--accent)">was ${esc(l.was.amount)} ${esc(l.was.currency)}</div>` : ''}</td>
       <td class="small">${(l.mods || []).slice(0, 6).map(esc).join('<br>')}${(l.mods || []).length > 6 ? '<br><span class="muted">…</span>' : ''}</td>
       <td class="small">${l.new ? '<span class="pill" style="border-color:var(--eo-good);color:var(--eo-good)">new</span> ' : ''}${w.under_target && w.under_target.includes(l.id) ? '<span class="pill" style="border-color:var(--eo-good);color:var(--eo-good)">under your target</span> ' : ''}
-        <div class="muted">${l.listed ? 'listed ' + esc(agoL(Date.parse(l.listed) / 1000)) : ''}${l.online ? (l.afk ? ' · seller afk' : ' · seller online') : ' · seller offline'}</div></td>
-      <td>${pinned ? '<span class="small muted">pinned</span>' : `<button class="btn wtpin" data-w="${w.id}" data-l="${esc(l.id)}" style="padding:1px 8px;font-size:11px" title="Follow this listing: every check says if it's still there, re-priced or gone">Pin</button>`}</td></tr>`;
+        <div class="muted">${l.listed ? 'listed ' + esc(agoL(Date.parse(l.listed) / 1000)) : ''}${l.online ? (l.afk ? ' · seller afk' : ' · seller online') : ' · seller offline'}${l.fee ? ' · gold fee ' + Number(l.fee).toLocaleString() : ''}</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px"><button class="btn wtopen" data-w="${w.id}" data-l="${esc(l.id)}" style="padding:1px 8px;font-size:11px" title="Opens the trade site with a search for this listing's exact stats and price (one search)">Open this listing</button>${l.whisper ? `<button class="btn wtwhisper" data-t="${esc(l.whisper)}" style="padding:1px 8px;font-size:11px" title="Copies the trade site's whisper for this listing: paste it in game chat (nothing is sent for you)">Copy whisper</button>` : ''}</div></td>
+      <td>${pinned ? `<button class="btn wtunpin" data-w="${w.id}" style="padding:1px 8px;font-size:11px;border-color:var(--accent)" title="Stop following this listing">Unpin</button>` : `<button class="btn wtpin" data-w="${w.id}" data-l="${esc(l.id)}" style="padding:1px 8px;font-size:11px" title="Follow this listing: every check says if it's still there, re-priced or gone (pinning another one moves the pin)">Pin</button>`}</td></tr>`;
   $('#wtitems').innerHTML = (!r.enabled ? `<div class="small" style="margin-bottom:8px;color:var(--accent)">Trade-site checks are off. <button class="btn" id="wtallow" style="padding:1px 8px;font-size:11px">Allow checks when I press Check now</button> <span class="muted">(the same switch as the overlay's live prices)</span></div>` : '') +
     (!it.length ? '<div class="empty">No wanted items yet. Paste a trade-site link or an item above.</div>' : it.map(w => {
       const L = w.last;
@@ -2107,8 +2108,20 @@ async function loadWanted() {
     if (!x.ok) { b.disabled = false; b.textContent = 'Check now'; $('#wtres-' + b.dataset.w).innerHTML = `<span style="color:var(--accent)">${esc(x.error || 'Check failed')}</span>`; return; }
     loadWanted();
   });
+  document.querySelectorAll('.wtopen').forEach(b => b.onclick = async () => {
+    const win = window.open('about:blank', '_blank');   // opened now, so the browser doesn't block it as a pop-up
+    b.disabled = true; b.textContent = 'Opening…';
+    const x = await post('/api/wanted/open', { id: b.dataset.w, listing: b.dataset.l });
+    b.disabled = false; b.textContent = 'Open this listing';
+    if (x.ok) { if (win) win.location = x.url; else window.open(x.url, '_blank'); if (x.total > 1) b.title = `${x.total} identical listings match`; }
+    else { if (win) win.close(); b.insertAdjacentHTML('afterend', `<span class="small" style="color:var(--accent)"> ${esc(x.error)}</span>`); }
+  });
+  document.querySelectorAll('.wtwhisper').forEach(b => b.onclick = async () => {
+    try { await navigator.clipboard.writeText(b.dataset.t); b.textContent = 'Copied: paste in game'; } catch (e) { b.textContent = 'Copy failed'; }
+    setTimeout(() => { if (b.isConnected) b.textContent = 'Copy whisper'; }, 3000);
+  });
   document.querySelectorAll('.wtpin').forEach(b => b.onclick = async () => { await post('/api/wanted/pin', { id: b.dataset.w, listing: b.dataset.l }); loadWanted(); });
-  document.querySelectorAll('.wtunpin').forEach(a => a.onclick = async ev => { ev.preventDefault(); await post('/api/wanted/pin', { id: a.dataset.w, listing: null }); loadWanted(); });
+  document.querySelectorAll('.wtunpin').forEach(a => a.onclick = async ev => { ev.preventDefault(); await post('/api/wanted/pin', { id: a.dataset.w, listing: null }); loadWanted(); });   // the box's link and the row's button
   document.querySelectorAll('.wtdel').forEach(btn => btn.onclick = async () => {
     if (!btn.classList.contains('sure')) {
       btn.classList.add('sure'); btn.textContent = 'Sure? Click again'; btn.style.borderColor = 'var(--accent)';

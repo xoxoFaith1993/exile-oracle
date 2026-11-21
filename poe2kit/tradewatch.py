@@ -15,9 +15,15 @@ Rules (the same as the overlay's live prices, poe2kit/trade.py; the same Setting
 Sold or taken down: every listing has an id. Each check compares with the last one; a listing that left the
 results is fetched by id, and if the trade site no longer has it, it's "gone (sold or taken down)". The trade site
 doesn't say which. A pinned listing is fetched on every check: still there, re-priced, or gone.
-No seller names are stored."""
+
+Open this listing: the trade site has no address for one listing, so a search is built from that listing's exact
+stats and price (the author, 2026-11-21: "I think it can be based on stats") and run once when the player presses the
+button; the link the trade site returns is opened (it shows that listing, or the few identical ones).
+No seller account names are stored; the trade site's own whisper text (with the seller's character name) is kept
+only for the listings currently shown, so the player can copy it into the game."""
 
 import base64
+import copy
 import gzip
 import json
 import re
@@ -194,9 +200,15 @@ def _row(r, rt, value_of):
     from . import trade
     l = trade._listing(r, rt, value_of)
     it = r.get('item') or {}
+    clean = lambda m: re.sub(r'\[([^|\]]+\|)?([^\]]+)\]', r'\2', m if isinstance(m, str) else str(m.get('text') or m.get('description') or ''))
+    mk = [[k, clean(m)] for k, key in (('implicit', 'implicitMods'), ('explicit', 'explicitMods'),
+                                       ('explicit', 'desecratedMods'), ('explicit', 'fracturedMods'))
+          for m in it.get(key) or [] if m]
     mods = (it.get('implicitMods') or []) + (it.get('explicitMods') or []) + (it.get('desecratedMods') or []) + \
         (it.get('fracturedMods') or [])
-    return {'id': r.get('id'), 'amount': l['amount'], 'currency': l['currency'], 'cur_name': l['name'], 'cur_icon': l['icon'],
+    lst = r.get('listing') or {}
+    return {'mk': mk[:20], 'whisper': (lst.get('whisper') or '')[:300], 'fee': lst.get('fee'),
+            'cls': it.get('typeLine'), 'id': r.get('id'), 'amount': l['amount'], 'currency': l['currency'], 'cur_name': l['name'], 'cur_icon': l['icon'],
             'div': l['div'], 'listed': l['listed'], 'online': l['online'], 'afk': l['afk'], 'ilvl': l['ilvl'],
             'corrupted': l['corrupted'], 'icon': it.get('icon'), 'item_name': ' '.join(x for x in (it.get('name'), it.get('typeLine')) if x),
             'mods': [re.sub(r'\[([^|\]]+\|)?([^\]]+)\]', r'\2', m if isinstance(m, str) else str(m.get('text') or m.get('description') or ''))
@@ -284,6 +296,70 @@ def check(con, wid):
                                                                   'median_div': e['last']['median_div']}]
     _save(con, w)
     return dict(view_one(e, rt), ok=True)
+
+
+def listing_query(e, l):
+    """A search only this listing (or identical copies) matches: the saved search + its exact stats + its price."""
+    from . import trade
+    q = copy.deepcopy(e['query'])
+    exact, groups = [], []
+    for kind, text in l.get('mk') or []:
+        vals = [float(x) for x in re.findall(r'[+-]?\d+(?:\.\d+)?', text)]
+        if not vals:   # lines without numbers ("Legacy of Basalt"): match the exact text
+            try:
+                ids = trade._stats()['by'].get(kind, {}).get(trade._norm(text))
+            except Exception:
+                ids = None
+            if ids and len(ids) == 1:
+                exact.append({'id': ids[0], 'value': {}})
+            elif ids:
+                groups.append({'type': 'count', 'value': {'min': 1}, 'filters': [{'id': i, 'value': {}} for i in ids]})
+            continue
+        try:
+            m = trade.match({'kind': kind, 'values': vals, 'text': text}, None)
+        except Exception:
+            m = None
+        if not m:
+            continue
+        ids, value, _ = m
+        v = round(value, 2)
+        val = {'min': v, 'max': v}
+        if len(ids) > 1:   # local and global versions of the same text: either may be the one
+            groups.append({'type': 'count', 'value': {'min': 1}, 'filters': [{'id': i, 'value': val} for i in ids]})
+        else:
+            exact.append({'id': ids[0], 'value': val})
+    q['stats'] = [g for g in q.get('stats') or [] if g.get('filters')] + ([{'type': 'and', 'filters': exact}] if exact else []) + groups
+    if not q['stats']:
+        q['stats'] = [{'type': 'and', 'filters': []}]
+    if l.get('currency') and l.get('amount') is not None:
+        tf = q.setdefault('filters', {}).setdefault('trade_filters', {'filters': {}}).setdefault('filters', {})
+        tf['price'] = {'option': l['currency'], 'min': l['amount'], 'max': l['amount']}
+    return q
+
+
+def open_listing(con, wid, listing_id):
+    """Press "Open this listing": ONE search for that listing's exact stats and price; returns the trade-site link."""
+    from . import trade
+    e = next((x for x in _load(con) if x['id'] == wid), None)
+    if not e:
+        return {'ok': False, 'error': 'Not found'}
+    l = next((x for x in (e.get('last') or {}).get('listings') or [] if x['id'] == listing_id), None)
+    if not l and (e.get('pinned') or {}).get('id') == listing_id:
+        l = e['pinned'].get('last')
+    if not l:
+        return {'ok': False, 'error': 'That listing is no longer in the list: press Check now.'}
+    if not trade.enabled():
+        return {'ok': False, 'off': True, 'error': 'Trade-site checks are off.'}
+    lq = urllib.parse.quote(e['league'])
+    try:
+        s = json.loads(trade._req(f'/api/trade2/search/poe2/{lq}', {'query': listing_query(e, l), 'sort': {'price': 'asc'}}, 'search'))
+    except Exception as ex:
+        return {'ok': False, 'error': str(ex)}
+    total = s.get('total', 0)
+    if not total:
+        return {'ok': False, 'gone': True, 'error': 'Not found on the trade site any more: probably sold or taken down.'}
+    return {'ok': True, 'url': f"{SITE}/trade2/search/poe2/{lq}/{s['id']}", 'total': total,
+            'exact': listing_id in (s.get('result') or [])}
 
 
 def view_one(e, rt):

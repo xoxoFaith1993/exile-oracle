@@ -320,13 +320,17 @@ def wanted_check():
     config.save_settings({'live_trade': False})
     a = tw.add(con, link, 'My belt', 90, 'div')
     off = tw.check(con, a['id'])
+    lq = tw.listing_query({'query': q}, {'mk': [['explicit', 'Legacy of Nothing']], 'currency': 'divine', 'amount': 65})
+    price_ok = lq['filters']['trade_filters']['filters']['price'] == {'option': 'divine', 'min': 65, 'max': 65}
+    off2 = tw.open_listing(con, a['id'], 'nope')
     st = tw.status(con)['items']
     gone = tw.remove(con, a['id'])
     config.save_settings({'live_trade': was})
     con.close()
     check(tw.decode_id(sid) == q and p.get('query') == q and p.get('league') == 'Test League' and bad.get('error')
           and a['ok'] and off.get('off') and st and st[0]['url'].endswith(sid) and st[0]['live_url'].endswith('/live')
-          and gone['ok'], 'wanted items: trade links read locally, no trade request while checks are off')
+          and gone['ok'] and price_ok and not off2['ok'],
+          'wanted items: trade links read locally, one-listing search, no trade request while checks are off')
 
 
 def patchwatch_check():

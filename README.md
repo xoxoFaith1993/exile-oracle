@@ -262,7 +262,9 @@ your target becomes the omen on Home. Ask the Oracle too: "put Mageblood on my w
 **Wanted items:** for one specific item you're after, like a staff with exact stats you can't afford yet, paste its
 trade-site link (or the item itself, copied in game with Ctrl+C). Press Check now whenever you like: the cheapest
 listings with their stats, which ones are new, re-priced, or gone since your last check (sold or taken down; the
-trade site doesn't say which), and the cheapest price at each of your checks. Pin one listing to follow it. It's
+trade site doesn't say which), the gold fee, and the cheapest price at each of your checks. Pin one listing to follow
+it, press Open this listing to see just that one on the trade site (a search for its exact stats and price), or
+Copy whisper to paste the trade site's message to the seller in game. It's
 checked only when you press the button, inside GGG's limits (the same "live trade-site prices" switch as the
 overlay); for instant news of new listings, Open live search uses the trade site's own live search.
 
