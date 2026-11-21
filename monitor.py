@@ -347,6 +347,18 @@ def api(path, q):
         if path == '/api/lab/bosses':   # Build Lab stage 6
             from poe2kit import lab
             return lab.readiness(con, q['build'])
+        if path == '/api/oracle':   # the Oracle's market advice: phase, what to do now, item outlook
+            from poe2kit import oracle
+            return oracle.advice(con, day=float(q['day']) if q.get('day') else None)
+        if path == '/api/top1/links':   # R10: character name -> poe.ninja 'account/character' link (from the benchmark read)
+            import urllib.parse as _up
+            out, league = {}, None
+            for lg, rows in con.execute("SELECT league, rows FROM bench WHERE metric='level' AND scope=? ORDER BY ts DESC",
+                                        (q.get('scope') or '',)):
+                for p in json.loads(rows).get('paths') or []:
+                    out.setdefault(_up.unquote(p).rpartition('/')[2], p)
+                league = league or lg
+            return {'league': league, 'links': out}
         if path == '/api/pagever':   # the dashboard reloads itself when its files change (after an update or a fix)
             d = os.path.join(HERE, 'dashboard')
             return {'v': max(os.path.getmtime(os.path.join(d, f)) for f in ('index.html', 'theme.css') if os.path.exists(os.path.join(d, f)))}
@@ -411,6 +423,14 @@ def api(path, q):
             from poe2kit import leaguestart
             r = leaguestart.playbook(con)
             r.pop('items', None)
+            try:   # the Oracle's research: some week-1 risers reverse (e.g. Tacati peaks ~day 10, then falls)
+                from poe2kit import oracle
+                for x in (r.get('hold') or []) + (r.get('sell_day1') or []):
+                    n = oracle.hold_note(x.get('item'))
+                    if n:
+                        x['oracle'] = n
+            except Exception:
+                pass
             return r
         if path == '/api/sessions':
             from poe2kit import clientlog
@@ -499,6 +519,26 @@ def craft_post(path, b):
         if path == '/api/connectors':   # other AI apps: {target: chatgpt|gemini, action: connect|disconnect}
             from poe2kit import connectors
             return connectors.connect(b.get('target')) if b.get('action') == 'connect' else connectors.disconnect(b.get('target'))
+        if path == '/api/ninja/open':   # R10: a player's poe.ninja page in an Exile Oracle window (the one page clicked)
+            import re as _re
+            from poe2kit import osutil
+            p, lg = str(b.get('path') or ''), str(b.get('league') or '')
+            if not _re.fullmatch(r"[A-Za-z0-9%._~'()!*-]+/[A-Za-z0-9%._~'()!*-]+", p):
+                return {'ok': False, 'why': 'bad character link'}
+            slug = _re.sub(r'[^a-z0-9]', '', lg.lower())
+            osutil.detached([osutil.background_python(), os.path.join(HERE, 'ninja_view.pyw'), p, slug, lg], cwd=HERE)
+            return {'ok': True}
+        if path == '/api/vault/from_ninja':   # R10: "Save this build" pressed on that page
+            from poe2kit import vault
+            code = str(b.get('code') or '').strip()
+            try:
+                vault.decode(code)
+            except Exception:
+                return {'ok': False, 'why': "That doesn't look like a Path of Building code."}
+            ch, acct, lg = b.get('character') or 'player', b.get('account') or '', b.get('league') or None
+            bid, _sum = vault.add(con, code, f'{ch} (poe.ninja, {lg})' if lg else f'{ch} (poe.ninja)',
+                            owner=f'{acct} (poe.ninja)' if acct else 'poe.ninja', league=lg, source_url=b.get('url'))
+            return {'ok': True, 'id': bid, 'message': f'Saved as vault #{bid}: open it in the Build Lab, or ask the Oracle to compare it with yours.'}
         if path == '/api/window':   # how the tray / shortcut open the dashboard: 'app' window or 'browser' tab
             config.save_settings({'dashboard_window': 'browser' if b.get('mode') == 'browser' else 'app'})
             from poe2kit import appwindow
@@ -723,6 +763,12 @@ class Handler(http.server.BaseHTTPRequestHandler):
         return self._send(404, b'not found', 'text/plain')
 
 
+class Server(http.server.ThreadingHTTPServer):
+    """On Windows SO_REUSEADDR lets a second process bind the same port (two monitors, both answering): refuse it."""
+    allow_reuse_address = os.name != 'nt'
+    daemon_threads = True
+
+
 def take_lock():
     try:
         if os.path.exists(LOCK):
@@ -745,7 +791,7 @@ def main(argv):
             run_job(con, name)
         return 0
     if '--serve' in argv:   # developer mode: only the dashboard (e.g. POE2KIT_PORT=47831), no jobs, no overlay, no lock,
-        srv = http.server.ThreadingHTTPServer(('127.0.0.1', PORT), Handler)   # so it runs beside the installed app
+        srv = Server(('127.0.0.1', PORT), Handler)   # so it runs beside the installed app
         log.info('serve-only dashboard on http://127.0.0.1:%d', PORT)
         srv.serve_forever()
         return 0
@@ -754,7 +800,7 @@ def main(argv):
         return 0
     stop = threading.Event()
     threading.Thread(target=scheduler, args=(stop,), daemon=True).start()
-    srv = http.server.ThreadingHTTPServer(('127.0.0.1', PORT), Handler)
+    srv = Server(('127.0.0.1', PORT), Handler)
     log.info('dashboard on http://127.0.0.1:%d', PORT)
     try:
         from poe2kit import overlaysrv

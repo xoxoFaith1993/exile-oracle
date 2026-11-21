@@ -274,6 +274,21 @@ def t_lab(a):
     return {'build_id': bid, 'cards': lab.cards(con, bid)}
 
 
+def t_oracle(a):
+    """The Oracle's market advice from three league launches: phase, what to do now, item outlook."""
+    from poe2kit import oracle
+    con = db.connect()
+    r = oracle.advice(con, day=a.get('day'))
+    if a.get('item'):
+        want = a['item'].lower()
+        r['items'] = [x for x in r.get('items') or [] if want in x['item'].lower()]
+        r['hold_note'] = {x['item']: oracle.hold_note(x['item']) for x in r['items']}
+    else:
+        r['items'] = (r.get('items') or [])[:int(a.get('top') or 15)]
+    r.pop('about', None)
+    return r
+
+
 def t_doctor(a):
     """Check every part of the toolkit; returns findings + the troubleshooting guide written for Claude."""
     from poe2kit import doctor
@@ -693,6 +708,14 @@ TOOLS = [
      '= DPS/EHP by level. Use it whenever you compare options: the player sees the numbers, not just your words.',
      S(build_id=NUM, action=STR, title=STR, why=STR, cost_div=NUM, change={'type': 'object'}, card_id=NUM, start=BOOL),
      t_lab),
+    ('poe2_oracle',
+     'The Oracle: market timing from the last three league launches (GGG exchange history, prices in Divines). '
+     'Gives the league day and phase (day 1-3 / week 1 / week 2-3 / week 4+), what to do now and what comes next '
+     '(strategies with their evidence), and for 42 key items where they usually go in the next 7 days (sell now / '
+     'hold / steady) next to the live price. item = one item; day = pretend another league day (e.g. plan day 0 of '
+     '1.0). Use it for "what should I sell / hold / buy", money-making and league-start questions; say it is history, '
+     'not a promise, and that patches move prices.',
+     S(day=NUM, item=STR, top=NUM), t_oracle),
     ('poe2_doctor',
      'Something in the toolkit is broken or acting odd (overlay, prices, dashboard, Build Planner, Path of Building, '
      "Claude connection)? Call this FIRST: it checks every part (read-only) and returns what's wrong, which sections "
@@ -726,7 +749,8 @@ INSTRUCTIONS = (
     'compare goes on the Build Lab as a what-if card (Path of Building measures it), and the roadmap / power curves '
     'live there too. The player watches the Lab while you talk.\n'
     '- Characters: poe2_my_characters / poe2_import_character only when asked. Their usual goal: the top 1% '
-    '(poe2_top1). Upgrades: poe2_upgrades (DPS per divine).\n'
+    '(poe2_top1). Upgrades: poe2_upgrades (DPS per divine). Selling / holding / buying and league timing: '
+    'poe2_oracle (patterns from the last three launches).\n'
     '- Levelling routes are a rule of thumb until you review them (poe2_levelling, then levelling_route=true in '
     'poe2_build_planner).\n'
     '- Rules: read-only toward the game. Data comes from the poe.ninja economy API, GGG public Currency Exchange '
@@ -748,7 +772,7 @@ FEED_WORDS = {
     'poe2_upgrades': 'tried every unique in every slot', 'poe2_whatif': 'tested an item swap',
     'poe2_compare': 'compared two builds', 'poe2_read_rare': 'read a rare item',
     'poe2_build_planner': 'worked on the in-game Build Planner', 'poe2_levelling': 'checked the levelling route',
-    'poe2_lab': 'used the Build Lab', 'poe2_doctor': 'checked the app for problems',
+    'poe2_lab': 'used the Build Lab', 'poe2_oracle': 'read the market history (the Oracle)', 'poe2_doctor': 'checked the app for problems',
     'poe2_from_overlay': 'read the items you sent', 'poe2_trade_link': 'made a trade-site link',
     'poe2_status': 'checked the app status', 'poe2_refresh': 'refreshed prices', 'poe2_top1': 'ran the Top 1% check',
 }

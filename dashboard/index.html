@@ -369,6 +369,13 @@ input[type=checkbox] { accent-color: var(--eo-blood-hi); }
 .boss ul { margin: 6px 0 0; padding: 0; list-style: none; font-size: 12.5px; }
 .boss li { padding: 1px 0; color: var(--eo-text-2); } .boss li.not-yet { color: #ff9a9a; } .boss li.risky { color: #e9c46a; }
 .boss-sum { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+.or-phase { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.or-phase .big { font: 700 26px var(--eo-display); color: var(--eo-gold-hi); }
+.or-do { margin: 8px 0 0; padding: 0; list-style: none; }
+.or-do li { padding: 7px 10px; margin: 6px 0; background: #17120e; border-left: 3px solid var(--eo-gold-dim); font-size: 14px; }
+.or-do li.hi { border-left-color: var(--eo-blood-hi); } .or-do li .why { display: block; font-size: 12.5px; color: var(--eo-muted); margin-top: 3px; }
+.verdict { font: 700 10.5px var(--eo-display); letter-spacing: .1em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; border: 1px solid; white-space: nowrap; }
+.verdict.sell { color: #ff7b7b; border-color: #7a2a2a; } .verdict.hold { color: var(--eo-good); border-color: #4f7a3f; } .verdict.steady { color: var(--eo-muted); border-color: var(--eo-line); }
 .lab-two { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px; }
 @media (max-width: 1100px) { .lab-two { grid-template-columns: 1fr; } }
 .up-path { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 8px 0 12px; font-size: 13px; }
@@ -430,6 +437,8 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
       <div class="card"><h2>Currency</h2><div class="sub">Live from GGG's currency exchange · 7-day change</div><div id="homecur"><div class="muted small">loading…</div></div></div>
       <div class="card"><h2>Alerts</h2><div class="sub">Price moves on your items, news, patch notes</div><div id="homealerts"><div class="muted small">loading…</div></div></div>
     </div>
+    <div class="card"><div class="lab-head"><h2 style="margin:0">The Oracle says</h2><span class="small muted" id="homeoraclesub"></span></div>
+      <div id="homeoracle"><div class="muted small">reading three league launches…</div></div></div>
     <div class="card"><h2>Go to</h2><div class="quick">
       <button data-go="farm"><b>What to farm</b>Mechanics by what they drop right now</button>
       <button data-go="league"><b>League start</b>Plan a class and ascendancy from level 1</button>
@@ -441,6 +450,10 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
   </section>
   <section id="claude"><div id="show"><div class="card empty">Ask the Oracle something in chat (Claude: a build cost, upgrades, a compare, a price chart) and it shows up here.</div></div></section>
   <section id="economy">
+    <div class="card"><div class="lab-head"><h2 style="margin:0">League timing: the Oracle</h2><span style="flex:1"></span>
+      <label class="small">Show <select class="crin" id="ordaysel"><option value="">today</option><option value="0">1.0 day 0 (launch)</option><option value="2">day 2</option><option value="5">day 5</option><option value="10">day 10</option><option value="21">day 21</option><option value="42">day 42</option></select></label></div>
+      <div class="sub">What happened to prices in the last three launches (Fate of the Vaal, Runes of Aldur, Forbidden Rites), from GGG's exchange history, in Divines. History, not a promise: patches move prices.</div>
+      <div id="oracle"></div></div>
     <div class="card"><h2>Market at a glance</h2><div class="sub" id="ovsub">Key currency and the league's chase items, from poe.ninja.</div>
       <div class="tiles" id="ovtiles"></div>
       <h2 style="margin-top:14px;font-size:14px">Chase uniques</h2><div class="chase" id="ovuniq"></div>
@@ -701,10 +714,10 @@ function hideTip() { tip.style.display = 'none'; }
 document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   document.querySelectorAll('nav button').forEach(x => x.classList.toggle('on', x === b));
   document.querySelectorAll('section').forEach(s => s.classList.toggle('on', s.id === b.dataset.tab));
-  if (b.dataset.tab === 'home') loadHome();
+  if (b.dataset.tab === 'home') { loadHome(); loadHomeOracle(); }
   if (b.dataset.tab === 'status') loadConnectors();
   if (b.dataset.tab === 'lab') initLab();
-  if (b.dataset.tab === 'economy') { loadOverview(); loadMovers(); loadMarket(); }
+  if (b.dataset.tab === 'economy') { loadOverview(); loadMovers(); loadMarket(); loadOracle($('#ordaysel').value); }
   if (b.dataset.tab === 'builds') loadBuilds();
   if (b.dataset.tab === 'alerts') loadAlerts(true);
   if (b.dataset.tab === 'patches') loadPatches();
@@ -1026,6 +1039,41 @@ async function labBosses() {
   $('#labbossmsg').textContent = r.main_skill ? `level ${r.level} · ${r.main_skill}` : '';
 }
 
+// ---------- the Oracle: market timing ----------
+const verdictTag = v => `<span class="verdict ${v === 'sell now' ? 'sell' : v === 'hold / buy' ? 'hold' : 'steady'}">${esc(v)}</span>`;
+async function loadOracle(day) {
+  const r = await get('/api/oracle' + (day !== '' && day != null ? '?day=' + day : ''));
+  if (!r || r.error) { $('#oracle').innerHTML = `<div class="muted small">${esc((r && r.error) || '')}</div>`; return; }
+  const strat = (xs, hi) => xs.map(x => `<li class="${hi ? 'hi' : ''}">${esc(x.action)}<span class="why">${esc(x.why)} · confidence ${esc(x.confidence)}</span></li>`).join('');
+  const rows = (r.items || []).filter(x => x.change_pct != null).slice(0, 18).map(x => `<tr><td>${ic(null, 24, x.item)}<b>${esc(x.item)}</b></td>
+    <td>${verdictTag(x.verdict)}</td><td class="num">${x.change_pct > 0 ? '+' : ''}${x.change_pct}%</td><td class="num">day ${x.peak_day ?? '?'}</td>
+    <td class="num">${x.price_div != null ? esc(P(x.price_div, x.item)) : '–'}</td><td class="num">${x.change_7d_pct != null ? (x.change_7d_pct > 0 ? '+' : '') + x.change_7d_pct + '%' : '–'}</td></tr>`).join('');
+  $('#oracle').innerHTML = `<div class="or-phase"><span class="big">${esc(r.phase || '?')}</span><span>${esc(r.league)} · day ${r.day ?? '?'}</span>${r.next_phase ? `<span class="small muted">${esc(r.next_phase.name)} starts in ${r.next_phase.in_days} days</span>` : ''}</div>
+    ${r.note ? `<div class="flag warn" style="margin-top:8px">${esc(r.note)}</div>` : ''}
+    <div class="lab-two" style="margin-top:6px"><div><div class="small muted" style="margin-top:8px">Do now</div><ul class="or-do">${strat(r.do_now || [], true)}</ul></div>
+      <div><div class="small muted" style="margin-top:8px">Coming up${r.next_phase ? ' (' + esc(r.next_phase.name) + ')' : ''}</div><ul class="or-do">${strat(r.coming_up || []) || '<li>Nothing new: keep doing the above.</li>'}</ul></div></div>
+    ${rows ? `<div class="small muted" style="margin-top:12px">The next 7 days, as in past launches (change in Divines)</div><table class="up" style="margin-top:6px"><tr><th>Item</th><th></th><th class="num">Next 7 days</th><th class="num">Usual peak</th><th class="num">Now</th><th class="num">Last 7 days</th></tr>${rows}</table>` : ''}
+    <div class="chips">${labAsk('What should I sell or hold right now?', 'Using the Oracle (poe2_oracle) and my characters, what should I sell, hold or buy right now?')}${labAsk('Plan my 1.0 launch money', 'Plan my first week of the 1.0 launch for money: what to farm, sell and hold each day, using poe2_oracle at day 0.')}</div>`;
+}
+async function loadHomeOracle() {
+  const r = await get('/api/oracle'); if (!r || r.error) { $('#homeoracle').innerHTML = ''; return; }
+  $('#homeoraclesub').textContent = `${r.league} · day ${r.day} · ${r.phase}`;
+  const top = (r.do_now || []).slice(0, 3).map(x => `<li class="hi">${esc(x.action)}</li>`).join('');
+  const it = (r.items || []).filter(x => x.change_pct != null).slice(0, 4).map(x => `<span class="res">${esc(x.item)} ${verdictTag(x.verdict)}</span>`).join('');
+  $('#homeoracle').innerHTML = `<ul class="or-do">${top}</ul>${it ? `<div class="res-row">${it}</div>` : ''}${r.note ? `<div class="small muted">${esc(r.note)}</div>` : ''}
+    <div class="chips"><span class="chip-ask" style="border-style:solid" onclick="document.querySelector('nav [data-tab=economy]').click()">Full league timing →</span></div>`;
+}
+
+// ---------- R10: a player's poe.ninja page in an Exile Oracle window, with "Save this build" ----------
+let NINJA = { league: null, links: {} };
+const ninjaBtn = name => NINJA.links[name] ? ` <button class="btn" style="padding:2px 8px;font-size:10px" data-ninja="${esc(NINJA.links[name])}" title="Open ${esc(name)}'s poe.ninja page in Exile Oracle; save their build from there">View profile</button>` : '';
+async function loadNinjaLinks(scope) { const r = await get('/api/top1/links?scope=' + encodeURIComponent(scope || '')); if (r && r.links) NINJA = r; }
+document.addEventListener('click', async e => {
+  const b = e.target.closest('[data-ninja]'); if (!b) return;
+  b.disabled = true; const r = await post('/api/ninja/open', { path: b.dataset.ninja, league: NINJA.league });
+  b.textContent = r.ok ? 'opening…' : (r.why || 'could not open'); setTimeout(() => { b.disabled = false; b.textContent = 'View profile'; }, 4000);
+});
+
 // ---------- home ----------
 const HOME_CUR = ['Chaos Orb', 'Exalted Orb', 'Orb of Annulment', 'Vaal Orb', 'Regal Orb', 'Orb of Alchemy', "Artificer's Orb", 'Mirror of Kalandra'];
 async function loadHome() {
@@ -1051,7 +1099,8 @@ async function loadHome() {
     : '<div class="muted small">Nothing yet.</div>';
 }
 document.querySelectorAll('.quick [data-go]').forEach(b => b.onclick = () => document.querySelector(`nav [data-tab="${b.dataset.go}"]`).click());
-if (document.querySelector('#home.on')) loadHome();
+if (document.querySelector('#home.on')) { loadHome(); loadHomeOracle(); }
+$('#ordaysel').onchange = () => loadOracle($('#ordaysel').value);
 
 // ---------- header ----------
 let STATUS = null;
@@ -1631,6 +1680,7 @@ async function runTop1() {
   $('#t1view').innerHTML = '<div class="card muted">Running your build through Path of Building…</div>';
   const r = await get('/api/top1?id=' + $('#t1build').value);
   if (r.error) { $('#t1view').innerHTML = `<div class="card">${esc(r.error)}</div>`; return; }
+  await loadNinjaLinks(r.scope);   // R10: View profile buttons
   const ax = r.axes, w = ax.wealth || {};
   const card = (label, yours, cutoff, p, fmt, extra) => {
     const ok = p && p.in_top1, known = p && 'in_top1' in p;
@@ -1656,8 +1706,8 @@ async function runTop1() {
     ${r.next_steps.length ? `<div class="card"><h2>What closes the gap</h2>${r.next_steps.map(x => `<div class="ls-node">→ <div>${esc(x)}</div></div>`).join('')}</div>` : ''}
     <div class="grid2">
       <div class="card"><h2>Top-1% ${esc(r.scope)} gear sampled</h2><div class="sub">Uniques, runes and unique jewels priced from their item icons; rares left out (same as yours).</div>
-        <table>${(w.sample || []).map(c => `<tr><td><b>${esc(c.name)}</b> <span class="small muted">lvl ${c.level}</span><div class="small muted">${c.top_items.map(t => esc(t.item) + ' ' + P(t.value_div, t.item)).join(' · ')}</div></td><td class="num">${P(c.value_div)}</td></tr>`).join('')}</table></div>
-      <div class="card"><h2>Top 5 ${esc(r.scope)}s</h2>${['dps', 'ehp'].filter(m => ax[m]).map(m => `<div class="small muted" style="margin-top:6px">${m.toUpperCase()}</div><table>${ax[m].top5.map(t => `<tr><td>${esc(t.name)}</td><td class="num">${big(t.value)}</td></tr>`).join('')}</table>`).join('')}</div>
+        <table>${(w.sample || []).map(c => `<tr><td><b>${esc(c.name)}</b> <span class="small muted">lvl ${c.level}</span>${ninjaBtn(c.name)}<div class="small muted">${c.top_items.map(t => esc(t.item) + ' ' + P(t.value_div, t.item)).join(' · ')}</div></td><td class="num">${P(c.value_div)}</td></tr>`).join('')}</table></div>
+      <div class="card"><h2>Top 5 ${esc(r.scope)}s</h2>${['dps', 'ehp'].filter(m => ax[m]).map(m => `<div class="small muted" style="margin-top:6px">${m.toUpperCase()}</div><table>${ax[m].top5.map(t => `<tr><td>${esc(t.name)}${ninjaBtn(t.name)}</td><td class="num">${big(t.value)}</td></tr>`).join('')}</table>`).join('')}</div>
     </div>
     <div class="card small muted">${r.notes.map(esc).join('<br>')}${r.missing.length ? '<br>Missing benchmarks: ' + r.missing.map(esc).join(', ') : ''}</div>`;
 }
@@ -1670,7 +1720,7 @@ async function loadPlaybook() {
   if (!PB.leagues || !PB.leagues.length) { $('#pbtable').innerHTML = '<div class="muted small">No launch history yet: it is being downloaded in the background.</div>'; return; }
   $('#pblg').innerHTML = '<option value="">All launches (median)</option>' + PB.leagues.map(l => `<option>${esc(l.league)}</option>`).join('');
   $('#pblg').onchange = drawPlaybook; drawPlaybook();
-  const mv = x => `<div class="ls-node"><div style="flex:1">${esc(x.item)} <span class="small muted">${esc(x.mechanic)}</span><div class="small muted">day 1 ${x.day1_ex} ex · ${x.leagues} launch${x.leagues > 1 ? 'es' : ''}</div></div><div class="num">${pct(x.change_by_day7_pct)}</div></div>`;
+  const mv = x => `<div class="ls-node"><div style="flex:1">${esc(x.item)} <span class="small muted">${esc(x.mechanic)}</span><div class="small muted">day 1 ${x.day1_ex} ex · ${x.leagues} launch${x.leagues > 1 ? 'es' : ''}</div>${x.oracle ? `<div class="small" style="color:var(--eo-gold-hi)">◈ Oracle: ${esc(x.oracle)}</div>` : ''}</div><div class="num">${pct(x.change_by_day7_pct)}</div></div>`;
   $('#pbsell').innerHTML = PB.sell_day1.slice(0, 12).map(mv).join('');
   $('#pbhold').innerHTML = PB.hold.slice(0, 12).map(mv).join('') || '<div class="muted small">Nothing rose.</div>';
   $('#pbnote').innerHTML = PB.notes.map(esc).join('<br>') + '<br>Launches: ' + PB.leagues.map(l => `${esc(l.league)} (${new Date(l.start_hour * 1000).toLocaleDateString()}, ${Math.round(l.hours / 24)} days)`).join(', ');

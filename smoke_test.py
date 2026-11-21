@@ -182,6 +182,12 @@ def oracle_extras_check():
     pv = report.preview('issue', 'smoke test')
     check(pv.startswith('smoke test') and os.path.expanduser('~') not in pv, 'report preview (scrubbed, not sent)')
     check(os.path.exists(os.path.join(HERE, 'app_window.pyw')), 'native window script present')
+    from poe2kit import oracle
+    adv = oracle.advice(day=5)
+    check(adv.get('phase') == 'week 1' and adv.get('do_now') and any(x['change_pct'] is not None for x in adv['items']),
+          f"Oracle market advice (day 5: {len(adv.get('do_now') or [])} actions, {len(adv['items'])} items)")
+    check(oracle.hold_note('Exalted Orb') and oracle.hold_note('Soul Core of Tacati'), 'Oracle hold notes for the playbook')
+    check(os.path.exists(os.path.join(HERE, 'ninja_view.pyw')), 'poe.ninja profile window script present')
 
 def appwindow_check():
     from poe2kit import appwindow
