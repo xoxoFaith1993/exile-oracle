@@ -222,7 +222,11 @@ def default_filters(it):
          'type': it.get('base') if rar != 'GEM' else it.get('name'),
          'category': it.get('cls'),
          'corrupted': bool(it.get('corrupted')),
-         'ilvl': {'value': it.get('ilvl'), 'on': False} if it.get('ilvl') and rar in ('RARE', 'MAGIC', 'NORMAL') else None,
+         # white/magic bases: item level is what crafters pay for, so it's matched by default (exactly below 60,
+         # where only low-level bases compare; "at least yours" from 60)
+         'ilvl': {'value': it.get('ilvl'), 'on': rar in ('MAGIC', 'NORMAL'),
+                  'max': it.get('ilvl') if rar in ('MAGIC', 'NORMAL') and (it.get('ilvl') or 0) < 60 else None}
+         if it.get('ilvl') and rar in ('RARE', 'MAGIC', 'NORMAL') else None,
          'sockets': {'value': it['rune_sockets'], 'on': True} if it.get('rune_sockets') else None,
          'gem_level': {'value': it['gem_level'], 'on': True} if it.get('gem_level') else None,
          'waystone_tier': it.get('waystone_tier')}
@@ -289,8 +293,11 @@ def build_query(it, league=None, f=None):
     if rar in ('RARE', 'MAGIC', 'NORMAL'):
         q['filters']['type_filters'] = {'filters': {'rarity': {'option': 'nonunique'}}}
     if (f.get('ilvl') or {}).get('on') and f['ilvl'].get('value'):
-        q['filters'].setdefault('type_filters', {'filters': {}})['filters']['ilvl'] = {'min': f['ilvl']['value']}
-        labels.append(f"item level {f['ilvl']['value']}+")
+        iv = {'min': f['ilvl']['value']}
+        if f['ilvl'].get('max'):
+            iv['max'] = f['ilvl']['max']
+        q['filters'].setdefault('type_filters', {'filters': {}})['filters']['ilvl'] = iv
+        labels.append(f"item level {f['ilvl']['value']}" + ('' if iv.get('max') else '+'))
     main, groups = [], []
     for s in f.get('stats') or []:
         if not s.get('on'):

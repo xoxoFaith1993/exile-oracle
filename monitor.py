@@ -534,7 +534,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
             elif u.path == '/api/overlay/send_claude':   # popup's "Ask Claude": save it, bring Claude forward
                 from poe2kit import overlaysrv, osutil
                 data = overlaysrv.send_to_claude()
-                if data.get('ok') and body.get('open', True):
+                data['target'] = config.settings().get('ask_claude_target') or 'app'
+                if data.get('ok') and body.get('open', True) and data['target'] == 'app':
                     try:
                         if osutil.IS_WIN:
                             os.startfile('claude://')

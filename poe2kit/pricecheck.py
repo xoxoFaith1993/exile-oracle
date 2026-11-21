@@ -96,8 +96,14 @@ def check(con, text, league=None, progress=None, filters=None):
             res['trade'] = trade.price(it, league, rt, value_of, f)
             t = res['trade']
             if t.get('state') == 'done' and t.get('low_div') is not None and (not res.get('headline') or it['rarity'] == 'GEM'):
-                res['headline'] = {'div': t['median_div'] if len(t['prices']) >= 3 else t['low_div'], 'qty': 1,
-                                   'label': f"trade site, {'middle of ' + str(len(t['prices'])) + ' cheapest' if len(t['prices']) >= 3 else 'lowest listing'}"}
+                if (t.get('total') or 0) < 20:   # a handful of listings at made-up prices isn't a market
+                    res['headline'] = {'div': t['low_div'], 'qty': 1,
+                                       'label': f"only {t.get('total')} listed: lowest price (thin market)"}
+                    res['notes'].append(f"Only {t.get('total')} listed: these prices are mostly wishful; it probably "
+                                        "won't sell for more than the lowest.")
+                else:
+                    res['headline'] = {'div': t['median_div'] if len(t['prices']) >= 3 else t['low_div'], 'qty': 1,
+                                       'label': f"trade site, {'middle of ' + str(len(t['prices'])) + ' cheapest' if len(t['prices']) >= 3 else 'lowest listing'}"}
     t = res.get('trade') or {}
     res['item']['icon'] = (n or {}).get('icon') or t.get('item_icon')
     if res.get('estimate') and t.get('state') == 'done' and t.get('prices'):

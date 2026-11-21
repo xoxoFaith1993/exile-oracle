@@ -21,6 +21,7 @@ import xml.etree.ElementTree as ET
 from . import config, osutil, vault
 
 PREFIX = 'PoE2 Toolkit - '
+ENDGAME_FROM = 55   # levelling plans: endgame gear hints show from this level, levelling hints before it
 SLOTS = {'Weapon 1': 'Weapon1', 'Weapon 2': 'Offhand1', 'Weapon 1 Swap': 'Weapon2', 'Weapon 2 Swap': 'Offhand2',
          'Helmet': 'Helm1', 'Body Armour': 'BodyArmour1', 'Gloves': 'Gloves1', 'Boots': 'Boots1',
          'Amulet': 'Amulet1', 'Ring 1': 'Ring1', 'Ring 2': 'Ring2', 'Belt': 'Belt1'}
@@ -159,23 +160,31 @@ def make(con, build_id=None, pob_code=None, notes=None, name=None, include_gear=
         have = [int(x) for x in (active.get('nodes') or '').split(',') if x]
         cls = b_el.get('className') if b_el is not None else None
         main, asc_nodes, _start = route.order(have, active.get('treeVersion') or '0_5', cls)
+        # the game shows a passive only while the character's level is inside its range, so each one appears
+        # LOOKAHEAD levels before it's due (seen at level 1: nothing showed when ranges started at the due level)
+        ahead = route.LOOKAHEAD
+
+        def due(p, lvl, tag):
+            p['level_interval'] = [max(1, lvl - ahead), 100]
+            p['additional_text'] = tag + ('\n' + p['additional_text'] if p.get('additional_text') else '')
+            return p
         for num, lvl in zip(main, route.levels(len(main))):
-            p = passive(num, [lvl, 100])
+            p = passive(num, [1, 100])
             if p:
-                passives.append(p)
+                passives.append(due(p, lvl, f"<grey>{{Take at level {lvl}}}"))
         trials = ['1st', '2nd', '3rd', '4th']
         for i, (num, lvl) in enumerate(zip(asc_nodes, route.asc_levels(len(asc_nodes)))):
-            p = passive(num, [lvl, 100])
+            p = passive(num, [1, 100])
             if p:
-                tag = f"<grey>{{Ascendancy: after your {trials[min(3, i // 2)]} trial}}"
-                p['additional_text'] = tag + ('\n' + p['additional_text'] if p.get('additional_text') else '')
-                passives.append(p)
+                passives.append(due(p, lvl, f"<grey>{{Ascendancy: after your {trials[min(3, i // 2)]} trial}}"))
         report['route'] = 'automatic'
     elif active is not None:
         for num in (int(x) for x in (active.get('nodes') or '').split(',') if x):
             p = passive(num)
             if p:
                 passives.append(p)
+
+    levelling_gear = bool(report.get('route') == 'automatic' or staged)
 
     # ---- skills: socket groups (not the copies PoB adds for item/tree-granted skills) ----
     meta = _meta_gems()
@@ -245,14 +254,26 @@ def make(con, build_id=None, pob_code=None, notes=None, name=None, include_gear=
             v = (prices.get(slot) or {}).get('value_div')
             price = f"\n<grey>{{toolkit price: about {v:.1f} div}}" if v else ''
             custom = gn.get(slot.lower())
+            mods = [m for m in it['mods'] if not re.search(r'\(rune\)|\(implicit\)|\(enchant\)', m)]
             if it['rarity'] == 'UNIQUE' and it['name']:
                 entry['unique_name'] = it['name']
                 text = f"<unique>{{{_clean(it['name'])}}}\n<grey>{{{_clean(it['base'])}}}" + price
             else:
-                mods = [m for m in it['mods'] if not re.search(r'\(rune\)|\(implicit\)|\(enchant\)', m)][:5]
                 text = (f"<yellow>{{{_clean(it['base'] or 'Rare item')}}}\n\n<grey>{{Wanted mods (yours)\n"
-                        "-------------------\n" + '\n'.join(f"{i + 1}. {_clean(m)}" for i, m in enumerate(mods)) + '}' + price)
+                        "-------------------\n" + '\n'.join(f"{i + 1}. {_clean(m)}" for i, m in enumerate(mods[:5]))
+                        + '}' + price)
             entry['additional_text'] = _note(custom) if custom else text
+            if levelling_gear:
+                # a levelling plan: the endgame item only from ENDGAME_FROM; before that, the kinds of stats to look
+                # for (the same mods without numbers: they matter at any level, the numbers don't)
+                entry['level_interval'] = [ENDGAME_FROM, 100]
+                kinds = list(dict.fromkeys(re.sub(r'[+-]?\d+(?:\.\d+)?', '#', _clean(m)) for m in mods))[:5]
+                if kinds:
+                    lead = (f"Until you have {_clean(it['name'])}: look for" if it['rarity'] == 'UNIQUE'
+                            else "Look for these mods (any base)")
+                    slots.append({'inventory_id': inv, 'level_interval': [1, ENDGAME_FROM - 1],
+                                  'additional_text': f"<yellow>{{Levelling}}\n<grey>{{{lead}\n-------------------\n"
+                                  + '\n'.join(f"{i + 1}. {k}" for i, k in enumerate(kinds)) + '}'})
             slots.append(entry)
 
     b = root.find('Build')

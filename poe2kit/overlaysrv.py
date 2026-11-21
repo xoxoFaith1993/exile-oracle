@@ -171,7 +171,7 @@ CHAT_DEFAULTS = [   # Exiled Exchange 2's defaults: one chat command per key pre
     {'text': '/hideout', 'key': 'F5'}, {'text': '/exit', 'key': 'F9'}, {'text': '@last ty', 'key': ''},
     {'text': '/invite @last', 'key': ''}, {'text': '/tradewith @last', 'key': ''}, {'text': '/hideout @last', 'key': ''}]
 DEFAULTS = {'listing': 'securable', 'search_range_pct': 10, 'quick_close_px': 150, 'popup_position': 'centre',
-            'overlay_on_copy': False, 'chat_commands': CHAT_DEFAULTS}
+            'overlay_on_copy': False, 'chat_commands': CHAT_DEFAULTS, 'ask_claude_target': 'app'}
 KEY_RX = __import__('re').compile(r'^((Ctrl|Alt|Shift)\+){0,3}(F([1-9]|1[0-2])|[A-Z0-9])$')
 
 
@@ -229,6 +229,8 @@ def set_options(b):
     ch = {k: bool(b[k]) for k in ('overlay', 'live_trade', 'overlay_on_copy') if k in b}
     if b.get('listing') in ('securable', 'online'):
         ch['listing'] = b['listing']
+    if b.get('ask_claude_target') in ('app', 'code'):
+        ch['ask_claude_target'] = b['ask_claude_target']
     if b.get('popup_position') in ('centre', 'mouse'):
         ch['popup_position'] = b['popup_position']
     if isinstance(b.get('chat_commands'), list):

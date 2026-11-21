@@ -175,6 +175,7 @@ async function renderSettings() {
       ${row('Quick check closes after the mouse moves', num('quick_close_px', o.quick_close_px, 'px'))}
       ${row('Popup position', seg('popup_position', o.popup_position, [['centre', 'centre'], ['mouse', 'by the mouse']]))}
       ${row('Also show a price when I press Ctrl+C myself', tog('overlay_on_copy', o.overlay_on_copy), 'Off: copying an item into chat stays quiet.')}
+      ${row('Ask Claude sends to', seg('ask_claude_target', o.ask_claude_target, [['app', 'claude app'], ['code', 'claude code chat']]), 'Claude Code chat: say "watch my overlay" there once; items then arrive in that chat.')}
     </div>
     <div class="matched sc" style="margin-top:12px">chat commands <span style="text-transform:none;font-variant:normal">(the key types the text in chat: Enter, text, Enter)</span></div>
     <div class="stats" id="cmds">${(o.chat_commands || []).map((c, i) => `<div class="st" data-i="${i}">
@@ -321,7 +322,9 @@ function wire() {
   if (ac) ac.onclick = async () => {
     ac.disabled = true;
     const r = await (await fetch('/api/overlay/send_claude', { method: 'POST', body: '{}' })).json();
-    if (r.ok) {
+    if (r.ok && r.target === 'code') {
+      ac.textContent = 'sent ✓ answer in your claude chat';
+    } else if (r.ok) {
       try { await navigator.clipboard.writeText(r.prompt); } catch (e) {}
       ac.textContent = 'sent ✓ paste in claude';
     } else { ac.textContent = r.error || 'not sent'; }

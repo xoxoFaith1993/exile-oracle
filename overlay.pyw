@@ -245,6 +245,13 @@ class Popup:
         self.since = 0
 
     def start(self):
+        existing = self._find()
+        if existing:   # a popup window from before (same Edge profile): reuse it, never open a second one
+            self.hwnd = existing
+            self._style()
+            self.hide()
+            log('popup reused')
+            return
         edge = next((p for p in EDGE if os.path.exists(p)), None)
         if not edge:
             log('Edge not found: popup unavailable')
@@ -264,12 +271,15 @@ class Popup:
         if not self.hwnd:
             log('popup window did not appear')
             return
+        self._style()
+        self.hide()
+        log('popup ready')
+
+    def _style(self):
         st = u32.GetWindowLongPtrW(self.hwnd, GWL_STYLE)
         u32.SetWindowLongPtrW(self.hwnd, GWL_STYLE, st & ~(WS_CAPTION | WS_THICKFRAME | WS_SYSMENU))
         ex = u32.GetWindowLongPtrW(self.hwnd, GWL_EXSTYLE)
         u32.SetWindowLongPtrW(self.hwnd, GWL_EXSTYLE, (ex | WS_EX_TOOLWINDOW) & ~WS_EX_APPWINDOW)
-        self.hide()
-        log('popup ready')
 
     def _find(self):
         found = []
@@ -360,6 +370,10 @@ class Popup:
         if self.alive():
             u32.ShowWindow(self.hwnd, SW_HIDE)
         self.shown = False
+        self.hidden_at = time.time()
+
+    def visible(self):
+        return self.alive() and bool(u32.IsWindowVisible(self.hwnd))
 
     def moved_away(self):
         """Quick check: the mouse left the spot where the hotkey was pressed (and isn't on the popup)."""
@@ -531,6 +545,15 @@ def main(argv):
                     popup.refit()
                 except Exception as e:
                     log(f'refit failed: {e}')
+            # keep the window and our idea of it in step: Windows/Edge sometimes shows the popup again on its own
+            # after we hid it (then nothing could close it); and while it's open, we must hold Esc
+            if popup.alive():
+                if popup.visible() and not popup.shown and time.time() - getattr(popup, 'hidden_at', 0) > 0.5:
+                    popup.hide()
+                    set_esc(False)
+                    log('popup reappeared by itself: hidden again')
+                elif popup.shown and not esc['on']:
+                    set_esc(True)
             front = game_in_front()
             set_hotkeys(front)
             if down['tick'] % 5 == 0 or not front:   # re-read the command list twice a second (settings edits)

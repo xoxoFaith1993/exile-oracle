@@ -21,6 +21,7 @@ from collections import deque
 from . import config
 
 VALUE = {'keystone': 6, 'notable': 4, 'jewel': 2, 'small': 1, 'attribute': 0.6}
+LOOKAHEAD = 10   # in game, a planned passive appears this many levels before it's due
 TRIAL_LEVELS = [22, 38, 55, 70]          # 1st..4th ascendancy trial, typical campaign / early-map levels
 SUPPORT_TIER_LEVEL = {1: 1, 2: 14, 3: 28, 4: 44, 5: 60}   # uncut support gem tiers: rough first-drop levels
 _cache = {}

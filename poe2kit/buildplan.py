@@ -206,8 +206,12 @@ def deaths(con, name, hours=3):
 
 def _mark_next(entry, level):
     iv = entry.get('level_interval') if isinstance(entry, dict) else None
-    if isinstance(iv, list) and level < iv[0] <= level + 10:
-        tag = f"<green>{{Next: from level {iv[0]}}}"
+    if not isinstance(iv, list):
+        return False
+    m = re.search(r'Take at level (\d+)', entry.get('additional_text') or '')
+    due = int(m.group(1)) if m else iv[0]   # route passives carry their due level in the note
+    if level < due <= level + 10:
+        tag = f"<green>{{Next: at level {due}}}"
         entry['additional_text'] = tag + ('\n' + entry['additional_text'] if entry.get('additional_text') else '')
         return True
     return False
