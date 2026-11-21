@@ -1,0 +1,4327 @@
+[
+{
+"name": "Armourer's Scrap",
+"id": "Metadata/Items/Currency/CurrencyArmourQuality",
+"desc": "Improves the [Quality|quality] of an armour"
+},
+{
+"name": "Arcanist's Etcher",
+"id": "Metadata/Items/Currency/CurrencyMagicQuality",
+"desc": "Improves the [Quality|quality] of a wand, staff or sceptre"
+},
+{
+"name": "Mirror of Kalandra",
+"id": "Metadata/Items/Currency/CurrencyDuplicate",
+"desc": "Creates a [Mirrored] copy of an item"
+},
+{
+"name": "Hinekora's Lock",
+"id": "Metadata/Items/Currency/CurrencyHinekorasLock",
+"desc": "Allows an item to foresee the result of the next Currency item used on it Modifying the item in any way removes the ability to foresee"
+},
+{
+"name": "Scroll of Wisdom",
+"id": "Metadata/Items/Currency/CurrencyIdentification",
+"desc": "Identifies an item"
+},
+{
+"name": "Orb of Regret",
+"id": "Metadata/Items/Currency/CurrencyPassiveRefund",
+"desc": "Grants a passive skill refund point"
+},
+{
+"name": "Orb of Unmaking",
+"id": "Metadata/Items/Currency/CurrencyAtlasPassiveRefund",
+"desc": "Grants an atlas passive skill refund point"
+},
+{
+"name": "Chaos Orb",
+"id": "Metadata/Items/Currency/CurrencyRerollRare",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new random modifier"
+},
+{
+"name": "Greater Chaos Orb",
+"id": "Metadata/Items/Currency/CurrencyRerollRare2",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new random modifier"
+},
+{
+"name": "Perfect Chaos Orb",
+"id": "Metadata/Items/Currency/CurrencyRerollRare3",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new random modifier"
+},
+{
+"name": "Orb of Chance",
+"id": "Metadata/Items/Currency/CurrencyUpgradeRandomly",
+"desc": "Unpredictably either upgrades a [ItemRarity|Normal] item to [ItemRarity|Unique] rarity or destroys it"
+},
+{
+"name": "Orb of Transmutation",
+"id": "Metadata/Items/Currency/CurrencyUpgradeToMagic",
+"desc": "Upgrades a [ItemRarity|Normal] item to a [ItemRarity|Magic] item with 1 modifier"
+},
+{
+"name": "Greater Orb of Transmutation",
+"id": "Metadata/Items/Currency/CurrencyUpgradeToMagic2",
+"desc": "Upgrades a [ItemRarity|Normal] item to a [ItemRarity|Magic] item with 1 modifier"
+},
+{
+"name": "Perfect Orb of Transmutation",
+"id": "Metadata/Items/Currency/CurrencyUpgradeToMagic3",
+"desc": "Upgrades a [ItemRarity|Normal] item to a [ItemRarity|Magic] item with 1 modifier"
+},
+{
+"name": "Orb of Alchemy",
+"id": "Metadata/Items/Currency/CurrencyUpgradeToRare",
+"desc": "Upgrades a [ItemRarity|Normal] or [ItemRarity|Magic] item to a [ItemRarity|Rare] item with 4 random modifiers"
+},
+{
+"name": "Blacksmith's Whetstone",
+"id": "Metadata/Items/Currency/CurrencyWeaponQuality",
+"desc": "Improves the [Quality|quality] of a [MartialWeapon|martial weapon]"
+},
+{
+"name": "Orb of Augmentation",
+"id": "Metadata/Items/Currency/CurrencyAddModToMagic",
+"desc": "Augments a [ItemRarity|Magic] item with a new random modifier"
+},
+{
+"name": "Greater Orb of Augmentation",
+"id": "Metadata/Items/Currency/CurrencyAddModToMagic2",
+"desc": "Augments a [ItemRarity|Magic] item with a new random modifier"
+},
+{
+"name": "Perfect Orb of Augmentation",
+"id": "Metadata/Items/Currency/CurrencyAddModToMagic3",
+"desc": "Augments a [ItemRarity|Magic] item with a new random modifier"
+},
+{
+"name": "Orb of Alteration",
+"id": "Metadata/Items/Currency/CurrencyRerollMagic",
+"desc": "Reforges a magic item with new random modifiers"
+},
+{
+"name": "Orb of Scouring",
+"id": "Metadata/Items/Currency/CurrencyConvertToNormal",
+"desc": "Removes all modifiers from an item"
+},
+{
+"name": "Exalted Orb",
+"id": "Metadata/Items/Currency/CurrencyAddModToRare",
+"desc": "Augments a [ItemRarity|Rare] item with a new random modifier"
+},
+{
+"name": "Greater Exalted Orb",
+"id": "Metadata/Items/Currency/CurrencyAddModToRare2",
+"desc": "Augments a [ItemRarity|Rare] item with a new random modifier"
+},
+{
+"name": "Perfect Exalted Orb",
+"id": "Metadata/Items/Currency/CurrencyAddModToRare3",
+"desc": "Augments a [ItemRarity|Rare] item with a new random modifier"
+},
+{
+"name": "Regal Orb",
+"id": "Metadata/Items/Currency/CurrencyUpgradeMagicToRare",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding 1 modifier"
+},
+{
+"name": "Greater Regal Orb",
+"id": "Metadata/Items/Currency/CurrencyUpgradeMagicToRare2",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding 1 modifier"
+},
+{
+"name": "Perfect Regal Orb",
+"id": "Metadata/Items/Currency/CurrencyUpgradeMagicToRare3",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding 1 modifier"
+},
+{
+"name": "Portal Scroll",
+"id": "Metadata/Items/Currency/CurrencyPortal",
+"desc": "Creates a portal to town"
+},
+{
+"name": "Glassblower's Bauble",
+"id": "Metadata/Items/Currency/CurrencyFlaskQuality",
+"desc": "Improves the [Quality|quality] of a [Flask|flask]"
+},
+{
+"name": "Gemcutter's Prism",
+"id": "Metadata/Items/Currency/CurrencyGemQuality",
+"desc": "Improves the [Quality|quality] of a Skill Gem"
+},
+{
+"name": "Cartographer's Chisel",
+"id": "Metadata/Items/Currency/CurrencyMapQuality",
+"desc": "Improves the [Quality|quality] of a map"
+},
+{
+"name": "Chromatic Orb",
+"id": "Metadata/Items/Currency/CurrencyRerollSocketColours",
+"desc": "Change the colour of a socket on a Skill Gem"
+},
+{
+"name": "Orb of Fusing",
+"id": "Metadata/Items/Currency/CurrencyRerollSocketLinks",
+"desc": "Reforges the links between sockets on an item"
+},
+{
+"name": "Lesser Jeweller's Orb",
+"id": "Metadata/Items/Currency/CurrencyAddSkillGemSocket3",
+"desc": "Sets a Skill Gem to have 3 Support Gem Sockets"
+},
+{
+"name": "Greater Jeweller's Orb",
+"id": "Metadata/Items/Currency/CurrencyAddSkillGemSocket4",
+"desc": "Sets a Skill Gem to have 4 Support Gem Sockets"
+},
+{
+"name": "Perfect Jeweller's Orb",
+"id": "Metadata/Items/Currency/CurrencyAddSkillGemSocket5",
+"desc": "Sets a Skill Gem to have 5 Support Gem Sockets"
+},
+{
+"name": "Artificer's Orb",
+"id": "Metadata/Items/Currency/CurrencyAddEquipmentSocket",
+"desc": "Adds an [Augment] Socket to a [MartialWeapon|Martial Weapon], wand, staff or Armour"
+},
+{
+"name": "Divine Orb",
+"id": "Metadata/Items/Currency/CurrencyModValues",
+"desc": "Randomises the numeric values of modifiers on an item"
+},
+{
+"name": "Blessed Orb",
+"id": "Metadata/Items/Currency/CurrencyRerollImplicit",
+"desc": "Randomises the numeric values of the implicit modifiers of an item"
+},
+{
+"name": "Sacred Orb",
+"id": "Metadata/Items/Currency/CurrencyRerollDefences",
+"desc": "Randomises the numeric values of base defences on an armour"
+},
+{
+"name": "Eternal Orb",
+"id": "Metadata/Items/Currency/CurrencyImprintOrb",
+"desc": "Creates an imprint of an item for later restoration. The imprint can't be applied to Fractured Items"
+},
+{
+"name": "Imprint",
+"id": "Metadata/Items/Currency/CurrencyImprint",
+"desc": "Restores an imprinted item onto the original. Can't be applied to Fractured Items"
+},
+{
+"name": "Vaal Orb",
+"id": "Metadata/Items/Currency/CurrencyCorrupt",
+"desc": "Modifies an item unpredictably and [Corrupted|Corrupts] it"
+},
+{
+"name": "Architect's Orb",
+"id": "Metadata/Items/Currency/CurrencyIncursionDoubleCorrupt",
+"desc": "Modifies a [Corrupted] [Equipment] or [Jewel] item unpredictably or destroys it"
+},
+{
+"name": "Crystallised Corruption",
+"id": "Metadata/Items/Currency/CurrencyIncursionDoubleCorruptGem",
+"desc": "Modifies a [Corrupted] Skill Gem unpredictably or destroys it"
+},
+{
+"name": "Core Destabiliser",
+"id": "Metadata/Items/Currency/CurrencyIncursionModifySoulCore",
+"desc": "Modifies a [SoulCore|Soul Core] unpredictably, with a chance to destroy it"
+},
+{
+"name": "Ancient Infuser",
+"id": "Metadata/Items/Currency/CurrencyIncursionCorruptTablet",
+"desc": "Modifies a [Tablet|Tablet] unpredictably and [Corrupted|Corrupts] it"
+},
+{
+"name": "Vaal Cultivation Orb",
+"id": "Metadata/Items/Currency/CurrencyIncursionMutateUnique",
+"desc": "Replaces up to 2 modifiers on a [Corrupted] [UniqueCulture|Vaal Unique] Replaces other [ItemRarity|Uniques] with a Corrupted Unique of the same Item Class"
+},
+{
+"name": "Yaomac's Orb of Sacrifice",
+"id": "Metadata/Items/Currency/CurrencyIncursionMutateCorruptionEnchantWeapon",
+"desc": "Upgrades a [Corrupted|Corruption] Enchantment on a [ItemRarity|Rare] Weapon or Quiver\r and removes a random Modifier"
+},
+{
+"name": "Kopec's Orb of Sacrifice",
+"id": "Metadata/Items/Currency/CurrencyIncursionMutateCorruptionEnchantArmour",
+"desc": "Upgrades a [Corrupted|Corruption] Enchantment on a [ItemRarity|Rare] Armour\r and removes a random Modifier"
+},
+{
+"name": "Kamasa's Orb of Sacrifice",
+"id": "Metadata/Items/Currency/CurrencyIncursionMutateCorruptionEnchantJewellery",
+"desc": "Upgrades a [Corrupted|Corruption] Enchantment on a [ItemRarity|Rare] Amulet, Ring or Belt\r and removes a random Modifier"
+},
+{
+"name": "Yugul's Orb of Sacrifice",
+"id": "Metadata/Items/Currency/CurrencyIncursionMutateCorruptionEnchantJewel",
+"desc": "Upgrades a [Corrupted|Corruption] Enchantment on a [ItemRarity|Rare] Jewel\r and removes a random Modifier"
+},
+{
+"name": "Vaal Armourer's Infuser",
+"id": "Metadata/Items/Currency/CurrencyIncursionWeaponOrArmourQualityHigh",
+"desc": "Improves the [Quality|quality] of an [Armour], exceeding maximum quality by up to 10% with a chance of [Corrupted|Corrupting] it"
+},
+{
+"name": "Vaal Blacksmith's Infuser",
+"id": "Metadata/Items/Currency/CurrencyIncursionMartialWeaponQuality",
+"desc": "Improves the [Quality|quality] of a [MartialWeapon|Martial Weapon], exceeding maximum quality by up to 10% with a chance of [Corrupted|Corrupting] it"
+},
+{
+"name": "Vaal Arcanist's Infuser",
+"id": "Metadata/Items/Currency/CurrencyIncursionCasterWeaponQuality",
+"desc": "Improves the [Quality|quality] of a wand, staff or sceptre, exceeding maximum quality by up to 10% with a chance of [Corrupted|Corrupting] it"
+},
+{
+"name": "Vaal Catalysing Infuser",
+"id": "Metadata/Items/Currency/CurrencyIncursionJewelleryQuality",
+"desc": "Improves the [Quality|quality] of a ring or amulet, exceeding maximum quality by up to 10% with a chance of [Corrupted|Corrupting] it"
+},
+{
+"name": "Orb of Extraction",
+"id": "Metadata/Items/Currency/CurrencyIncursionExtractAllSocketablesCurrency",
+"desc": "Destroys an [Equipment] item, returning any non [SocketBound|Socket-Bound] [Augment|Augments] socketed in it"
+},
+{
+"name": "Vaal Siphoner",
+"id": "Metadata/Items/Currency/CurrencyIncursionVaalIncubator",
+"desc": "Adds a kill threshold to a [Corrupted] [ItemRarity|Rare] [Jewellery] item, when threshold is met [VaalSiphoner|Siphons] a random modifier and improves the numeric values of other modifiers"
+},
+{
+"name": "Bestiary Orb",
+"id": "Metadata/Items/Currency/CurrencyItemiseCapturedMonster",
+"desc": "Stores a Beast in an item"
+},
+{
+"name": "Surveyor's Compass",
+"id": "Metadata/Items/Currency/CurrencyItemiseSextantModifier",
+"desc": "Stores a Sextant Modifier in an item"
+},
+{
+"name": "Prime Regrading Lens",
+"id": "Metadata/Items/Currency/CurrencyRerollSkillQualityType",
+"desc": "Change the type of quality of a skill gem with quality to another random quality"
+},
+{
+"name": "Secondary Regrading Lens",
+"id": "Metadata/Items/Currency/CurrencyRerollSupportQualityType",
+"desc": "Change the type of quality of a support gem with quality to another random quality"
+},
+{
+"name": "Tempering Orb",
+"id": "Metadata/Items/Currency/CurrencyHeistWeaponEnchant",
+"desc": "Adds or replaces an enchantment on a weapon. This may reforge the weapon's sockets."
+},
+{
+"name": "Tailoring Orb",
+"id": "Metadata/Items/Currency/CurrencyHeistArmourEnchant",
+"desc": "Adds or replaces an enchantment on a body armour. This may reforge the body armour's sockets."
+},
+{
+"name": "Unshaping Orb",
+"id": "Metadata/Items/Currency/CurrencyRespecShapersOrb",
+"desc": "Downgrades a map on the Atlas"
+},
+{
+"name": "Lesser Essence of the Body",
+"id": "Metadata/Items/Currency/CurrencyLesserEssenceLife",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Lesser Essence of the Mind",
+"id": "Metadata/Items/Currency/CurrencyLesserEssenceMana",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Lesser Essence of Enhancement",
+"id": "Metadata/Items/Currency/CurrencyLesserEssenceDefences",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Lesser Essence of Abrasion",
+"id": "Metadata/Items/Currency/CurrencyLesserEssencePhysical",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Lesser Essence of Flames",
+"id": "Metadata/Items/Currency/CurrencyLesserEssenceFire",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Lesser Essence of Ice",
+"id": "Metadata/Items/Currency/CurrencyLesserEssenceCold",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Lesser Essence of Electricity",
+"id": "Metadata/Items/Currency/CurrencyLesserEssenceLightning",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Lesser Essence of Ruin",
+"id": "Metadata/Items/Currency/CurrencyLesserEssenceChaos",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Lesser Essence of Battle",
+"id": "Metadata/Items/Currency/CurrencyLesserEssenceAttack",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Lesser Essence of Sorcery",
+"id": "Metadata/Items/Currency/CurrencyLesserEssenceCaster",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Lesser Essence of Haste",
+"id": "Metadata/Items/Currency/CurrencyLesserEssenceSpeed",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Lesser Essence of the Infinite",
+"id": "Metadata/Items/Currency/CurrencyLesserEssenceAttribute",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Essence of the Body",
+"id": "Metadata/Items/Currency/CurrencyEssenceLife",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Essence of the Mind",
+"id": "Metadata/Items/Currency/CurrencyEssenceMana",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Essence of Enhancement",
+"id": "Metadata/Items/Currency/CurrencyEssenceDefences",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Essence of Abrasion",
+"id": "Metadata/Items/Currency/CurrencyEssencePhysical",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Essence of Flames",
+"id": "Metadata/Items/Currency/CurrencyEssenceFire",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Essence of Ice",
+"id": "Metadata/Items/Currency/CurrencyEssenceCold",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Essence of Electricity",
+"id": "Metadata/Items/Currency/CurrencyEssenceLightning",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Essence of Ruin",
+"id": "Metadata/Items/Currency/CurrencyEssenceChaos",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Essence of Battle",
+"id": "Metadata/Items/Currency/CurrencyEssenceAttack",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Essence of Sorcery",
+"id": "Metadata/Items/Currency/CurrencyEssenceCaster",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Essence of Haste",
+"id": "Metadata/Items/Currency/CurrencyEssenceSpeed",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Essence of the Infinite",
+"id": "Metadata/Items/Currency/CurrencyEssenceAttribute",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Greater Essence of the Body",
+"id": "Metadata/Items/Currency/CurrencyGreaterEssenceLife",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Greater Essence of the Mind",
+"id": "Metadata/Items/Currency/CurrencyGreaterEssenceMana",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Greater Essence of Enhancement",
+"id": "Metadata/Items/Currency/CurrencyGreaterEssenceDefences",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Greater Essence of Abrasion",
+"id": "Metadata/Items/Currency/CurrencyGreaterEssencePhysical",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Greater Essence of Flames",
+"id": "Metadata/Items/Currency/CurrencyGreaterEssenceFire",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Greater Essence of Ice",
+"id": "Metadata/Items/Currency/CurrencyGreaterEssenceCold",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Greater Essence of Electricity",
+"id": "Metadata/Items/Currency/CurrencyGreaterEssenceLightning",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Greater Essence of Ruin",
+"id": "Metadata/Items/Currency/CurrencyGreaterEssenceChaos",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Greater Essence of Battle",
+"id": "Metadata/Items/Currency/CurrencyGreaterEssenceAttack",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Greater Essence of Sorcery",
+"id": "Metadata/Items/Currency/CurrencyGreaterEssenceCaster",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Greater Essence of Haste",
+"id": "Metadata/Items/Currency/CurrencyGreaterEssenceSpeed",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Greater Essence of the Infinite",
+"id": "Metadata/Items/Currency/CurrencyGreaterEssenceAttribute",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Perfect Essence of the Body",
+"id": "Metadata/Items/Currency/CurrencyPerfectEssenceLife",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Perfect Essence of the Mind",
+"id": "Metadata/Items/Currency/CurrencyPerfectEssenceMana",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Perfect Essence of Enhancement",
+"id": "Metadata/Items/Currency/CurrencyPerfectEssenceDefences",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Perfect Essence of Abrasion",
+"id": "Metadata/Items/Currency/CurrencyPerfectEssencePhysical",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Perfect Essence of Flames",
+"id": "Metadata/Items/Currency/CurrencyPerfectEssenceFire",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Perfect Essence of Ice",
+"id": "Metadata/Items/Currency/CurrencyPerfectEssenceCold",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Perfect Essence of Electricity",
+"id": "Metadata/Items/Currency/CurrencyPerfectEssenceLightning",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Perfect Essence of Ruin",
+"id": "Metadata/Items/Currency/CurrencyPerfectEssenceChaos",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Perfect Essence of Battle",
+"id": "Metadata/Items/Currency/CurrencyPerfectEssenceAttack",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Perfect Essence of Sorcery",
+"id": "Metadata/Items/Currency/CurrencyPerfectEssenceCaster",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Perfect Essence of Haste",
+"id": "Metadata/Items/Currency/CurrencyPerfectEssenceSpeed",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Perfect Essence of the Infinite",
+"id": "Metadata/Items/Currency/CurrencyPerfectEssenceAttribute",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Lesser Essence of Seeking",
+"id": "Metadata/Items/Currency/CurrencyLesserEssenceCritical",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Essence of Seeking",
+"id": "Metadata/Items/Currency/CurrencyEssenceCritical",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Greater Essence of Seeking",
+"id": "Metadata/Items/Currency/CurrencyGreaterEssenceCritical",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Perfect Essence of Seeking",
+"id": "Metadata/Items/Currency/CurrencyPerfectEssenceCritical",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Essence of Hysteria",
+"id": "Metadata/Items/Currency/CurrencyCorruptedEssenceHysteria",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Essence of Delirium",
+"id": "Metadata/Items/Currency/CurrencyCorruptedEssenceDelirium",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Essence of Horror",
+"id": "Metadata/Items/Currency/CurrencyCorruptedEssenceHorror",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Essence of Insanity",
+"id": "Metadata/Items/Currency/CurrencyCorruptedEssenceInsanity",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Essence of the Abyss",
+"id": "Metadata/Items/Currency/CurrencyCorruptedEssenceAbyss",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Essence of the Breach",
+"id": "Metadata/Items/Currency/CurrencyCorruptedEssenceBreach",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Lesser Essence of Insulation",
+"id": "Metadata/Items/Currency/CurrencyLesserEssenceFireResist",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Essence of Insulation",
+"id": "Metadata/Items/Currency/CurrencyEssenceFireResist",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Greater Essence of Insulation",
+"id": "Metadata/Items/Currency/CurrencyGreaterEssenceFireResist",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Perfect Essence of Insulation",
+"id": "Metadata/Items/Currency/CurrencyPerfectEssenceFireResist",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Lesser Essence of Thawing",
+"id": "Metadata/Items/Currency/CurrencyLesserEssenceColdResist",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Essence of Thawing",
+"id": "Metadata/Items/Currency/CurrencyEssenceColdResist",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Greater Essence of Thawing",
+"id": "Metadata/Items/Currency/CurrencyGreaterEssenceColdResist",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Perfect Essence of Thawing",
+"id": "Metadata/Items/Currency/CurrencyPerfectEssenceColdResist",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Lesser Essence of Grounding",
+"id": "Metadata/Items/Currency/CurrencyLesserEssenceLightningResist",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Essence of Grounding",
+"id": "Metadata/Items/Currency/CurrencyEssenceLightningResist",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Greater Essence of Grounding",
+"id": "Metadata/Items/Currency/CurrencyGreaterEssenceLightningResist",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Perfect Essence of Grounding",
+"id": "Metadata/Items/Currency/CurrencyPerfectEssenceLightningResist",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Lesser Essence of Alacrity",
+"id": "Metadata/Items/Currency/CurrencyLesserEssenceSpeedCaster",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Essence of Alacrity",
+"id": "Metadata/Items/Currency/CurrencyEssenceSpeedCaster",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Greater Essence of Alacrity",
+"id": "Metadata/Items/Currency/CurrencyGreaterEssenceSpeedCaster",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Perfect Essence of Alacrity",
+"id": "Metadata/Items/Currency/CurrencyPerfectEssenceSpeedCaster",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Lesser Essence of Opulence",
+"id": "Metadata/Items/Currency/CurrencyLesserEssenceRarity",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Essence of Opulence",
+"id": "Metadata/Items/Currency/CurrencyEssenceRarity",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Greater Essence of Opulence",
+"id": "Metadata/Items/Currency/CurrencyGreaterEssenceRarity",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Perfect Essence of Opulence",
+"id": "Metadata/Items/Currency/CurrencyPerfectEssenceRarity",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Lesser Essence of Command",
+"id": "Metadata/Items/Currency/CurrencyLesserEssenceAlly",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Essence of Command",
+"id": "Metadata/Items/Currency/CurrencyEssenceAlly",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Greater Essence of Command",
+"id": "Metadata/Items/Currency/CurrencyGreaterEssenceAlly",
+"desc": "Upgrades a [ItemRarity|Magic] item to a [ItemRarity|Rare] item, adding a guaranteed modifier"
+},
+{
+"name": "Perfect Essence of Command",
+"id": "Metadata/Items/Currency/CurrencyPerfectEssenceAlly",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Simple Sextant",
+"id": "Metadata/Items/Currency/CurrencyAddAtlasMod",
+"desc": "Adds or rerolls a modifier on a Voidstone."
+},
+{
+"name": "Prime Sextant",
+"id": "Metadata/Items/Currency/CurrencyAddAtlasModMid",
+"desc": "Adds or rerolls a modifier on a Voidstone."
+},
+{
+"name": "Awakened Sextant",
+"id": "Metadata/Items/Currency/CurrencyAddAtlasModHigh",
+"desc": "Adds or rerolls a modifier on a Voidstone."
+},
+{
+"name": "Elevated Sextant",
+"id": "Metadata/Items/Currency/CurrencyAddAtlasModMaven",
+"desc": "Adds or rerolls a modifier on a Voidstone."
+},
+{
+"name": "Apprentice Cartographer's Seal",
+"id": "Metadata/Items/Currency/CurrencySealMapLow",
+"desc": "Uncompletes a white map on the Atlas"
+},
+{
+"name": "Journeyman Cartographer's Seal",
+"id": "Metadata/Items/Currency/CurrencySealMapMid",
+"desc": "Uncompletes a yellow or white map on the Atlas"
+},
+{
+"name": "Master Cartographer's Seal",
+"id": "Metadata/Items/Currency/CurrencySealMapHigh",
+"desc": "Uncompletes any map on the Atlas"
+},
+{
+"name": "Blessing of Xoph",
+"id": "Metadata/Items/Currency/CurrencyBreachUpgradeUniqueFire",
+"desc": "Upgrades a breach unique item or breachstone to a more powerful version"
+},
+{
+"name": "Blessing of Tul",
+"id": "Metadata/Items/Currency/CurrencyBreachUpgradeUniqueCold",
+"desc": "Upgrades a breach unique item or breachstone to a more powerful version"
+},
+{
+"name": "Blessing of Esh",
+"id": "Metadata/Items/Currency/CurrencyBreachUpgradeUniqueLightning",
+"desc": "Upgrades a breach unique item or breachstone to a more powerful version"
+},
+{
+"name": "Blessing of Uul-Netol",
+"id": "Metadata/Items/Currency/CurrencyBreachUpgradeUniquePhysical",
+"desc": "Upgrades a breach unique item or breachstone to a more powerful version"
+},
+{
+"name": "Blessing of Chayula",
+"id": "Metadata/Items/Currency/CurrencyBreachUpgradeUniqueChaos",
+"desc": "Upgrades a breach unique item or breachstone to a more powerful version"
+},
+{
+"name": "Orb of Annulment",
+"id": "Metadata/Items/Currency/CurrencyRemoveMod",
+"desc": "Removes a random modifier from an item"
+},
+{
+"name": "Orb of Binding",
+"id": "Metadata/Items/Currency/CurrencyUpgradeToRareAndSetSockets",
+"desc": "Upgrades a normal item to a rare item with up to four linked sockets"
+},
+{
+"name": "Orb of Horizons",
+"id": "Metadata/Items/Currency/CurrencyRerollMapType",
+"desc": "Reforges a map item as another of the same tier"
+},
+{
+"name": "Harbinger's Orb",
+"id": "Metadata/Items/Currency/CurrencyUpgradeMapTier",
+"desc": "Reforges a map item as another of a higher tier"
+},
+{
+"name": "Engineer's Orb",
+"id": "Metadata/Items/Currency/CurrencyStrongboxQuality",
+"desc": "Improves the quality of a Strongbox"
+},
+{
+"name": "Infused Engineer's Orb",
+"id": "Metadata/Items/Currency/CurrencyStrongboxQualityInfused",
+"desc": "Greatly improves the quality and rewards of a Strongbox and strengthens its defenders"
+},
+{
+"name": "Ancient Orb",
+"id": "Metadata/Items/Currency/CurrencyRerollUnique",
+"desc": "Reforges a unique equipment as another of the same item class"
+},
+{
+"name": "Fracturing Orb",
+"id": "Metadata/Items/Currency/CurrencyFractureRare",
+"desc": "[Fracture|Fracture] a random modifier on a rare item with at least 4 modifiers, locking it in place."
+},
+{
+"name": "Divine Vessel",
+"id": "Metadata/Items/MapFragments/CurrencyFragmentPantheonFlask",
+"desc": "Unique Boss deals 10% increased Damage\r Unique Boss has 10% increased Attack and Cast Speed\r Unique Boss has 10% increased Life\r Unique Boss has 20% increased Area of Effect"
+},
+{
+"name": "Xoph's Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentFire",
+"desc": "Rare Monsters drop an additional Reward Type\r Area has 2 additional random Modifiers\r 100% increased Experience Gain\r Monster Level: 81"
+},
+{
+"name": "Tul's Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentCold",
+"desc": "Rare Monsters drop an additional Reward Type\r Area has 2 additional random Modifiers\r 100% increased Experience Gain\r Monster Level: 81"
+},
+{
+"name": "Esh's Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentLightning",
+"desc": "Rare Monsters drop an additional Reward Type\r Area has 2 additional random Modifiers\r 100% increased Experience Gain\r Monster Level: 81"
+},
+{
+"name": "Uul-Netol's Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentPhysical",
+"desc": "Rare Monsters drop an additional Reward Type\r Area has 2 additional random Modifiers\r 150% increased Experience Gain\r Monster Level: 82"
+},
+{
+"name": "Chayula's Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentChaos",
+"desc": "Rare Monsters drop an additional Reward Type\r Area has 2 additional random Modifiers\r 200% increased Experience Gain\r Monster Level: 83"
+},
+{
+"name": "Xoph's Charged Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentFire2",
+"desc": "Rare Monsters drop an additional Reward Type\r Area has 2 additional random Modifiers\r 100% increased Experience Gain\r 20% increased Rarity of Items found in this Area\r 20% increased Pack Size\r Monster Level: 74"
+},
+{
+"name": "Tul's Charged Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentCold2",
+"desc": "Rare Monsters drop an additional Reward Type\r Area has 2 additional random Modifiers\r 100% increased Experience Gain\r 20% increased Rarity of Items found in this Area\r 20% increased Pack Size\r Monster Level: 74"
+},
+{
+"name": "Esh's Charged Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentLightning2",
+"desc": "Rare Monsters drop an additional Reward Type\r Area has 2 additional random Modifiers\r 100% increased Experience Gain\r 20% increased Rarity of Items found in this Area\r 20% increased Pack Size\r Monster Level: 74"
+},
+{
+"name": "Uul-Netol's Charged Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentPhysical2",
+"desc": "Rare Monsters drop an additional Reward Type\r Area has 2 additional random Modifiers\r 150% increased Experience Gain\r 20% increased Rarity of Items found in this Area\r 20% increased Pack Size\r Monster Level: 78"
+},
+{
+"name": "Chayula's Charged Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentChaos2",
+"desc": "Rare Monsters drop an additional Reward Type\r Area has 2 additional random Modifiers\r 200% increased Experience Gain\r 20% increased Rarity of Items found in this Area\r 20% increased Pack Size\r Monster Level: 81"
+},
+{
+"name": "Xoph's Enriched Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentFire3",
+"desc": "Rare Monsters drop an additional Reward Type\r Area has 2 additional random Modifiers\r 100% increased Experience Gain\r 40% increased Rarity of Items found in this Area\r 40% increased Pack Size\r Monster Level: 79"
+},
+{
+"name": "Tul's Enriched Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentCold3",
+"desc": "Rare Monsters drop an additional Reward Type\r Area has 2 additional random Modifiers\r 100% increased Experience Gain\r 40% increased Rarity of Items found in this Area\r 40% increased Pack Size\r Monster Level: 79"
+},
+{
+"name": "Esh's Enriched Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentLightning3",
+"desc": "Rare Monsters drop an additional Reward Type\r Area has 2 additional random Modifiers\r 100% increased Experience Gain\r 40% increased Rarity of Items found in this Area\r 40% increased Pack Size\r Monster Level: 79"
+},
+{
+"name": "Uul-Netol's Enriched Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentPhysical3",
+"desc": "Rare Monsters drop an additional Reward Type\r Area has 2 additional random Modifiers\r 150% increased Experience Gain\r 40% increased Rarity of Items found in this Area\r 40% increased Pack Size\r Monster Level: 81"
+},
+{
+"name": "Chayula's Enriched Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentChaos3",
+"desc": "Rare Monsters drop an additional Reward Type\r Area has 2 additional random Modifiers\r 200% increased Experience Gain\r 40% increased Rarity of Items found in this Area\r 40% increased Pack Size\r Monster Level: 82"
+},
+{
+"name": "Xoph's Pure Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentFire4",
+"desc": "Rare Monsters drop an additional Reward Type\r Area has 2 additional random Modifiers\r 100% increased Experience Gain\r 60% increased Rarity of Items found in this Area\r 60% increased Pack Size\r Monster Level: 81"
+},
+{
+"name": "Tul's Pure Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentCold4",
+"desc": "Rare Monsters drop an additional Reward Type\r Area has 2 additional random Modifiers\r 100% increased Experience Gain\r 60% increased Rarity of Items found in this Area\r 60% increased Pack Size\r Monster Level: 81"
+},
+{
+"name": "Esh's Pure Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentLightning4",
+"desc": "Rare Monsters drop an additional Reward Type\r Area has 2 additional random Modifiers\r 100% increased Experience Gain\r 60% increased Rarity of Items found in this Area\r 60% increased Pack Size\r Monster Level: 81"
+},
+{
+"name": "Uul-Netol's Pure Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentPhysical4",
+"desc": "Rare Monsters drop an additional Reward Type\r Area has 2 additional random Modifiers\r 150% increased Experience Gain\r 60% increased Rarity of Items found in this Area\r 60% increased Pack Size\r Monster Level: 82"
+},
+{
+"name": "Chayula's Pure Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentChaos4",
+"desc": "Rare Monsters drop an additional Reward Type\r Area has 2 additional random Modifiers\r 200% increased Experience Gain\r 60% increased Rarity of Items found in this Area\r 60% increased Pack Size\r Monster Level: 83"
+},
+{
+"name": "Xoph's Flawless Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentFire5",
+"desc": "Rare Monsters drop 2 additional Reward Types\r Area has 4 additional random Modifiers\r 200% increased Experience Gain\r 250% more Monster Life\r 60% increased Rarity of Items found in this Area\r 60% increased Pack Size\r Monster Level: 84"
+},
+{
+"name": "Tul's Flawless Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentCold5",
+"desc": "Rare Monsters drop 2 additional Reward Types\r Area has 4 additional random Modifiers\r 200% increased Experience Gain\r 250% more Monster Life\r 60% increased Rarity of Items found in this Area\r 60% increased Pack Size\r Monster Level: 84"
+},
+{
+"name": "Esh's Flawless Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentLightning5",
+"desc": "Rare Monsters drop 2 additional Reward Types\r Area has 4 additional random Modifiers\r 200% increased Experience Gain\r 250% more Monster Life\r 60% increased Rarity of Items found in this Area\r 60% increased Pack Size\r Monster Level: 84"
+},
+{
+"name": "Uul-Netol's Flawless Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentPhysical5",
+"desc": "Rare Monsters drop 2 additional Reward Types\r Area has 4 additional random Modifiers\r 200% increased Experience Gain\r 250% more Monster Life\r 60% increased Rarity of Items found in this Area\r 60% increased Pack Size\r Monster Level: 84"
+},
+{
+"name": "Chayula's Flawless Breachstone",
+"id": "Metadata/Items/MapFragments/CurrencyBreachFragmentChaos5",
+"desc": "Rare Monsters drop 2 additional Reward Types\r Area has 4 additional random Modifiers\r 200% increased Experience Gain\r 250% more Monster Life\r 60% increased Rarity of Items found in this Area\r 60% increased Pack Size\r Monster Level: 84"
+},
+{
+"name": "Unrelenting Timeless Karui Emblem",
+"id": "Metadata/Items/MapFragments/CurrencyLegionFragmentKaruiUber",
+"desc": "Monsters gain 10% increased Maximum Life each time they are Revived\r Monsters Regenerate 1% of Life per second for each time they have been Revived\r Monsters gain +20% chance to Avoid being Stunned for each time they are Revived\r 10% improved Rewards"
+},
+{
+"name": "Unrelenting Timeless Maraketh Emblem",
+"id": "Metadata/Items/MapFragments/CurrencyLegionFragmentMarakethUber",
+"desc": "Monsters gain 10% increased Maximum Life each time they are Revived\r Monsters gain 10% increased Attack and Cast Speed each time they are Revived\r Monsters gain 10% increased Movement Speed each time they are Revived\r 10% improved Rewards"
+},
+{
+"name": "Unrelenting Timeless Eternal Emblem",
+"id": "Metadata/Items/MapFragments/CurrencyLegionFragmentEternalUber",
+"desc": "Monsters gain 10% increased Maximum Life each time they are Revived\r Monsters gain 50% increased Critical Strike Chance each time they are Revived\r Monsters gain 3% additional Critical Strike Multiplier each time they are Revived\r 10% improved Rewards"
+},
+{
+"name": "Unrelenting Timeless Templar Emblem",
+"id": "Metadata/Items/MapFragments/CurrencyLegionFragmentTemplarUber",
+"desc": "Monsters gain 10% increased Maximum Life each time they are Revived\r Monsters gain 4% additional Physical Damage Reduction each time they are Revived\r Monsters gain 4% additional Resistances each time they are Revived\r 10% improved Rewards"
+},
+{
+"name": "Unrelenting Timeless Vaal Emblem",
+"id": "Metadata/Items/MapFragments/CurrencyLegionFragmentVaalUber",
+"desc": "Monsters gain 10% increased Maximum Life each time they are Revived\r Monsters Penetrate 4% of Enemy Resistances for each time they have been Revived\r Monsters Overwhelm 4% of Physical Damage Reduction for each time they have been Revived\r 10% improved Rewards"
+},
+{
+"name": "Simulacrum",
+"id": "Metadata/Items/MapFragments/CurrencyAfflictionFragment",
+"desc": "Adds the Simulacrum to a Map"
+},
+{
+"name": "Scorched Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingFire",
+"desc": "More Fire modifiers\r No Cold modifiers"
+},
+{
+"name": "Frigid Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingCold",
+"desc": "More Cold modifiers\r No Fire modifiers"
+},
+{
+"name": "Metallic Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingLightning",
+"desc": "More Lightning modifiers\r No Physical modifiers"
+},
+{
+"name": "Jagged Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingPhysical",
+"desc": "More Physical modifiers\r No Chaos modifiers"
+},
+{
+"name": "Aberrant Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingChaos",
+"desc": "More Chaos modifiers\r No Lightning modifiers"
+},
+{
+"name": "Pristine Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingLife",
+"desc": "More Life modifiers\r No Defence modifiers"
+},
+{
+"name": "Dense Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingDefences",
+"desc": "More Defence modifiers\r No Life Modifiers"
+},
+{
+"name": "Corroded Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingBleedPoison",
+"desc": "More Physical Ailment or Chaos Ailment modifiers\r No Elemental modifiers"
+},
+{
+"name": "Prismatic Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingElemental",
+"desc": "More Elemental modifiers\r No Physical Ailment or Chaos Ailment modifiers"
+},
+{
+"name": "Aetheric Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingCasterMods",
+"desc": "More Caster modifiers\r Fewer Attack modifiers"
+},
+{
+"name": "Serrated Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingAttackMods",
+"desc": "More Attack modifiers\r Fewer Caster modifiers"
+},
+{
+"name": "Lucent Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingMana",
+"desc": "More Mana modifiers\r No Speed modifiers"
+},
+{
+"name": "Shuddering Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingSpeed",
+"desc": "More Speed modifiers\r No Mana modifiers"
+},
+{
+"name": "Bound Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingMinionsAuras",
+"desc": "More Minion, Aura or Curse modifiers"
+},
+{
+"name": "Perfect Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingQuality",
+"desc": "Improved Quality"
+},
+{
+"name": "Deft Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingEnchant",
+"desc": "More Critical modifiers\r No Attribute modifiers"
+},
+{
+"name": "Fundamental Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingSockets",
+"desc": "More Attribute modifiers\r No Critical modifiers"
+},
+{
+"name": "Faceted Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingGemLevel",
+"desc": "More Gem modifiers"
+},
+{
+"name": "Bloodstained Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingVaal",
+"desc": "Corrupted\r Has a Corrupted implicit modifier"
+},
+{
+"name": "Hollow Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingAbyss",
+"desc": "Has an Abyssal socket"
+},
+{
+"name": "Fractured Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingMirror",
+"desc": "Creates a split copy. Cannot be used to split Influenced,\r Enchanted, Fractured, or Synthesised items."
+},
+{
+"name": "Glyphic Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingCorruptEssence",
+"desc": "Has a Corrupt Essence modifier"
+},
+{
+"name": "Tangled Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingRandom",
+"desc": "Makes a random modifier type much more likely and prevents \r another random modifier type. Effects revealed once resonator is\r fully socketed."
+},
+{
+"name": "Sanctified Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingLuckyModRolls",
+"desc": "Numeric modifier values are lucky\r High Level modifiers are more common"
+},
+{
+"name": "Gilded Fossil",
+"id": "Metadata/Items/Currency/CurrencyDelveCraftingSellPrice",
+"desc": "Item is overvalued by vendors"
+},
+{
+"name": "Primitive Alchemical Resonator",
+"id": "Metadata/Items/Delve/DelveSocketableCurrencyUpgrade1",
+"desc": "Upgrades a normal item to a rare item"
+},
+{
+"name": "Potent Alchemical Resonator",
+"id": "Metadata/Items/Delve/DelveSocketableCurrencyUpgrade2",
+"desc": "Upgrades a normal item to a rare item"
+},
+{
+"name": "Powerful Alchemical Resonator",
+"id": "Metadata/Items/Delve/DelveSocketableCurrencyUpgrade3",
+"desc": "Upgrades a normal item to a rare item"
+},
+{
+"name": "Prime Alchemical Resonator",
+"id": "Metadata/Items/Delve/DelveSocketableCurrencyUpgrade4",
+"desc": "Upgrades a normal item to a rare item"
+},
+{
+"name": "Primitive Chaotic Resonator",
+"id": "Metadata/Items/Delve/DelveSocketableCurrencyReroll1",
+"desc": "Reforges a rare item with new random modifiers"
+},
+{
+"name": "Potent Chaotic Resonator",
+"id": "Metadata/Items/Delve/DelveSocketableCurrencyReroll2",
+"desc": "Reforges a rare item with new random modifiers"
+},
+{
+"name": "Powerful Chaotic Resonator",
+"id": "Metadata/Items/Delve/DelveSocketableCurrencyReroll3",
+"desc": "Reforges a rare item with new random modifiers"
+},
+{
+"name": "Prime Chaotic Resonator",
+"id": "Metadata/Items/Delve/DelveSocketableCurrencyReroll4",
+"desc": "Reforges a rare item with new random modifiers"
+},
+{
+"name": "Primitive Alchemical Resonator",
+"id": "Metadata/Items/Delve/DelveStackableSocketableCurrencyUpgrade1",
+"desc": "Upgrades a normal item to a rare item"
+},
+{
+"name": "Potent Alchemical Resonator",
+"id": "Metadata/Items/Delve/DelveStackableSocketableCurrencyUpgrade2",
+"desc": "Upgrades a normal item to a rare item"
+},
+{
+"name": "Powerful Alchemical Resonator",
+"id": "Metadata/Items/Delve/DelveStackableSocketableCurrencyUpgrade3",
+"desc": "Upgrades a normal item to a rare item"
+},
+{
+"name": "Prime Alchemical Resonator",
+"id": "Metadata/Items/Delve/DelveStackableSocketableCurrencyUpgrade4",
+"desc": "Upgrades a normal item to a rare item"
+},
+{
+"name": "Primitive Chaotic Resonator",
+"id": "Metadata/Items/Delve/DelveStackableSocketableCurrencyReroll1",
+"desc": "Reforges a rare item with new random modifiers"
+},
+{
+"name": "Potent Chaotic Resonator",
+"id": "Metadata/Items/Delve/DelveStackableSocketableCurrencyReroll2",
+"desc": "Reforges a rare item with new random modifiers"
+},
+{
+"name": "Powerful Chaotic Resonator",
+"id": "Metadata/Items/Delve/DelveStackableSocketableCurrencyReroll3",
+"desc": "Reforges a rare item with new random modifiers"
+},
+{
+"name": "Prime Chaotic Resonator",
+"id": "Metadata/Items/Delve/DelveStackableSocketableCurrencyReroll4",
+"desc": "Reforges a rare item with new random modifiers"
+},
+{
+"name": "Whispering Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationEssence",
+"desc": "Adds an incubated Essence item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Fine Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationCurrency",
+"desc": "Adds an incubated Currency item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Singular Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationUniques",
+"desc": "Adds an incubated Unique item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Cartographer's Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationMaps",
+"desc": "Adds an incubated Map item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Otherworldly Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationUniqueMaps",
+"desc": "Adds an incubated Unique Map item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Abyssal Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationAbyss",
+"desc": "Adds an incubated Rare Abyss item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Fragmented Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationFragments",
+"desc": "Adds an incubated Fragment item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Skittering Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationScarabs",
+"desc": "Adds an incubated Scarab item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Infused Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationEssenceHigh",
+"desc": "Adds an incubated Essence item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Fossilised Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationFossils",
+"desc": "Adds an incubated Fossil item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Kalguuran Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationPerandus",
+"desc": "Adds an incubated Expedition item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Diviner's Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationDivination",
+"desc": "Adds incubated Stacked Decks to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Primal Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationTalismans",
+"desc": "Adds an incubated Talisman item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Enchanted Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationLabyrinthHelm",
+"desc": "Adds an incubated Enchanted Helmet item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Geomancer's Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationArmour6Linked",
+"desc": "Adds an incubated 6-Linked Armour item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Ornate Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationCurrencyMid",
+"desc": "Adds an incubated Currency item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Time-Lost Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationUniqueLeague",
+"desc": "Adds an incubated League-specific Unique item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Celestial Armoursmith's Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationArmourShaperElder",
+"desc": "Adds an incubated Shaper or Elder Armour item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Celestial Blacksmith's Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationWeaponShaperElder",
+"desc": "Adds an incubated Shaper or Elder Weapon item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Celestial Jeweller's Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationTrinketShaperElder",
+"desc": "Adds an incubated Shaper or Elder Trinket item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Eldritch Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationMapElder",
+"desc": "Adds an incubated Elder Map item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Obscured Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationBreach",
+"desc": "Adds an incubated Breach item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Foreboding Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationHarbingerShard",
+"desc": "Adds incubated valuable Currency Shards or a Harbinger item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Thaumaturge's Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationGem",
+"desc": "Adds an incubated high level Corrupted Gem or valuable Gem item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Mysterious Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationGeneric",
+"desc": "Adds an incubated item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Gemcutter's Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationGemLow",
+"desc": "Adds an incubated Quality Gem item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Feral Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationBestiary",
+"desc": "Adds an incubated Bestiary item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Blighted Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationBlight",
+"desc": "Adds an incubated Blight item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Morphing Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationMetamorph",
+"desc": "Adds an incubated Metamorph item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Maddening Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationDelirium",
+"desc": "Adds an incubated Delirium item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Whispering Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationEssenceStackable",
+"desc": "Adds an incubated Essence item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Fine Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationCurrencyStackable",
+"desc": "Adds an incubated Currency item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Singular Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationUniquesStackable",
+"desc": "Adds an incubated Unique item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Cartographer's Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationMapsStackable",
+"desc": "Adds an incubated Map item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Otherworldly Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationUniqueMapsStackable",
+"desc": "Adds an incubated Unique Map item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Abyssal Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationAbyssStackable",
+"desc": "Adds an incubated Rare Abyss item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Fragmented Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationFragmentsStackable",
+"desc": "Adds an incubated Fragment item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Skittering Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationScarabsStackable",
+"desc": "Adds an incubated Scarab item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Infused Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationEssenceHighStackable",
+"desc": "Adds an incubated Essence item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Fossilised Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationFossilsStackable",
+"desc": "Adds an incubated Fossil item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Kalguuran Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationPerandusStackable",
+"desc": "Adds an incubated Expedition item to an equippable item \r Item drops after killing {0} monsters"
+},
+{
+"name": "Diviner's Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationDivinationStackable",
+"desc": "Adds incubated Stacked Decks to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Primal Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationTalismansStackable",
+"desc": "Adds an incubated Talisman item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Enchanted Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationLabyrinthHelmStackable",
+"desc": "Adds an incubated Enchanted Helmet item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Geomancer's Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationArmour6LinkedStackable",
+"desc": "Adds an incubated 6-Linked Armour item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Ornate Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationCurrencyMidStackable",
+"desc": "Adds an incubated Currency item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Time-Lost Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationUniqueLeagueStackable",
+"desc": "Adds an incubated League-specific Unique item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Celestial Armoursmith's Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationArmourShaperElderStackable",
+"desc": "Adds an incubated Shaper or Elder Armour item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Celestial Blacksmith's Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationWeaponShaperElderStackable",
+"desc": "Adds an incubated Shaper or Elder Weapon item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Celestial Jeweller's Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationTrinketShaperElderStackable",
+"desc": "Adds an incubated Shaper or Elder Trinket item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Eldritch Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationMapElderStackable",
+"desc": "Adds an incubated Elder Map item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Obscured Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationBreachStackable",
+"desc": "Adds an incubated Breach item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Foreboding Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationHarbingerShardStackable",
+"desc": "Adds incubated valuable Currency Shards or a Harbinger item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Thaumaturge's Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationGemStackable",
+"desc": "Adds an incubated high level Corrupted Gem or valuable Gem item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Mysterious Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationGenericStackable",
+"desc": "Adds an incubated item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Gemcutter's Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationGemLowStackable",
+"desc": "Adds an incubated Quality Gem item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Feral Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationBestiaryStackable",
+"desc": "Adds an incubated Bestiary item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Blighted Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationBlightStackable",
+"desc": "Adds an incubated Blight item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Morphing Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationMetamorphStackable",
+"desc": "Adds an incubated Metamorph item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Maddening Incubator",
+"id": "Metadata/Items/Currency/CurrencyIncubationDeliriumStackable",
+"desc": "Adds an incubated Delirium item to an equippable item\r Item drops after killing {0} monsters"
+},
+{
+"name": "Facetor's Lens",
+"id": "Metadata/Items/Currency/CurrencyAddGemExperience",
+"desc": "Adds stored experience to a gem, up to its maximum level"
+},
+{
+"name": "Dance - Duelist",
+"id": "Metadata/Items/MicrotransactionAnimations/MicrotransactionDanceDuelist",
+"desc": "Performs a rousing dance!"
+},
+{
+"name": "Dance - Marauder",
+"id": "Metadata/Items/MicrotransactionAnimations/MicrotransactionDanceMarauder",
+"desc": "Performs a rousing dance!"
+},
+{
+"name": "Dance - Ranger",
+"id": "Metadata/Items/MicrotransactionAnimations/MicrotransactionDanceRanger",
+"desc": "Performs a rousing dance!"
+},
+{
+"name": "Dance - Shadow",
+"id": "Metadata/Items/MicrotransactionAnimations/MicrotransactionDanceShadow",
+"desc": "Performs a rousing dance!"
+},
+{
+"name": "Dance - Templar",
+"id": "Metadata/Items/MicrotransactionAnimations/MicrotransactionDanceTemplar",
+"desc": "Performs a rousing dance!"
+},
+{
+"name": "Dance - Witch",
+"id": "Metadata/Items/MicrotransactionAnimations/MicrotransactionDanceWitch",
+"desc": "Performs a rousing dance!"
+},
+{
+"name": "Dance - Scion",
+"id": "Metadata/Items/MicrotransactionAnimations/MicrotransactionDanceScion",
+"desc": "Performs a rousing dance!"
+},
+{
+"name": "Mystery Leaguestone",
+"id": "Metadata/Items/Classic/MysteryLeaguestone",
+"desc": "Contains an unknown Leaguestone."
+},
+{
+"name": "Simple Rope Net",
+"id": "Metadata/Items/Currency/Bestiary/BestiaryNet1",
+"desc": "Effective against Beasts of levels 1 to 13.\r Activate to use this type of Net when capturing Beasts."
+},
+{
+"name": "Reinforced Rope Net",
+"id": "Metadata/Items/Currency/Bestiary/BestiaryNet2",
+"desc": "Effective against Beasts of levels 7 to 23.\r Activate to use this type of Net when capturing Beasts."
+},
+{
+"name": "Strong Rope Net",
+"id": "Metadata/Items/Currency/Bestiary/BestiaryNet3",
+"desc": "Effective against Beasts of levels 15 to 35.\r Activate to use this type of Net when capturing Beasts."
+},
+{
+"name": "Simple Iron Net",
+"id": "Metadata/Items/Currency/Bestiary/BestiaryNet4",
+"desc": "Effective against Beasts of levels 25 to 46.\r Activate to use this type of Net when capturing Beasts."
+},
+{
+"name": "Reinforced Iron Net",
+"id": "Metadata/Items/Currency/Bestiary/BestiaryNet5",
+"desc": "Effective against Beasts of levels 37 to 56.\r Activate to use this type of Net when capturing Beasts."
+},
+{
+"name": "Strong Iron Net",
+"id": "Metadata/Items/Currency/Bestiary/BestiaryNet6",
+"desc": "Effective against Beasts of levels 48 to 66.\r Activate to use this type of Net when capturing Beasts."
+},
+{
+"name": "Simple Steel Net",
+"id": "Metadata/Items/Currency/Bestiary/BestiaryNet7",
+"desc": "Effective against Beasts of levels 58 to 70.\r Activate to use this type of Net when capturing Beasts."
+},
+{
+"name": "Reinforced Steel Net",
+"id": "Metadata/Items/Currency/Bestiary/BestiaryNet8",
+"desc": "Effective against Beasts of levels 60 to 75.\r Activate to use this type of Net when capturing Beasts."
+},
+{
+"name": "Strong Steel Net",
+"id": "Metadata/Items/Currency/Bestiary/BestiaryNet9",
+"desc": "Effective against Beasts of levels 64 and above.\r Activate to use this type of Net when capturing Beasts."
+},
+{
+"name": "Thaumaturgical Net",
+"id": "Metadata/Items/Currency/Bestiary/BestiaryNet10",
+"desc": "Effective against Beasts of levels 68 and above.\r Activate to use this type of Net when capturing Beasts."
+},
+{
+"name": "Necromancy Net",
+"id": "Metadata/Items/Currency/Bestiary/BestiaryNet11",
+"desc": "Can be used on Beast corpses of all levels.\r Activate to use this type of Net when capturing Beasts."
+},
+{
+"name": "Rusted Breach Scarab",
+"id": "Metadata/Items/Scarabs/ScarabBreach1",
+"desc": "Area contains an additional Breach"
+},
+{
+"name": "Polished Breach Scarab",
+"id": "Metadata/Items/Scarabs/ScarabBreach2",
+"desc": "Area contains an additional Breach\r Breaches in Area contain an additional Breach Boss' Clasped Hand"
+},
+{
+"name": "Gilded Breach Scarab",
+"id": "Metadata/Items/Scarabs/ScarabBreach3",
+"desc": "Area contains an additional Breach\r Breaches in Area contain an additional Breach Boss' Clasped Hand\r Breach Hands in Area drop double Breach Splinters"
+},
+{
+"name": "Winged Breach Scarab",
+"id": "Metadata/Items/Scarabs/ScarabBreach4",
+"desc": "Area contains 2 additional Breaches\r Breaches in Area contain an additional Breach Boss' Clasped Hand\r Breach Hands in Area drop double Breach Splinters"
+},
+{
+"name": "Rusted Cartography Scarab",
+"id": "Metadata/Items/Scarabs/ScarabMaps1",
+"desc": "20% increased Maps found in Area"
+},
+{
+"name": "Polished Cartography Scarab",
+"id": "Metadata/Items/Scarabs/ScarabMaps2",
+"desc": "35% increased Maps found in Area"
+},
+{
+"name": "Gilded Cartography Scarab",
+"id": "Metadata/Items/Scarabs/ScarabMaps3",
+"desc": "50% increased Maps found in Area"
+},
+{
+"name": "Winged Cartography Scarab",
+"id": "Metadata/Items/Scarabs/ScarabMaps4",
+"desc": "85% increased Maps found in Area"
+},
+{
+"name": "Rusted Reliquary Scarab",
+"id": "Metadata/Items/Scarabs/ScarabUniques1",
+"desc": "50% more Unique Items found in Area"
+},
+{
+"name": "Polished Reliquary Scarab",
+"id": "Metadata/Items/Scarabs/ScarabUniques2",
+"desc": "100% more Unique Items found in Area"
+},
+{
+"name": "Gilded Reliquary Scarab",
+"id": "Metadata/Items/Scarabs/ScarabUniques3",
+"desc": "150% more Unique Items found in Area"
+},
+{
+"name": "Winged Reliquary Scarab",
+"id": "Metadata/Items/Scarabs/ScarabUniques4",
+"desc": "250% more Unique Items found in Area"
+},
+{
+"name": "Rusted Bestiary Scarab",
+"id": "Metadata/Items/Scarabs/ScarabBeasts1",
+"desc": "Area contains Einhar\r Area contains an additional Red Beast"
+},
+{
+"name": "Polished Bestiary Scarab",
+"id": "Metadata/Items/Scarabs/ScarabBeasts2",
+"desc": "Area contains Einhar\r Area contains 2 additional Red Beasts"
+},
+{
+"name": "Gilded Bestiary Scarab",
+"id": "Metadata/Items/Scarabs/ScarabBeasts3",
+"desc": "Area contains Einhar\r Area contains 3 additional Red Beasts"
+},
+{
+"name": "Winged Bestiary Scarab",
+"id": "Metadata/Items/Scarabs/ScarabBeasts4",
+"desc": "Area contains Einhar\r Area contains 5 additional Red Beasts"
+},
+{
+"name": "Farric Lure",
+"id": "Metadata/Items/Scarabs/ScarabBeasts4a",
+"desc": "Area contains Einhar\r Area contains 4 additional Red Beasts from The Wilds\r Cannot be used alongside a Bestiary Scarab"
+},
+{
+"name": "Saqawine Lure",
+"id": "Metadata/Items/Scarabs/ScarabBeasts4b",
+"desc": "Area contains Einhar\r Area contains 4 additional Red Beasts from The Sands\r Cannot be used alongside a Bestiary Scarab"
+},
+{
+"name": "Fenumal Lure",
+"id": "Metadata/Items/Scarabs/ScarabBeasts4c",
+"desc": "Area contains Einhar\r Area contains 4 additional Red Beasts from The Caverns\r Cannot be used alongside a Bestiary Scarab"
+},
+{
+"name": "Craicic Lure",
+"id": "Metadata/Items/Scarabs/ScarabBeasts4d",
+"desc": "Area contains Einhar\r Area contains 4 additional Red Beasts from The Deep\r Cannot be used alongside a Bestiary Scarab"
+},
+{
+"name": "Rusted Shaper Scarab",
+"id": "Metadata/Items/Scarabs/ScarabShaperRares1",
+"desc": "Adds Shaper Influence outcome to Map Area\r 30% more Rare Shaper Items found in Area"
+},
+{
+"name": "Polished Shaper Scarab",
+"id": "Metadata/Items/Scarabs/ScarabShaperRares2",
+"desc": "Adds Shaper Influence outcome to Map Area\r 60% more Rare Shaper Items found in Area"
+},
+{
+"name": "Gilded Shaper Scarab",
+"id": "Metadata/Items/Scarabs/ScarabShaperRares3",
+"desc": "Adds Shaper Influence outcome to Map Area\r 90% more Rare Shaper Items found in Area"
+},
+{
+"name": "Winged Shaper Scarab",
+"id": "Metadata/Items/Scarabs/ScarabShaperRares4",
+"desc": "Adds Shaper Influence outcome to Map Area\r 150% more Rare Shaper Items found in Area"
+},
+{
+"name": "Rusted Elder Scarab",
+"id": "Metadata/Items/Scarabs/ScarabElderRares1",
+"desc": "Adds Elder Influence outcome to Map Area\r 30% more Rare Elder Items found in Area"
+},
+{
+"name": "Polished Elder Scarab",
+"id": "Metadata/Items/Scarabs/ScarabElderRares2",
+"desc": "Adds Elder Influence outcome to Map Area\r 60% more Rare Elder Items found in Area"
+},
+{
+"name": "Gilded Elder Scarab",
+"id": "Metadata/Items/Scarabs/ScarabElderRares3",
+"desc": "Adds Elder Influence outcome to Map Area\r 90% more Rare Elder Items found in Area"
+},
+{
+"name": "Winged Elder Scarab",
+"id": "Metadata/Items/Scarabs/ScarabElderRares4",
+"desc": "Adds Elder Influence outcome to Map Area\r 150% more Rare Elder Items found in Area"
+},
+{
+"name": "Rusted Sulphite Scarab",
+"id": "Metadata/Items/Scarabs/ScarabSulphite1",
+"desc": "Area contains Niko\r Map owner gains 20% more Sulphite"
+},
+{
+"name": "Polished Sulphite Scarab",
+"id": "Metadata/Items/Scarabs/ScarabSulphite2",
+"desc": "Area contains Niko\r Map owner gains 40% more Sulphite"
+},
+{
+"name": "Gilded Sulphite Scarab",
+"id": "Metadata/Items/Scarabs/ScarabSulphite3",
+"desc": "Area contains Niko\r Map owner gains 60% more Sulphite"
+},
+{
+"name": "Winged Sulphite Scarab",
+"id": "Metadata/Items/Scarabs/ScarabSulphite4",
+"desc": "Area contains Niko\r Map owner gains 100% more Sulphite"
+},
+{
+"name": "Rusted Divination Scarab",
+"id": "Metadata/Items/Scarabs/ScarabDivinationCards1",
+"desc": "50% more Divination Cards found in Area"
+},
+{
+"name": "Polished Divination Scarab",
+"id": "Metadata/Items/Scarabs/ScarabDivinationCards2",
+"desc": "100% more Divination Cards found in Area"
+},
+{
+"name": "Gilded Divination Scarab",
+"id": "Metadata/Items/Scarabs/ScarabDivinationCards3",
+"desc": "150% more Divination Cards found in Area"
+},
+{
+"name": "Winged Divination Scarab",
+"id": "Metadata/Items/Scarabs/ScarabDivinationCards4",
+"desc": "250% more Divination Cards found in Area"
+},
+{
+"name": "Rusted Torment Scarab",
+"id": "Metadata/Items/Scarabs/ScarabTorment1",
+"desc": "Area contains 3 additional Tormented Spirits"
+},
+{
+"name": "Polished Torment Scarab",
+"id": "Metadata/Items/Scarabs/ScarabTorment2",
+"desc": "Area contains 5 additional Tormented Spirits"
+},
+{
+"name": "Gilded Torment Scarab",
+"id": "Metadata/Items/Scarabs/ScarabTorment3",
+"desc": "Area contains 7 additional Tormented Spirits"
+},
+{
+"name": "Winged Torment Scarab",
+"id": "Metadata/Items/Scarabs/ScarabTorment4",
+"desc": "Area contains 12 additional Tormented Spirits"
+},
+{
+"name": "Rusted Ambush Scarab",
+"id": "Metadata/Items/Scarabs/ScarabStrongbox1",
+"desc": "Area contains 3 additional Strongboxes"
+},
+{
+"name": "Polished Ambush Scarab",
+"id": "Metadata/Items/Scarabs/ScarabStrongbox2",
+"desc": "Area contains 4 additional Strongboxes"
+},
+{
+"name": "Gilded Ambush Scarab",
+"id": "Metadata/Items/Scarabs/ScarabStrongbox3",
+"desc": "Area contains 5 additional Strongboxes"
+},
+{
+"name": "Winged Ambush Scarab",
+"id": "Metadata/Items/Scarabs/ScarabStrongbox4",
+"desc": "Area contains 9 additional Strongboxes"
+},
+{
+"name": "Rusted Harbinger Scarab",
+"id": "Metadata/Items/Scarabs/ScarabHarbinger1",
+"desc": "Area contains 2 additional Harbingers"
+},
+{
+"name": "Polished Harbinger Scarab",
+"id": "Metadata/Items/Scarabs/ScarabHarbinger2",
+"desc": "Area contains 3 additional Harbingers"
+},
+{
+"name": "Gilded Harbinger Scarab",
+"id": "Metadata/Items/Scarabs/ScarabHarbinger3",
+"desc": "Area contains 4 additional Harbingers"
+},
+{
+"name": "Winged Harbinger Scarab",
+"id": "Metadata/Items/Scarabs/ScarabHarbinger4",
+"desc": "Area contains 7 additional Harbingers"
+},
+{
+"name": "Rusted Expedition Scarab",
+"id": "Metadata/Items/Scarabs/ScarabPerandus1",
+"desc": "Area contains an additional Expedition Encounter"
+},
+{
+"name": "Polished Expedition Scarab",
+"id": "Metadata/Items/Scarabs/ScarabPerandus2",
+"desc": "Area contains an additional Expedition Encounter\r Area contains 25% increased number of Runic Monster Markers\r 20% increased number of Explosives"
+},
+{
+"name": "Gilded Expedition Scarab",
+"id": "Metadata/Items/Scarabs/ScarabPerandus3",
+"desc": "Area contains an additional Expedition Encounter\r Area contains 50% increased number of Runic Monster Markers\r 20% increased number of Explosives"
+},
+{
+"name": "Winged Expedition Scarab",
+"id": "Metadata/Items/Scarabs/ScarabPerandus4",
+"desc": "Area contains an additional Expedition Encounter\r Area contains 50% increased number of Runic Monster Markers\r 20% increased number of Explosives\r Remnants in area have an additional Suffix"
+},
+{
+"name": "Rusted Legion Scarab",
+"id": "Metadata/Items/Scarabs/ScarabLegion1",
+"desc": "Area contains an additional Legion Encounter"
+},
+{
+"name": "Polished Legion Scarab",
+"id": "Metadata/Items/Scarabs/ScarabLegion2",
+"desc": "Area contains an additional Legion Encounter\r Each Legion contains a War Hoard"
+},
+{
+"name": "Gilded Legion Scarab",
+"id": "Metadata/Items/Scarabs/ScarabLegion3",
+"desc": "Area contains an additional Legion Encounter\r Each Legion contains a War Hoard\r Each Legion is accompanied by a General"
+},
+{
+"name": "Winged Legion Scarab",
+"id": "Metadata/Items/Scarabs/ScarabLegion4",
+"desc": "Area contains 2 additional Legion Encounters\r Each Legion contains a War Hoard\r Each Legion is accompanied by a General"
+},
+{
+"name": "Rusted Metamorph Scarab",
+"id": "Metadata/Items/Scarabs/ScarabMetamorph1",
+"desc": "Area contains Metamorph Monsters"
+},
+{
+"name": "Polished Metamorph Scarab",
+"id": "Metadata/Items/Scarabs/ScarabMetamorph2",
+"desc": "Area contains Metamorph Monsters\r Metamorph Bosses which drop an Itemised Sample drop an additional Itemised Sample"
+},
+{
+"name": "Gilded Metamorph Scarab",
+"id": "Metadata/Items/Scarabs/ScarabMetamorph3",
+"desc": "Area contains Metamorph Monsters\r Metamorph Bosses which drop an Itemised Sample drop an additional Itemised Sample\r All Metamorph Monsters have Rewards"
+},
+{
+"name": "Winged Metamorph Scarab",
+"id": "Metadata/Items/Scarabs/ScarabMetamorph4",
+"desc": "Area contains Metamorph Monsters\r Metamorph Bosses which drop an Itemised Sample drop two additional Itemised Samples\r All Metamorph Monsters have Rewards"
+},
+{
+"name": "Rusted Blight Scarab",
+"id": "Metadata/Items/Scarabs/ScarabBlight1",
+"desc": "Area contains a Blight Encounter"
+},
+{
+"name": "Polished Blight Scarab",
+"id": "Metadata/Items/Scarabs/ScarabBlight2",
+"desc": "Area contains a Blight Encounter\r Blight Encounters contain an additional Blight Boss"
+},
+{
+"name": "Gilded Blight Scarab",
+"id": "Metadata/Items/Scarabs/ScarabBlight3",
+"desc": "Area contains a Blight Encounter\r Blight Encounters contain an additional Blight Boss\r 50% chance for Blight Chests to contain an additional Reward"
+},
+{
+"name": "Winged Blight Scarab",
+"id": "Metadata/Items/Scarabs/ScarabBlight4",
+"desc": "Area contains a Blight Encounter\r Blight Encounters contain an additional Blight Boss\r 50% chance for Blight Chests to contain an additional Reward\r Lanes of Blight Encounters in Areas have an additional Reward Chest"
+},
+{
+"name": "Rusted Abyss Scarab",
+"id": "Metadata/Items/Scarabs/ScarabAbyss1",
+"desc": "Area contains an additional Abyss"
+},
+{
+"name": "Polished Abyss Scarab",
+"id": "Metadata/Items/Scarabs/ScarabAbyss2",
+"desc": "Area contains an additional Abyss\r Abysses in Area spawn 50% increased Monsters"
+},
+{
+"name": "Gilded Abyss Scarab",
+"id": "Metadata/Items/Scarabs/ScarabAbyss3",
+"desc": "Area contains an additional Abyss\r Abysses in Area spawn 50% increased Monsters\r Abysses in Area that do not lead to an Abyssal Depths lead to a Stygian Spire"
+},
+{
+"name": "Winged Abyss Scarab",
+"id": "Metadata/Items/Scarabs/ScarabAbyss4",
+"desc": "Area contains 2 additional Abysses\r Abysses in Area spawn 50% increased Monsters\r Abysses in Area that do not lead to an Abyssal Depths lead to a Stygian Spire"
+},
+{
+"name": "Diluted Liquid Ire",
+"id": "Metadata/Items/Currency/DistilledEmotion1",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] [BasicJewel|Basic Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Diluted Liquid Guilt",
+"id": "Metadata/Items/Currency/DistilledEmotion2",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] [BasicJewel|Basic Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Diluted Liquid Greed",
+"id": "Metadata/Items/Currency/DistilledEmotion3",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] [BasicJewel|Basic Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Liquid Paranoia",
+"id": "Metadata/Items/Currency/DistilledEmotion4",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] [BasicJewel|Basic Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Liquid Envy",
+"id": "Metadata/Items/Currency/DistilledEmotion5",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] [BasicJewel|Basic Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Liquid Disgust",
+"id": "Metadata/Items/Currency/DistilledEmotion6",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] [BasicJewel|Basic Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Liquid Despair",
+"id": "Metadata/Items/Currency/DistilledEmotion7",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] [BasicJewel|Basic Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Concentrated Liquid Fear",
+"id": "Metadata/Items/Currency/DistilledEmotion8",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] [BasicJewel|Basic Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Concentrated Liquid Suffering",
+"id": "Metadata/Items/Currency/DistilledEmotion9",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] [BasicJewel|Basic Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Concentrated Liquid Isolation",
+"id": "Metadata/Items/Currency/DistilledEmotion10",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] [BasicJewel|Basic Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Ancient Diluted Liquid Ire",
+"id": "Metadata/Items/Currency/DistilledEmotionTimeLost1",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] Time-Lost [Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Ancient Diluted Liquid Guilt",
+"id": "Metadata/Items/Currency/DistilledEmotionTimeLost2",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] Time-Lost [Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Ancient Diluted Liquid Greed",
+"id": "Metadata/Items/Currency/DistilledEmotionTimeLost3",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] Time-Lost [Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Ancient Liquid Paranoia",
+"id": "Metadata/Items/Currency/DistilledEmotionTimeLost4",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] Time-Lost [Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Ancient Liquid Envy",
+"id": "Metadata/Items/Currency/DistilledEmotionTimeLost5",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] Time-Lost [Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Ancient Liquid Disgust",
+"id": "Metadata/Items/Currency/DistilledEmotionTimeLost6",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] Time-Lost [Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Ancient Liquid Despair",
+"id": "Metadata/Items/Currency/DistilledEmotionTimeLost7",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] Time-Lost [Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Ancient Concentrated Liquid Fear",
+"id": "Metadata/Items/Currency/DistilledEmotionTimeLost8",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] Time-Lost [Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Ancient Concentrated Liquid Suffering",
+"id": "Metadata/Items/Currency/DistilledEmotionTimeLost9",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] Time-Lost [Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Ancient Concentrated Liquid Isolation",
+"id": "Metadata/Items/Currency/DistilledEmotionTimeLost10",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] Time-Lost [Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Potent Liquid Melancholy",
+"id": "Metadata/Items/Currency/EndgameDistilledEmotion1",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] [BasicJewel|Basic Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Potent Liquid Ferocity",
+"id": "Metadata/Items/Currency/EndgameDistilledEmotion2",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] [BasicJewel|Basic Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Potent Liquid Contempt",
+"id": "Metadata/Items/Currency/EndgameDistilledEmotion3",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] [BasicJewel|Basic Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Ancient Potent Liquid Melancholy",
+"id": "Metadata/Items/Currency/EndgameDistilledEmotionTimeLost1",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] Time-Lost [Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Ancient Potent Liquid Ferocity",
+"id": "Metadata/Items/Currency/EndgameDistilledEmotionTimeLost2",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] Time-Lost [Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Ancient Potent Liquid Contempt",
+"id": "Metadata/Items/Currency/EndgameDistilledEmotionTimeLost3",
+"desc": "Removes a random modifer and Augments a [Rarity|Rare] Time-Lost [Jewel] with a new guaranteed [Crafted] modifier"
+},
+{
+"name": "Flesh Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelleryQualityLife",
+"desc": "Adds [Quality|quality] that enhances Life modifiers on a ring or amulet\r Replaces other quality types"
+},
+{
+"name": "Neural Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelleryQualityMana",
+"desc": "Adds [Quality|quality] that enhances Mana modifiers on a ring or amulet\r Replaces other quality types"
+},
+{
+"name": "Carapace Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelleryQualityDefences",
+"desc": "Adds [Quality|quality] that enhances [Armour], [Evasion] and [EnergyShield|Energy Shield] modifiers on a ring or amulet\r Replaces other quality types"
+},
+{
+"name": "Uul-Netol's Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelleryQualityPhysical",
+"desc": "Adds [Quality|quality] that enhances [Physical] modifiers on a ring or amulet\r Replaces other quality types"
+},
+{
+"name": "Xoph's Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelleryQualityFire",
+"desc": "Adds [Quality|quality] that enhances [Fire] modifiers on a ring or amulet\r Replaces other quality types"
+},
+{
+"name": "Tul's Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelleryQualityCold",
+"desc": "Adds [Quality|quality] that enhances [Cold] modifiers on a ring or amulet\r Replaces other quality types"
+},
+{
+"name": "Esh's Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelleryQualityLightning",
+"desc": "Adds [Quality|quality] that enhances [Lightning] modifiers on a ring or amulet\r Replaces other quality types"
+},
+{
+"name": "Chayula's Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelleryQualityChaos",
+"desc": "Adds [Quality|quality] that enhances [Chaos] modifiers on a ring or amulet\r Replaces other quality types"
+},
+{
+"name": "Reaver Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelleryQualityAttack",
+"desc": "Adds [Quality|quality] that enhances [Attack] modifiers on a ring or amulet\r Replaces other quality types"
+},
+{
+"name": "Sibilant Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelleryQualityCaster",
+"desc": "Adds [Quality|quality] that enhances [Spell|Caster] modifiers on a ring or amulet\r Replaces other quality types"
+},
+{
+"name": "Skittering Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelleryQualitySpeed",
+"desc": "Adds [Quality|quality] that enhances Speed modifiers on a ring or amulet\r Replaces other quality types"
+},
+{
+"name": "Adaptive Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelleryQualityAttribute",
+"desc": "Adds [Quality|quality] that enhances [Attributes|Attribute] modifiers on a ring or amulet\r Replaces other quality types"
+},
+{
+"name": "Necrotic Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelleryQualityMinion",
+"desc": "Adds [Quality|quality] that enhances [Minion] modifiers on a ring or amulet\r Replaces other quality types"
+},
+{
+"name": "Refined Flesh Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelQualityLife",
+"desc": "Adds [Quality|quality] that enhances Life modifiers on a jewel\r Replaces other quality types"
+},
+{
+"name": "Refined Neural Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelQualityMana",
+"desc": "Adds [Quality|quality] that enhances Mana modifiers on a jewel\r Replaces other quality types"
+},
+{
+"name": "Refined Carapace Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelQualityDefences",
+"desc": "Adds [Quality|quality] that enhances [Armour], [Evasion] and [EnergyShield|Energy Shield] modifiers on a jewel\r Replaces other quality types"
+},
+{
+"name": "Refined Uul-Netol's Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelQualityPhysical",
+"desc": "Adds [Quality|quality] that enhances [Physical] modifiers on a jewel\r Replaces other quality types"
+},
+{
+"name": "Refined Xoph's Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelQualityFire",
+"desc": "Adds [Quality|quality] that enhances [Fire] modifiers on a jewel\r Replaces other quality types"
+},
+{
+"name": "Refined Tul's Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelQualityCold",
+"desc": "Adds [Quality|quality] that enhances [Cold] modifiers on a jewel\r Replaces other quality types"
+},
+{
+"name": "Refined Esh's Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelQualityLightning",
+"desc": "Adds [Quality|quality] that enhances [Lightning] modifiers on a jewel\r Replaces other quality types"
+},
+{
+"name": "Refined Chayula's Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelQualityChaos",
+"desc": "Adds [Quality|quality] that enhances [Chaos] modifiers on a jewel\r Replaces other quality types"
+},
+{
+"name": "Refined Reaver Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelQualityAttack",
+"desc": "Adds [Quality|quality] that enhances [Attack] modifiers on a jewel\r Replaces other quality types"
+},
+{
+"name": "Refined Sibilant Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelQualityCaster",
+"desc": "Adds [Quality|quality] that enhances [Spell|Caster] modifiers on a jewel\r Replaces other quality types"
+},
+{
+"name": "Refined Skittering Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelQualitySpeed",
+"desc": "Adds [Quality|quality] that enhances Speed modifiers on a jewel\r Replaces other quality types"
+},
+{
+"name": "Refined Adaptive Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelQualityAttribute",
+"desc": "Adds [Quality|quality] that enhances [Attributes|Attribute] modifiers on a jewel\r Replaces other quality types"
+},
+{
+"name": "Refined Necrotic Catalyst",
+"id": "Metadata/Items/Currency/CurrencyJewelQualityMinion",
+"desc": "Adds [Quality|quality] that enhances [Minion] modifiers on a jewel\r Replaces other quality types"
+},
+{
+"name": "Time-light Scroll",
+"id": "Metadata/Items/Currency/CurrencyHarbingerBlessingBelt",
+"desc": "Upgrades The Flow Untethered to a more powerful version"
+},
+{
+"name": "Fragmentation Scroll",
+"id": "Metadata/Items/Currency/CurrencyHarbingerBlessingQuiver",
+"desc": "Upgrades The Fracturing Spinner to a more powerful version"
+},
+{
+"name": "Deregulation Scroll",
+"id": "Metadata/Items/Currency/CurrencyHarbingerBlessingHelmet",
+"desc": "Upgrades The Tempest's Binding to a more powerful version"
+},
+{
+"name": "Electroshock Scroll",
+"id": "Metadata/Items/Currency/CurrencyHarbingerBlessingSword",
+"desc": "Upgrades The Rippling Thoughts to a more powerful version"
+},
+{
+"name": "Haemocombustion Scroll",
+"id": "Metadata/Items/Currency/CurrencyHarbingerBlessingStaff",
+"desc": "Upgrades The Enmity Divine to a more powerful version"
+},
+{
+"name": "Specularity Scroll",
+"id": "Metadata/Items/Currency/CurrencyHarbingerBlessingShield",
+"desc": "Upgrades The Unshattered Will to a more powerful version"
+},
+{
+"name": "Crusader's Exalted Orb",
+"id": "Metadata/Items/AtlasExiles/AddModToRareCrusader",
+"desc": "Adds Crusader influence and a new Crusader modifier to a rare item"
+},
+{
+"name": "Redeemer's Exalted Orb",
+"id": "Metadata/Items/AtlasExiles/AddModToRareRedeemer",
+"desc": "Adds Redeemer influence and a new Redeemer modifier to a rare item"
+},
+{
+"name": "Hunter's Exalted Orb",
+"id": "Metadata/Items/AtlasExiles/AddModToRareHunter",
+"desc": "Adds Hunter influence and a new Hunter modifier to a rare item"
+},
+{
+"name": "Warlord's Exalted Orb",
+"id": "Metadata/Items/AtlasExiles/AddModToRareWarlord",
+"desc": "Adds Warlord influence and a new Warlord modifier to a rare item"
+},
+{
+"name": "Awakener's Orb",
+"id": "Metadata/Items/AtlasExiles/ApplyInfluence",
+"desc": "Destroys an item, applying its influence to another of the same item class\r The second item is reforged as a rare item with both influence types and new modifiers"
+},
+{
+"name": "Rogue's Marker",
+"id": "Metadata/Items/Heist/HeistCoin",
+"desc": "Creates a portal to the Rogue Harbour from a Town or Hideout Used as Currency for services in the Rogue Harbour"
+},
+{
+"name": "Ritual Vessel",
+"id": "Metadata/Items/Currency/CurrencyRitualStone",
+"desc": "Stores the monsters slain for the first time from a completed Ritual Altar for future use"
+},
+{
+"name": "Orb of Dominance",
+"id": "Metadata/Items/Currency/CurrencyUpgradeInfluenceMod",
+"desc": "Removes one Influenced Modifier from an item with at least two Influenced Modifiers and upgrades another Influenced Modifier. Upgrading a modifier of the highest tier transforms the modifier into an Elevated Modifier. Attempting to upgrade an Elevated Modifier rerolls its values. Can be used on Body Armours, Boots, Gloves and Helmets."
+},
+{
+"name": "Enkindling Orb",
+"id": "Metadata/Items/Currency/CurrencyEnkindlingOrb",
+"desc": "Adds an enchantment to a utility flask that will improve it but prevent it from gaining charges during its effect. Replaces any existing enchantment."
+},
+{
+"name": "Instilling Orb",
+"id": "Metadata/Items/Currency/CurrencyInstillingOrb",
+"desc": "Adds an enchantment to a utility flask that will cause it to be used when certain conditions are met. Replaces any existing enchantment."
+},
+{
+"name": "Tainted Chromatic Orb",
+"id": "Metadata/Items/Currency/CurrencyHellscapeRerollSocketColours",
+"desc": "Unpredictably reforges the colour of sockets on a corrupted item"
+},
+{
+"name": "Tainted Orb of Fusing",
+"id": "Metadata/Items/Currency/CurrencyHellscapeRerollSocketLinks",
+"desc": "Unpredictably adds or removes a link to the largest group of linked sockets on a corrupted item"
+},
+{
+"name": "Tainted Jeweller's Orb",
+"id": "Metadata/Items/Currency/CurrencyHellscapeRerollSocketNumbers",
+"desc": "Unpredictably adds or removes a socket on a corrupted item"
+},
+{
+"name": "Tainted Chaos Orb",
+"id": "Metadata/Items/Currency/CurrencyHellscapeRerollRare",
+"desc": "Unpredictably either reforges a corrupted rare item with new random modifiers or removes all of its modifiers"
+},
+{
+"name": "Tainted Exalted Orb",
+"id": "Metadata/Items/Currency/CurrencyHellscapeAddModToRare",
+"desc": "Unpredictably adds or removes a modifier on a corrupted rare item"
+},
+{
+"name": "Tainted Mythic Orb",
+"id": "Metadata/Items/Currency/CurrencyHellscapeUpgradeToUnique",
+"desc": "Unpredictably either upgrades a corrupted item to unique rarity or destroys it"
+},
+{
+"name": "Tainted Armourer's Scrap",
+"id": "Metadata/Items/Currency/CurrencyHellscapeArmourQuality",
+"desc": "Randomises the quality of a corrupted armour"
+},
+{
+"name": "Tainted Blacksmith's Whetstone",
+"id": "Metadata/Items/Currency/CurrencyHellscapeWeaponQuality",
+"desc": "Randomises the quality of a corrupted weapon"
+},
+{
+"name": "Tainted Divine Teardrop",
+"id": "Metadata/Items/Currency/CurrencyHellscapeUpgradeModTier",
+"desc": "Unpredictably raises or lowers the tier of each modifier on a corrupted rare item"
+},
+{
+"name": "Lesser Eldritch Ember",
+"id": "Metadata/Items/Currency/CurrencyEldritchEmber1",
+"desc": "Adds a Lesser Searing Exarch implicit modifier to a Body Armour, Boots, Gloves or Helmet. This replaces any existing implicit modifiers other than Eater of Worlds implicit modifiers."
+},
+{
+"name": "Greater Eldritch Ember",
+"id": "Metadata/Items/Currency/CurrencyEldritchEmber2",
+"desc": "Adds a Greater Searing Exarch implicit modifier to a Body Armour, Boots, Gloves or Helmet. This replaces any existing implicit modifiers other than Eater of Worlds implicit modifiers."
+},
+{
+"name": "Grand Eldritch Ember",
+"id": "Metadata/Items/Currency/CurrencyEldritchEmber3",
+"desc": "Adds a Grand Searing Exarch implicit modifier to a Body Armour, Boots, Gloves or Helmet. This replaces any existing implicit modifiers other than Eater of Worlds implicit modifiers."
+},
+{
+"name": "Exceptional Eldritch Ember",
+"id": "Metadata/Items/Currency/CurrencyEldritchEmber4",
+"desc": "Adds an Exceptional Searing Exarch implicit modifier to a Body Armour, Boots, Gloves or Helmet. This replaces any existing implicit modifiers other than Eater of Worlds implicit modifiers."
+},
+{
+"name": "Lesser Eldritch Ichor",
+"id": "Metadata/Items/Currency/CurrencyEldritchIchor1",
+"desc": "Adds a Lesser Eater of Worlds implicit modifier to a Body Armour, Boots, Gloves or Helmet. This replaces any existing implicit modifiers other than Searing Exarch implicit modifiers."
+},
+{
+"name": "Greater Eldritch Ichor",
+"id": "Metadata/Items/Currency/CurrencyEldritchIchor2",
+"desc": "Adds a Greater Eater of Worlds implicit modifier to a Body Armour, Boots, Gloves or Helmet. This replaces any existing implicit modifiers other than Searing Exarch implicit modifiers."
+},
+{
+"name": "Grand Eldritch Ichor",
+"id": "Metadata/Items/Currency/CurrencyEldritchIchor3",
+"desc": "Adds a Grand Eater of Worlds implicit modifier to a Body Armour, Boots, Gloves or Helmet. This replaces any existing implicit modifiers other than Searing Exarch implicit modifiers."
+},
+{
+"name": "Exceptional Eldritch Ichor",
+"id": "Metadata/Items/Currency/CurrencyEldritchIchor4",
+"desc": "Adds an Exceptional Eater of Worlds implicit modifier to a Body Armour, Boots, Gloves or Helmet. This replaces any existing implicit modifiers other than Searing Exarch implicit modifiers."
+},
+{
+"name": "Orb of Conflict",
+"id": "Metadata/Items/Currency/CurrencyConflictOrb",
+"desc": "Unpredictably raise the strength of one Searing Exarch or Eater of Worlds modifier on an item and lower the strength of another. Lesser modifiers that have their strength lowered will be removed."
+},
+{
+"name": "Eldritch Chaos Orb",
+"id": "Metadata/Items/Currency/CurrencyEldritchRerollRare",
+"desc": "If The Searing Exarch is dominant, reroll prefix modifiers. If The Eater of Worlds is dominant, reroll suffix modifiers."
+},
+{
+"name": "Eldritch Exalted Orb",
+"id": "Metadata/Items/Currency/CurrencyEldritchAddModToRare",
+"desc": "If The Searing Exarch is dominant, add a prefix modifier. If The Eater of Worlds is dominant, add a suffix modifier."
+},
+{
+"name": "Eldritch Orb of Annulment",
+"id": "Metadata/Items/Currency/CurrencyEldritchRemoveMod",
+"desc": "If The Searing Exarch is dominant, remove a prefix modifier. If The Eater of Worlds is dominant, remove a suffix modifier."
+},
+{
+"name": "Singular Scouting Report",
+"id": "Metadata/Items/Currency/ScoutingReports/AtlasScoutingReportUnique",
+"desc": "Reroll all of Kirac's Atlas Missions, including at least one Unique map."
+},
+{
+"name": "Otherworldly Scouting Report",
+"id": "Metadata/Items/Currency/ScoutingReports/AtlasScoutingReportBreachstone",
+"desc": "Reroll all of Kirac's Atlas Missions, including at least one Breachstone."
+},
+{
+"name": "Comprehensive Scouting Report",
+"id": "Metadata/Items/Currency/ScoutingReports/AtlasScoutingReportMoreHidden",
+"desc": "Reroll all of Kirac's Atlas Missions, adding additional mission options."
+},
+{
+"name": "Vaal Scouting Report",
+"id": "Metadata/Items/Currency/ScoutingReports/AtlasScoutingReportCorrupted",
+"desc": "Reroll all of Kirac's Atlas Missions, corrupting all non-Unique Maps."
+},
+{
+"name": "Delirious Scouting Report",
+"id": "Metadata/Items/Currency/ScoutingReports/AtlasScoutingReportDelirium",
+"desc": "Reroll all of Kirac's Atlas Missions, adding layers of Delirium to all non-Unique Maps."
+},
+{
+"name": "Operative's Scouting Report",
+"id": "Metadata/Items/Currency/ScoutingReports/AtlasScoutingReportJuiced",
+"desc": "Reroll all of Kirac's Atlas Missions, granting missions with rewarding implicit modifiers."
+},
+{
+"name": "Blighted Scouting Report",
+"id": "Metadata/Items/Currency/ScoutingReports/AtlasScoutingReportBlighted",
+"desc": "Reroll all of Kirac's Atlas Missions, including at least one Blighted Map."
+},
+{
+"name": "Influenced Scouting Report",
+"id": "Metadata/Items/Currency/ScoutingReports/AtlasScoutingReportGuardian",
+"desc": "Reroll all of Kirac's Atlas Missions, including at least one Shaper Guardian, Elder Guardian, or Elderslayer Map."
+},
+{
+"name": "Explorer's Scouting Report",
+"id": "Metadata/Items/Currency/ScoutingReports/AtlasScoutingReportExplorers",
+"desc": "Reroll all of Kirac's Atlas Missions, using uncompleted Maps where possible."
+},
+{
+"name": "Oil Extractor",
+"id": "Metadata/Items/Currency/CurrencyExtractOil",
+"desc": "Destroys an Anointed Item to recover one of the Oils that was used to apply that Anointment"
+},
+{
+"name": "Bronze Key",
+"id": "Metadata/Items/Sanctum/SanctumBronzeKey",
+"desc": "Used to open Bronze Caches within the Trials"
+},
+{
+"name": "Silver Key",
+"id": "Metadata/Items/Sanctum/SanctumSilverKey",
+"desc": "Used to open Silver Caches within the Trials"
+},
+{
+"name": "Gold Key",
+"id": "Metadata/Items/Sanctum/SanctumGoldKey",
+"desc": "Used to open Gold Caches within the Trials"
+},
+{
+"name": "Bronze Key",
+"id": "Metadata/Items/Sanctum/SanctumBronzeKeyDrop",
+"desc": "Used to open Bronze Caches within the Trials"
+},
+{
+"name": "Silver Key",
+"id": "Metadata/Items/Sanctum/SanctumSilverKeyDrop",
+"desc": "Used to open Silver Caches within the Trials"
+},
+{
+"name": "Gold Key",
+"id": "Metadata/Items/Sanctum/SanctumGoldKeyDrop",
+"desc": "Used to open Gold Caches within the Trials"
+},
+{
+"name": "Gold",
+"id": "Metadata/Items/Currency/GoldCoin",
+"desc": "Can be spent at Vendors."
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeDominusPin",
+"desc": "You've found a Dominus Pin!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeBrutusPin",
+"desc": "You've found a Brutus Pin!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizePietyPin",
+"desc": "You've found a Piety Pin!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeWhiteMapPin",
+"desc": "You've found a White Map Pin!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeYellowMapPin",
+"desc": "You've found a Yellow Map Pin!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeRedMapPin",
+"desc": "You've found a Red Map Pin!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeTabulaRasaPin",
+"desc": "You've found a Tabula Rasa Pin!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeKitavaPin",
+"desc": "You've found a Kitava Pin!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeJewellersOrbPin",
+"desc": "You've found a Jeweller's Orb Pin!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizePortalScrollPin",
+"desc": "You've found a Portal Scroll Pin!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeWisdomScrollPin",
+"desc": "You've found a Wisdom Scroll Pin!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeQuicksilverFlaskPin",
+"desc": "You've found a Quicksilver Flask Pin!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeDivineOrbPin",
+"desc": "You've found a Divine Orb Pin!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeOrbofFusingPin",
+"desc": "You've found an Orb of Fusing Pin!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeExaltedOrbPin",
+"desc": "You've found an Exalted Orb Pin!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeChiselPin",
+"desc": "You've found a Chisel Pin!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeChaosOrbPin",
+"desc": "You've found a Chaos Orb Pin!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeDuelistPin",
+"desc": "You've found a Duelist Pin!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeMarauderPin",
+"desc": "You've found a Marauder Pin!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeTemplarPin",
+"desc": "You've found a Templar Pin!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeRangerPin",
+"desc": "You've found a Ranger Pin!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeWitchPin",
+"desc": "You've found a Witch Pin!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeShadowPin",
+"desc": "You've found a Shadow Pin!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeWitchDeskPad",
+"desc": "You've found a Witch Desk Pad!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeMarauderDeskPad",
+"desc": "You've found a Marauder Desk Pad!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeRangerDeskPad",
+"desc": "You've found a Ranger Desk Pad!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeChaosOrbDeskPad",
+"desc": "You've found a Chaos Orb Desk Pad!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeCelestialCatSocks",
+"desc": "You've found some Celestial Cat Socks!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeChaosOrbSocks",
+"desc": "You've found some Chaos Orb Socks!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeTShirt",
+"desc": "You've found a T-Shirt!"
+},
+{
+"name": "Convention Treasure",
+"id": "Metadata/Items/Currency/PrizeHoodie",
+"desc": "You've found a Hoodie!"
+},
+{
+"name": "Lesser Robust Rune",
+"id": "Metadata/Items/SoulCores/RuneStrengthLesser",
+"desc": "Place into an empty [Augment] Socket in any Equipment to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Robust Rune",
+"id": "Metadata/Items/SoulCores/RuneStrength",
+"desc": "Place into an empty [Augment] Socket in any Equipment to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Greater Robust Rune",
+"id": "Metadata/Items/SoulCores/RuneStrengthGreater",
+"desc": "Place into an empty [Augment] Socket in any Equipment to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Lesser Adept Rune",
+"id": "Metadata/Items/SoulCores/RuneDexterityLesser",
+"desc": "Place into an empty [Augment] Socket in any Equipment to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Adept Rune",
+"id": "Metadata/Items/SoulCores/RuneDexterity",
+"desc": "Place into an empty [Augment] Socket in any Equipment to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Greater Adept Rune",
+"id": "Metadata/Items/SoulCores/RuneDexterityGreater",
+"desc": "Place into an empty [Augment] Socket in any Equipment to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Lesser Resolve Rune",
+"id": "Metadata/Items/SoulCores/RuneIntelligenceLesser",
+"desc": "Place into an empty [Augment] Socket in any Equipment to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Resolve Rune",
+"id": "Metadata/Items/SoulCores/RuneIntelligence",
+"desc": "Place into an empty [Augment] Socket in any Equipment to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Greater Resolve Rune",
+"id": "Metadata/Items/SoulCores/RuneIntelligenceGreater",
+"desc": "Place into an empty [Augment] Socket in any Equipment to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Hedgewitch Assandra's Rune of Wisdom",
+"id": "Metadata/Items/SoulCores/RuneSpecial5",
+"desc": "Place into an empty [Augment] Socket in a Wand or a Staff to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Saqawal's Rune of the Sky",
+"id": "Metadata/Items/SoulCores/RuneSpecial6",
+"desc": "Place into an empty [Augment] Socket in a Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Fenumus' Rune of Agony",
+"id": "Metadata/Items/SoulCores/RuneSpecial7",
+"desc": "Place into an empty [Augment] Socket in a Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Farrul's Rune of Grace",
+"id": "Metadata/Items/SoulCores/RuneSpecial8",
+"desc": "Place into an empty [Augment] Socket in a pair of Boots to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Farrul's Rune of the Chase",
+"id": "Metadata/Items/SoulCores/RuneSpecial9",
+"desc": "Place into an empty [Augment] Socket in a pair of Boots to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Craiceann's Rune of Warding",
+"id": "Metadata/Items/SoulCores/RuneSpecial10",
+"desc": "Place into an empty [Augment] Socket in a Body Armour to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Saqawal's Rune of Memory",
+"id": "Metadata/Items/SoulCores/RuneSpecial11",
+"desc": "Place into an empty [Augment] Socket in a Helmet to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Saqawal's Rune of Erosion",
+"id": "Metadata/Items/SoulCores/RuneSpecial12",
+"desc": "Place into an empty [Augment] Socket in a Helmet to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Farrul's Rune of the Hunt",
+"id": "Metadata/Items/SoulCores/RuneSpecial13",
+"desc": "Place into an empty [Augment] Socket in a Martial Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Craiceann's Rune of Recovery",
+"id": "Metadata/Items/SoulCores/RuneSpecial14",
+"desc": "Place into an empty [Augment] Socket in a Body Armour to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Courtesan Mannan's Rune of Cruelty",
+"id": "Metadata/Items/SoulCores/RuneSpecial15",
+"desc": "Place into an empty [Augment] Socket in a pair of Gloves to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Thane Grannell's Rune of Mastery",
+"id": "Metadata/Items/SoulCores/RuneSpecial16",
+"desc": "Place into an empty [Augment] Socket in a pair of Gloves to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Fenumus' Rune of Spinning",
+"id": "Metadata/Items/SoulCores/RuneSpecial17",
+"desc": "Place into an empty [Augment] Socket in a pair of Gloves to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Countess Seske's Rune of Archery",
+"id": "Metadata/Items/SoulCores/RuneSpecial18",
+"desc": "Place into an empty [Augment] Socket in a Bow to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Thane Girt's Rune of Wildness",
+"id": "Metadata/Items/SoulCores/RuneSpecial19",
+"desc": "Place into an empty [Augment] Socket in a Wand or a Staff to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Fenumus' Rune of Draining",
+"id": "Metadata/Items/SoulCores/RuneSpecial20",
+"desc": "Place into an empty [Augment] Socket in a pair of Gloves to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Thane Myrk's Rune of Summer",
+"id": "Metadata/Items/SoulCores/RuneSpecial21",
+"desc": "Place into an empty [Augment] Socket in a Martial Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Lady Hestra's Rune of Winter",
+"id": "Metadata/Items/SoulCores/RuneSpecial22",
+"desc": "Place into an empty [Augment] Socket in a Martial Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Thane Leld's Rune of Spring",
+"id": "Metadata/Items/SoulCores/RuneSpecial23",
+"desc": "Place into an empty [Augment] Socket in a Martial Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "The Greatwolf's Rune of Claws",
+"id": "Metadata/Items/SoulCores/RuneSpecial24",
+"desc": "Place into an empty [Augment] Socket in a pair of Gloves to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "The Greatwolf's Rune of Willpower",
+"id": "Metadata/Items/SoulCores/RuneSpecial25",
+"desc": "Place into an empty [Augment] Socket in a Body Armour to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Masterwork Rune",
+"id": "Metadata/Items/SoulCores/RuneUpgrade",
+"desc": "Place into an [Augment] Socket containing any tiered [Rune] to upgrade that [Rune]."
+},
+{
+"name": "Soul Core of Vizoma",
+"id": "Metadata/Items/SoulCores/SoulCoreVision",
+"desc": "Place into an empty [Augment] Socket in a Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Soul Core of Opiloti",
+"id": "Metadata/Items/SoulCores/SoulCoreBleed",
+"desc": "Place into an empty [Augment] Socket in a Weapon or a Helmet to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Soul Core of Jiquani",
+"id": "Metadata/Items/SoulCores/SoulCoreMaxLife",
+"desc": "Place into an empty [Augment] Socket in a Weapon or a Body Armour to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Soul Core of Zalatl",
+"id": "Metadata/Items/SoulCores/SoulCoreMaxMana",
+"desc": "Place into an empty [Augment] Socket in a Weapon or a Helmet to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Soul Core of Puhuarte",
+"id": "Metadata/Items/SoulCores/SoulCoreIgnite",
+"desc": "Place into an empty [Augment] Socket in a Weapon or a pair of Gloves to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Soul Core of Tzamoto",
+"id": "Metadata/Items/SoulCores/SoulCoreFreeze",
+"desc": "Place into an empty [Augment] Socket in a Weapon or a Helmet to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Soul Core of Xopec",
+"id": "Metadata/Items/SoulCores/SoulCoreShock",
+"desc": "Place into an empty [Augment] Socket in a Weapon or a pair of Boots to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Soul Core of Azcapa",
+"id": "Metadata/Items/SoulCores/SoulCoreLight",
+"desc": "Place into an empty [Augment] Socket in a Weapon or a pair of Gloves to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Soul Core of Topotante",
+"id": "Metadata/Items/SoulCores/SoulCoreElemental",
+"desc": "Place into an empty [Augment] Socket in a Weapon or a pair of Boots to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Soul Core of Quipolatl",
+"id": "Metadata/Items/SoulCores/SoulCoreSpeed",
+"desc": "Place into an empty [Augment] Socket in a Weapon or a pair of Boots to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Soul Core of Ticaba",
+"id": "Metadata/Items/SoulCores/SoulCoreCrit",
+"desc": "Place into an empty [Augment] Socket in a Weapon, a Body Armour or a Shield to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Hayoxi's Soul Core of Heatproofing",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial1",
+"desc": "Place into an empty [Augment] Socket in a Helmet or Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Zalatl's Soul Core of Insulation",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial2",
+"desc": "Place into an empty [Augment] Socket in a pair of Boots to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Topotante's Soul Core of Dampening",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial3",
+"desc": "Place into an empty [Augment] Socket in a pair of Gloves to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Atmohua's Soul Core of Retreat",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial4",
+"desc": "Place into an empty [Augment] Socket in a Body Armour or a Focus to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Quipolatl's Soul Core of Flow",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial5",
+"desc": "Place into an empty [Augment] Socket in a Helmet to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Tzamoto's Soul Core of Ferocity",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial6",
+"desc": "Place into an empty [Augment] Socket in a Helmet to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Uromoti's Soul Core of Attenuation",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial7",
+"desc": "Place into an empty [Augment] Socket in a pair of Boots to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Opiloti's Soul Core of Assault",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial8",
+"desc": "Place into an empty [Augment] Socket in a Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Guatelitzi's Soul Core of Endurance",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial9",
+"desc": "Place into an empty [Augment] Socket in a Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Xopec's Soul Core of Power",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial10",
+"desc": "Place into an empty [Augment] Socket in a Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Estazunti's Soul Core of Convalescence",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial11",
+"desc": "Place into an empty [Augment] Socket in a pair of Boots or a Helmet to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Tacati's Soul Core of Affliction",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial12",
+"desc": "Place into an empty [Augment] Socket in a Helmet to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Cholotl's Soul Core of War",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial13",
+"desc": "Place into an empty [Augment] Socket in a Bow to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Citaqualotl's Soul Core of Foulness",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial14",
+"desc": "Place into an empty [Augment] Socket in a Martial Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Xipocado's Soul Core of Dominion",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial15",
+"desc": "Place into an empty [Augment] Socket in a Wand, a Staff or a Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Jiquani's Soul Core of Automation",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial16",
+"desc": "Place into an empty [Augment] Socket in a Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Jiquani's Soul Core of Malediction",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial17",
+"desc": "Place into an empty [Augment] Socket in a Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Jiquani's Soul Core of Targeting",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial18",
+"desc": "Place into an empty [Augment] Socket in a Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Jiquani's Soul Core of Rallying",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial19",
+"desc": "Place into an empty [Augment] Socket in a Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Jiquani's Soul Core of Radiance",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial20",
+"desc": "Place into an empty [Augment] Socket in a Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Jiquani's Soul Core of Severing",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial21",
+"desc": "Place into an empty [Augment] Socket in a Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Jiquani's Soul Core of Rippling",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial22",
+"desc": "Place into an empty [Augment] Socket in a Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Jiquani's Soul Core of Quaking",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial23",
+"desc": "Place into an empty [Augment] Socket in a Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Jiquani's Soul Core of Munitions",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial24",
+"desc": "Place into an empty [Augment] Socket in a Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Jiquani's Soul Core of Snares",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial25",
+"desc": "Place into an empty [Augment] Socket in a Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Jiquani's Soul Core of Abundance",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial26",
+"desc": "Place into an empty [Augment] Socket in a Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Jiquani's Soul Core of Squalls",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial27",
+"desc": "Place into an empty [Augment] Socket in a Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Jiquani's Soul Core of Thundering",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial28",
+"desc": "Place into an empty [Augment] Socket in a Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Atziri's Soul Core of Devotion",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial29",
+"desc": "Place into an empty [Augment] Socket in a Helmet to apply its effect to that item. Once socketed it cannot be retrieved or replaced."
+},
+{
+"name": "Atziri's Soul Core of Vitality",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial30",
+"desc": "Place into an empty [Augment] Socket in a Body Armour to apply its effect to that item. Once socketed it cannot be retrieved or replaced."
+},
+{
+"name": "Atziri's Soul Core of Alacrity",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial31",
+"desc": "Place into an empty [Augment] Socket in a pair of Gloves to apply its effect to that item. Once socketed it cannot be retrieved or replaced."
+},
+{
+"name": "Atziri's Soul Core of Inoculation",
+"id": "Metadata/Items/SoulCores/SoulCoreSpecial32",
+"desc": "Place into an empty [Augment] Socket in a pair of Boots to apply its effect to that item. Once socketed it cannot be retrieved or replaced."
+},
+{
+"name": "Snake Idol",
+"id": "Metadata/Items/SoulCores/TalismanSnake",
+"desc": "Place into an empty [Augment] Socket in Gloves or a Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Primate Idol",
+"id": "Metadata/Items/SoulCores/TalismanMonkey",
+"desc": "Place into an empty [Augment] Socket in a Helmet or Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Owl Idol",
+"id": "Metadata/Items/SoulCores/TalismanOwl",
+"desc": "Place into an empty [Augment] Socket in a Focus or a Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Cat Idol",
+"id": "Metadata/Items/SoulCores/TalismanCat",
+"desc": "Place into an empty [Augment] Socket in Gloves or a Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Wolf Idol",
+"id": "Metadata/Items/SoulCores/TalismanWolf",
+"desc": "Place into an empty [Augment] Socket in Gloves or a Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Stag Idol",
+"id": "Metadata/Items/SoulCores/TalismanStag",
+"desc": "Place into an empty [Augment] Socket in a Helmet or Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Boar Idol",
+"id": "Metadata/Items/SoulCores/TalismanBoar",
+"desc": "Place into an empty [Augment] Socket in Gloves or a Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Bear Idol",
+"id": "Metadata/Items/SoulCores/TalismanBear",
+"desc": "Place into an empty [Augment] Socket in a Helmet or Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Ox Idol",
+"id": "Metadata/Items/SoulCores/TalismanOx",
+"desc": "Place into an empty [Augment] Socket in a Shield, a Buckler or a Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Rabbit Idol",
+"id": "Metadata/Items/SoulCores/TalismanRabbit",
+"desc": "Place into an empty [Augment] Socket in a Body Armour or Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Fox Idol",
+"id": "Metadata/Items/SoulCores/TalismanFox",
+"desc": "Place into an empty [Augment] Socket in a Body Armour or Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Idol of Sirrius",
+"id": "Metadata/Items/SoulCores/TalismanSpecial1",
+"desc": "Place into an empty [Augment] Socket in Gloves or a Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Idol of Thruldana",
+"id": "Metadata/Items/SoulCores/TalismanSpecial2",
+"desc": "Place into an empty [Augment] Socket in a Martial Weapon or a Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Idol of Grold",
+"id": "Metadata/Items/SoulCores/TalismanSpecial3",
+"desc": "Place into an empty [Augment] Socket in Gloves or a Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Idol of Eeshta",
+"id": "Metadata/Items/SoulCores/TalismanSpecial4",
+"desc": "Place into an empty [Augment] Socket in a Helmet or Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Idol of Egrin",
+"id": "Metadata/Items/SoulCores/TalismanSpecial5",
+"desc": "Place into an empty [Augment] Socket in a Helmet or Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Idol of Maxarius",
+"id": "Metadata/Items/SoulCores/TalismanSpecial6",
+"desc": "Place into an empty [Augment] Socket in a Body Armour or Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Idol of Ralakesh",
+"id": "Metadata/Items/SoulCores/TalismanSpecial7",
+"desc": "Place into an empty [Augment] Socket in a Helmet or Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Idol of Greust",
+"id": "Metadata/Items/SoulCores/IdolSpecial1",
+"desc": "Place into an empty [Augment] Socket in a Shield, a Buckler or a Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Idol of Yeena",
+"id": "Metadata/Items/SoulCores/IdolSpecial2",
+"desc": "Place into an empty [Augment] Socket in Boots or a Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Idol of Eramir",
+"id": "Metadata/Items/SoulCores/IdolSpecial3",
+"desc": "Place into an empty [Augment] Socket in a Body Armour or Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Idol of Oak",
+"id": "Metadata/Items/SoulCores/IdolSpecial4",
+"desc": "Place into an empty [Augment] Socket in Boots or a Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Idol of Alira",
+"id": "Metadata/Items/SoulCores/IdolSpecial5",
+"desc": "Place into an empty [Augment] Socket in a Helmet or Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Idol of Kraityn",
+"id": "Metadata/Items/SoulCores/IdolSpecial6",
+"desc": "Place into an empty [Augment] Socket in Gloves or a Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Idol of Silk",
+"id": "Metadata/Items/SoulCores/IdolSpecial7",
+"desc": "Place into an empty [Augment] Socket in a Shield, Buckler or a Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Idol of the Sycophant",
+"id": "Metadata/Items/SoulCores/IdolCorrupted1",
+"desc": "Place into an empty [Augment] Socket in a Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Idol of the Martyr",
+"id": "Metadata/Items/SoulCores/IdolCorrupted2",
+"desc": "Place into an empty [Augment] Socket in a Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Idol of the Pharisee",
+"id": "Metadata/Items/SoulCores/IdolCorrupted3",
+"desc": "Place into an empty [Augment] Socket in a Weapon to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Panther Idol",
+"id": "Metadata/Items/SoulCores/IdolPanther",
+"desc": "Place into an empty [Augment] Socket in a Body Armour or Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Hawk Idol",
+"id": "Metadata/Items/SoulCores/IdolHawk",
+"desc": "Place into an empty [Augment] Socket in a Body Armour or Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Stoat Idol",
+"id": "Metadata/Items/SoulCores/IdolStoat",
+"desc": "Place into an empty [Augment] Socket in a Body Armour or Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Omen of Refreshment",
+"id": "Metadata/Items/Currency/OmenOnLowLifeRecoverCharges",
+"desc": "While this item is active in your inventory will fully recover your flask and charm charges when you reach [LowLife|Low Life]"
+},
+{
+"name": "Omen of Resurgence",
+"id": "Metadata/Items/Currency/OmenOnLowLifeFullyHeal",
+"desc": "While this item is active in your inventory fully recover your Life, Mana and [EnergyShield|Energy Shield] when you reach [LowLife|Low Life]"
+},
+{
+"name": "Omen of Amelioration",
+"id": "Metadata/Items/Currency/OmenOnDeathPreventExpLoss",
+"desc": "While this item is active in your inventory will prevent 75% of Experience loss when you die"
+},
+{
+"name": "Omen of Whittling",
+"id": "Metadata/Items/Currency/OmenOnChaosLowestLevelMod",
+"desc": "While this item is active in your inventory your next Chaos Orb will remove the lowest level modifier"
+},
+{
+"name": "Omen of Sinistral Erasure",
+"id": "Metadata/Items/Currency/OmenOnChaosPrefix",
+"desc": "While this item is active in your inventory your next Chaos Orb will remove only prefix modifiers"
+},
+{
+"name": "Omen of Dextral Erasure",
+"id": "Metadata/Items/Currency/OmenOnChaosSuffix",
+"desc": "While this item is active in your inventory your next Chaos Orb will remove only suffix modifiers"
+},
+{
+"name": "Omen of Sinistral Alchemy",
+"id": "Metadata/Items/Currency/OmenOnAlchemyMaximumPrefixes",
+"desc": "While this item is active in your inventory your next Orb of Alchemy will result in the maximum number of prefix modifiers"
+},
+{
+"name": "Omen of Dextral Alchemy",
+"id": "Metadata/Items/Currency/OmenOnAlchemyMaximumSuffixes",
+"desc": "While this item is active in your inventory your next Orb of Alchemy will result in the maximum number of suffix modifiers"
+},
+{
+"name": "Omen of Sinistral Coronation",
+"id": "Metadata/Items/Currency/OmenOnRegalPrefix",
+"desc": "While this item is active in your inventory your next Regal Orb will add only prefix modifiers"
+},
+{
+"name": "Omen of Dextral Coronation",
+"id": "Metadata/Items/Currency/OmenOnRegalSuffix",
+"desc": "While this item is active in your inventory your next Regal Orb will add only suffix modifiers"
+},
+{
+"name": "Omen of Corruption",
+"id": "Metadata/Items/Currency/OmenOnVaalRemoveDoNothingOutcome",
+"desc": "While this item is active in your inventory your next Vaal Orb will always result in change"
+},
+{
+"name": "Omen of Greater Exaltation",
+"id": "Metadata/Items/Currency/OmenOnExaltAddTwoMods",
+"desc": "While this item is active in your inventory your next Exalted Orb will add two random modifiers"
+},
+{
+"name": "Omen of Sinistral Exaltation",
+"id": "Metadata/Items/Currency/OmenOnExaltAddPrefixes",
+"desc": "While this item is active in your inventory your next Exalted Orb will add only prefix modifiers"
+},
+{
+"name": "Omen of Dextral Exaltation",
+"id": "Metadata/Items/Currency/OmenOnExaltAddSuffixes",
+"desc": "While this item is active in your inventory your next Exalted Orb will add only suffix modifiers"
+},
+{
+"name": "Omen of Greater Annulment",
+"id": "Metadata/Items/Currency/OmenOnAnnulRemoveTwoMods",
+"desc": "While this item is active in your inventory your next Orb of Annulment will remove two modifiers"
+},
+{
+"name": "Omen of Sinistral Annulment",
+"id": "Metadata/Items/Currency/OmenOnAnnulRemovePrefixes",
+"desc": "While this item is active in your inventory your next Orb of Annulment will remove only prefix modifiers"
+},
+{
+"name": "Omen of Dextral Annulment",
+"id": "Metadata/Items/Currency/OmenOnAnnulRemoveSuffixes",
+"desc": "While this item is active in your inventory your next Orb of Annulment will remove only suffix modifiers"
+},
+{
+"name": "Omen of Answered Prayers",
+"id": "Metadata/Items/Currency/OmenShrineAdditionalEffect",
+"desc": "While this item is active in your inventory the next [Shrine] you click on will grant an additional Effect"
+},
+{
+"name": "Omen of Secret Compartments",
+"id": "Metadata/Items/Currency/OmenStrongboxOpenableAgain",
+"desc": "While this item is active in your inventory the next [Strongbox] you click on will be reopenable"
+},
+{
+"name": "Omen of the Hunt",
+"id": "Metadata/Items/Currency/OmenTormentedMonsterReleased",
+"desc": "While this item is active in your inventory the next [SpiritPossessed|Possessed] monster you kill will [ReleaseAzmeriSpirits|Release] and manifest all [AzmeriSpirit|Azmeri Spirits]"
+},
+{
+"name": "Omen of Reinforcements",
+"id": "Metadata/Items/Currency/OmenRogueExileSummonsPartyMember",
+"desc": "While this item is active in your inventory the next [RogueExile|Rogue Exile] you encounter will summon an ally"
+},
+{
+"name": "Omen of Homogenising Exaltation",
+"id": "Metadata/Items/Currency/OmenOnExaltAddExistingModType",
+"desc": "While this item is active in your inventory your next Exalted Orb will add a Modifier of the same type as an existing Modifier on the Item"
+},
+{
+"name": "Omen of Homogenising Coronation",
+"id": "Metadata/Items/Currency/OmenOnRegalAddExistingModType",
+"desc": "While this item is active in your inventory your next Regal Orb will add a Modifier of the same type as an existing Modifier on the Item"
+},
+{
+"name": "Omen of Gambling",
+"id": "Metadata/Items/Currency/OmenGambleNoGoldCost",
+"desc": "While this item is active in your inventory your next Gamble purchase will have a 50% chance of costing no Gold and not consuming this [Omen]"
+},
+{
+"name": "Omen of Bartering",
+"id": "Metadata/Items/Currency/OmenSellVendorRandomise",
+"desc": "While this item is active in your inventory your next sold item's Gold value will be incorrectly assessed by the Vendor"
+},
+{
+"name": "Omen of the Blessed",
+"id": "Metadata/Items/Currency/OmenOnDivineRerollImplicits",
+"desc": "While this item is active in your inventory your next Divine Orb will only reroll Implicit Modifiers"
+},
+{
+"name": "Omen of Chaotic Rarity",
+"id": "Metadata/Items/Currency/OmenOnChaosMapItemRarity",
+"desc": "While this item is active in your inventory your next Chaos Orb will replace all Modifiers on a [Waystone] with Modifiers that do not grant Item Rarity"
+},
+{
+"name": "Omen of Chaotic Quantity",
+"id": "Metadata/Items/Currency/OmenOnChaosMapPackSize",
+"desc": "While this item is active in your inventory your next Chaos Orb will replace all Modifiers on a [Waystone] with Modifiers that do not grant Pack Size"
+},
+{
+"name": "Omen of Chaotic Monsters",
+"id": "Metadata/Items/Currency/OmenOnChaosMapMonsterRarity",
+"desc": "While this item is active in your inventory your next Chaos Orb will replace all Modifiers on a [Waystone] with Modifiers that do not grant Monster Rarity"
+},
+{
+"name": "Omen of Chaotic Effectiveness",
+"id": "Metadata/Items/Currency/OmenOnChaosMapMonsterEffectiveness",
+"desc": "While this item is active in your inventory your next Chaos Orb will replace all Modifiers on a [Waystone] with Modifiers that do not grant Monster Effectiveness"
+},
+{
+"name": "Omen of Chance",
+"id": "Metadata/Items/Currency/OmenOnChanceNotDestroy",
+"desc": "While this item is active in your inventory your next Orb of Chance will not destroy the Item"
+},
+{
+"name": "Omen of the Ancients",
+"id": "Metadata/Items/Currency/OmenOnChanceAncientOrb",
+"desc": "While this item is active in your inventory your next Orb of Chance will upgrade the Item to a random [ItemRarity|Unique] of the same Item Class"
+},
+{
+"name": "Omen of Sanctification",
+"id": "Metadata/Items/Currency/OmenOnDivineSanctify",
+"desc": "While this item is active in your inventory your next Divine Orb used on a [ItemRarity|Rare] item will [Sanctified|Sanctify] it"
+},
+{
+"name": "Omen of Dextral Crystallisation",
+"id": "Metadata/Items/Currency/OmenOnPerfectEssenceSuffix",
+"desc": "While this item is active in your inventory your next Perfect or Corrupted Essence will remove only Suffix modifiers"
+},
+{
+"name": "Omen of Sinistral Crystallisation",
+"id": "Metadata/Items/Currency/OmenOnPerfectEssencePrefix",
+"desc": "While this item is active in your inventory your next Perfect or Corrupted Essence will remove only Prefix modifiers"
+},
+{
+"name": "Omen of Catalysing Exaltation",
+"id": "Metadata/Items/Currency/OmenOnExaltConsumeQuality",
+"desc": "While this item is active in your inventory your next Exalted Orb will consume all [Catalyst] [Quality] to increase the chance of the corresponding type of Modifier"
+},
+{
+"name": "Omen of Abyssal Echoes",
+"id": "Metadata/Items/Currency/OmenOnAbyssRerollOptions",
+"desc": "While this item is active in your inventory the next time you reveal [Abyssalify|Desecrated] modifiers you can reroll the options once"
+},
+{
+"name": "Omen of the Sovereign",
+"id": "Metadata/Items/Currency/OmenOnAbyssGuarenteeLichTypeMod1",
+"desc": "While this item is active in your inventory your next Weapon or Jewellery [Abyssalify|Desecration] attempt will guarantee a random Ulaman modifier"
+},
+{
+"name": "Omen of the Liege",
+"id": "Metadata/Items/Currency/OmenOnAbyssGuarenteeLichTypeMod2",
+"desc": "While this item is active in your inventory your next Weapon or Jewellery [Abyssalify|Desecration] attempt will guarantee a random Amanamu modifier"
+},
+{
+"name": "Omen of the Blackblooded",
+"id": "Metadata/Items/Currency/OmenOnAbyssGuarenteeLichTypeMod3",
+"desc": "While this item is active in your inventory your next Weapon or Jewellery [Abyssalify|Desecration] attempt will guarantee a random Kurgal modifier"
+},
+{
+"name": "Omen of Putrefaction",
+"id": "Metadata/Items/Currency/OmenOnAbyssVeilAllAndCorrupt",
+"desc": "While this item is active in your inventory your next [Abyssalify|Desecration] attempt will replace all modifiers on the item creating an item with up to 6 Unrevealed modifiers and [Corrupted|Corrupting] the item"
+},
+{
+"name": "Omen of Light",
+"id": "Metadata/Items/Currency/OmenOnAnnulRemoveAbyssMod",
+"desc": "While this item is active in your inventory your next Orb of Annulment will remove only [Abyssalify|Desecrated] modifiers"
+},
+{
+"name": "Omen of Sinistral Necromancy",
+"id": "Metadata/Items/Currency/OmenOnAbyssAddPrefixes",
+"desc": "While this item is active in your inventory your next [Abyssalify|Desecration] attempt will add only prefix modifiers"
+},
+{
+"name": "Omen of Dextral Necromancy",
+"id": "Metadata/Items/Currency/OmenOnAbyssAddSuffixes",
+"desc": "While this item is active in your inventory your next [Abyssalify|Desecration] attempt will add only suffix modifiers"
+},
+{
+"name": "Rotten Satchel Charge",
+"id": "Metadata/Items/Currency/CastawayExplosive",
+"desc": "Used to excavate Buried Treasure"
+},
+{
+"name": "Brother's Gift",
+"id": "Metadata/Items/DivinationCards/DivinationCardBrothersGift",
+"desc": "<currencyitem>{5x Divine Orb}"
+},
+{
+"name": "Gnawed Jawbone",
+"id": "Metadata/Items/Currency/AbyssalBenchTicketWeaponLow",
+"desc": "[Abyssalify|Desecrates] a [ItemRarity|Rare] Weapon or [Quiver]"
+},
+{
+"name": "Preserved Jawbone",
+"id": "Metadata/Items/Currency/AbyssalBenchTicketWeapon",
+"desc": "[Abyssalify|Desecrates] a [ItemRarity|Rare] Weapon or [Quiver]"
+},
+{
+"name": "Ancient Jawbone",
+"id": "Metadata/Items/Currency/AbyssalBenchTicketWeaponHigh",
+"desc": "[Abyssalify|Desecrates] a [ItemRarity|Rare] Weapon or [Quiver]"
+},
+{
+"name": "Gnawed Rib",
+"id": "Metadata/Items/Currency/AbyssalBenchTicketArmourLow",
+"desc": "[Abyssalify|Desecrates] a [ItemRarity|Rare] [EquipArmour|Armour]"
+},
+{
+"name": "Preserved Rib",
+"id": "Metadata/Items/Currency/AbyssalBenchTicketArmour",
+"desc": "[Abyssalify|Desecrates] a [ItemRarity|Rare] [EquipArmour|Armour]"
+},
+{
+"name": "Ancient Rib",
+"id": "Metadata/Items/Currency/AbyssalBenchTicketArmourHigh",
+"desc": "[Abyssalify|Desecrates] a [ItemRarity|Rare] [EquipArmour|Armour]"
+},
+{
+"name": "Gnawed Collarbone",
+"id": "Metadata/Items/Currency/AbyssalBenchTicketJewelleryLow",
+"desc": "[Abyssalify|Desecrates] a [ItemRarity|Rare] Amulet, Ring or Belt"
+},
+{
+"name": "Preserved Collarbone",
+"id": "Metadata/Items/Currency/AbyssalBenchTicketJewellery",
+"desc": "[Abyssalify|Desecrates] a [ItemRarity|Rare] Amulet, Ring or Belt"
+},
+{
+"name": "Ancient Collarbone",
+"id": "Metadata/Items/Currency/AbyssalBenchTicketJewelleryHigh",
+"desc": "[Abyssalify|Desecrates] a [ItemRarity|Rare] Amulet, Ring or Belt"
+},
+{
+"name": "Preserved Cranium",
+"id": "Metadata/Items/Currency/AbyssalBenchTicketJewel",
+"desc": "[Abyssalify|Desecrates] a [ItemRarity|Rare] [Jewel]"
+},
+{
+"name": "Preserved Vertebrae",
+"id": "Metadata/Items/Currency/AbyssalBenchTicketWaystone",
+"desc": "[Abyssalify|Desecrates] a [ItemRarity|Rare] [Waystone]"
+},
+{
+"name": "Altered Collarbone",
+"id": "Metadata/Items/Currency/AbyssalBenchTicketBreach",
+"desc": "[Abyssalify|Desecrates] a [ItemRarity|Rare] Amulet, Ring or Belt with a chance for otherworldly modifiers"
+},
+{
+"name": "Uncut Skill Gem (Level 1)",
+"id": "Metadata/Items/Gems/SkillGemUncut1",
+"desc": "Creates a Skill Gem up to level 1"
+},
+{
+"name": "Uncut Skill Gem (Level 2)",
+"id": "Metadata/Items/Gems/SkillGemUncut2",
+"desc": "Creates a Skill Gem or Level an existing gem to level 2"
+},
+{
+"name": "Uncut Skill Gem (Level 3)",
+"id": "Metadata/Items/Gems/SkillGemUncut3",
+"desc": "Creates a Skill Gem or Level an existing gem to level 3"
+},
+{
+"name": "Uncut Skill Gem (Level 4)",
+"id": "Metadata/Items/Gems/SkillGemUncut4",
+"desc": "Creates a Skill Gem or Level an existing gem to level 4"
+},
+{
+"name": "Uncut Skill Gem (Level 5)",
+"id": "Metadata/Items/Gems/SkillGemUncut5",
+"desc": "Creates a Skill Gem or Level an existing gem to level 5"
+},
+{
+"name": "Uncut Skill Gem (Level 6)",
+"id": "Metadata/Items/Gems/SkillGemUncut6",
+"desc": "Creates a Skill Gem or Level an existing gem to level 6"
+},
+{
+"name": "Uncut Skill Gem (Level 7)",
+"id": "Metadata/Items/Gems/SkillGemUncut7",
+"desc": "Creates a Skill Gem or Level an existing gem to level 7"
+},
+{
+"name": "Uncut Skill Gem (Level 8)",
+"id": "Metadata/Items/Gems/SkillGemUncut8",
+"desc": "Creates a Skill Gem or Level an existing gem to level 8"
+},
+{
+"name": "Uncut Skill Gem (Level 9)",
+"id": "Metadata/Items/Gems/SkillGemUncut9",
+"desc": "Creates a Skill Gem or Level an existing gem to level 9"
+},
+{
+"name": "Uncut Skill Gem (Level 10)",
+"id": "Metadata/Items/Gems/SkillGemUncut10",
+"desc": "Creates a Skill Gem or Level an existing gem to level 10"
+},
+{
+"name": "Uncut Skill Gem (Level 11)",
+"id": "Metadata/Items/Gems/SkillGemUncut11",
+"desc": "Creates a Skill Gem or Level an existing gem to level 11"
+},
+{
+"name": "Uncut Skill Gem (Level 12)",
+"id": "Metadata/Items/Gems/SkillGemUncut12",
+"desc": "Creates a Skill Gem or Level an existing gem to level 12"
+},
+{
+"name": "Uncut Skill Gem (Level 13)",
+"id": "Metadata/Items/Gems/SkillGemUncut13",
+"desc": "Creates a Skill Gem or Level an existing gem to level 13"
+},
+{
+"name": "Uncut Skill Gem (Level 14)",
+"id": "Metadata/Items/Gems/SkillGemUncut14",
+"desc": "Creates a Skill Gem or Level an existing gem to level 14"
+},
+{
+"name": "Uncut Skill Gem (Level 15)",
+"id": "Metadata/Items/Gems/SkillGemUncut15",
+"desc": "Creates a Skill Gem or Level an existing gem to level 15"
+},
+{
+"name": "Uncut Skill Gem (Level 16)",
+"id": "Metadata/Items/Gems/SkillGemUncut16",
+"desc": "Creates a Skill Gem or Level an existing gem to level 16"
+},
+{
+"name": "Uncut Skill Gem (Level 17)",
+"id": "Metadata/Items/Gems/SkillGemUncut17",
+"desc": "Creates a Skill Gem or Level an existing gem to level 17"
+},
+{
+"name": "Uncut Skill Gem (Level 18)",
+"id": "Metadata/Items/Gems/SkillGemUncut18",
+"desc": "Creates a Skill Gem or Level an existing gem to level 18"
+},
+{
+"name": "Uncut Skill Gem (Level 19)",
+"id": "Metadata/Items/Gems/SkillGemUncut19",
+"desc": "Creates a Skill Gem or Level an existing gem to level 19"
+},
+{
+"name": "Uncut Skill Gem (Level 20)",
+"id": "Metadata/Items/Gems/SkillGemUncut20",
+"desc": "Creates a Skill Gem or Level an existing gem to level 20"
+},
+{
+"name": "Uncut Support Gem (Level 1)",
+"id": "Metadata/Items/Gems/SupportGemUncut1",
+"desc": "Creates a Support Gem"
+},
+{
+"name": "Uncut Support Gem (Level 2)",
+"id": "Metadata/Items/Gems/SupportGemUncut2",
+"desc": "Creates a Support Gem"
+},
+{
+"name": "Uncut Support Gem (Level 3)",
+"id": "Metadata/Items/Gems/SupportGemUncut3",
+"desc": "Creates a Support Gem"
+},
+{
+"name": "Uncut Support Gem (Level 4)",
+"id": "Metadata/Items/Gems/SupportGemUncut4",
+"desc": "Creates a Support Gem"
+},
+{
+"name": "Uncut Support Gem (Level 5)",
+"id": "Metadata/Items/Gems/SupportGemUncut5",
+"desc": "Creates a Support Gem"
+},
+{
+"name": "Uncut Spirit Gem (Level 4)",
+"id": "Metadata/Items/Gems/ReservationGemUncut4",
+"desc": "Creates a Persistent Skill Gem at Level 4"
+},
+{
+"name": "Uncut Spirit Gem (Level 5)",
+"id": "Metadata/Items/Gems/ReservationGemUncut5",
+"desc": "Creates a Persistent Skill Gem or Level an existing gem to Level 5"
+},
+{
+"name": "Uncut Spirit Gem (Level 6)",
+"id": "Metadata/Items/Gems/ReservationGemUncut6",
+"desc": "Creates a Persistent Skill Gem or Level an existing gem to Level 6"
+},
+{
+"name": "Uncut Spirit Gem (Level 7)",
+"id": "Metadata/Items/Gems/ReservationGemUncut7",
+"desc": "Creates a Persistent Skill Gem or Level an existing gem to Level 7"
+},
+{
+"name": "Uncut Spirit Gem (Level 8)",
+"id": "Metadata/Items/Gems/ReservationGemUncut8",
+"desc": "Creates a Persistent Skill Gem or Level an existing gem to Level 8"
+},
+{
+"name": "Uncut Spirit Gem (Level 9)",
+"id": "Metadata/Items/Gems/ReservationGemUncut9",
+"desc": "Creates a Persistent Skill Gem or Level an existing gem to Level 9"
+},
+{
+"name": "Uncut Spirit Gem (Level 10)",
+"id": "Metadata/Items/Gems/ReservationGemUncut10",
+"desc": "Creates a Persistent Skill Gem or Level an existing gem to Level 10"
+},
+{
+"name": "Uncut Spirit Gem (Level 11)",
+"id": "Metadata/Items/Gems/ReservationGemUncut11",
+"desc": "Creates a Persistent Skill Gem or Level an existing gem to Level 11"
+},
+{
+"name": "Uncut Spirit Gem (Level 12)",
+"id": "Metadata/Items/Gems/ReservationGemUncut12",
+"desc": "Creates a Persistent Skill Gem or Level an existing gem to Level 12"
+},
+{
+"name": "Uncut Spirit Gem (Level 13)",
+"id": "Metadata/Items/Gems/ReservationGemUncut13",
+"desc": "Creates a Persistent Skill Gem or Level an existing gem to Level 13"
+},
+{
+"name": "Uncut Spirit Gem (Level 14)",
+"id": "Metadata/Items/Gems/ReservationGemUncut14",
+"desc": "Creates a Persistent Skill Gem or Level an existing gem to Level 14"
+},
+{
+"name": "Uncut Spirit Gem (Level 15)",
+"id": "Metadata/Items/Gems/ReservationGemUncut15",
+"desc": "Creates a Persistent Skill Gem or Level an existing gem to Level 15"
+},
+{
+"name": "Uncut Spirit Gem (Level 16)",
+"id": "Metadata/Items/Gems/ReservationGemUncut16",
+"desc": "Creates a Persistent Skill Gem or Level an existing gem to Level 16"
+},
+{
+"name": "Uncut Spirit Gem (Level 17)",
+"id": "Metadata/Items/Gems/ReservationGemUncut17",
+"desc": "Creates a Persistent Skill Gem or Level an existing gem to Level 17"
+},
+{
+"name": "Uncut Spirit Gem (Level 18)",
+"id": "Metadata/Items/Gems/ReservationGemUncut18",
+"desc": "Creates a Persistent Skill Gem or Level an existing gem to Level 18"
+},
+{
+"name": "Uncut Spirit Gem (Level 19)",
+"id": "Metadata/Items/Gems/ReservationGemUncut19",
+"desc": "Creates a Persistent Skill Gem or Level an existing gem to Level 19"
+},
+{
+"name": "Uncut Spirit Gem (Level 20)",
+"id": "Metadata/Items/Gems/ReservationGemUncut20",
+"desc": "Creates a Persistent Skill Gem or Level an existing gem to Level 20"
+},
+{
+"name": "Uncut Skill Gem (Level 1)",
+"id": "Metadata/Items/Gems/SkillGemUncutQuest1",
+"desc": "Creates a Skill Gem up to level 1"
+},
+{
+"name": "Idol of Estazunti",
+"id": "Metadata/Items/Currency/Atlas/VaalAtlasKey",
+"desc": "Grants access to a Sealed Vault on the Atlas"
+},
+{
+"name": "Red Packet",
+"id": "Metadata/Items/MicrotransactionCurrency/MicrotransactionTencentEventCoin4",
+"desc": "Grants an Event Point."
+},
+{
+"name": "Runic Alloy",
+"id": "Metadata/Items/Currency/CurrencyVerisiumAlloy1",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Adaptive Alloy",
+"id": "Metadata/Items/Currency/CurrencyVerisiumAlloy2",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Protective Alloy",
+"id": "Metadata/Items/Currency/CurrencyVerisiumAlloy3",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Expansive Alloy",
+"id": "Metadata/Items/Currency/CurrencyVerisiumAlloy4",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Swift Alloy",
+"id": "Metadata/Items/Currency/CurrencyVerisiumAlloy5",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Cyclonic Alloy",
+"id": "Metadata/Items/Currency/CurrencyVerisiumAlloy6",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Prismatic Alloy",
+"id": "Metadata/Items/Currency/CurrencyVerisiumAlloy7",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Mystic Alloy",
+"id": "Metadata/Items/Currency/CurrencyVerisiumAlloy8",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Sovereign Alloy",
+"id": "Metadata/Items/Currency/CurrencyVerisiumAlloy9",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Celestial Alloy",
+"id": "Metadata/Items/Currency/CurrencyVerisiumAlloy10",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Transcendent Alloy",
+"id": "Metadata/Items/Currency/CurrencyVerisiumAlloy11",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "The Runebinder's Alloy",
+"id": "Metadata/Items/Currency/CurrencyVerisiumAlloy12",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "The Runefather's Alloy",
+"id": "Metadata/Items/Currency/CurrencyVerisiumAlloy13",
+"desc": "Removes a random modifier and augments a [ItemRarity|Rare] item with a new guaranteed modifier"
+},
+{
+"name": "Blazing Flux",
+"id": "Metadata/Items/Currency/CurrencyArcaneFluxFire",
+"desc": "Transforms all [Cold] and [Lightning] Resistance modifiers on an item to equivalent [Fire] Resistance modifiers"
+},
+{
+"name": "Chilling Flux",
+"id": "Metadata/Items/Currency/CurrencyArcaneFluxCold",
+"desc": "Transforms all [Fire] and [Lightning] Resistance modifiers on an item to equivalent [Cold] Resistance modifiers"
+},
+{
+"name": "Crackling Flux",
+"id": "Metadata/Items/Currency/CurrencyArcaneFluxLightning",
+"desc": "Transforms all [Fire] and [Cold] Resistance modifiers on an item to equivalent [Lightning] Resistance modifiers"
+},
+{
+"name": "Void Flux",
+"id": "Metadata/Items/Currency/CurrencyArcaneFluxChaos",
+"desc": "Transforms all [Fire], [Cold] and [Lightning] Resistance modifiers on an item to equivalent [Chaos] resistance modifiers"
+},
+{
+"name": "Liquid Verisium",
+"id": "Metadata/Items/Currency/CurrencyRerollRemnant",
+"desc": "Immediately start a Runic Remnant Encounter with a random Runic Inscription"
+},
+{
+"name": "Expedition Logbook",
+"id": "Metadata/Items/Expedition/Expedition2Logbook",
+"desc": "Reveals an Ocean Biome on the Atlas"
+},
+{
+"name": "Aldur's Saga",
+"id": "Metadata/Items/Expedition/Expedition2LogbookSpecial",
+"desc": "While this item is active in your inventory your next Logbook adds special modifiers to revealed Grand Expedition areas"
+},
+{
+"name": "Medved's Saga",
+"id": "Metadata/Items/Expedition/Expedition2LogbookMedved",
+"desc": "While this item is active in your inventory your next Logbook guarantees a Medved encounter in the revealed Biome"
+},
+{
+"name": "Vorana's Saga",
+"id": "Metadata/Items/Expedition/Expedition2LogbookVorana",
+"desc": "While this item is active in your inventory your next Logbook guarantees a Vorana encounter in the revealed Biome"
+},
+{
+"name": "Uhtred's Saga",
+"id": "Metadata/Items/Expedition/Expedition2LogbookUhtred",
+"desc": "While this item is active in your inventory your next Logbook guarantees an Uhtred encounter in the revealed Biome"
+},
+{
+"name": "Olroth's Saga",
+"id": "Metadata/Items/Expedition/Expedition2LogbookOlroth",
+"desc": "While this item is active in your inventory your next Logbook guarantees an Olroth encounter in the revealed Biome"
+},
+{
+"name": "Ancient Rune of Splinters",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients1",
+"desc": "Place into an empty [Augment] Socket in a Bow to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Ancient Rune of Dueling",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients2",
+"desc": "Place into an empty [Augment] Socket in a Buckler to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Ancient Rune of the Titan",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients3",
+"desc": "Place into an empty [Augment] Socket in a Two Hand Mace to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Ancient Rune of Shattering",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients4",
+"desc": "Place into an empty [Augment] Socket in a One Hand Mace to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Ancient Rune of Prowess",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients5",
+"desc": "Place into an empty [Augment] Socket in a Spear to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Ancient Rune of Control",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients6",
+"desc": "Place into an empty [Augment] Socket in a  Quarterstaff to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Ancient Rune of Discovery",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients7",
+"desc": "Place into an empty [Augment] Socket in a Staff to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Ancient Rune of Decay",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients8",
+"desc": "Place into an empty [Augment] Socket in a Wand to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Ancient Rune of Witchcraft",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients9",
+"desc": "Place into an empty [Augment] Socket in a Focus to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Ancient Rune of the Horde",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients10",
+"desc": "Place into an empty [Augment] Socket in a Sceptre to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Ancient Rune of Animosity",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients11",
+"desc": "Place into an empty [Augment] Socket in a Talisman to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Ancient Rune of Detonation",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients12",
+"desc": "Place into an empty [Augment] Socket in a Crossbow to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Ancient Rune of Retaliation",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients13",
+"desc": "Place into an empty [Augment] Socket in a Shield to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Rune of Vitality",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients14",
+"desc": "Place into an empty [Augment] Socket in a Weapon, Shield or Buckler to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Rune of the Hunt",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients15",
+"desc": "Place into an empty [Augment] Socket in a Sceptre or pair of Boots to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Rune of Acrobatics",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients16",
+"desc": "Place into an empty [Augment] Socket in a weapon or pair of Boots to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Rune of Culmination",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients17",
+"desc": "Place into an empty [Augment] Socket in a One Hand Mace, Quarterstaff, or pair of Gloves to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Rune of Renown",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients18",
+"desc": "Place into an empty [Augment] Socket in a Caster Weapon or pair of Gloves to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Rune of Accumulation",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients19",
+"desc": "Place into an empty [Augment] Socket in a Ranged Weapon or pair of Gloves to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Rune of Foundations",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients20",
+"desc": "Place into an empty [Augment] Socket in a Body Armour to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Rune of the Prism",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients21",
+"desc": "Place into an empty [Augment] Socket in a Body Armour to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Rune of the Blossom",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients22",
+"desc": "Place into an empty [Augment] Socket in a Body Armour to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Rune of Consistency",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients23",
+"desc": "Place into an empty [Augment] Socket in a Wand, Staff or Helmet to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Rune of Reach",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients24",
+"desc": "Place into an empty [Augment] Socket in a Wand, Staff or Helmet to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Rune of Vital Flame",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients25",
+"desc": "Place into an empty [Augment] Socket in a Mace or Talisman to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Rune of Confrontation",
+"id": "Metadata/Items/SoulCores/RuneOfTheAncients26",
+"desc": "Place into an empty [Augment] Socket in a Quarterstaff or Spear to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Perfect Flux",
+"id": "Metadata/Items/Currency/CurrencyUpgradeInherentTo20",
+"desc": "Upgrades the Skills on an item to Level 20"
+},
+{
+"name": "Passion of Aldur",
+"id": "Metadata/Items/SoulCores/RuneConvertFire",
+"desc": "Place into an empty [Augment] Socket in a [Rarity|Rare] Weapon to apply its effect to that item. Transforms modifiers upon socketing, further added modifiers will not be transformed. Once socketed it cannot be retrieved or replaced."
+},
+{
+"name": "Breath of Aldur",
+"id": "Metadata/Items/SoulCores/RuneConvertCold",
+"desc": "Place into an empty [Augment] Socket in a [Rarity|Rare] Weapon to apply its effect to that item. Transforms modifiers upon socketing, further added modifiers will not be transformed. Once socketed it cannot be retrieved or replaced."
+},
+{
+"name": "Ire of Aldur",
+"id": "Metadata/Items/SoulCores/RuneConvertLightning",
+"desc": "Place into an empty [Augment] Socket in a [Rarity|Rare] Weapon to apply its effect to that item. Transforms modifiers upon socketing, further added modifiers will not be transformed. Once socketed it cannot be retrieved or replaced."
+},
+{
+"name": "Betrayal of Aldur",
+"id": "Metadata/Items/SoulCores/RuneConvertChaos",
+"desc": "Place into an empty [Augment] Socket in a [Rarity|Rare] Weapon to apply its effect to that item. Transforms modifiers upon socketing, further added modifiers will not be transformed. Once socketed it cannot be retrieved or replaced."
+},
+{
+"name": "Raven-Touched Shard",
+"id": "Metadata/Items/SoulCores/AugmentAnoint",
+"desc": "Place into an empty [Augment] Socket in a Helmet to apply its effect to that item. Once socketed it cannot be retrieved or replaced."
+},
+{
+"name": "Serle's Triumph",
+"id": "Metadata/Items/SoulCores/RuneWarpingAdditionalSuffix",
+"desc": "Place into an empty [Augment] Socket in any Equipment to apply its effect to that item. Once socketed it cannot be retrieved or replaced."
+},
+{
+"name": "Cadigan's Epiphany",
+"id": "Metadata/Items/SoulCores/RuneWarpingCreateJewelSocket",
+"desc": "Place into an empty [Augment] Socket in a pair of Gloves to apply its effect to that item. Once socketed it cannot be retrieved or replaced. "
+},
+{
+"name": "Astrid's Creativity",
+"id": "Metadata/Items/SoulCores/RuneWarpingAdditionalCraftedMod",
+"desc": "Place into an empty [Augment] Socket in any Equipment to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Uhtred's Sidereus",
+"id": "Metadata/Items/SoulCores/RuneWarpingTimeInfluence",
+"desc": "Place into an empty [Augment] Socket in a pair of Boots to apply its effect to that item. Once socketed it cannot be retrieved or replaced. "
+},
+{
+"name": "Kolr's Hunt",
+"id": "Metadata/Items/SoulCores/RuneWarpingMarksmanInfluence",
+"desc": "Place into an empty [Augment] Socket in a pair of Gloves to apply its effect to that item. Once socketed it cannot be retrieved or replaced."
+},
+{
+"name": "Vorana's Carnage",
+"id": "Metadata/Items/SoulCores/RuneWarpingBerserkerInfluence",
+"desc": "Place into an empty [Augment] Socket in a Helmet to apply its effect to that item. Once socketed it cannot be retrieved or replaced."
+},
+{
+"name": "Thrud's Might",
+"id": "Metadata/Items/SoulCores/RuneWarpingDestructionInfluence",
+"desc": "Place into an empty [Augment] Socket in a Weapon to apply its effect to that item. Once socketed it cannot be retrieved or replaced."
+},
+{
+"name": "Medved's Tending",
+"id": "Metadata/Items/SoulCores/RuneWarpingSoulInfluence",
+"desc": "Place into an empty [Augment] Socket in a Body Armour to apply its effect to that item. Once socketed it cannot be retrieved or replaced."
+},
+{
+"name": "Katla's Gloom",
+"id": "Metadata/Items/SoulCores/RuneWarpingDecayInfluence",
+"desc": "Place into an empty [Augment] Socket in a pair of Gloves to apply its effect to that item. Once socketed it cannot be retrieved or replaced."
+},
+{
+"name": "Aldur's Legacy",
+"id": "Metadata/Items/SoulCores/RuneWarpingOlrothsLegacy",
+"desc": "Place into an empty [Augment] Socket in any non-Corrupted Kalguuran or Ezomyte [Rarity|Unique] to destroy that Unique and create a new Rune."
+},
+{
+"name": "Legacy of Bramblejack",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyBramblejack",
+"desc": "Place into an empty [Augment] Socket in a Body Armour to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Blackbraid",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyBlackbraid",
+"desc": "Place into an empty [Augment] Socket in a Body Armour to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Edyrn's Tusks",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyEdyrnsTusks",
+"desc": "Place into an empty [Augment] Socket in a Body Armour to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Bristleboar",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyBristleboar",
+"desc": "Place into an empty [Augment] Socket in a Body Armour to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Foxshade",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyFoxshade",
+"desc": "Place into an empty [Augment] Socket in a Body Armour to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Ashrend",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyAshrend",
+"desc": "Place into an empty [Augment] Socket in a Body Armour to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Horns of Bynden",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyHornsofBynden",
+"desc": "Place into an empty [Augment] Socket in a Helmet to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Wings of Caelyn",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyWingsofCaelyn",
+"desc": "Place into an empty [Augment] Socket in a Helmet to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Ezomyte Peak",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyEzomytePeak",
+"desc": "Place into an empty [Augment] Socket in a Helmet to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Deidbell",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyDeidbell",
+"desc": "Place into an empty [Augment] Socket in a Helmet to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Elevore",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyElevore",
+"desc": "Place into an empty [Augment] Socket in a Helmet to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Greymake",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyGreymake",
+"desc": "Place into an empty [Augment] Socket in a Helmet to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Erian's Cobble",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyEriansCobble",
+"desc": "Place into an empty [Augment] Socket in a Helmet to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of The Smiling Knight",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyTheSmilingKnight",
+"desc": "Place into an empty [Augment] Socket in a Helmet to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of The Vile Knight",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyTheVileKnight",
+"desc": "Place into an empty [Augment] Socket in a Helmet to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Northpaw",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyNorthpaw",
+"desc": "Place into an empty [Augment] Socket in a pair of Gloves to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Candlemaker",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyCandlemaker",
+"desc": "Place into an empty [Augment] Socket in a pair of Gloves to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Deathblow",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyDeathblow",
+"desc": "Place into an empty [Augment] Socket in a pair of Gloves to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Legionstride",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyLegionstride",
+"desc": "Place into an empty [Augment] Socket in a pair of Boots to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Trampletoe",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyTrampletoe",
+"desc": "Place into an empty [Augment] Socket in a pair of Boots to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Bushwhack",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyBushwhack",
+"desc": "Place into an empty [Augment] Socket in a pair of Boots to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Wanderlust",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyWanderlust",
+"desc": "Place into an empty [Augment] Socket in a pair of Boots to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of The Knight-errant",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyTheKnight-errant",
+"desc": "Place into an empty [Augment] Socket in a pair of Boots to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Obern's Bastion",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyObernsBastion",
+"desc": "Place into an empty [Augment] Socket in a pair of Boots to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Dionadair",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyDionadair",
+"desc": "Place into an empty [Augment] Socket in a Shield to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Wulfsbane",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyWulfsbane",
+"desc": "Place into an empty [Augment] Socket in a Shield to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Chernobog's Pillar",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyChernobogsPillar",
+"desc": "Place into an empty [Augment] Socket in a Shield to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Alkem Eira",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyAlkemEira",
+"desc": "Place into an empty [Augment] Socket in a Shield to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Dunkelhalt",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyDunkelhalt",
+"desc": "Place into an empty [Augment] Socket in a Buckler to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Brynhand's Mark",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyBrynhandsMark",
+"desc": "Place into an empty [Augment] Socket in a One Hand Mace to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Trenchtimbre",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyTrenchtimbre",
+"desc": "Place into an empty [Augment] Socket in a One Hand Mace to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Hoghunt",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyHoghunt",
+"desc": "Place into an empty [Augment] Socket in a Two Hand Mace to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Hrimnor's Hymn",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyHrimnorsHymn",
+"desc": "Place into an empty [Augment] Socket in a Two Hand Mace to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Brain Rattler",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyBrainRattler",
+"desc": "Place into an empty [Augment] Socket in a Two Hand Mace to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of The Sentry",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyTheSentry",
+"desc": "Place into an empty [Augment] Socket in a  Quarterstaff to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Adonia's Ego",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyAdoniasEgo",
+"desc": "Place into an empty [Augment] Socket in a Wand to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Cursecarver",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyCursecarver",
+"desc": "Place into an empty [Augment] Socket in a Wand to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Dusk Vigil",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyDuskVigil",
+"desc": "Place into an empty [Augment] Socket in a Staff to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Quill Rain",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyQuillRain",
+"desc": "Place into an empty [Augment] Socket in a Bow to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Svalinn",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacySvalinn",
+"desc": "Place into an empty [Augment] Socket in a Shield to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Keeper of the Arc",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyKeeperoftheArc",
+"desc": "Place into an empty [Augment] Socket in a Helmet to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Olrovasara",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyOlrovasara",
+"desc": "Place into an empty [Augment] Socket in a One Hand Mace to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of A Worthy Foe",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacyEyesOfTheRunefather",
+"desc": "Place into an empty [Augment] Socket in a Shield to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Legacy of Serle's Grit",
+"id": "Metadata/Items/SoulCores/RuneOlrothsLegacySerlesGrit",
+"desc": "Place into an empty [Augment] Socket in a One Hand Mace to apply its effect to that item. Once socketed it cannot be retrieved but can be replaced by other [Augment] items."
+},
+{
+"name": "Cryptic Key",
+"id": "Metadata/Items/Currency/StrongboxKey",
+"desc": "Opens an unopened [Strongbox] allowing it to be opened an additional time"
+},
+{
+"name": "Thaumaturgic Flux (Level 1)",
+"id": "Metadata/Items/Currency/CurrencySetKalguuranSkillGemLevel1",
+"desc": "Sets a Kalguuran Skill Gem to level 1"
+},
+{
+"name": "Thaumaturgic Flux (Level 2)",
+"id": "Metadata/Items/Currency/CurrencySetKalguuranSkillGemLevel2",
+"desc": "Upgrades a Kalguuran Skill Gem to level 2"
+},
+{
+"name": "Thaumaturgic Flux (Level 3)",
+"id": "Metadata/Items/Currency/CurrencySetKalguuranSkillGemLevel3",
+"desc": "Upgrades a Kalguuran Skill Gem to level 3"
+},
+{
+"name": "Thaumaturgic Flux (Level 4)",
+"id": "Metadata/Items/Currency/CurrencySetKalguuranSkillGemLevel4",
+"desc": "Upgrades a Kalguuran Skill Gem to level 4"
+},
+{
+"name": "Thaumaturgic Flux (Level 5)",
+"id": "Metadata/Items/Currency/CurrencySetKalguuranSkillGemLevel5",
+"desc": "Upgrades a Kalguuran Skill Gem to level 5"
+},
+{
+"name": "Thaumaturgic Flux (Level 6)",
+"id": "Metadata/Items/Currency/CurrencySetKalguuranSkillGemLevel6",
+"desc": "Upgrades a Kalguuran Skill Gem to level 6"
+},
+{
+"name": "Thaumaturgic Flux (Level 7)",
+"id": "Metadata/Items/Currency/CurrencySetKalguuranSkillGemLevel7",
+"desc": "Upgrades a Kalguuran Skill Gem to level 7"
+},
+{
+"name": "Thaumaturgic Flux (Level 8)",
+"id": "Metadata/Items/Currency/CurrencySetKalguuranSkillGemLevel8",
+"desc": "Upgrades a Kalguuran Skill Gem to level 8"
+},
+{
+"name": "Thaumaturgic Flux (Level 9)",
+"id": "Metadata/Items/Currency/CurrencySetKalguuranSkillGemLevel9",
+"desc": "Upgrades a Kalguuran Skill Gem to level 9"
+},
+{
+"name": "Thaumaturgic Flux (Level 10)",
+"id": "Metadata/Items/Currency/CurrencySetKalguuranSkillGemLevel10",
+"desc": "Upgrades a Kalguuran Skill Gem to level 10"
+},
+{
+"name": "Thaumaturgic Flux (Level 11)",
+"id": "Metadata/Items/Currency/CurrencySetKalguuranSkillGemLevel11",
+"desc": "Upgrades a Kalguuran Skill Gem to level 11"
+},
+{
+"name": "Thaumaturgic Flux (Level 12)",
+"id": "Metadata/Items/Currency/CurrencySetKalguuranSkillGemLevel12",
+"desc": "Upgrades a Kalguuran Skill Gem to level 12"
+},
+{
+"name": "Thaumaturgic Flux (Level 13)",
+"id": "Metadata/Items/Currency/CurrencySetKalguuranSkillGemLevel13",
+"desc": "Upgrades a Kalguuran Skill Gem to level 13"
+},
+{
+"name": "Thaumaturgic Flux (Level 14)",
+"id": "Metadata/Items/Currency/CurrencySetKalguuranSkillGemLevel14",
+"desc": "Upgrades a Kalguuran Skill Gem to level 14"
+},
+{
+"name": "Thaumaturgic Flux (Level 15)",
+"id": "Metadata/Items/Currency/CurrencySetKalguuranSkillGemLevel15",
+"desc": "Upgrades a Kalguuran Skill Gem to level 15"
+},
+{
+"name": "Thaumaturgic Flux (Level 16)",
+"id": "Metadata/Items/Currency/CurrencySetKalguuranSkillGemLevel16",
+"desc": "Upgrades a Kalguuran Skill Gem to level 16"
+},
+{
+"name": "Thaumaturgic Flux (Level 17)",
+"id": "Metadata/Items/Currency/CurrencySetKalguuranSkillGemLevel17",
+"desc": "Upgrades a Kalguuran Skill Gem to level 17"
+},
+{
+"name": "Thaumaturgic Flux (Level 18)",
+"id": "Metadata/Items/Currency/CurrencySetKalguuranSkillGemLevel18",
+"desc": "Upgrades a Kalguuran Skill Gem to level 18"
+},
+{
+"name": "Thaumaturgic Flux (Level 19)",
+"id": "Metadata/Items/Currency/CurrencySetKalguuranSkillGemLevel19",
+"desc": "Upgrades a Kalguuran Skill Gem to level 19"
+},
+{
+"name": "Thaumaturgic Flux (Level 20)",
+"id": "Metadata/Items/Currency/CurrencySetKalguuranSkillGemLevel20",
+"desc": "Upgrades a Kalguuran Skill Gem to level 20"
+},
+{
+"name": "Sacred Bloom",
+"id": "Metadata/Items/MapFragments/CurrencyWildwoodFragment",
+"desc": "Adds a Viridian Wildwood to a Map and all Maps connected to it"
+}
+]

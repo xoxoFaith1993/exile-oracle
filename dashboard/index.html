@@ -1,0 +1,1185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PoE 2 Toolkit</title>
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #121211; --surface-1: #1a1a19; --surface-2: #232321; --border: #33332f;
+  --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #8f8e86;
+  --accent: #c8283c; --accent-soft: #3a1a1f;
+  --series-1: #3987e5; --up: #3987e5; --down: #e66767; --mid: #383835;
+  --good: #0ca30c; --warning: #fab219; --critical: #d03b3b;
+  --grid: #2a2a27;
+}
+@media (prefers-color-scheme: light) {
+  :root:where(:not([data-theme="dark"])) {
+    color-scheme: light;
+    --bg: #f4f3f0; --surface-1: #fcfcfb; --surface-2: #f0efec; --border: #dddcd6;
+    --text-primary: #0b0b0b; --text-secondary: #52514e; --text-muted: #77766f;
+    --accent: #c8283c; --accent-soft: #f7e3e6;
+    --series-1: #2a78d6; --up: #2a78d6; --down: #e34948; --mid: #f0efec; --grid: #e7e6e1;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text-primary);
+  font: 14px/1.45 "Segoe UI", system-ui, sans-serif; }
+header { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 12px 18px;
+  background: var(--surface-1); border-bottom: 2px solid var(--accent); position: sticky; top: 0; z-index: 5; }
+header h1 { font-size: 17px; margin: 0; letter-spacing: .3px; }
+header h1 span { color: var(--accent); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; padding: 3px 10px;
+  font-size: 12.5px; color: var(--text-secondary); white-space: nowrap; }
+.chip b { color: var(--text-primary); font-weight: 600; }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+nav { display: flex; gap: 4px; padding: 10px 18px 0; flex-wrap: wrap; }
+nav button { background: none; border: 0; color: var(--text-secondary); padding: 8px 14px; font: inherit;
+  border-bottom: 2px solid transparent; cursor: pointer; }
+nav button.on { color: var(--text-primary); border-bottom-color: var(--accent); }
+nav .badge { background: var(--accent); color: #fff; border-radius: 999px; padding: 0 6px; font-size: 11px; margin-left: 4px; }
+main { padding: 14px 18px 40px; max-width: 1200px; margin: 0 auto; }
+section { display: none; } section.on { display: block; }
+.card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 14px;
+  overflow-x: auto; min-width: 0; }
+.card h2 { font-size: 15px; margin: 0 0 4px; } .card .sub { color: var(--text-muted); font-size: 12.5px; margin-bottom: 10px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 14px; }
+.grid2 > * { min-width: 0; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { text-align: left; color: var(--text-muted); font-weight: 600; font-size: 12px; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+td { padding: 6px 8px; border-bottom: 1px solid var(--grid); vertical-align: top; }
+tr.click { cursor: pointer; } tr.click:hover td { background: var(--surface-2); }
+.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.muted { color: var(--text-muted); } .small { font-size: 12px; }
+.pos { color: var(--up); } .neg { color: var(--down); }
+input[type=search] { width: 100%; max-width: 420px; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--surface-2); color: var(--text-primary); font: inherit; }
+.tier1 { color: #e3b341; font-weight: 600; } .tier2 { color: var(--text-primary); } .tierlow { color: var(--text-muted); }
+.pill { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 11.5px; background: var(--surface-2); border: 1px solid var(--border); }
+.alert { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--grid); }
+.alert .k { min-width: 92px; }
+.empty { color: var(--text-muted); padding: 24px 0; text-align: center; }
+svg text { fill: var(--text-muted); font-size: 11px; }
+.tip { position: fixed; pointer-events: none; background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px;
+  padding: 6px 9px; font-size: 12.5px; display: none; z-index: 20; box-shadow: 0 4px 14px rgba(0,0,0,.35); }
+pre { white-space: pre-wrap; font-size: 12px; color: var(--text-secondary); }
+footer { color: var(--text-muted); font-size: 11.5px; text-align: center; padding: 20px; }
+@media (max-width: 600px) { header, nav, main { padding-left: 16px; padding-right: 16px; } }
+
+/* ---------- character page (poe.ninja-style) ---------- */
+.char-head { display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 16px; }
+.char-head h2 { font-size:22px; margin:0; }
+.char-grid { display:grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap:14px; }
+@media (max-width: 900px) { .char-grid { grid-template-columns: minmax(0, 1fr); } }
+.inv { display:grid; grid-template-columns: repeat(8, 46px); grid-auto-rows: 46px; gap:4px; justify-content:center; padding:8px 0; }
+.slot { border:1px solid var(--border); background: var(--surface-2); border-radius:6px; display:flex; align-items:center;
+  justify-content:center; position:relative; cursor:default; overflow:hidden; }
+.slot img { max-width:92%; max-height:92%; object-fit:contain; }
+.slot.r-UNIQUE { border-color:#af6025; box-shadow: inset 0 0 12px rgba(175,96,37,.25); }
+.slot.r-RARE { border-color:#c9b65a; box-shadow: inset 0 0 12px rgba(201,182,90,.18); }
+.slot.r-MAGIC { border-color:#7777dd; }
+.slot .lbl { position:absolute; bottom:2px; left:0; right:0; font-size:9.5px; color:var(--text-muted); text-align:center; }
+.jrow { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; }
+.jrow .slot { width:46px; height:46px; }
+.ptip { max-width: 380px; padding:0; background:#0c0c0b; border:1px solid #3d3a33; color:#c8c8c8; text-align:center; font-size:12.5px; }
+.ptip .hd { padding:6px 10px; font-weight:600; line-height:1.25; }
+.ptip .hd.r-UNIQUE { color:#af6025; background:linear-gradient(#2a1a10,#1a120b); }
+.ptip .hd.r-RARE { color:#ffff77; background:linear-gradient(#2a2614,#1a170b); }
+.ptip .hd.r-MAGIC { color:#8888ff; background:linear-gradient(#16163a,#0e0e22); }
+.ptip .hd.r-NORMAL { color:#c8c8c8; background:#1b1b1a; }
+.ptip .sec { padding:5px 10px; border-top:1px solid #2c2a25; }
+.ptip .prop { color:#7f7f7f; } .ptip .prop b { color:#fff; font-weight:500; }
+.ptip .imp, .ptip .exp { color:#8888ff; } .ptip .ench { color:#b4b4ff; } .ptip .crafted { color:#b4b4ff; }
+.ptip .desec { color:#d06c6c; } .ptip .corr { color:#d20000; } .ptip .tier { color:#e3b341; font-size:11px; margin-right:4px; }
+.ptip .note { color:#7f7f7f; font-size:11px; }
+.skills { display:grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap:8px; }
+.sk { background:var(--surface-2); border:1px solid var(--border); border-radius:8px; padding:8px 10px; }
+.sk.main { border-color: var(--accent); }
+.sk .top { display:flex; align-items:center; gap:8px; }
+.sk .top img { width:34px; height:34px; border-radius:4px; }
+.sk .sup { font-size:12px; color:var(--text-secondary); margin-top:4px; line-height:1.5; }
+.sk .lin { color:#e09a4b; }
+.stat-sec h3 { font-size:12px; letter-spacing:.6px; color:var(--text-muted); margin:10px 0 4px; text-transform:uppercase; }
+.stat-row { display:flex; justify-content:space-between; gap:10px; padding:3px 0; border-bottom:1px solid var(--grid); font-size:13px; }
+.stat-row span:last-child { font-variant-numeric: tabular-nums; color:var(--text-primary); }
+.ks { display:flex; gap:10px; align-items:flex-start; padding:6px 0; border-bottom:1px solid var(--grid); }
+.ks img { width:36px; height:36px; border-radius:50%; flex:none; }
+.ks .t { font-weight:600; } .ks .d { font-size:12px; color:var(--text-secondary); }
+.treebox { position:relative; height: 620px; background:#0b0b0a; border:1px solid var(--border); border-radius:8px; overflow:hidden; touch-action:none; }
+.treebox svg { width:100%; height:100%; cursor:default; display:block; }
+.treebox svg.dragging { cursor:grabbing; }
+.treebox svg [data-n] { cursor:pointer; }
+.treebox svg.dragging [data-n] { cursor:grabbing; }
+.treebox .hint { position:absolute; left:10px; bottom:8px; font-size:11.5px; color:#77766f; pointer-events:none; }
+.treebox .zbtn { position:absolute; right:10px; top:10px; display:flex; flex-direction:column; gap:4px; }
+.treebox .zbtn button { width:30px; height:30px; border-radius:6px; border:1px solid var(--border); background:var(--surface-2); color:var(--text-primary); font-size:16px; cursor:pointer; }
+.btn { background: var(--surface-2); border:1px solid var(--border); color: var(--text-primary); border-radius:6px; padding:5px 12px; font: inherit; font-size:13px; cursor:pointer; }
+.btn:hover { border-color: var(--accent); } .btn:disabled { opacity:.6; cursor:default; }
+
+/* ---------- market at a glance ---------- */
+.tiles { display:grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap:10px; margin:6px 0 4px; }
+.tile { background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:10px 12px; display:flex; gap:10px; align-items:center; }
+.tile img { width:40px; height:40px; object-fit:contain; flex:none; }
+.tile .v { font-size:20px; font-weight:700; line-height:1.15; font-variant-numeric: tabular-nums; }
+.tile .l { font-size:12px; color:var(--text-muted); }
+.chase { display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:8px; }
+.ci { background:var(--surface-2); border:1px solid var(--border); border-radius:8px; padding:8px; display:flex; gap:9px; align-items:center; cursor:pointer; min-width:0; }
+.ci:hover { border-color:#af6025; }
+.ci img { width:44px; height:44px; object-fit:contain; flex:none; }
+.ci .n { font-weight:600; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ci .u { color:#e09a4b; } .ci .b { font-size:11.5px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ci .p { font-size:13px; font-variant-numeric: tabular-nums; } .ci .m { font-size:11px; color:#e3b341; }
+
+/* ---------- craft lab ---------- */
+.crrow { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:6px; }
+.crin { background:var(--surface-2); color:var(--text-primary); border:1px solid var(--border); border-radius:6px; padding:5px 8px; font:inherit; font-size:13px; }
+.crmod { display:flex; gap:6px; align-items:center; padding:4px 6px; border-radius:6px; font-size:13px; margin-top:3px; background:var(--surface-2); }
+.crmod.ok { box-shadow: inset 3px 0 0 #3fa34d; } .crmod.bad { box-shadow: inset 3px 0 0 var(--down); }
+.crmod .x { margin-left:auto; background:none; border:0; color:var(--text-muted); cursor:pointer; font-size:12px; }
+.crmod .x + .x { margin-left:0; }
+.crstep { display:flex; gap:8px; align-items:center; padding:8px; border:1px solid var(--border); border-radius:8px; margin-top:6px; flex-wrap:wrap; }
+.crstep.rec { border-color: var(--accent); background: var(--accent-soft); }
+
+/* ---------- patch notes ---------- */
+.pn-line { padding:6px 8px; border-left:3px solid var(--border); margin:4px 0; background:var(--surface-2); border-radius:0 6px 6px 0; font-size:13px; }
+.pn-line.buff { border-left-color:#3fa34d; } .pn-line.nerf { border-left-color:var(--down); } .pn-line.buffq { border-left-color:#3fa34d99; } .pn-line.nerfq { border-left-color:#e6676799; }
+.pn-tag { font-size:11px; padding:0 6px; border-radius:999px; margin-right:6px; border:1px solid var(--border); }
+.pn-hit { font-size:11px; color:#e3b341; margin-left:4px; }
+
+/* ---------- farming + league start ---------- */
+.farm-row { display:grid; grid-template-columns: 28px minmax(140px,1.3fr) repeat(4, minmax(70px,1fr)); gap:8px; align-items:center; padding:8px 4px; border-bottom:1px solid var(--border); cursor:pointer; }
+.farm-row:hover { background:var(--surface-2); }
+.farm-rank { font-weight:700; color:var(--text-secondary); text-align:center; }
+.farm-bar { height:6px; border-radius:3px; background:#C8283C; margin-top:4px; }
+.farm-detail { padding:6px 10px 12px 40px; display:none; } .farm-detail.on { display:block; }
+.ls-node { display:flex; gap:8px; align-items:flex-start; padding:5px 0; border-bottom:1px solid var(--border); font-size:13px; }
+.ls-took { font-size:11px; color:#e3b341; white-space:nowrap; }
+@media (max-width: 640px) { .farm-row { grid-template-columns: 22px 1fr 1fr 1fr; } .farm-row .hide-s { display:none; } .farm-detail { padding-left:6px; } }
+
+/* ---------- top 1% ---------- */
+.t1-axes { display:grid; grid-template-columns: repeat(auto-fit, minmax(min(220px,100%), 1fr)); gap:12px; }
+.t1-axis { background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:12px; }
+.t1-axis.ok { border-color:#3fa34d; } .t1-axis.no { border-color:#C8283C; }
+.t1-label { font-size:12px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:.04em; }
+.t1-val { font-size:22px; font-weight:700; margin:4px 0; font-variant-numeric: tabular-nums; }
+.t1-meter { height:8px; border-radius:4px; background:var(--border); overflow:hidden; margin:8px 0 4px; }
+.t1-meter > div { height:100%; background:#C8283C; } .t1-axis.ok .t1-meter > div { background:#3fa34d; }
+.t1-score { font-size:28px; font-weight:800; }
+
+.pb-table td, .pb-table th { padding:5px 6px; text-align:right; font-variant-numeric: tabular-nums; font-size:13px; }
+.pb-table td:first-child, .pb-table th:first-child { text-align:left; }
+.pb-cell { border-radius:4px; }
+
+.mh-cats { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0; }
+.mh-cats button { background:var(--surface-2); border:1px solid var(--border); color:var(--text-secondary); border-radius:999px; padding:3px 10px; font:inherit; font-size:12px; cursor:pointer; }
+.mh-cats button.on { border-color:#C8283C; color:var(--text-primary); }
+.mh-table td { padding:6px 6px; vertical-align:middle; }
+@media (max-width: 640px) { .mh-table .hide-s { display:none; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>PoE 2 <span>Toolkit</span></h1>
+  <div class="chips" id="chips"><span class="chip">loading…</span></div>
+  <label class="chip" style="margin-left:auto">Prices in
+    <select id="unit" style="background:var(--surface-2);color:var(--text-primary);border:1px solid var(--border);border-radius:6px;margin-left:6px;font:inherit">
+      <option value="auto">Auto (div, or ex under 1 div)</option><option value="div">Divine</option>
+      <option value="ex">Exalted</option><option value="chaos">Chaos</option></select></label>
+</header>
+<nav id="nav">
+  <button data-tab="claude" class="on">From Claude</button>
+  <button data-tab="economy">Economy</button>
+  <button data-tab="builds">Builds</button>
+  <button data-tab="character">Character</button>
+  <button data-tab="top1">Top 1%</button>
+  <button data-tab="sessions">Sessions</button>
+  <button data-tab="farm">Farming</button>
+  <button data-tab="league">League start</button>
+  <button data-tab="craft">Craft</button>
+  <button data-tab="patches">Patch notes</button>
+  <button data-tab="alerts">Alerts <span class="badge" id="badge" hidden></span></button>
+  <button data-tab="status">Status</button>
+</nav>
+<main>
+  <section id="claude" class="on"><div id="show"><div class="card empty">Ask Claude something in chat (a build cost, upgrades, a compare, a price chart) and it shows up here.</div></div></section>
+  <section id="economy">
+    <div class="card"><h2>Market at a glance</h2><div class="sub" id="ovsub">Key currency and the league's chase items, from poe.ninja.</div>
+      <div class="tiles" id="ovtiles"></div>
+      <h2 style="margin-top:14px;font-size:14px">Chase uniques</h2><div class="chase" id="ovuniq"></div>
+      <h2 style="margin-top:14px;font-size:14px">Chase gems, runes, soul cores, idols &amp; fragments</h2><div class="chase" id="ovother"></div>
+      <h2 style="margin-top:14px;font-size:14px">Currency</h2><div class="chase" id="ovcur"></div>
+      <div class="small muted" style="margin-top:8px" id="ovnote"></div></div>
+    <div class="card">
+      <h2>Price check</h2><div class="sub">Search anything poe.ninja prices: uniques, currency, runes, soul cores, gems. Click a row for its price history.</div>
+      <input type="search" id="q" placeholder="e.g. Headhunter, Divine, Perfect Desert Rune">
+      <div id="results"></div>
+      <div id="hist"></div>
+    </div>
+    <div class="card"><h2>Market history</h2><div class="sub" id="mhsub">Every Currency Exchange item: price, stock and the last 7 days, hour by hour from GGG's exchange history.</div>
+      <div class="mh-cats" id="mhcats"></div>
+      <input type="search" id="mhq" placeholder="Filter items">
+      <div id="mhtable" style="overflow-x:auto"></div></div>
+    <div class="card"><h2>Biggest movers</h2><div class="sub" id="moverssub">Last 24 hours, from the prices the monitor stored.</div><div id="movers"></div></div>
+  </section>
+  <section id="builds"><div class="card"><h2>My characters</h2><div class="sub">Live from your account through Path of Building's GGG login, in the background. Only asks GGG when you press a button.</div><button class="btn" id="loadchars">Show my characters</button><div id="mychars"></div></div><div class="card"><h2>Build Vault</h2><div class="sub">Every build saved, kept forever. Ask Claude to cost, compare or upgrade any of them.</div><div id="buildlist"></div></div></section>
+  <section id="character"><div id="charview"><div class="card empty">Pick a build on the Builds tab, or ask Claude to show one.</div></div></section>
+  <section id="top1">
+    <div class="card"><h2>Top 1% check</h2><div class="sub">Your character against the top 1% of your ascendancy on poe.ninja: level, damage, toughness and gear value. Benchmarks are read on request (ask Claude to refresh them).</div>
+      <label class="small">Character <select class="crin" id="t1build"></select></label> <button class="btn" id="t1go">Check</button></div>
+    <div id="t1view"></div>
+  </section>
+  <section id="sessions">
+    <div class="card"><h2>Play sessions</h2><div class="sub">From the game's own log file (Client.txt) on this PC: no GGG API, nothing leaves your PC. Updates every minute while the monitor runs.</div><div id="sesslist"></div></div>
+    <div id="sessview"></div>
+  </section>
+  <section id="farm">
+    <div class="card"><h2>What to farm</h2><div class="sub" id="farmsub">League mechanics ranked by what their loot is worth and how much of it actually sells, from live poe.ninja prices. Click a row for its drops, chase items and tablets.</div>
+      <div class="farm-row" style="cursor:default;font-size:12px;color:var(--text-secondary)"><div>#</div><div>Mechanic</div><div class="num">Average drop</div><div class="num">Best realistic drop</div><div class="num hide-s">Drops traded / day</div><div class="num hide-s">6 h · 24 h</div></div>
+      <div id="farmlist"></div><div class="small muted" id="farmnote" style="margin-top:8px"></div></div>
+    <div class="card"><h2>League start playbook</h2><div class="sub">What each mechanic's realistic drops sold for on days 1–7 of the last launches, hour by hour from GGG's Currency Exchange history. Exchange items only (no uniques). Values in exalts at that day's prices; darker = worth more that day.</div>
+      <label class="small">League <select class="crin" id="pblg"><option value="">All launches (median)</option></select></label>
+      <div id="pbtable" style="overflow-x:auto;margin-top:8px"></div>
+      <div class="grid2" style="margin-top:10px"><div><h2 style="font-size:14px">Sell on day 1 (lost most against the Divine by day 7)</h2><div id="pbsell"></div></div>
+        <div><h2 style="font-size:14px">Rose against the Divine by day 7 (worth holding)</h2><div id="pbhold"></div></div></div>
+      <div class="small muted" id="pbnote" style="margin-top:8px"></div></div>
+  </section>
+  <section id="league">
+    <div class="card"><h2>League start planner</h2><div class="sub">Any class, any chain of ascendancies (you can change ascendancy any time). Aim it at one of your builds to rank the skills and nodes you'll want.</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+        <label class="small">Class <select class="crin" id="lscls"></select></label>
+        <label class="small">Ascendancy path <select class="crin lsasc"></select> → <select class="crin lsasc"></select> → <select class="crin lsasc"></select></label>
+        <label class="small">Aim at <select class="crin" id="lstarget"><option value="">(no target)</option></select></label>
+        <label class="small">Unique budget (div) <input class="crin" id="lsbudget" type="number" step="0.01" value="0.05" style="width:80px"></label>
+        <button class="btn" id="lsgo">Plan it</button></div></div>
+    <div id="lsview"></div>
+  </section>
+  <section id="craft">
+    <div class="card"><h2>Craft lab</h2>
+      <div class="sub">Theory-craft and follow it step by step. Pick a base, set target mods, then work the item: roll it here to practise, or record what really happened in game, and the next step re-plans. Odds assume equal weights (the real ones aren't in the game files), so they're optimistic.</div>
+      <div class="crrow">
+        <label>Base <input list="crbases" id="crbase" placeholder="e.g. Attuned Wand" class="crin" style="width:230px"></label>
+        <datalist id="crbases"></datalist>
+        <label>Item level <input id="crilvl" type="number" value="82" min="1" max="100" class="crin" style="width:70px"></label>
+        <button class="btn" id="crload">Load base</button>
+        <span class="muted small" id="crpoolinfo"></span>
+      </div>
+      <details style="margin-top:8px"><summary class="small">Start from a real item (paste it, or a slot from a saved build)</summary>
+        <div class="crrow" style="margin-top:6px">
+          <textarea id="crpaste" rows="5" class="crin" style="width:min(520px,100%)" placeholder="Ctrl+C an item in game (or copy from PoB) and paste it here"></textarea>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <button class="btn" id="crpastetarget">Use as TARGET</button>
+            <button class="btn" id="crpastecurrent">Use as CURRENT item</button>
+          </div>
+        </div>
+        <div class="crrow">Build # <input id="crbid" type="number" class="crin" style="width:60px" value="1"> slot
+          <input id="crslot" class="crin" style="width:110px" value="Ring 1"> <button class="btn" id="crfrombuild">Use as TARGET</button></div>
+      </details>
+    </div>
+    <div class="grid2">
+      <div class="card"><h2>Targets</h2><div class="sub">What the finished item needs. "T2 or better" means tier 1 or 2 (tier 1 = best).</div>
+        <div id="crtargets"></div>
+        <div class="crrow" style="margin-top:8px"><select id="craddfam" class="crin" style="max-width:100%;flex:1"></select>
+          <select id="craddtier" class="crin"></select><button class="btn" id="cradd">Add target</button></div>
+      </div>
+      <div class="card"><h2>Current item <span class="pill" id="crrarity">normal</span></h2>
+        <div id="critem"></div>
+        <div class="crrow" style="margin-top:8px">
+          <button class="btn" id="crreset">New base (start over)</button>
+          <select id="crmanfam" class="crin" style="max-width:220px"></select><select id="crmantier" class="crin"></select>
+          <button class="btn" id="crmanadd" title="Record a mod you got in game">+ mod</button>
+          <select id="crmanrar" class="crin"><option value="">rarity…</option><option>normal</option><option>magic</option><option>rare</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="card"><h2>Next step</h2><div class="sub" id="crplansub"></div><div id="crplan"></div></div>
+    <div class="grid2">
+      <div class="card"><h2>History <span class="muted small" id="crspent"></span></h2><div id="crhist"></div>
+        <button class="btn" id="crclearhist" style="margin-top:6px">Clear history</button></div>
+      <div class="card"><h2>Simulator</h2><div class="sub">Run the planner from the current item to the targets many times (equal weights).</div>
+        <div class="crrow">Runs <input id="crruns" type="number" value="300" class="crin" style="width:70px"> max steps
+          <input id="crsteps" type="number" value="250" class="crin" style="width:70px"> <button class="btn" id="crsim">Simulate</button></div>
+        <div id="crsimout" style="margin-top:8px"></div></div>
+    </div>
+  </section>
+  <section id="patches">
+    <div class="card"><h2>Patch notes</h2><div class="sub">GGG's patch notes and hotfixes, checked against every build you own (gems, uniques, keystones, ascendancy). New posts are analysed automatically and raise an alert.</div>
+      <div id="pnlist"></div>
+      <details style="margin-top:8px"><summary class="small">Paste notes (for notes that are only on the forum)</summary>
+        <textarea id="pnpaste" rows="6" class="crin" style="width:100%;margin-top:6px" placeholder="Paste the patch notes text here"></textarea>
+        <button class="btn" id="pnanalyze" style="margin-top:6px">Analyse</button></details></div>
+    <div id="pnview"></div>
+  </section>
+  <section id="alerts"><div class="card"><h2>Alerts</h2><div class="sub">Price moves on items in your builds, big market moves, GGG news and patch notes, install and tool updates.</div><div id="alertlist"></div></div></section>
+  <section id="status"><div class="card"><h2>Your profile</h2><div class="sub">Your class and ascendancy set the defaults everywhere: patch notes watch list, league start planner, Top 1% comparison.</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+        <label class="small">Class <select class="crin" id="pfcls"></select></label>
+        <label class="small">Main ascendancy <select class="crin" id="pfasc"></select></label>
+        <label class="small">League-start path <input class="crin" id="pfpath" placeholder="e.g. Lich, Blood Mage" style="width:180px"></label></div>
+      <label class="small" style="display:block;margin-top:8px">Watch words for patch notes and news (comma separated) <input class="crin" id="pfwatch" style="width:100%"></label>
+      <label class="small" style="display:block;margin-top:8px">Path of Exile 2 folder <input class="crin" id="pfdir" style="width:100%" placeholder="found automatically"></label>
+      <div style="margin-top:8px"><button class="btn" id="pfsave">Save profile</button> <span class="small muted" id="pfmsg"></span></div>
+      <div class="small muted" id="pfpaths" style="margin-top:8px"></div></div>
+    <div class="card"><h2>Connect to Claude <span class="pill">optional</span></h2><div class="sub">This toolkit is made to be used with Claude: connect it once, then ask things like "what should I farm", "how close am I to the top 1%" or "how do I craft this". Everything else works without it. <a href="https://github.com/xoxoFaith1993/poe2-toolkit/blob/main/CLAUDE-GUIDE.md" target="_blank" rel="noopener">How to use it with Claude ↗</a></div>
+      <div id="cllink"></div></div>
+    <div class="card"><h2>Monitor jobs</h2><div class="sub">What runs in the background, how often, and how it went last time.</div><div id="jobs"></div></div></section>
+</main>
+<div class="tip" id="tip"></div>
+<footer>Personal tool. Data: poe.ninja economy API, GGG public Currency Exchange history, Steam news. This product isn't affiliated with or endorsed by Grinding Gear Games in any way.</footer>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const get = async (p) => { const r = await fetch(p); return r.json(); };
+const ago = ts => { if (!ts) return 'never'; const m = (Date.now()/1000 - ts)/60; return m < 1 ? 'just now' : m < 90 ? Math.round(m)+' min ago' : (m/60).toFixed(1)+' h ago'; };
+const ic = (u, sz = 30) => u ? `<img src="/img?u=${encodeURIComponent(u)}" width="${sz}" height="${sz}" alt="" loading="lazy" style="object-fit:contain;vertical-align:middle;margin-right:8px;flex:none">` : '';
+const pic = (o, sz = 30) => o && o.icon ? ic(o.icon, sz) : o && o.art ? `<img src="/art/${o.art.split('/').map(encodeURIComponent).join('/')}" width="${sz}" height="${sz}" alt="" loading="lazy" style="object-fit:contain;vertical-align:middle;margin-right:8px;flex:none">` : '';
+let UNIT = 'auto';
+try { UNIT = localStorage.getItem('poe2unit') || 'auto'; } catch (e) {}
+const nf = x => x >= 100 ? Math.round(x).toLocaleString() : x >= 1 ? (+x.toFixed(1)).toString()
+  : x >= 0.01 ? (+x.toFixed(2)).toString() : (+x.toPrecision(2)).toString();
+// div value -> text in the chosen unit. An item that IS the unit (e.g. Divine Orb in divines) shows in the next unit.
+function P(div, name) {
+  if (div == null || isNaN(div)) return '';
+  const r = (STATUS && STATUS.rates) || {}; const ex = +r.ex_per_div || 0, ch = +r.chaos_per_div || 0;
+  let u = UNIT;
+  if (u === 'auto') u = div >= 1 ? 'div' : 'ex';
+  const self = { div: 'Divine Orb', ex: 'Exalted Orb', chaos: 'Chaos Orb' };
+  if (name && self[u] === name) u = u === 'div' ? 'ex' : u === 'ex' ? 'chaos' : 'ex';
+  if (u === 'ex' && ex) { const v = div * ex; return v < 1 ? '<1 ex' : nf(v) + ' ex'; }
+  if (u === 'chaos' && ch) { const v = div * ch; return v < 0.01 ? '<0.01 chaos' : nf(v) + ' chaos'; }
+  return nf(div) + ' div';
+}
+let LASTSHOW = null;
+const pct = v => v == null ? '' : `<span class="${v>=0?'pos':'neg'}">${v>=0?'+':''}${v}%</span>`;
+const tip = $('#tip');
+function showTip(e, html) { tip.innerHTML = html; tip.style.display = 'block';
+  const x = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 8); tip.style.left = x + 'px'; tip.style.top = (e.clientY + 14) + 'px'; }
+function hideTip() { tip.style.display = 'none'; }
+
+// ---------- tabs ----------
+document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('nav button').forEach(x => x.classList.toggle('on', x === b));
+  document.querySelectorAll('section').forEach(s => s.classList.toggle('on', s.id === b.dataset.tab));
+  if (b.dataset.tab === 'economy') { loadOverview(); loadMovers(); loadMarket(); }
+  if (b.dataset.tab === 'builds') loadBuilds();
+  if (b.dataset.tab === 'alerts') loadAlerts(true);
+  if (b.dataset.tab === 'patches') loadPatches();
+  if (b.dataset.tab === 'farm') { loadFarm(); loadPlaybook(); }
+  if (b.dataset.tab === 'sessions') loadSessions();
+  if (b.dataset.tab === 'top1') initTop1();
+  if (b.dataset.tab === 'league') initLeague();
+  if (b.dataset.tab === 'status') { loadStatus(); loadProfile(); loadClaude(); }
+  try { localStorage.setItem('poe2tab', b.dataset.tab); } catch (e) {}
+});
+try { const t = localStorage.getItem('poe2tab'); if (t) document.querySelector(`nav [data-tab="${t}"]`)?.click(); } catch (e) {}
+
+// ---------- header ----------
+let STATUS = null;
+async function loadStatus() {
+  const s = STATUS = await get('/api/status');
+  const r = s.rates || {};
+  const inst = s.install || {};
+  $('#chips').innerHTML = [
+    `<span class="chip"><span class="dot" style="background:${s.monitor_alive?'var(--good)':'var(--critical)'}"></span>${s.monitor_alive?'Monitor running':'Monitor stopped'}</span>`,
+    `<span class="chip">League <b>${esc(s.league)}</b></span>`,
+    r.ex_per_div ? `<span class="chip">1 div = <b>${Math.round(r.ex_per_div)}</b> ex = <b>${(+r.chaos_per_div).toFixed(1)}</b> chaos</span>` : '',
+    `<span class="chip">Prices <b>${esc(s.last_price_snapshot)}</b></span>`,
+    `<span class="chip">${esc(s.items_tracked)} items tracked</span>`,
+    `<span class="chip">PoE 2 install: <b>${esc(inst.state)}</b>${inst.state==='installed'?'':' ('+inst.total_gb+' GB)'}</span>`,
+  ].join('');
+  const jobs = s.jobs || {};
+  $('#jobs').innerHTML = `<table><tr><th>Job</th><th>Every</th><th>Last run</th><th>Result</th></tr>${
+    Object.entries(jobs).map(([k, j]) => `<tr><td><span class="dot" style="background:${j.ok?'var(--good)':'var(--critical)'}"></span>${esc(k)}</td>
+      <td class="num">${j.every_min>=1440?(j.every_min/1440)+' d':j.every_min>=60?(j.every_min/60)+' h':j.every_min+' min'}</td>
+      <td class="num">${ago(j.last)}</td><td class="small">${esc(j.result)}</td></tr>`).join('')}</table>`;
+}
+
+// ---------- charts ----------
+function lineChart(points, opts = {}) {
+  // points: [[label, value], ...] ; single series, one axis
+  if (!points.length) return '<div class="empty">No history yet: the monitor adds a point every time prices update.</div>';
+  const W = 760, H = 220, L = 52, R = 14, T = 14, B = 28;
+  const vals = points.map(p => p[1]); let lo = Math.min(...vals), hi = Math.max(...vals);
+  if (lo === hi) { lo = lo * 0.95; hi = hi * 1.05 || 1; }
+  const pad = (hi - lo) * 0.08; lo = Math.max(0, lo - pad); hi += pad;
+  const x = i => L + (points.length === 1 ? (W-L-R)/2 : i * (W - L - R) / (points.length - 1));
+  const y = v => T + (H - T - B) * (1 - (v - lo) / (hi - lo));
+  const ticks = [0, .25, .5, .75, 1].map(f => lo + f * (hi - lo));
+  const fmt = opts.fmt || (v => v.toPrecision(3));
+  const d = points.map((p, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(p[1]).toFixed(1)}`).join('');
+  const labelsEvery = Math.max(1, Math.ceil(points.length / 6));
+  const id = 'c' + Math.random().toString(36).slice(2);
+  setTimeout(() => {
+    const svg = document.getElementById(id); if (!svg) return;
+    const cross = svg.querySelector('.cross'), mk = svg.querySelector('.mk');
+    svg.onmousemove = e => {
+      const r = svg.getBoundingClientRect(); const px = (e.clientX - r.left) * W / r.width;
+      let i = Math.round((px - L) / ((W - L - R) / Math.max(1, points.length - 1))); i = Math.max(0, Math.min(points.length - 1, i));
+      cross.setAttribute('x1', x(i)); cross.setAttribute('x2', x(i)); cross.style.display = '';
+      mk.setAttribute('cx', x(i)); mk.setAttribute('cy', y(points[i][1])); mk.style.display = '';
+      showTip(e, `<b>${esc(points[i][0])}</b><br>${esc(opts.name || 'price')}: ${esc(fmt(points[i][1]))}`);
+    };
+    svg.onmouseleave = () => { cross.style.display = mk.style.display = 'none'; hideTip(); };
+  });
+  return `<svg id="${id}" viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${esc(opts.name||'price history')}">
+    ${ticks.map(t => `<line x1="${L}" x2="${W-R}" y1="${y(t)}" y2="${y(t)}" stroke="var(--grid)"/><text x="${L-6}" y="${y(t)+4}" text-anchor="end">${esc(fmt(t))}</text>`).join('')}
+    ${points.map((p, i) => i % labelsEvery ? '' : `<text x="${x(i)}" y="${H-8}" text-anchor="middle">${esc(p[0])}</text>`).join('')}
+    <path d="${d}" fill="none" stroke="var(--series-1)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    ${points.length < 40 ? points.map((p, i) => `<circle cx="${x(i)}" cy="${y(p[1])}" r="3" fill="var(--series-1)" stroke="var(--surface-1)" stroke-width="2"/>`).join('') : ''}
+    <line class="cross" y1="${T}" y2="${H-B}" stroke="var(--text-muted)" stroke-dasharray="3 3" style="display:none"/>
+    <circle class="mk" r="5" fill="var(--series-1)" stroke="var(--surface-1)" stroke-width="2" style="display:none"/>
+  </svg>`;
+}
+
+function moverBars(rows) {
+  // diverging: up = blue, down = red, gray zero line; every bar labelled with its value (identity never colour-only)
+  if (!rows.length) return '<div class="empty">Not enough history yet (needs two price pulls a day apart).</div>';
+  const max = Math.max(...rows.map(r => Math.abs(r.change_pct)), 1);
+  return `<table>${rows.map(r => {
+    const w = Math.max(2, Math.abs(r.change_pct) / max * 46);
+    const bar = r.change_pct >= 0
+      ? `<div style="margin-left:50%;width:${w}%;height:10px;border-radius:0 4px 4px 0;background:var(--up)"></div>`
+      : `<div style="margin-left:${50-w}%;width:${w}%;height:10px;border-radius:4px 0 0 4px;background:var(--down)"></div>`;
+    return `<tr class="click" data-q="${esc(r.name)}"><td style="width:38%">${esc(r.name)}<div class="small muted">${esc(r.category)}</div></td>
+      <td style="width:30%"><div style="position:relative;border-left:1px solid var(--mid);margin-left:0">${bar}</div></td>
+      <td class="num">${pct(r.change_pct)}</td><td class="num small">${esc(P(r.before, r.name))} → <b>${esc(P(r.now, r.name))}</b></td></tr>`;
+  }).join('')}</table>`;
+}
+
+// ---------- economy ----------
+let qTimer;
+$('#q').oninput = () => { clearTimeout(qTimer); qTimer = setTimeout(search, 250); };
+async function search() {
+  const q = $('#q').value.trim(); if (!q) { $('#results').innerHTML = ''; return; }
+  const rows = await get('/api/search?q=' + encodeURIComponent(q));
+  if (!Array.isArray(rows) || !rows.length) { $('#results').innerHTML = '<div class="empty">No match in stored prices.</div>'; return; }
+  $('#results').innerHTML = `<table><tr><th>Item</th><th>Base</th><th>Category</th><th class="num">Price</th><th class="num">Listings / volume</th></tr>${
+    rows.map(r => `<tr class="click" data-q="${esc(r.name)}"><td>${ic(r.icon)}${esc(r.name)}</td><td class="muted">${esc(r.base||'')}</td><td class="muted">${esc(r.category)}</td>
+      <td class="num"><b>${esc(P(r.value_div, r.name))}</b></td><td class="num muted">${r.listings ?? (r.volume ? Math.round(r.volume)+' traded' : '')}</td></tr>`).join('')}</table>`;
+}
+document.addEventListener('click', e => { const tr = e.target.closest('tr[data-q]'); if (tr) history(tr.dataset.q); });
+async function history(q) {
+  const h = await get('/api/history?q=' + encodeURIComponent(q));
+  const series = h.series || {}; const name = Object.keys(series).find(n => n === q) || Object.keys(series)[0];
+  if (!name) { $('#hist').innerHTML = ''; return; }
+  const r = STATUS?.rates || {};
+  const fmt = v => P(v, name);
+  $('#hist').innerHTML = `<h2 style="margin-top:16px;font-size:14px">${esc(name)}: price history</h2>${lineChart(series[name], {name, fmt})}`;
+  document.querySelector('nav [data-tab="economy"]').click();
+  $('#hist').scrollIntoView({behavior: 'smooth', block: 'nearest'});
+}
+async function loadMovers() {
+  const m = await get('/api/movers?hours=24&min=0.05');
+  if (m.note) { $('#movers').innerHTML = `<div class="empty">${esc(m.note)}</div>`; return; }
+  $('#movers').innerHTML = `<div class="grid2"><div><h2 style="font-size:13px" class="muted">Rising</h2>${moverBars(m.risers||[])}</div><div><h2 style="font-size:13px" class="muted">Falling</h2>${moverBars(m.fallers||[])}</div></div>`;
+}
+
+
+// ---------- market at a glance ----------
+async function loadOverview() {
+  const o = await get('/api/overview');
+  if (!o || !o.rates) return;
+  const cur = Object.fromEntries((o.currency || []).map(c => [c.name, c]));
+  const tile = (icon, v, l) => `<div class="tile">${icon ? ic(icon, 40) : ''}<div><div class="v">${v}</div><div class="l">${l}</div></div></div>`;
+  const r = o.rates;
+  $('#ovsub').textContent = `${o.league} · key currency and the league's chase items, from poe.ninja.`;
+  $('#ovtiles').innerHTML = [
+    tile(cur['Mirror of Kalandra']?.icon, P(r.mirror_div, 'Mirror of Kalandra'), '1 Mirror of Kalandra'),
+    tile(cur['Divine Orb']?.icon, P(1, 'Divine Orb'), `1 Divine Orb · ${Math.round(r.div_ex || 0)} ex · ${(+r.div_chaos || 0).toFixed(1)} chaos`),
+    tile(cur['Chaos Orb']?.icon, P(cur['Chaos Orb']?.value_div, 'Chaos Orb'), `1 Chaos Orb · ${r.chaos_ex ?? '?'} ex`),
+    cur["Hinekora's Lock"] ? tile(cur["Hinekora's Lock"].icon, P(cur["Hinekora's Lock"].value_div), "1 Hinekora's Lock") : '',
+  ].join('');
+  const item = (c, uniq) => `<div class="ci" data-q="${esc(c.name)}" title="${esc(c.name)}${c.base ? ' · ' + esc(c.base) : ''}">${ic(c.icon, 44)}<div style="min-width:0">
+      <div class="n ${uniq ? 'u' : ''}">${esc(c.name)}${c.corrupted ? ' <span class="small" style="color:#d20000">corrupted</span>' : ''}</div>
+      <div class="b">${esc(c.base || c.category || '')}${c.listings ? ' · ' + c.listings + ' listed' : ''}</div>
+      <div class="p"><b>${esc(P(c.value_div, c.name))}</b>${c.mirrors ? ` <span class="m">≈ ${c.mirrors} mirror${c.mirrors >= 1.5 ? 's' : ''}</span>` : ''}</div></div></div>`;
+  $('#ovuniq').innerHTML = (o.chase_uniques || []).map(c => item(c, true)).join('');
+  $('#ovother').innerHTML = (o.chase_other || []).map(c => item(c, false)).join('');
+  $('#ovcur').innerHTML = (o.currency || []).map(c => item(c, false)).join('');
+  $('#ovnote').textContent = o.note || '';
+}
+document.addEventListener('click', e => { const c = e.target.closest('.ci[data-q]'); if (c) history(c.dataset.q); });
+
+// ---------- builds / alerts ----------
+async function loadBuilds() {
+  const b = await get('/api/builds');
+  $('#buildlist').innerHTML = !b.length ? '<div class="empty">No builds yet.</div>' : `<table><tr><th>#</th><th>Build</th><th>Ascendancy</th><th class="num">Level</th><th>Main skill</th><th>League</th><th>Whose</th><th>Saved</th></tr>${
+    b.map(x => `<tr class="click" data-build="${x.id}"><td class="muted">${x.id}</td><td><b>${esc(x.label)}</b></td><td>${esc(x.ascendancy)}</td><td class="num">${x.level}</td><td>${esc(x.main_skill)}</td><td class="muted">${esc(x.league)}</td><td class="muted">${esc(x.owner)}</td><td class="muted">${esc(x.added)}</td></tr>`).join('')}</table>`;
+}
+const KIND = { patch: 'patch notes', build: 'build', 'price-mine': '★ your item', 'price-market': 'market', news: 'news', install: 'install', pob: 'PoB', ggg: 'GGG' };
+async function loadAlerts(markSeen) {
+  const a = await get('/api/alerts');
+  const unseen = a.filter(x => !x.seen).length;
+  $('#badge').hidden = !unseen; $('#badge').textContent = unseen;
+  $('#alertlist').innerHTML = !a.length ? '<div class="empty">No alerts yet. They appear as prices move and news lands.</div>' :
+    a.map(x => `<div class="alert"><span class="k"><span class="pill">${esc(KIND[x.kind] || x.kind)}</span></span><div><b>${esc(x.title)}</b>${x.seen?'':' <span class="pill" style="border-color:var(--accent)">new</span>'}<div class="small muted">${esc(x.detail)} · ${ago(x.ts)}</div></div></div>`).join('');
+  if (markSeen && unseen) { await get('/api/alerts/seen'); $('#badge').hidden = true; }
+}
+
+
+// ---------- character page ----------
+const RCOL = { UNIQUE: 'r-UNIQUE', RARE: 'r-RARE', MAGIC: 'r-MAGIC', NORMAL: 'r-NORMAL' };
+const artSrc = rel => rel ? '/art/' + rel.split('/').map(encodeURIComponent).join('/') : '';
+function itemTip(it) {
+  const head = it.rarity === 'RARE' || it.rarity === 'UNIQUE' ? `${esc(it.name)}<br>${esc(it.base)}` : esc(it.name);
+  const mod = (m, cls) => {
+    const t = m.tags || [];
+    const c = t.includes('desecrated') ? 'desec' : t.includes('crafted') ? 'crafted' : cls;
+    const tier = m.tier ? `<span class="tier">T${m.tier}</span>` : (m.roll != null && it.rarity === 'RARE' ? `<span class="tier">${m.roll}%</span>` : '');
+    return `<div class="${c}">${tier}${esc(m.t)}</div>`;
+  };
+  const secs = [];
+  const props = [...(it.props || [])]; if (it.quality) props.unshift('Quality: +' + it.quality + '%');
+  if (props.length) secs.push(props.map(p => { const [k, ...v] = p.split(':'); return `<div class="prop">${esc(k)}: <b>${esc(v.join(':').trim())}</b></div>`; }).join(''));
+  const meta = [it.item_level ? 'Item Level: ' + it.item_level : '', it.req_level ? 'Requires Level ' + it.req_level : ''].filter(Boolean);
+  if (meta.length) secs.push(`<div class="note">${meta.map(esc).join(' · ')}</div>`);
+  if ((it.enchants || []).length || (it.runes || []).length) secs.push((it.enchants || []).map(m => mod(m, 'ench')).join('') + ((it.runes || []).length ? `<div class="note">Runes: ${it.runes.map(esc).join(', ')}</div>` : ''));
+  if ((it.implicits || []).length) secs.push(it.implicits.map(m => mod(m, 'imp')).join(''));
+  if ((it.explicits || []).length) secs.push(it.explicits.map(m => mod(m, 'exp')).join(''));
+  if (it.corrupted) secs.push('<div class="corr">Corrupted</div>');
+  if (it.value_div || it.unpriced) secs.push(`<div class="note">${it.value_div ? 'Value: <b style="color:#fff">' + esc(P(it.value_div)) + '</b>' + (it.rarity !== 'UNIQUE' ? ' (runes/cores)' : '') + (it.roll_dependent ? '<br><span style="color:#e3b341">That is the cheapest roll: poe.ninja has one price for all ' + it.roll_dependent + ' possible rolls. Check trade for this roll.</span>' : '') : it.estimate ? 'Estimate: <b style="color:#fff">≈ ' + esc(P(it.estimate.est_div)) + (it.estimate.kind === 'floor' ? '+' : '') + '</b> · ' + esc(it.estimate.note) : 'Rare: check the trade site'}</div>`);
+  return `<div class="ptip"><div class="hd ${RCOL[it.rarity] || ''}">${head}</div>${secs.map(x => `<div class="sec">${x}</div>`).join('')}</div>`;
+}
+function bindTips(root, getHtml) {
+  root.querySelectorAll('[data-tip]').forEach(el => {
+    el.onmousemove = e => { tip.style.padding = '0'; tip.style.background = 'transparent'; tip.style.border = '0'; showTip(e, getHtml(el.dataset.tip)); };
+    el.onmouseleave = () => { hideTip(); tip.style.padding = ''; tip.style.background = ''; tip.style.border = ''; };
+  });
+}
+const INV = { 'Weapon 1': [1, 1, 2, 4], 'Helmet': [4, 1, 2, 2], 'Weapon 2': [7, 1, 2, 4], 'Amulet': [6, 2, 1, 1],
+  'Body Armour': [4, 3, 2, 3], 'Ring 1': [3, 4, 1, 1], 'Ring 2': [6, 4, 1, 1], 'Gloves': [1, 5, 2, 2],
+  'Belt': [4, 6, 2, 1], 'Boots': [7, 5, 2, 2], 'Charm 1': [3, 7, 1, 1], 'Charm 2': [4, 7, 1, 1], 'Charm 3': [5, 7, 1, 1],
+  'Flask 1': [1, 7, 1, 2], 'Flask 2': [8, 7, 1, 2] };
+function renderCharacter(c, el) {
+  const items = {}; c.gear.forEach((g, i) => items['g' + i] = g); c.jewels.forEach((j, i) => items['j' + i] = j);
+  const bySlot = {}; c.gear.forEach((g, i) => bySlot[g.slot] = 'g' + i);
+  const cell = (key, it, label) => `<div class="slot ${it ? RCOL[it.rarity] : ''}" ${it ? `data-tip="${key}"` : ''}>${it && it.art ? `<img src="${artSrc(it.art)}" alt="${esc(it.name)}">` : ''}${!it ? `<span class="lbl">${esc(label)}</span>` : ''}</div>`;
+  const inv = Object.entries(INV).map(([slot, [cx, cy, w, h]]) => {
+    const key = bySlot[slot]; const it = key ? items[key] : null;
+    return `<div style="grid-column:${cx} / span ${w};grid-row:${cy} / span ${h};display:grid">${cell(key, it, slot)}</div>`;
+  }).join('');
+  const swap = c.gear.filter(g => g.slot.endsWith('Swap'));
+  const jew = c.jewels.map((j, i) => cell('j' + i, j, 'Jewel')).join('');
+  const statSec = (title, o) => `<div class="stat-sec"><h3>${title}</h3>${Object.entries(o || {}).map(([k, v]) => `<div class="stat-row"><span class="muted">${esc(k)}</span><span>${esc(typeof v === 'number' ? v.toLocaleString() : v)}</span></div>`).join('')}</div>`;
+  const skills = c.skills.map(g => {
+    const act = g.gems.filter(x => !x.support); const sup = g.gems.filter(x => x.support);
+    const a = act[0] || g.gems[0];
+    return `<div class="sk ${g.index === c.main_group ? 'main' : ''}"><div class="top">${a && a.art ? `<img src="${artSrc(a.art)}" alt="">` : ''}<div><b>${esc(act.map(x => x.name).join(' + ') || a.name)}</b>
+      <div class="small muted">level ${esc(a.level)}${a.type === 'spirit' ? ' · spirit' : ''}${g.dps ? ' · ' + g.dps.toLocaleString() + ' DPS' : ''}</div></div></div>
+      ${sup.length ? `<div class="sup">${sup.map(x => `<span class="${x.lineage ? 'lin' : ''}">${esc(x.name)}</span>`).join(' · ')}</div>` : ''}</div>`;
+  }).join('');
+  const ksList = arr => arr.map(k => `<div class="ks">${k.art ? `<img src="${artSrc(k.art)}" alt="">` : ''}<div><div class="t">${esc(k.name)}</div><div class="d">${(k.stats || []).map(esc).join('<br>')}</div></div></div>`).join('');
+  el.innerHTML = `
+    <div class="card"><div class="char-head"><h2>${esc(c.label)}</h2><span class="muted">Level ${esc(c.level)} ${esc(c.ascendancy || c.class)}</span>
+      <span class="pill">${esc(c.league || '')}</span><span class="pill">${esc(c.owner)}</span>
+      <span class="muted">Main skill <b style="color:var(--text-primary)">${esc(c.main_skill)}</b> · ${c.dps.toLocaleString()} DPS</span></div>
+      ${(c.warnings || []).map(w => `<div class="small" style="color:var(--warning)">⚠ ${esc(w)}</div>`).join('')}</div>
+    <div class="char-grid">
+      <div>
+        <div class="card"><h2>Equipment</h2><div class="inv">${inv}</div>
+          ${swap.length ? `<div class="small muted" style="text-align:center">Weapon swap: ${swap.map(g => `<span data-tip="g${c.gear.indexOf(g)}" style="text-decoration:underline dotted">${esc(g.name)}</span>`).join(', ')}</div>` : ''}
+          ${c.jewels.length ? `<h2 style="margin-top:12px">Jewels</h2><div class="jrow">${jew}</div>` : ''}</div>
+        ${valueCard(c)}
+        <div class="card"><h2>Stats</h2>${statSec('Character', c.stats.character)}${statSec('Defensive', c.stats.defensive)}${statSec('Recovery', c.stats.recovery)}</div>
+      </div>
+      <div>
+        <div class="card"><h2>Skills</h2><div class="sub">Main skill outlined. Lineage supports in orange.</div><div class="skills">${skills}</div></div>
+        <div class="card"><h2>Passive tree</h2><div class="sub">${c.points.passives} passives · ${c.points.ascendancy} ascendancy · tree ${esc(c.tree.version)}${c.tree.missing_nodes ? ' · ' + c.tree.missing_nodes + ' nodes no longer exist' : ''}</div>
+          <div class="treebox" id="treebox"><div class="hint">Scroll to zoom · drag to move · hover a node</div>
+          <div class="zbtn"><button data-z="1.4" title="Zoom in">+</button><button data-z="0.7" title="Zoom out">−</button><button data-z="fit" title="Fit to build">⤢</button></div></div></div>
+        <div class="grid2">
+          <div class="card"><h2>Ascendancy: ${esc(c.ascendancy || '')}</h2>${ksList(c.ascendancy_nodes) || '<div class="muted">None</div>'}</div>
+          <div class="card"><h2>Keystones</h2>${ksList(c.keystones) || '<div class="muted">None</div>'}<h2 style="margin-top:12px">Notables</h2>${ksList(c.notables)}</div>
+        </div>
+      </div>
+    </div>`;
+  bindTips(el, key => itemTip(items[key]));
+  drawTree(c, document.getElementById('treebox'));
+}
+function valueCard(c) {
+  const v = c.value || {};
+  if (v.error) return `<div class="card small muted">Prices unavailable: ${esc(v.error)}</div>`;
+  const items = [...c.gear, ...c.jewels];
+  const row = (it, i) => `<tr><td><div style="display:flex;align-items:center;gap:6px">${it.art ? `<img src="${artSrc(it.art)}" width="28" height="28" style="object-fit:contain">` : ''}
+      <div><span style="color:${it.rarity === 'UNIQUE' ? '#e09a4b' : it.rarity === 'RARE' ? '#e8d36a' : it.rarity === 'MAGIC' ? '#9a9aff' : 'inherit'}">${esc(it.name)}</span>
+      <div class="small muted">${esc(it.slot)}${it.value_parts && it.value_parts.length && it.rarity !== 'UNIQUE' ? ' · runes/cores' : ''}</div>
+      ${it.roll_dependent ? `<div class="small" style="color:#e3b341" title="poe.ninja has one price for all ${it.roll_dependent} possible rolls of this unique: the cheapest.">price = cheapest roll; yours: ${esc((it.roll_text || [''])[0])}. Check trade</div>` : ''}</div></div></td>
+    <td class="num">${it.value_div ? `<b>${esc(P(it.value_div))}</b>${it.estimate ? `<div class="small muted" title="${esc(it.estimate.note)}">+ ≈ ${esc(P(it.estimate.est_div))}${it.estimate.kind === 'floor' ? '+' : ''} craft cost</div>` : ''}` : it.estimate ? `<span title="${esc(it.estimate.note)}">≈ ${esc(P(it.estimate.est_div))}${it.estimate.kind === 'floor' ? '<span style="color:#e3b341">+</span>' : ''}</span><div class="small muted">${it.estimate.kind === 'floor' ? 'craft cost, floor' : 'craft cost'}</div>` : it.rarity === 'RARE' ? '<span class="small muted">check</span>' : '<span class="small muted">–</span>'}</td>
+    <td class="num">${it.trade_link ? `<a class="btn" href="${esc(it.trade_link)}" target="_blank" rel="noopener">Trade ↗</a>` : ''}</td></tr>`;
+  return `<div class="card"><h2>Build value</h2><div class="sub">${esc(v.league || '')} prices · grain of salt: ${esc(v.caveat || '')}</div>
+    <div class="tiles"><div class="tile"><div><div class="v">${esc(P(v.total_div))}</div><div class="l">priced parts (incl. ${esc(P(v.gems_div))} of gems)</div></div></div>
+    <div class="tile"><div><div class="v">≈ ${esc(P(v.estimated_rares_div || 0))}+</div><div class="l">rares, estimated from craft cost (${v.rares_unpriced || 0} rares; special mods not priced, so a floor)</div></div></div></div>
+    <table style="margin-top:8px">${items.map(row).join('')}</table></div>`;
+}
+const TREES = {};
+async function drawTree(c, box) {
+  const t = TREES[c.tree.version] || (TREES[c.tree.version] = await get('/api/tree?v=' + encodeURIComponent(c.tree.version)));
+  const alloc = new Set(c.tree.allocated); const jn = new Set(c.tree.jewel_nodes);
+  const nodes = t.nodes.filter(n => !n.a); const byId = {}; t.nodes.forEach(n => byId[n.id] = n);
+  let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+  nodes.forEach(n => { x0 = Math.min(x0, n.x); y0 = Math.min(y0, n.y); x1 = Math.max(x1, n.x); y1 = Math.max(y1, n.y); });
+  const R = { keystone: 52, notable: 38, jewel: 34, mastery: 30, start: 40, attribute: 20, small: 20 };
+  const edge = e => {
+    const a = byId[e[0]], b = byId[e[1]]; if (!a || !b || a.a || b.a) return '';
+    const on = alloc.has(a.id) && alloc.has(b.id);
+    const d = e.length > 2 ? `M${a.x},${a.y}A${e[2]},${e[2]} 0 0 ${e[3]} ${b.x},${b.y}` : `M${a.x},${a.y}L${b.x},${b.y}`;
+    return `<path d="${d}" class="${on ? 'eon' : 'eoff'}"/>`;
+  };
+  const on = nodes.filter(n => alloc.has(n.id));
+  const nodeSvg = n => {
+    const a = alloc.has(n.id), r = R[n.k] || 20;
+    const shape = n.k === 'jewel' ? `<rect x="${n.x - r}" y="${n.y - r}" width="${2 * r}" height="${2 * r}" transform="rotate(45 ${n.x} ${n.y})" class="${a || jn.has(n.id) ? 'non' : 'noff'}"/>`
+      : `<circle cx="${n.x}" cy="${n.y}" r="${r}" class="${a ? 'non' : 'noff'} k-${n.k}"/>`;
+    const img = n.i && (n.k === 'keystone' || n.k === 'notable') ? `<image href="${artSrc(n.i)}" x="${n.x - r * .8}" y="${n.y - r * .8}" width="${r * 1.6}" height="${r * 1.6}" clip-path="circle(50%)" pointer-events="none" ${a ? '' : 'class="dimimg"'}/>` : '';
+    return `<g data-n="${n.id}">${shape}${img}</g>`;
+  };
+  box.insertAdjacentHTML('afterbegin', `<svg viewBox="${x0} ${y0} ${x1 - x0} ${y1 - y0}" preserveAspectRatio="xMidYMid meet">
+    <style>.eoff{stroke:#2b2a26;stroke-width:9;fill:none}.eon{stroke:#d8b25a;stroke-width:16;fill:none}
+      .noff{fill:#151513;stroke:#3a3832;stroke-width:6}.non{fill:#3b2f12;stroke:#e3b341;stroke-width:9}
+      .k-keystone.noff{stroke:#55524a}.k-notable.noff{stroke:#4a4740}.dimimg{opacity:.35;filter:grayscale(1)}</style>
+    <g>${t.edges.map(edge).join('')}</g><g>${nodes.map(nodeSvg).join('')}</g></svg>`);
+  const svg = box.querySelector('svg');
+  let vb = [x0, y0, x1 - x0, y1 - y0];
+  const set = () => svg.setAttribute('viewBox', vb.join(' '));
+  const fit = () => {
+    let a = 1e9, b = 1e9, cX = -1e9, d = -1e9;
+    (on.length ? on : nodes).forEach(n => { a = Math.min(a, n.x); b = Math.min(b, n.y); cX = Math.max(cX, n.x); d = Math.max(d, n.y); });
+    const pad = 900; vb = [a - pad, b - pad, cX - a + 2 * pad, d - b + 2 * pad]; set();
+  };
+  const zoom = (f, px = .5, py = .5) => { const w = vb[2] / f, h = vb[3] / f; vb = [vb[0] + (vb[2] - w) * px, vb[1] + (vb[3] - h) * py, w, h]; set(); };
+  fit();
+  svg.addEventListener('wheel', e => { e.preventDefault(); const r = svg.getBoundingClientRect(); zoom(e.deltaY < 0 ? 1.25 : 0.8, (e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height); }, { passive: false });
+  let drag = null;
+  svg.addEventListener('pointerdown', e => { drag = { x: e.clientX, y: e.clientY, vb: [...vb], moved: false, id: e.pointerId }; });
+  svg.addEventListener('pointermove', e => {
+    if (drag && !drag.moved && Math.hypot(e.clientX - drag.x, e.clientY - drag.y) > 4) { drag.moved = true; svg.classList.add('dragging'); svg.setPointerCapture(drag.id); }
+    if (drag && drag.moved) { const r = svg.getBoundingClientRect(); const s = Math.max(vb[2] / r.width, vb[3] / r.height);
+      vb = [drag.vb[0] - (e.clientX - drag.x) * s, drag.vb[1] - (e.clientY - drag.y) * s, vb[2], vb[3]]; set(); hideTip(); return; }
+    const g = e.target.closest('[data-n]');
+    if (g) { const n = byId[g.dataset.n]; showTip(e, `<b>${esc(n.n || '')}</b>${alloc.has(n.id) ? ' <span class="pill">allocated</span>' : ''}<div class="small">${(n.s || []).map(esc).join('<br>')}</div>`); }
+    else hideTip();
+  });
+  svg.addEventListener('pointerup', () => { drag = null; svg.classList.remove('dragging'); });
+  svg.addEventListener('pointerleave', () => { drag = null; svg.classList.remove('dragging'); hideTip(); });
+  box.querySelectorAll('.zbtn button').forEach(b => b.onclick = () => b.dataset.z === 'fit' ? fit() : zoom(+b.dataset.z));
+}
+async function openCharacter(id) {
+  document.querySelector('nav [data-tab="character"]').click();
+  $('#charview').innerHTML = '<div class="card empty">Loading… (first time runs Path of Building, a few seconds)</div>';
+  const c = await get('/api/character?id=' + id);
+  if (c.error) { $('#charview').innerHTML = `<div class="card">${esc(c.error)}</div>`; return; }
+  renderCharacter(c, $('#charview'));
+}
+document.addEventListener('click', e => { const tr = e.target.closest('tr[data-build]'); if (tr) openCharacter(tr.dataset.build); });
+
+// ---------- my characters (background import) ----------
+$('#loadchars').onclick = async () => {
+  $('#mychars').innerHTML = '<div class="muted small" style="margin-top:8px">Asking your account…</div>';
+  const r = await get('/api/mychars');
+  if (!r.ok) { $('#mychars').innerHTML = `<div class="small" style="color:var(--warning);margin-top:8px">⚠ ${esc(r.error)}</div>`; return; }
+  $('#mychars').innerHTML = `<table style="margin-top:8px"><tr><th>Character</th><th>Class</th><th class="num">Level</th><th>League</th><th></th></tr>${
+    r.characters.sort((a, b) => b.level - a.level).map(c => `<tr><td><b>${esc(c.name)}</b></td><td>${esc(c.class)}</td><td class="num">${c.level}</td><td class="muted">${esc(c.league)}</td>
+      <td><button class="btn" data-imp="${esc(c.name)}">Import &amp; open</button></td></tr>`).join('')}</table>
+    <div class="small muted">${r.cached ? 'List from the last 15 minutes (not re-asked).' : 'Fresh from your account.'}</div>`;
+};
+document.addEventListener('click', async e => {
+  const b = e.target.closest('button[data-imp]'); if (!b) return;
+  b.disabled = true; b.textContent = 'Importing…';
+  const r = await get('/api/import?name=' + encodeURIComponent(b.dataset.imp));
+  if (!r.ok) { b.textContent = 'Failed'; alert(r.error); return; }
+  b.textContent = r.reused ? 'Opened (recent copy)' : 'Imported';
+  loadBuilds(); openCharacter(r.build_id);
+});
+
+
+// ---------- Craft lab ----------
+const post = async (p, b) => { const r = await fetch(p, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(b) }); return r.json(); };
+let CR = { base: '', ilvl: 82, pool: null, state: null, targets: [], history: [], plan: null };
+try { const s = JSON.parse(localStorage.getItem('poe2craft') || 'null'); if (s) CR = Object.assign(CR, s, { pool: null, plan: null }); } catch (e) {}
+const crSave = () => { try { const { pool, plan, ...keep } = CR; localStorage.setItem('poe2craft', JSON.stringify(keep)); } catch (e) {} };
+const famById = fid => CR.pool && CR.pool.families.find(f => f.fid === fid);
+const tierText = (fid, tier) => { const f = famById(fid); const t = f && f.tiers.find(x => x.tier === tier); return t ? t.text : (f ? f.template : '?'); };
+const isTarget = m => CR.targets.some(t => (t.fid != null && m.fid === t.fid && (m.tier || 99) <= (t.max_tier || 99)) || (t.text && m.text && t.text.toLowerCase() === m.text.toLowerCase()));
+
+async function crLoadPool(keepState) {
+  CR.base = $('#crbase').value.trim(); CR.ilvl = +$('#crilvl').value || 82;
+  if (!CR.base) return;
+  const p = await get(`/api/craft/pool?base=${encodeURIComponent(CR.base)}&ilvl=${CR.ilvl}`);
+  if (p.error) { $('#crpoolinfo').textContent = '⚠ ' + p.error; return; }
+  CR.pool = p;
+  $('#crpoolinfo').textContent = `${p.class} · ${p.families.filter(f => f.side === 'prefix').length} prefix / ${p.families.filter(f => f.side === 'suffix').length} suffix families at item level ${p.ilvl}`;
+  const opts = side => p.families.filter(f => f.side === side).map(f => `<option value="${f.fid}">${esc(f.template)}</option>`).join('');
+  const famSel = `<optgroup label="Prefixes">${opts('prefix')}</optgroup><optgroup label="Suffixes">${opts('suffix')}</optgroup>`;
+  $('#craddfam').innerHTML = famSel; $('#crmanfam').innerHTML = famSel;
+  const tierFill = (famEl, tierEl, label) => { const f = famById(+famEl.value); tierEl.innerHTML = f ? f.tiers.map(t => `<option value="${t.tier}">${label}T${t.tier} (lvl ${t.level})</option>`).join('') : ''; };
+  $('#craddfam').onchange = () => tierFill($('#craddfam'), $('#craddtier'), '≤ '); $('#crmanfam').onchange = () => tierFill($('#crmanfam'), $('#crmantier'), '');
+  tierFill($('#craddfam'), $('#craddtier'), '≤ '); tierFill($('#crmanfam'), $('#crmantier'), '');
+  if (!keepState || !CR.state || CR.state.base !== CR.base) CR.state = { base: CR.base, ilvl: CR.ilvl, rarity: 'normal', mods: [], corrupted: false };
+  CR.state.ilvl = CR.ilvl;
+  crSave(); crRender(); crPlan();
+}
+function crRender() {
+  const tgt = side => CR.targets.filter(t => (t.fid != null ? (famById(t.fid) || {}).side : t.side) === side);
+  const trow = t => { const i = CR.targets.indexOf(t); const done = CR.state && CR.state.mods.some(m => isTarget({ ...m }) && ((t.fid != null && m.fid === t.fid) || (t.text && m.text === t.text)));
+    return `<div class="crmod ${done ? 'ok' : ''}">${done ? '✔' : '○'} ${esc(t.fid != null ? tierText(t.fid, t.max_tier) : t.text)} ${t.fid != null ? `<span class="pill">T${t.max_tier} or better</span>` : '<span class="pill">special</span>'}
+      <button class="x" data-rmt="${i}" title="Remove target">✕</button></div>`; };
+  $('#crtargets').innerHTML = ['prefix', 'suffix'].map(s => `<div class="small muted" style="margin-top:6px">${s === 'prefix' ? 'Prefixes' : 'Suffixes'} (${tgt(s).length}/3)</div>${tgt(s).map(trow).join('') || '<div class="small muted">none</div>'}`).join('');
+  const st = CR.state || { rarity: 'normal', mods: [] };
+  $('#crrarity').textContent = st.rarity + (st.corrupted ? ' · corrupted' : '');
+  const mrow = (m, i) => `<div class="crmod ${isTarget(m) ? 'ok' : 'bad'}">${m.fractured ? '🔒' : isTarget(m) ? '✔' : '✗'} ${esc(m.text)} ${m.tier ? `<span class="pill">T${m.tier}</span>` : ''}
+      <button class="x" data-frac="${i}" title="Toggle fractured">🔒</button><button class="x" data-rmm="${i}" title="Remove (record a removal)">✕</button></div>`;
+  $('#critem').innerHTML = ['prefix', 'suffix'].map(s => { const ms = st.mods.map((m, i) => [m, i]).filter(([m]) => m.side === s);
+    return `<div class="small muted" style="margin-top:6px">${s === 'prefix' ? 'Prefixes' : 'Suffixes'} (${ms.length}/${st.rarity === 'magic' ? 1 : 3})</div>${ms.map(([m, i]) => mrow(m, i)).join('') || '<div class="small muted">empty</div>'}`; }).join('');
+  const spent = CR.history.reduce((a, h) => a + (h.cost || 0), 0);
+  $('#crspent').textContent = CR.history.length ? `· ${CR.history.length} steps · spent ${P(spent)}` : '';
+  $('#crhist').innerHTML = CR.history.slice().reverse().map(h => `<div class="small" style="padding:4px 0;border-bottom:1px solid var(--grid)">${curIcons(h.label, 18)}<b>${esc(h.label)}</b> <span class="muted">${h.real ? 'in game' : 'simulated'} · ${esc(P(h.cost))}</span><div class="muted">${esc(h.msg)}</div></div>`).join('') || '<div class="small muted">Nothing yet.</div>';
+}
+async function crPlan() {
+  if (!CR.state || !CR.pool) { $('#crplan').innerHTML = '<div class="muted small">Load a base first.</div>'; return; }
+  await loadIcons();
+  const pl = CR.plan = await post('/api/craft/plan', { state: CR.state, targets: CR.targets });
+  if (pl.error) { $('#crplan').innerHTML = `<div class="small" style="color:var(--warning)">⚠ ${esc(pl.error)}</div>`; return; }
+  $('#crplansub').textContent = CR.targets.length ? `${pl.hit} of ${pl.of} targets on the item${pl.junk ? ` · ${pl.junk} unwanted mod(s)` : ''}${pl.done ? ' · done!' : ''}` : 'Add some targets to get a plan.';
+  $('#crplan').innerHTML = (pl.options || []).map((o, i) => `<div class="crstep ${o.recommended ? 'rec' : ''}"><div style="flex:1">${curIcons(o.label, 26)}<b>${o.recommended ? '★ ' : ''}${esc(o.label)}</b>
+      <div class="small muted">${o.p_progress != null ? `chance of progress ≈ ${(o.p_progress * 100).toFixed(o.p_progress < .01 ? 2 : 1)}% (≈1 in ${o.p_progress ? Math.round(1 / o.p_progress) : '∞'})` : ''} · ${esc(P(o.cost))} per try${o.expected_cost ? ` · ≈ ${esc(P(o.expected_cost))} expected` : ''}${o.note ? ' · ' + esc(o.note) : ''}</div></div>
+      <button class="btn" data-sim="${i}">Roll it (simulate)</button><button class="btn" data-real="${i}">I did this in game</button></div>`).join('') || '<div class="muted small">No options: check the targets fit this base.</div>';
+}
+async function crDo(i, real) {
+  const o = CR.plan.options[i];
+  if (!real) {
+    const r = await post('/api/craft/apply', { state: CR.state, action: o.action, targets: CR.targets });
+    CR.state = r.state; CR.history.push({ label: o.label, msg: r.message, cost: r.cost_div, real: false });
+  } else {
+    CR.history.push({ label: o.label, msg: 'Done in game: update the item below (+ mod / ✕ / 🔒, or paste the item) to match what you got.', cost: o.cost, real: true });
+    $('#critem').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  crSave(); crRender(); crPlan();
+}
+document.addEventListener('click', async e => {
+  const t = e.target;
+  if (t.dataset.sim != null) return crDo(+t.dataset.sim, false);
+  if (t.dataset.real != null) return crDo(+t.dataset.real, true);
+  if (t.dataset.rmt != null) { CR.targets.splice(+t.dataset.rmt, 1); crSave(); crRender(); return crPlan(); }
+  if (t.dataset.rmm != null) { const m = CR.state.mods.splice(+t.dataset.rmm, 1)[0]; CR.history.push({ label: 'Recorded: removed', msg: m.text, cost: 0, real: true }); crSave(); crRender(); return crPlan(); }
+  if (t.dataset.frac != null) { const m = CR.state.mods[+t.dataset.frac]; m.fractured = !m.fractured; crSave(); crRender(); return crPlan(); }
+});
+async function crImport(text, asTarget) {
+  const r = await post('/api/craft/import', { text, base: CR.base, ilvl: CR.ilvl });
+  if (r.error) { alert(r.error); return; }
+  $('#crbase').value = r.base; $('#crilvl').value = r.ilvl; await crLoadPool(true);
+  if (asTarget) CR.targets = r.mods.map(m => m.fid != null ? { fid: m.fid, max_tier: m.tier } : { text: m.text, side: m.side });
+  else { CR.state = { base: r.base, ilvl: r.ilvl, rarity: r.rarity, mods: r.mods, corrupted: false }; CR.history.push({ label: 'Pasted current item', msg: `${r.mods.length} mods`, cost: 0, real: true }); }
+  crSave(); crRender(); crPlan();
+}
+function crInit() {
+  get('/api/craft/bases').then(b => { $('#crbases').innerHTML = b.map(x => `<option value="${esc(x.name)}">${esc(x.class)}</option>`).join(''); });
+  $('#crbase').value = CR.base || ''; $('#crilvl').value = CR.ilvl || 82;
+  if (CR.base) crLoadPool(true); else crRender();
+  $('#crload').onclick = () => crLoadPool(false);
+  $('#cradd').onclick = () => { const fid = +$('#craddfam').value, tier = +$('#craddtier').value; const f = famById(fid);
+    if (CR.targets.filter(t => (famById(t.fid) || {}).side === f.side).length >= 3) { alert(`Already 3 ${f.side} targets`); return; }
+    CR.targets.push({ fid, max_tier: tier }); crSave(); crRender(); crPlan(); };
+  $('#crmanadd').onclick = () => { const fid = +$('#crmanfam').value, tier = +$('#crmantier').value; const f = famById(fid);
+    CR.state.mods.push({ fid, tier, side: f.side, text: tierText(fid, tier), kind: 'normal', fractured: false });
+    CR.history.push({ label: 'Recorded: got', msg: tierText(fid, tier) + ` (T${tier})`, cost: 0, real: true }); crSave(); crRender(); crPlan(); };
+  $('#crmanrar').onchange = () => { if ($('#crmanrar').value) { CR.state.rarity = $('#crmanrar').value; $('#crmanrar').value = ''; crSave(); crRender(); crPlan(); } };
+  $('#crreset').onclick = () => { CR.state = { base: CR.base, ilvl: CR.ilvl, rarity: 'normal', mods: [], corrupted: false }; CR.history.push({ label: 'New base', msg: CR.base, cost: 0, real: true }); crSave(); crRender(); crPlan(); };
+  $('#crclearhist').onclick = () => { CR.history = []; crSave(); crRender(); };
+  $('#crpastetarget').onclick = () => crImport($('#crpaste').value, true);
+  $('#crpastecurrent').onclick = () => crImport($('#crpaste').value, false);
+  $('#crfrombuild').onclick = async () => { const r = await post('/api/craft/from_build', { build_id: +$('#crbid').value, slot: $('#crslot').value });
+    if (r.error) { alert(r.error); return; } $('#crbase').value = r.base; $('#crilvl').value = r.ilvl; await crLoadPool(false);
+    CR.targets = r.mods.map(m => m.fid != null ? { fid: m.fid, max_tier: m.tier } : { text: m.text, side: m.side }); crSave(); crRender(); crPlan(); };
+  $('#crsim').onclick = async () => { $('#crsimout').innerHTML = '<span class="muted small">Running…</span>';
+    const r = await post('/api/craft/simulate', { state: CR.state, targets: CR.targets, runs: +$('#crruns').value, max_steps: +$('#crsteps').value });
+    $('#crsimout').innerHTML = r.error ? esc(r.error) : `<div class="tiles"><div class="tile"><div><div class="v">${(r.success_rate * 100).toFixed(0)}%</div><div class="l">finished within ${$('#crsteps').value} steps</div></div></div>
+      <div class="tile"><div><div class="v">${esc(P(r.median_cost_div) || '–')}</div><div class="l">median cost (finished runs)</div></div></div>
+      <div class="tile"><div><div class="v">${esc(P(r.p90_cost_div) || '–')}</div><div class="l">unlucky (90th percentile)</div></div></div>
+      <div class="tile"><div><div class="v">${r.avg_steps ?? '–'}</div><div class="l">average steps</div></div></div></div><div class="small muted">${esc(r.note)}</div>`; };
+}
+// Claude can load a setup: poe2_show view=craftlab with {base, ilvl, targets, state}
+function crLoadFromClaude(d) {
+  CR.base = d.base; CR.ilvl = d.ilvl || 82; CR.targets = d.targets || []; CR.state = d.state || null; CR.history = [];
+  $('#crbase').value = CR.base; $('#crilvl').value = CR.ilvl; crLoadPool(!!d.state);
+  document.querySelector('nav [data-tab="craft"]').click();
+}
+crInit();
+
+
+// ---------- patch notes ----------
+const dirTag = d => ({ buff: ['buff', 'buff'], nerf: ['nerf', 'nerf'], 'buff?': ['buff?', 'buffq'], 'nerf?': ['nerf?', 'nerfq'] }[d] || ['change', '']);
+function pnLine(x, hits) {
+  const [label, cls] = dirTag(x.direction);
+  return `<div class="pn-line ${cls}"><span class="pn-tag">${label}</span>${esc(x.text)}${x.parent ? `<div class="small muted">under: ${esc(x.parent.slice(0, 120))}</div>` : ''}
+    ${hits && x.hits ? `<div>${x.hits.map(h => `<span class="pn-hit">● ${esc(h.name)} <span class="muted">(${esc(h.kind)}, ${esc(h.build)})</span></span>`).join(' ')}</div>` : ''}
+    ${x.watch ? `<div class="small muted">mentions: ${x.watch.map(esc).join(', ')}</div>` : ''}</div>`;
+}
+function pnRender(r) {
+  const secs = {}; (r.all || []).forEach(x => (secs[x.section] = secs[x.section] || []).push(x));
+  $('#pnview').innerHTML = `<div class="card"><h2>${esc(r.title)}</h2><div class="sub">${r.lines} lines · ${Object.keys(r.sections || {}).length} sections${r.url ? ` · <a href="${esc(r.url)}" target="_blank" rel="noopener">original ↗</a>` : ''} · ${esc(r.note || '')}</div>
+      <h2 style="font-size:14px;margin-top:6px">Changes that hit your builds (${r.for_your_builds.length})</h2>${r.for_your_builds.map(x => pnLine(x, true)).join('') || '<div class="muted small">Nothing in this patch touches your builds directly.</div>'}
+      <h2 style="font-size:14px;margin-top:12px">Your watch list (${r.witch_blood_mage_watch.length})</h2>${r.witch_blood_mage_watch.map(x => pnLine(x, false)).join('') || '<div class="muted small">None.</div>'}</div>
+    <div class="card"><h2>Everything, by section</h2>${Object.entries(secs).map(([sec, xs]) => `<details><summary><b>${esc(sec)}</b> <span class="muted small">(${xs.length})</span></summary>${xs.map(x => pnLine(x, false)).join('')}</details>`).join('')}</div>`;
+}
+async function loadPatches() {
+  const l = await get('/api/patches');
+  $('#pnlist').innerHTML = !l.length ? '<div class="muted small">No patch notes yet: the monitor checks Steam every 20 minutes.</div>' :
+    `<table>${l.map(x => `<tr class="click" data-gid="${esc(x.gid)}"><td><b>${esc(x.title)}</b><div class="small muted">${new Date(x.date * 1000).toLocaleDateString()} · ${x.lines} lines</div></td>
+      <td class="num">${x.for_you ? `<span class="pill" style="border-color:#e3b341;color:#e3b341">${x.for_you} hit your builds</span>` : '<span class="muted small">none for you</span>'}</td><td class="num small muted">${x.watch} watch</td></tr>`).join('')}</table>`;
+  if (l.length && !$('#pnview').innerHTML) openPatch(l[0].gid);
+}
+async function openPatch(gid) { const r = await get('/api/patch?gid=' + encodeURIComponent(gid)); if (!r.error) pnRender(r); }
+document.addEventListener('click', e => { const tr = e.target.closest('tr[data-gid]'); if (tr) openPatch(tr.dataset.gid); });
+$('#pnanalyze').onclick = async () => { const r = await post('/api/patch/analyze', { text: $('#pnpaste').value, title: 'Pasted notes' }); pnRender(r); };
+
+
+// ---------- farming ----------
+async function loadFarm() {
+  const r = await get('/api/farm');
+  const top = Math.max(...r.mechanics.map(m => m.score), 1);
+  $('#farmsub').innerHTML = `League mechanics ranked by what their loot is worth and how much of it actually sells (${esc(r.league)}, live poe.ninja). Click a row for its top drops and tablets.`;
+  const rar = { common: '#3fa34d', uncommon: '#4b8fd6', rare: '#e3b341', chase: '#C8283C' };
+  const tag = x => `<span class="pill" style="border-color:${rar[x.rarity]};color:${rar[x.rarity]}">${x.rarity}</span>`;
+  const itemRow = x => `<div class="ls-node">${ic(x.icon, 26)}<div style="flex:1">${esc(x.name)} ${tag(x)}<div class="small muted">${esc(x.how_often)}</div></div><div class="num">${P(x.value_div, x.name)}</div></div>`;
+  $('#farmlist').innerHTML = r.mechanics.map((m, i) => `<div class="farm-row" data-fi="${i}"><div class="farm-rank">${i + 1}</div>
+      <div><b>${esc(m.mechanic)}</b> <span class="small muted">${m.farmable_units_day.toLocaleString()} drops/day${m.chase.length ? ` · ${m.chase.length} chase` : ''}${m.also ? ' · + uniques' : ''}</span>${m.est_map ? `<div class="small" style="color:#e3b341">est. ~${P(m.est_map.value_div)} per map <span class="muted">(${esc(m.est_map.confidence)}, ${esc(String(m.est_map.sample || 'n?'))})</span></div>` : ''}<div class="farm-bar" style="width:${Math.max(4, m.score / top * 100)}%"></div></div>
+      <div class="num">${P(m.avg_drop_div)}</div><div class="num">${m.best_real ? `${P(m.best_real.value_div, m.best_real.name)}<div class="small muted">${esc(m.best_real.name)}</div>` : '–'}</div><div class="num hide-s">${P(m.liquidity_div_per_day)}</div><div class="num hide-s">${m.trend_6h_pct == null ? '<span class="muted small">–</span>' : pct(m.trend_6h_pct)} · ${m.trend_24h_pct == null ? '<span class="muted small">soon</span>' : pct(m.trend_24h_pct)}</div></div>
+    <div class="farm-detail" id="fd${i}"><div class="grid2"><div><div class="small muted">What actually sells (most traded value first)</div>${m.top_items.map(itemRow).join('')}</div>
+      ${m.also ? `<div style="grid-column:1/-1" class="small"><span class="pill" style="border-color:#e3b341;color:#e3b341">also</span> ${esc(m.also.text)} ${m.also.examples.map(x => `<b>${esc(x.name)}</b> ${P(x.value_div, x.name)}`).join(' · ')}</div>` : ''}
+      ${m.estimates.length ? `<div style="grid-column:1/-1"><div class="small muted">Tracked runs people published (anecdotal: only GGG knows real drop rates), priced today</div>${m.estimates.map(e => `<div class="ls-node"><div style="flex:1"><b>${P(e.value_div)}</b> ${esc(e.unit)} <span class="pill">${esc(e.confidence)}</span> <span class="small muted">${esc(String(e.sample || 'sample unknown'))} · ${esc(e.patch || '')}</span>
+        <div class="small muted">${esc(e.conditions)}</div><div class="small">${e.items.slice(0, 5).map(i => `${esc(i.item)} ×${+(+i.rate).toPrecision(3)}`).join(' · ')}</div></div>${e.source ? `<a class="small" href="${esc(e.source)}" target="_blank" rel="noopener">source ↗</a>` : ''}</div>`).join('')}</div>` : ''}
+      <div><div class="small muted">Chase drops (don't count on these)</div>${m.chase.length ? m.chase.map(itemRow).join('') : '<div class="muted small">None.</div>'}
+      <div class="small muted" style="margin-top:10px">Tablets for it</div>${m.tablets.length ? m.tablets.map(t => `<div class="ls-node">${ic(t.icon, 26)}<div style="flex:1">${esc(t.name)}</div><div class="num">${P(t.value_div)}</div></div>`).join('') : '<div class="muted small">No tablets priced for this one.</div>'}</div></div></div>`).join('');
+  $('#farmnote').innerHTML = r.notes.map(esc).join('<br>') + `<br>Price history so far: ${r.history_hours} h.`;
+}
+document.addEventListener('click', e => { const row = e.target.closest('.farm-row[data-fi]'); if (row) $('#fd' + row.dataset.fi).classList.toggle('on'); });
+
+// ---------- league start ----------
+let LSCLASSES = null;
+async function initLeague() {
+  if (LSCLASSES) return;
+  LSCLASSES = await get('/api/classes');
+  const PR = (STATUS && STATUS.profile) || {};
+  $('#lscls').innerHTML = LSCLASSES.map(c => `<option${c.name === (PR.class || 'Witch') ? ' selected' : ''}>${esc(c.name)}</option>`).join('');
+  const builds = await get('/api/builds');
+  $('#lstarget').innerHTML += builds.map(b => `<option value="${b.id}">#${b.id} ${esc(b.label)} (${esc(b.ascendancy || b.class || '')})</option>`).join('');
+  const firstBM = builds.find(b => b.owner === 'me' && b.ascendancy === PR.ascendancy) || builds.find(b => b.owner === 'me'); if (firstBM) $('#lstarget').value = firstBM.id;
+  $('#lscls').onchange = () => fillAsc(false); fillAsc(true);
+}
+function fillAsc(first) {
+  const c = LSCLASSES.find(x => x.name === $('#lscls').value) || LSCLASSES[0];
+  const sel = document.querySelectorAll('.lsasc');
+  sel.forEach(s => { s.innerHTML = '<option value="">—</option>' + c.ascendancies.map(a => `<option>${esc(a)}</option>`).join(''); });
+  const PR = (STATUS && STATUS.profile) || {}, path = (PR.path && PR.path.length ? PR.path : [PR.ascendancy]).filter(Boolean);
+  if (first && c.name === PR.class && path.length) path.slice(0, 3).forEach((a, i) => { sel[i].value = a; }); else sel[0].value = c.ascendancies[0] || '';
+}
+$('#lsgo').onclick = async () => {
+  const asc = [...document.querySelectorAll('.lsasc')].map(s => s.value).filter(Boolean);
+  $('#lsview').innerHTML = '<div class="card muted">Planning…</div>';
+  const r = await get(`/api/leagueplan?cls=${encodeURIComponent($('#lscls').value)}&asc=${encodeURIComponent(asc.join(','))}&target=${$('#lstarget').value}&budget=${+$('#lsbudget').value || 0.05}`);
+  if (r.error) { $('#lsview').innerHTML = `<div class="card">${esc(r.error)}</div>`; return; }
+  const acts = Object.entries(r.acts).map(([act, qs]) => `<details${act === 'Act 1' ? ' open' : ''}><summary><b>${esc(act)}</b> <span class="small muted">(${qs.length} rewards)</span></summary>
+      <table>${qs.map(q => `<tr><td class="small">${esc(q.area || '')} <span class="muted">lvl ${q.area_level ?? '?'}</span></td><td class="small">${esc(q.what || '')}</td><td>${esc(q.reward || '')}${q.choices.length ? `<div class="small muted">pick one: ${q.choices.map(esc).join(' · ')}</div>` : ''}</td></tr>`).join('')}</table></details>`).join('');
+  const ascs = Object.entries(r.ascendancies).map(([a, ns]) => `<div class="card"><h2>${esc(a)}</h2>${ns.map(n => `<div class="ls-node">${pic(n, 28)}<div style="flex:1"><b>${esc(n.name)}</b>${n.copies > 1 ? ` <span class="small muted">×${n.copies}</span>` : ''}<div class="small muted">${n.stats.map(esc).join(' · ')}</div></div>${n.your_builds_took ? `<span class="ls-took">your builds: ${n.your_builds_took}</span>` : ''}</div>`).join('')}</div>`).join('');
+  const t = r.target;
+  $('#lsview').innerHTML = `
+    <div class="card"><h2>${esc(r.class)} → ${r.ascendancy_path.map(esc).join(' → ') || '(no ascendancy)'}</h2>
+      ${t ? `<div class="sub">Aimed at <b>${esc(t.label)}</b>: ${esc(t.ascendancy || '')}, main skill <b>${esc(t.main_skill || '?')}</b>${t.keystones.length ? ', keystones ' + t.keystones.map(esc).join(', ') : ''}.</div>` : ''}
+      <div class="small">${esc(r.ascendancy_points)}</div></div>
+    <div class="grid2">
+      <div class="card"><h2>Skills to cut</h2><div class="sub">★ = in your target build (cut these as their tier drops). Then the best matches for it. Tier = uncut gem level needed.</div>
+        <table>${r.skills.map(g => `<tr><td>${g.yours ? '★ ' : ''}<b>${esc(g.name)}</b> <span class="small muted">${esc(g.type)}</span><div class="small muted">${g.tags.map(esc).join(', ')}</div></td><td class="num small">tier ${g.tier}</td></tr>`).join('')}</table></div>
+      <div class="card"><h2>Cheap leveling uniques</h2><div class="sub">Under ${P(+$('#lsbudget').value || 0.05)}, usable by a ${esc(r.class)}, by level.</div>
+        <table>${r.leveling_uniques.map(u => `<tr><td>${ic(u.icon, 26)}<b>${esc(u.name)}</b> <span class="small muted">${esc(u.base || '')}</span><div class="small muted">${u.mods.slice(0, 2).map(esc).join(' · ')}</div></td><td class="num small">${u.level ? 'lvl ' + u.level : 'any lvl'}</td><td class="num">${P(u.value_div)}</td></tr>`).join('')}</table></div>
+    </div>
+    <div class="grid2">${ascs}</div>
+    <div class="card"><h2>Campaign rewards</h2><div class="sub">Permanent buffs and passive points per act (from Path of Building).</div>${acts}</div>
+    <div class="card small muted">${r.notes.map(esc).join('<br>')}</div>`;
+};
+
+
+// ---------- top 1% ----------
+const big = v => v == null ? '–' : v >= 1e9 ? (v / 1e9).toFixed(1) + 'B' : v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : v >= 1e3 ? (v / 1e3).toFixed(1) + 'k' : Math.round(v).toString();
+let T1INIT = false;
+async function initTop1() {
+  if (!T1INIT) {
+    T1INIT = true;
+    const builds = (await get('/api/builds')).filter(b => b.owner === 'me');
+    $('#t1build').innerHTML = builds.map(b => `<option value="${b.id}">#${b.id} ${esc(b.label)} (${esc(b.ascendancy || b.class || '')} ${b.level || ''})</option>`).join('');
+    $('#t1go').onclick = runTop1;
+  }
+  if (!$('#t1view').innerHTML) runTop1();
+}
+async function runTop1() {
+  $('#t1view').innerHTML = '<div class="card muted">Running your build through Path of Building…</div>';
+  const r = await get('/api/top1?id=' + $('#t1build').value);
+  if (r.error) { $('#t1view').innerHTML = `<div class="card">${esc(r.error)}</div>`; return; }
+  const ax = r.axes, w = ax.wealth || {};
+  const card = (label, yours, cutoff, p, fmt, extra) => {
+    const ok = p && p.in_top1, known = p && 'in_top1' in p;
+    const pctv = known && cutoff ? Math.min(100, Math.max(2, (yours || 0) / cutoff * 100)) : 0;
+    return `<div class="t1-axis ${known ? (ok ? 'ok' : 'no') : ''}"><div class="t1-label">${label}</div>
+      <div class="t1-val">${fmt(yours)} ${known ? (ok ? '✅' : '') : ''}</div>
+      <div class="small muted">top 1% starts at <b>${cutoff == null ? '?' : fmt(cutoff)}</b></div>
+      <div class="t1-meter"><div style="width:${pctv}%"></div></div>
+      <div class="small">${extra || ''}</div></div>`;
+  };
+  const rankTxt = p => !p ? 'no benchmark yet' : p.rank ? `about rank ${p.rank} of ${p.total.toLocaleString()} (top ${p.top_pct}%)` : `${esc(p.note || '')}${p.gap_x ? ` · ${p.gap_x}× short` : ''}`;
+  const lv = ax.level, dps = ax.dps, ehp = ax.ehp;
+  const asOf = [lv, dps, ehp].filter(Boolean).map(p => p.as_of)[0];
+  $('#t1view').innerHTML = `
+    <div class="card"><div style="display:flex;gap:16px;align-items:baseline;flex-wrap:wrap"><div class="t1-score">${esc(r.score)}</div>
+      <div><b>${esc(r.build)}</b><div class="small muted">vs ${esc(r.scope)} in ${esc(r.league)}${asOf ? ' · benchmarks from ' + new Date(asOf * 1000).toLocaleDateString() : ''} · best skill ${esc(r.best_skill || '?')}</div></div></div></div>
+    <div class="t1-axes">
+      ${card('Level (progress)', r.yours.level, lv && lv.top1_cutoff, lv, v => v ?? '–', rankTxt(lv))}
+      ${card('DPS (power)', r.yours.dps, dps && dps.top1_cutoff, dps, big, rankTxt(dps))}
+      ${card('Effective HP (power)', r.yours.ehp, ehp && ehp.top1_cutoff, ehp, big, rankTxt(ehp))}
+      ${card('Gear value (wealth)', w.yours_div, w.median_div, w, v => v == null ? '–' : P(v), w.median_div != null ? `typical top-1% ${esc(r.scope)}; range ${P(w.low_div)} to ${P(w.high_div)}` : 'no samples yet')}
+    </div>
+    ${r.next_steps.length ? `<div class="card"><h2>What closes the gap</h2>${r.next_steps.map(x => `<div class="ls-node">→ <div>${esc(x)}</div></div>`).join('')}</div>` : ''}
+    <div class="grid2">
+      <div class="card"><h2>Top-1% ${esc(r.scope)} gear sampled</h2><div class="sub">Uniques, runes and unique jewels priced from their item icons; rares left out (same as yours).</div>
+        <table>${(w.sample || []).map(c => `<tr><td><b>${esc(c.name)}</b> <span class="small muted">lvl ${c.level}</span><div class="small muted">${c.top_items.map(t => esc(t.item) + ' ' + P(t.value_div, t.item)).join(' · ')}</div></td><td class="num">${P(c.value_div)}</td></tr>`).join('')}</table></div>
+      <div class="card"><h2>Top 5 ${esc(r.scope)}s</h2>${['dps', 'ehp'].filter(m => ax[m]).map(m => `<div class="small muted" style="margin-top:6px">${m.toUpperCase()}</div><table>${ax[m].top5.map(t => `<tr><td>${esc(t.name)}</td><td class="num">${big(t.value)}</td></tr>`).join('')}</table>`).join('')}</div>
+    </div>
+    <div class="card small muted">${r.notes.map(esc).join('<br>')}${r.missing.length ? '<br>Missing benchmarks: ' + r.missing.map(esc).join(', ') : ''}</div>`;
+}
+
+
+// ---------- league start playbook ----------
+let PB = null;
+async function loadPlaybook() {
+  PB = await get('/api/playbook');
+  if (!PB.leagues || !PB.leagues.length) { $('#pbtable').innerHTML = '<div class="muted small">No launch history yet: it is being downloaded in the background.</div>'; return; }
+  $('#pblg').innerHTML = '<option value="">All launches (median)</option>' + PB.leagues.map(l => `<option>${esc(l.league)}</option>`).join('');
+  $('#pblg').onchange = drawPlaybook; drawPlaybook();
+  const mv = x => `<div class="ls-node"><div style="flex:1">${esc(x.item)} <span class="small muted">${esc(x.mechanic)}</span><div class="small muted">day 1 ${x.day1_ex} ex · ${x.leagues} launch${x.leagues > 1 ? 'es' : ''}</div></div><div class="num">${pct(x.change_by_day7_pct)}</div></div>`;
+  $('#pbsell').innerHTML = PB.sell_day1.slice(0, 12).map(mv).join('');
+  $('#pbhold').innerHTML = PB.hold.slice(0, 12).map(mv).join('') || '<div class="muted small">Nothing rose.</div>';
+  $('#pbnote').innerHTML = PB.notes.map(esc).join('<br>') + '<br>Launches: ' + PB.leagues.map(l => `${esc(l.league)} (${new Date(l.start_hour * 1000).toLocaleDateString()}, ${Math.round(l.hours / 24)} days)`).join(', ');
+}
+function drawPlaybook() {
+  const L = $('#pblg').value, med = a => { const s = a.filter(v => v != null).sort((x, y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : null; };
+  const exf = v => v == null ? '–' : (v >= 100 ? Math.round(v).toLocaleString() : v >= 1 ? (+v.toFixed(1)) : (+v.toFixed(2))) + ' ex';
+  const D = [0, 1, 2, 3, 4, 5, 6];
+  const rate = D.map(d => L ? (PB.div_rate[L] || {})[d] : med(Object.values(PB.div_rate).map(x => x[d])));
+  const rows = Object.entries(PB.mechanics).map(([mech, lgs]) => {
+    const days = D.map(d => L ? (lgs[L] && lgs[L][d] ? lgs[L][d].avg_ex : null) : med(Object.values(lgs).map(x => x[d] ? x[d].avg_ex : null)));
+    return { mech, days };
+  }).filter(r => r.days.some(v => v != null)).sort((a, b) => (b.days[0] || 0) - (a.days[0] || 0));
+  $('#pbtable').innerHTML = `<table class="pb-table"><tr><th>Mechanic</th>${D.map(d => `<th>Day ${d + 1}</th>`).join('')}<th>Day 1 → 7</th></tr>
+    <tr class="small muted"><td>1 div =</td>${rate.map(v => `<td>${v ? Math.round(v) + ' ex' : '–'}</td>`).join('')}<td></td></tr>${rows.map(r => {
+    const mx = Math.max(...r.days.filter(v => v != null), 1e-9), first = r.days[0], last = [...r.days].reverse().find(v => v != null);
+    return `<tr><td><b>${esc(r.mech)}</b></td>${r.days.map(v => v == null ? '<td class="muted">–</td>' : `<td><span class="pb-cell" style="padding:2px 6px;background:rgba(200,40,60,${(0.12 + 0.55 * v / mx).toFixed(2)})">${exf(v)}</span></td>`).join('')}<td>${first && last ? pct(Math.round((last / first - 1) * 1000) / 10) : ''}</td></tr>`;
+  }).join('')}</table>`;
+}
+
+// ---------- sessions ----------
+const KCOL = { map: '#C8283C', hideout: '#4b8fd6', town: '#e3b341', campaign: '#3fa34d', trial: '#a371f7', other: '#888780' };
+const hm = m => m == null ? '–' : m >= 60 ? `${Math.floor(m / 60)}h ${Math.round(m % 60)}m` : `${Math.round(m)}m`;
+let SESS = null;
+async function loadSessions() {
+  SESS = await get('/api/sessions');
+  if (!SESS.found_log && !SESS.sessions.length) { $('#sesslist').innerHTML = '<div class="muted small">No Client.txt yet: start Path of Exile 2 once and it appears (logs folder in the game install).</div>'; $('#sessview').innerHTML = ''; return; }
+  if (!SESS.sessions.length) { $('#sesslist').innerHTML = `<div class="muted small">Log found (${esc(SESS.log)}), no sessions yet: play a bit and they show up here.</div>`; return; }
+  $('#sesslist').innerHTML = `<table>${SESS.sessions.map((x, i) => `<tr class="click" data-si="${i}"><td><b>${new Date(x.start * 1000).toLocaleString()}</b><div class="small muted">${esc(x.characters.join(', ') || '')}</div></td>
+    <td class="num">${hm(x.minutes)}</td><td class="num">${x.maps_run} maps</td><td class="num small">${x.deaths} deaths</td></tr>`).join('')}</table>`;
+  drawSession(0);
+}
+function drawSession(i) {
+  const x = SESS.sessions[i]; if (!x) return;
+  const tot = Object.values(x.time_by_kind_min).reduce((a, b) => a + b, 0) || 1;
+  const bar = Object.entries(x.time_by_kind_min).map(([k, v]) => `<div title="${k} ${hm(v)}" style="width:${v / tot * 100}%;background:${KCOL[k] || '#888'};height:14px"></div>`).join('');
+  const legend = Object.entries(x.time_by_kind_min).map(([k, v]) => `<span class="small" style="margin-right:12px"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${KCOL[k] || '#888'}"></span> ${k} ${hm(v)}</span>`).join('');
+  const tile = (l, v) => `<div class="t1-axis"><div class="t1-label">${l}</div><div class="t1-val">${v}</div></div>`;
+  const acts = Object.entries(x.acts || {});
+  $('#sessview').innerHTML = `<div class="card"><h2>${new Date(x.start * 1000).toLocaleString()} · ${hm(x.minutes)}</h2>
+      <div class="t1-axes">${tile('Maps run', x.maps_run)}${tile('Avg map time', x.avg_map_min == null ? '–' : x.avg_map_min + ' min')}${tile('Maps per hour', x.maps_per_hour ?? '–')}${tile('Deaths', x.deaths)}${tile('Mapping share', x.mapping_share_pct + '%')}${tile('AFK', hm(x.afk_minutes))}</div>
+      <div style="display:flex;border-radius:4px;overflow:hidden;margin:12px 0 6px">${bar}</div><div>${legend}</div>
+      ${x.levelups.length ? `<div class="small muted" style="margin-top:8px">Level-ups: ${x.levelups.map(l => `${esc(l.player)} ${l.level}`).join(', ')}</div>` : ''}</div>
+    <div class="grid2">
+      <div class="card"><h2>Map runs</h2>${x.maps.length ? `<table>${x.maps.slice().reverse().map(m => `<tr><td><b>${esc(m.name)}</b> <span class="small muted">lvl ${m.level}${m.portals ? ` · ${m.portals} portal${m.portals > 1 ? 's' : ''} back` : ''}</span></td><td class="num">${m.minutes} min</td><td class="num small">${m.deaths ? `<span style="color:var(--down)">${m.deaths} death${m.deaths > 1 ? 's' : ''}</span>` : ''}</td></tr>`).join('')}</table>` : '<div class="muted small">No maps this session.</div>'}</div>
+      <div class="card"><h2>Campaign time per act</h2>${acts.length ? `<table>${acts.map(([a, t]) => `<tr><td>${esc(a)}</td><td class="num small">world ${hm(t.world || 0)}</td><td class="num small">town ${hm(t.town || 0)}</td><td class="num"><b>${hm((t.world || 0) + (t.town || 0) + (t.trial || 0))}</b></td></tr>`).join('')}</table>` : '<div class="muted small">No campaign zones this session.</div>'}</div>
+    </div>
+    <div class="card small muted">${SESS.notes.map(esc).join('<br>')}</div>`;
+}
+document.addEventListener('click', e => { const tr = e.target.closest('tr[data-si]'); if (tr) drawSession(+tr.dataset.si); });
+
+
+// ---------- market history ----------
+let MH = null, MHCAT = 'Currency';
+const PRETTYCAT = c => ({ SoulCores: 'Soul Cores', UncutGems: 'Uncut Gems', LineageSupportGems: 'Lineage Gems', Fragments: 'Fragments' }[c] || c);
+function spark(vals, up) {
+  if (!vals || vals.length < 2) return '';
+  const w = 110, h = 26, mn = Math.min(...vals), mx = Math.max(...vals), r = mx - mn || 1;
+  const pts = vals.map((v, i) => `${(i / (vals.length - 1) * w).toFixed(1)},${(h - 2 - (v - mn) / r * (h - 4)).toFixed(1)}`).join(' ');
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><polyline points="${pts}" fill="none" stroke="${up == null ? '#888780' : up ? '#3fa34d' : '#C8283C'}" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
+}
+async function loadMarket(cat) {
+  if (cat) MHCAT = cat;
+  MH = await get('/api/market?cat=' + encodeURIComponent(MHCAT));
+  const all = await get('/api/market?days=7&cat=__none__');
+  const cats = (all.categories || []).filter(([c]) => c !== 'Other');
+  $('#mhcats').innerHTML = cats.map(([c, n]) => `<button data-mhc="${esc(c)}" class="${c === MHCAT ? 'on' : ''}">${esc(PRETTYCAT(c))} <span class="muted">${n}</span></button>`).join('');
+  $('#mhsub').innerHTML = `Every Currency Exchange item: price, stock and the last ${MH.days} days, hour by hour from GGG's exchange history (${esc(MH.league)}${MH.as_of ? ', to ' + new Date(MH.as_of * 1000).toLocaleString() : ''}).`;
+  drawMarket();
+}
+function drawMarket() {
+  const q = ($('#mhq').value || '').toLowerCase();
+  const rows = (MH.items || []).filter(x => !q || x.item.toLowerCase().includes(q));
+  $('#mhtable').innerHTML = rows.length ? `<table class="mh-table"><tr class="small muted"><td>Item</td><td class="num">Price</td><td class="num hide-s">Stock</td><td class="num hide-s">Traded 24 h</td><td>History</td><td class="num">Change</td></tr>${rows.map(x =>
+    `<tr><td>${ic(x.icon, 26)}<b>${esc(x.item)}</b></td><td class="num">${P(x.price_div, x.item)}</td><td class="num hide-s">${x.stock == null ? '–' : x.stock >= 1000 ? (x.stock / 1000).toFixed(1) + 'K' : Math.round(x.stock)}</td>
+     <td class="num hide-s">${x.traded_24h >= 1000 ? (x.traded_24h / 1000).toFixed(1) + 'K' : x.traded_24h}</td><td>${spark(x.spark, x.change_pct == null ? null : x.change_pct >= 0)}</td><td class="num">${x.change_pct == null ? '' : pct(x.change_pct)}</td></tr>`).join('')}</table>`
+    : '<div class="muted small">Nothing here yet.</div>';
+}
+document.addEventListener('click', e => { const b = e.target.closest('button[data-mhc]'); if (b) loadMarket(b.dataset.mhc); });
+document.addEventListener('input', e => { if (e.target.id === 'mhq') drawMarket(); });
+
+
+// ---------- currency pictures in text (craft steps, history) ----------
+let ICONS = null, ICONNAMES = [];
+async function loadIcons() { if (!ICONS) { ICONS = await get('/api/icons'); ICONNAMES = Object.keys(ICONS).sort((a, b) => b.length - a.length); } }
+function curIcons(text, sz = 22) {
+  if (!ICONS || !text) return '';
+  let t = text, found = [];
+  for (const n of ICONNAMES) { const i = t.indexOf(n); if (i >= 0) { found.push([i, n]); t = t.slice(0, i) + ' '.repeat(n.length) + t.slice(i + n.length); } }
+  return found.sort((a, b) => a[0] - b[0]).map(([, n]) => `<img src="/img?u=${encodeURIComponent(ICONS[n])}" width="${sz}" height="${sz}" alt="" title="${esc(n)}" style="object-fit:contain;vertical-align:middle;margin-right:4px">`).join('');
+}
+
+
+// ---------- profile ----------
+let PFCLASSES = null;
+async function loadProfile() {
+  const st = await get('/api/status'); const pr = st.profile || {};
+  PFCLASSES = PFCLASSES || await get('/api/classes');
+  $('#pfcls').innerHTML = '<option value="">—</option>' + PFCLASSES.map(c => `<option${c.name === pr.class ? ' selected' : ''}>${esc(c.name)}</option>`).join('');
+  const fillAsc = () => { const c = PFCLASSES.find(x => x.name === $('#pfcls').value); $('#pfasc').innerHTML = '<option value="">—</option>' + (c ? c.ascendancies : []).map(a => `<option${a === pr.ascendancy ? ' selected' : ''}>${esc(a)}</option>`).join(''); };
+  $('#pfcls').onchange = fillAsc; fillAsc();
+  $('#pfpath').value = (pr.path || []).join(', ');
+  $('#pfwatch').value = (pr.watch || []).join(', ');
+  $('#pfdir').value = (st.paths && st.paths.poe2) || '';
+  $('#pfpaths').innerHTML = st.paths ? `Version ${esc(st.paths.version)} · data in ${esc(st.paths.home)} · game log: ${esc(st.paths.client_log || 'not found yet (play once)')}` : '';
+  if (!pr.configured) $('#pfmsg').textContent = 'Not set up yet: pick your class and ascendancy, then save.';
+}
+$('#pfsave').onclick = async () => {
+  const split = v => v.split(',').map(x => x.trim()).filter(Boolean);
+  const r = await post('/api/profile', { class: $('#pfcls').value || null, ascendancy: $('#pfasc').value || null,
+    path: split($('#pfpath').value), watch: split($('#pfwatch').value.toLowerCase()), poe2_dir: $('#pfdir').value.trim() || null });
+  $('#pfmsg').textContent = r.ok ? 'Saved.' : 'Could not save.';
+  STATUS = await get('/api/status'); LSCLASSES = null;
+};
+
+
+// ---------- connect to Claude (optional) ----------
+async function loadClaude() {
+  const c = await get('/api/claude');
+  $('#cllink').innerHTML = `<div class="small">${c.registered ? '<span style="color:#3fa34d">● Connected to the Claude desktop app.</span>' : c.desktop_installed ? 'Claude desktop app found, not connected yet.' : 'Claude desktop app not found on this PC.'}</div>
+    <div style="margin-top:8px">${c.registered ? '<button class="btn" id="cldis">Disconnect</button>' : `<button class="btn" id="clcon"${c.desktop_installed ? '' : ' disabled'}>Connect to Claude desktop</button>`} <span class="small muted">${esc(c.note)}</span></div>
+    <details style="margin-top:8px"><summary class="small">Using Claude Code instead? Run this once in a terminal</summary><input class="crin" style="width:100%;margin-top:6px" readonly value="${esc(c.claude_code_command)}" onclick="this.select()"></details>`;
+  const con = $('#clcon'), dis = $('#cldis');
+  if (con) con.onclick = async () => { await post('/api/claude/connect', {}); loadClaude(); };
+  if (dis) dis.onclick = async () => { await post('/api/claude/disconnect', {}); loadClaude(); };
+}
+
+
+// ---------- update banner ----------
+async function checkUpdate() {
+  const u = await get('/api/update');
+  if (!u || !u.available || document.querySelector('#updbar')) return;
+  const bar = document.createElement('div');
+  bar.id = 'updbar';
+  bar.style.cssText = 'background:#3a0d14;border-bottom:1px solid #C8283C;padding:8px 16px;font-size:13px;display:flex;gap:10px;align-items:center;flex-wrap:wrap';
+  bar.innerHTML = `<b>Update available: PoE 2 Toolkit ${esc(u.latest)}</b> <span class="muted">(you have ${esc(u.current)})</span>
+    <button class="btn" id="updgo">Download &amp; install</button> <a class="small" href="${esc(u.page)}" target="_blank" rel="noopener">what's new ↗</a> <span class="small muted" id="updmsg"></span>`;
+  document.body.prepend(bar);
+  $('#updgo').onclick = async () => { $('#updmsg').textContent = 'Downloading… the installer opens when it is ready.'; const r = await post('/api/update/install', {}); $('#updmsg').textContent = r.ok ? 'Installer started: follow it, the toolkit restarts after.' : ('Could not update: ' + (r.why || '')); };
+}
+checkUpdate();
+
+// ---------- views Claude sends (poe2_show) ----------
+const tierClass = t => t == null ? '' : t <= 1 ? 'tier1' : t <= 2 ? 'tier2' : 'tierlow';
+const VIEWS = {
+  build_cost(d) {
+    const rows = d.all_priced || d.most_expensive || [];
+    return `<div class="card"><h2>${esc(d.build)}: what it costs</h2><div class="sub">${esc(d.league)} prices · ${esc(d.rate||'')}</div>
+      <div style="font-size:28px;font-weight:700;margin:4px 0 2px">${esc(P(d.priced_total_div))}</div><div class="muted small">for the parts with a market price; ${ (d.needs_a_price_check||[]).length } rares need a check</div></div>
+      <div class="grid2"><div class="card"><h2>Buy order</h2>${Object.entries(d.buy_order||{}).map(([k, v]) => `<div style="margin:8px 0 4px"><b>${esc(k)}</b></div>${v.map(s => `<div class="small">${esc(s)}</div>`).join('')}`).join('')}</div>
+      <div class="card"><h2>Priced pieces</h2><table>${rows.map(e => `<tr><td><div style="display:flex;align-items:center">${pic(e)}<div>${esc(e.item)}<div class="small muted">${esc(e.kind)} · ${esc(e.slot)}</div></div></div></td><td class="num"><b>${esc(P(e.value_div, e.item))}</b></td></tr>`).join('')}</table></div></div>
+      <div class="card"><h2>Rares to check</h2>${(d.needs_a_price_check||[]).map(u => `<div style="margin:10px 0">${pic(u, 40)}<b>${esc(u.item)}</b> <span class="muted small">${esc(u.slot)} · ${esc(u.quality||u.why||'')}</span>${u.trade_link?` <a href="${esc(u.trade_link)}" target="_blank" rel="noopener" class="small">trade search ↗</a>`:''}
+        ${(u.mods||[]).map(m => { const t = /^T(\d+)/.exec(m); return `<div class="small ${tierClass(t ? +t[1] : null)}">${esc(m)}</div>`; }).join('')}</div>`).join('') || '<div class="muted">None</div>'}</div>`;
+  },
+  upgrades(d) {
+    const row = c => `<tr><td><div style="display:flex;align-items:center">${ic(c.icon)}<div>${esc(c.item)}${c.slot?`<div class="small muted">${esc(c.slot)}${c.replaces?' · replaces '+esc(c.replaces):''}</div>`:''}</div></div></td><td class="num"><b>${esc(P(c.price_div, c.item))}</b></td><td class="num">${pct(c.dps_pct)} DPS</td><td class="num">${c.life_es_change>=0?'+':''}${c.life_es_change} life/ES</td><td class="num">${pct(c.lowest_max_hit_pct)} min hit</td></tr>`;
+    return `<div class="card"><h2>${esc(d.build)}: upgrade finder</h2><div class="sub">${esc(d.uniques_considered)} uniques tried in every slot · budget ${esc(d.budget)} · baseline ${Math.round(d.baseline.dps).toLocaleString()} DPS, ${d.baseline['life+es']} life+ES</div>
+      <h2 style="font-size:13px;margin-top:8px">Biggest damage upgrades</h2><table>${(d.biggest_damage_upgrades||[]).map(row).join('')}</table>
+      <h2 style="font-size:13px;margin-top:14px">Best damage per divine</h2><table>${(d.best_value_damage_upgrades||[]).map(row).join('')}</table></div>
+      <div class="card"><h2>Per slot</h2>${(d.slots||[]).filter(s => s.tested).map(s => `<div style="margin:12px 0 4px"><b>${esc(s.slot)}</b> <span class="muted small">now: ${esc(s.current||'empty')} · ${s.tested} tried</span>${s.blocked_note?`<div class="small" style="color:var(--warning)">⚠ ${esc(s.blocked_note)}</div>`:''}</div>
+        <table>${[...(s.best_for_damage||[]).slice(0,3), ...(s.best_for_defence||[]).slice(0,2)].map(row).join('')}</table>
+        ${(s.best_if_unblocked||[]).length && s.blocked_note ? `<div class="small muted" style="margin-top:4px">If unblocked: ${s.best_if_unblocked.map(c => esc(c.item)+' ('+(c.life_es_change>=0?'+':'')+c.life_es_change+' life/ES)').join(', ')}</div>`:''}`).join('')}</div>`;
+  },
+  compare(d) {
+    return `<div class="card"><h2>${esc(d.a.build)} vs ${esc(d.b.build)}</h2><div class="sub">${esc(d.a.ascendancy)} (${esc(d.a.main_skill)}) vs ${esc(d.b.ascendancy)} (${esc(d.b.main_skill)})</div>
+      <table><tr><th>Stat</th><th class="num">${esc(d.a.build)}</th><th class="num">${esc(d.b.build)}</th><th class="num">Difference</th></tr>${
+      Object.entries(d.diff||{}).map(([k, v]) => `<tr><td>${esc(k)}</td><td class="num">${(+v.a).toLocaleString()}</td><td class="num">${(+v.b).toLocaleString()}</td><td class="num">${pct(v.b_vs_a_pct)}</td></tr>`).join('')}</table></div>`;
+  },
+  whatif(d) {
+    return `<div class="card"><h2>${esc(d.build)}: what if, ${esc(d.slot)}</h2><div class="sub">Main skill ${esc(d.main_skill)}</div>
+      <table><tr><th>Stat</th><th class="num">Before</th><th class="num">After</th><th class="num">Change</th></tr>${
+      Object.entries(d.changes||{}).map(([k, v]) => `<tr><td>${esc(k)}</td><td class="num">${(+v.before).toLocaleString()}</td><td class="num">${(+v.after).toLocaleString()}</td><td class="num">${pct(v.change_pct)}</td></tr>`).join('')}</table></div>`;
+  },
+  stats(d) {
+    return `<div class="card"><h2>${esc(d.build)}</h2><div class="sub">${esc(d.ascendancy)} · level ${esc(d.level)} · main skill ${esc(d.main_skill)}</div>
+      <div class="grid2"><table>${Object.entries(d.stats||{}).map(([k, v]) => `<tr><td>${esc(k)}</td><td class="num">${(+v).toLocaleString()}</td></tr>`).join('')}</table>
+      <table><tr><th>Skill</th><th class="num">DPS</th></tr>${(d.skills||[]).map(s => `<tr><td>${esc(s.skill)}</td><td class="num">${(+s.dps).toLocaleString()}</td></tr>`).join('')}</table></div>
+      ${(d.warnings||[]).map(w => `<div class="small" style="color:var(--warning)">⚠ ${esc(w)}</div>`).join('')}</div>`;
+  },
+  chart(d) {
+    return `<div class="card"><h2>${esc(d.title)}</h2><div class="sub">${esc(d.subtitle||'')}</div>${lineChart(d.points||[], {name: d.name || d.title, fmt: v => v.toPrecision(3) + (d.unit ? ' ' + d.unit : '')})}</div>`;
+  },
+  table(d) {
+    return `<div class="card"><h2>${esc(d.title)}</h2><div class="sub">${esc(d.subtitle||'')}</div><table><tr>${(d.columns||[]).map(c => `<th>${esc(c)}</th>`).join('')}</tr>${
+      (d.rows||[]).map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</table></div>`;
+  },
+  character(d) { setTimeout(() => { renderCharacter(d, $('#charview')); document.querySelector('nav [data-tab="character"]').click(); }); return `<div class="card">Showing <b>${esc(d.label)}</b> on the Character tab.</div>`; },
+  craft(d) {
+    const src = { normal: 'normal roll', essence: 'essence-only', desecrated: 'desecrated', unknown: 'other' };
+    return `<div class="card"><div style="display:flex;gap:12px;align-items:center">${d.art ? `<img src="${artSrc(d.art)}" width="56" height="56" style="object-fit:contain">` : ''}
+      <div><h2>Crafting plan: ${esc(d.item || d.base)}</h2><div class="sub">${esc(d.base)} · item level ${esc(d.item_level)}+ · pool: ${d.pool_size.prefix_families} prefix / ${d.pool_size.suffix_families} suffix families · ${esc(d.league)} prices</div></div></div>
+      <div style="font-size:26px;font-weight:700;margin:6px 0 0">${esc(P(d.expected_total_div))}</div><div class="small muted">rough expected cost (a floor: real top-tier weights are lower)</div></div>
+    <div class="grid2"><div class="card"><h2>Target mods</h2><table>${(d.mods || []).map(m => `<tr><td><span class="${m.tier === 1 ? 'tier1' : ''}">${m.tier ? 'T' + m.tier : ''}</span> ${esc(m.text)}
+        <div class="small muted">${esc(m.side || '')} · ${esc(src[m.source] || m.source)}${m.essences ? ' · ' + esc(m.essences.join(', ')) : ''}${m.family ? ' · ' + esc(m.family) : ''}</div></td>
+        <td class="num small">${m.best_orb ? esc(m.best_orb) + '<br>≈1 in ' + m.chances[m.best_orb].one_in : ''}</td></tr>`).join('')}</table></div>
+      <div class="card"><h2>Route</h2>${(d.route || []).map(s => `<div style="padding:7px 0;border-bottom:1px solid var(--grid)"><b>${s.step}.</b> ${esc(s.do)}
+        <div class="small"><b>${esc(P(s.expected_cost_div))}</b>${s.note ? ' · <span class="muted">' + esc(s.note) + '</span>' : ''}</div></div>`).join('')}</div></div>
+    <div class="card small">${(d.warnings || []).map(w => `<div style="color:var(--warning)">⚠ ${esc(w)}</div>`).join('')}
+      <div style="margin-top:6px">Exact odds: <a href="${esc(d.craft_of_exile)}" target="_blank" rel="noopener">Craft of Exile ↗</a></div></div>`;
+  },
+  craftlab(d) { setTimeout(() => crLoadFromClaude(d)); return `<div class="card">Loaded a crafting setup for <b>${esc(d.base)}</b> on the Craft tab.</div>`; },
+  note(d) { return `<div class="card"><h2>${esc(d.title)}</h2><div style="white-space:pre-wrap">${esc(d.text)}</div></div>`; },
+};
+let lastShow = 0;
+async function pollShow() {
+  try {
+    const s = await get('/api/show');
+    if (s && s.ts && s.ts !== lastShow) {
+      lastShow = s.ts;
+      LASTSHOW = s;
+      const f = VIEWS[s.type];
+      $('#show').innerHTML = `<div class="muted small" style="margin:0 0 8px">${esc(s.caption || '')} · ${ago(s.ts)}</div>` +
+        (f ? f(s.data || {}) : `<div class="card"><pre>${esc(JSON.stringify(s.data, null, 1))}</pre></div>`);
+      if (document.visibilityState === 'visible') document.querySelector('nav [data-tab="claude"]').click();
+    }
+  } catch (e) {}
+}
+loadStatus(); loadAlerts(false); pollShow();
+$('#unit').value = UNIT;
+$('#unit').onchange = () => {
+  UNIT = $('#unit').value; try { localStorage.setItem('poe2unit', UNIT); } catch (e) {}
+  if (LASTSHOW) { const f = VIEWS[LASTSHOW.type]; if (f) $('#show').innerHTML = `<div class="muted small" style="margin:0 0 8px">${esc(LASTSHOW.caption || '')} · ${ago(LASTSHOW.ts)}</div>` + f(LASTSHOW.data || {}); }
+  if (document.querySelector('#economy.on')) { loadOverview(); loadMovers(); search(); }
+};
+setInterval(pollShow, 3000); setInterval(loadStatus, 30000); setInterval(() => loadAlerts(false), 60000);
+</script>
+</body>
+</html>

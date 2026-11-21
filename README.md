@@ -1,0 +1,50 @@
+# PoE 2 Toolkit
+
+A free, personal **Path of Exile 2 companion** for Windows: live economy, what to farm, a league-start playbook, a
+Top 1% check for your character, play-session tracking, a craft lab and patch notes checked against your builds.
+It runs on your own PC and opens in your browser, and it's built to be used **together with Claude**: connect it
+once and ask Claude anything about your character, the economy or your next craft.
+
+**[⬇ Download the latest installer](../../releases/latest)** · **[Using it with Claude](CLAUDE-GUIDE.md)**
+
+> Screenshots are from the author's own copy (his Blood Mage). Yours shows your own characters after you import them.
+
+| | |
+|---|---|
+| ![Economy](docs/screenshots/economy.jpg) **Economy** – Mirror, Divine and the league's chase items at a glance | ![Market history](docs/screenshots/market-history.jpg) **Market history** – every exchange item, price, stock, 7-day trend |
+| ![Character](docs/screenshots/character.jpg) **Character** – gear, skills and DPS from Path of Building | ![Top 1%](docs/screenshots/top1.jpg) **Top 1% check** – you vs the top 1% of your ascendancy |
+| ![Farming](docs/screenshots/farming.jpg) **What to farm** – mechanics ranked by what actually sells | ![League start playbook](docs/screenshots/league-start-playbook.jpg) **League start playbook** – days 1–7 of past launches |
+| ![League start planner](docs/screenshots/league-start-planner.jpg) **League start planner** – any class, any ascendancy path | ![Craft lab](docs/screenshots/craft-lab.jpg) **Craft lab** – plan and practise a craft step by step |
+| ![Patch notes](docs/screenshots/patch-notes.jpg) **Patch notes** – every line that hits your builds | ![Connect to Claude](docs/screenshots/status-claude.jpg) **Your profile + Connect to Claude** |
+
+## Install
+1. Download `PoE2Toolkit-Setup-<version>.exe` from **[Releases](../../releases/latest)** and run it.
+   Windows may say *"Windows protected your PC"* (the installer isn't code-signed): **More info → Run anyway**.
+2. It installs for your Windows user (no admin) and starts; a red icon appears by the clock. Click it for the
+   dashboard; right-click for *Start with Windows* and *Quit*.
+3. First start downloads prices, the community game data and Path of Building (about 2 minutes).
+4. **Status tab → Your profile:** pick your class and ascendancy.
+5. **Connect to Claude** (Status tab) — see **[the Claude guide](CLAUDE-GUIDE.md)**.
+
+Updates: the dashboard shows a banner when a new version is out; one click downloads and installs it.
+
+## What it uses (and what it never does)
+- **Public data only:** poe.ninja's economy data, GGG's public Currency Exchange history, Steam news, the community
+  game-data export (RePoE), Path of Building (downloaded on first run), and the game's own log file on your PC.
+- **Read-only toward the game:** no input to the game, no memory reading, no changes to game files, no private
+  trade API, no logins handled by the toolkit (your GGG login stays inside Path of Building).
+- **Polite:** prices every 30 minutes, exchange history hourly.
+- **Nothing about you leaves your PC.**
+
+## Build it yourself
+Needs Python 3.15, Inno Setup 7 and (for the bundled art) a local extraction of your own game files:
+```
+python make_datapack.py          # refresh the data pack
+python build_release.py --setup  # stage + privacy scan + installer -> F:\Tools\poe2kit-build\out
+```
+
+## Credits and licences
+See [release/LICENSES.md](release/LICENSES.md). Path of Building Community (MIT), RePoE, poe.ninja, Python.
+**Not affiliated with or endorsed by Grinding Gear Games.** Path of Exile and all of its artwork are © Grinding Gear
+Games; this free, non-commercial fan tool bundles some game art for its pictures and icon, and will remove it on
+request.

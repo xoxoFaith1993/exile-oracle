@@ -1,0 +1,159 @@
+"""Headless Path of Building: real DPS / defence numbers for any build, cached by content hash.
+Runs PoB's own LuaJIT through F:\\PoE2Toolkit\\tools\\poblua.exe (see pobhost\\)."""
+
+import hashlib
+import json
+import os
+import subprocess
+import tempfile
+
+from . import config, vault
+
+POB = config.POB_DIR
+HOST = os.path.join(config.TOOLS_DIR, 'poblua.exe')
+SCRIPT = os.path.join(config.ROOT, 'pobhost', 'pobrun.lua')
+CACHE = os.path.join(config.DATA_DIR, 'pob-cache')
+
+# The numbers people actually compare, in a sensible order (PoB mainOutput keys).
+KEY_STATS = [
+    ('CombinedDPS', 'DPS (combined)'), ('TotalDPS', 'DPS (main skill)'), ('Speed', 'casts/attacks per sec'),
+    ('CritChance', 'crit chance %'), ('CritMultiplier', 'crit multiplier'),
+    ('Life', 'life'), ('EnergyShield', 'energy shield'), ('Mana', 'mana'), ('Spirit', 'spirit'),
+    ('TotalEHP', 'effective HP'), ('PhysicalMaximumHitTaken', 'max hit: physical'),
+    ('FireMaximumHitTaken', 'max hit: fire'), ('ColdMaximumHitTaken', 'max hit: cold'),
+    ('LightningMaximumHitTaken', 'max hit: lightning'), ('ChaosMaximumHitTaken', 'max hit: chaos'),
+    ('FireResist', 'fire res'), ('ColdResist', 'cold res'), ('LightningResist', 'lightning res'),
+    ('ChaosResist', 'chaos res'), ('Armour', 'armour'), ('Evasion', 'evasion'),
+    ('EffectiveMovementSpeedMod', 'movement speed x'), ('LifeRegenRecovery', 'life regen /s'),
+]
+
+
+def version():
+    try:
+        with open(os.path.join(POB, 'manifest.xml'), encoding='utf-8') as f:
+            head = f.read(400)
+        import re
+        m = re.search(r'number="([^"]+)"', head)
+        return m.group(1) if m else '?'
+    except OSError:
+        return 'not installed'
+
+
+def calc(xml_text, use_cache=True, timeout=300, main_group=None):
+    with open(SCRIPT, 'rb') as f:
+        script = hashlib.sha1(f.read()).hexdigest()
+    key = hashlib.sha1((version() + script + str(main_group) + xml_text).encode('utf-8')).hexdigest()
+    os.makedirs(CACHE, exist_ok=True)
+    cpath = os.path.join(CACHE, key + '.json')
+    if use_cache and os.path.exists(cpath):
+        with open(cpath, encoding='utf-8') as f:
+            return json.load(f)
+    tmp = tempfile.mkdtemp(prefix='pob-', dir=CACHE)  # temp on F:, never C:
+    xml_path, out_path = os.path.join(tmp, 'in.xml'), os.path.join(tmp, 'out.json')
+    try:
+        with open(xml_path, 'w', encoding='utf-8') as f:
+            f.write(xml_text)
+        env = dict(os.environ, POB_RUNTIME=os.path.join(POB, 'runtime'), POB_IN=xml_path, POB_OUT=out_path,
+                   TEMP=tmp, TMP=tmp)
+        if main_group is not None:
+            env['POB_MAIN_GROUP'] = str(int(main_group))
+        p = subprocess.run([os.path.abspath(HOST), os.path.join(POB, 'runtime'), SCRIPT], cwd=os.path.join(POB, 'src'),
+                           env=env, capture_output=True, text=True, timeout=timeout, stdin=subprocess.DEVNULL)
+        if p.returncode != 0 or not os.path.exists(out_path):
+            tail = (p.stderr or p.stdout or '').strip().splitlines()[-6:]
+            raise RuntimeError('PoB failed: ' + ' | '.join(tail))
+        with open(out_path, encoding='utf-8') as f:
+            res = json.load(f)
+        missing = sum(1 for l in p.stdout.splitlines() if l.startswith('missing node'))
+        res['warnings'] = [f'{missing} passive nodes in this build no longer exist in PoB {version()} '
+                           '(tree changed since the build was made)'] if missing else []
+        res['pob_version'] = version()
+        with open(cpath, 'w', encoding='utf-8') as f:
+            json.dump(res, f)
+        return res
+    finally:
+        for fn in (xml_path, out_path):
+            try:
+                os.remove(fn)
+            except OSError:
+                pass
+        try:
+            os.rmdir(tmp)
+        except OSError:
+            pass
+
+
+def key_stats(res):
+    o = res.get('output', {})
+    return {label: round(o[k], 2) for k, label in KEY_STATS if k in o}
+
+
+def stats_for(con, build_id=None, pob_code=None, main_group=None):
+    if build_id is not None:
+        r = con.execute('SELECT label, pob_code FROM build WHERE id=?', (int(build_id),)).fetchone()
+        if not r:
+            raise ValueError('no such build in the vault')
+        label, pob_code = r['label'], r['pob_code']
+    else:
+        label = 'pasted build'
+    res = calc(vault.decode(pob_code), main_group=main_group)
+    return {'build': label, 'class': res.get('class'), 'ascendancy': res.get('ascendancy'), 'level': res.get('level'),
+            'main_skill': res.get('main_skill'), 'main_skill_reason': res.get('main_group_reason'),
+            'skills': [{'group': g['index'], 'skill': g['skill'], 'dps': round(g['dps'])}
+                       for g in res.get('skill_groups', []) if g.get('dps', 0) > 0],
+            'stats': key_stats(res), 'warnings': res.get('warnings', []), 'pob_version': res.get('pob_version')}
+
+
+def compare(con, a, b):
+    """a, b: dicts with build_id or pob_code. Returns both stat sets and the differences (b vs a)."""
+    sa, sb = stats_for(con, **a), stats_for(con, **b)
+    diff = {}
+    for label, va in sa['stats'].items():
+        vb = sb['stats'].get(label)
+        if vb is None:
+            continue
+        pct = round((vb / va - 1) * 100, 1) if va else None
+        diff[label] = {'a': va, 'b': vb, 'b_vs_a_pct': pct}
+    return {'a': {k: sa[k] for k in ('build', 'ascendancy', 'level', 'main_skill')},
+            'b': {k: sb[k] for k in ('build', 'ascendancy', 'level', 'main_skill')},
+            'diff': diff, 'warnings': sa['warnings'] + sb['warnings']}
+
+
+def swap_item(xml_text, slot, item_text):
+    """Put item_text (in-game Ctrl+C text or PoB item text) into slot ('Helmet', 'Ring 1', 'Weapon 1', ...).
+    Returns new XML. Jewel sockets aren't supported yet."""
+    import xml.etree.ElementTree as ET
+    root = ET.fromstring(xml_text)
+    slots = {s.get('name', '').lower(): s for s in root.iter('Slot')}
+    sl = slots.get(slot.lower())
+    if sl is None:
+        raise ValueError(f'no slot {slot!r}; slots: ' + ', '.join(sorted(s.get('name') for s in root.iter('Slot'))))
+    items = root.find('Items')
+    new_id = str(max([int(i.get('id')) for i in items.iter('Item')] + [0]) + 1)
+    it = ET.SubElement(items, 'Item', {'id': new_id})
+    it.text = '\n' + item_text.strip().replace('\r\n', '\n') + '\n'
+    for s in root.iter('Slot'):  # item sets hold their own slot lists; point every matching slot at the new item
+        if s.get('name', '').lower() == slot.lower():
+            s.set('itemId', new_id)
+    return ET.tostring(root, encoding='unicode')
+
+
+def whatif(con, build_id=None, pob_code=None, slot=None, item_text=None, main_group=None):
+    """Swap one item and show what changes."""
+    if build_id is not None:
+        r = con.execute('SELECT label, pob_code FROM build WHERE id=?', (int(build_id),)).fetchone()
+        if not r:
+            raise ValueError('no such build in the vault')
+        label, pob_code = r['label'], r['pob_code']
+    else:
+        label = 'pasted build'
+    xml = vault.decode(pob_code)
+    before = calc(xml, main_group=main_group)
+    grp = before.get('main_group') if main_group is None else main_group
+    after = calc(swap_item(xml, slot, item_text), main_group=grp)
+    a, b = key_stats(before), key_stats(after)
+    diff = {k: {'before': a[k], 'after': b.get(k), 'change': round(b.get(k, 0) - a[k], 2),
+                'change_pct': round((b.get(k, 0) / a[k] - 1) * 100, 1) if a[k] else None}
+            for k in a if b.get(k) != a[k]}
+    return {'build': label, 'slot': slot, 'main_skill': after.get('main_skill'), 'changes': diff,
+            'unchanged': [k for k in a if b.get(k) == a[k]], 'warnings': before.get('warnings', [])}
