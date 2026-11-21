@@ -185,7 +185,7 @@ noise at 30 maps.
   - Masterer Mitch: `BIxn4Vz_6LY`
   - KingPinUwU: `dxJBGuX01u8`, `5J_UrM9pdYo`
 
-## Added 2026-11-20 from the author's own browser (sites the research agent couldn't reach)
+## Added 2026-11-20 (sites the research agent couldn't reach)
 
 101 more entries, tagged `browser-2026-11-20` in the notes and added by `research/add_browser_rates.py` (safe to re-run).
 - **Mobalytics guides by sirgog**, built from Prohibited Library run logs. These are 0.1-era pages, updated Feb–Mar 2025:
@@ -219,5 +219,5 @@ noise at 30 maps.
     Carved Tenacity 1%, Carved Cunning under 1%.
   - **Atziri's Vault** (0.4.0, n=100): Atziri's Step 35%, Drillneck 32%, Atziri's Rule 12% ... plus Zerphi's Infamy 11%
     and Atziri's Impatience 8%.
-- **Ritual uniques:** the author has had uniques, including Mageblood, from Ritual rewards. No public rate exists anywhere,
+- **Ritual uniques:** players report uniques, including Mageblood, from Ritual rewards. No public rate exists anywhere,
   so this is a qualitative entry. The Farming tab shows it as upside ("also") without changing the numbers.

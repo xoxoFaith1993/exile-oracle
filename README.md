@@ -2,16 +2,28 @@
 
 *(formerly PoE 2 Toolkit)*
 
-A free, personal **Path of Exile 2 companion** for Windows: live economy, what to farm, a league-start playbook, a
-Top 1% check for your character, play-session tracking, a craft lab and patch notes checked against your builds.
-It runs on your own PC and opens in your browser, and it's built to be used **together with Claude**: connect it
-once and ask Claude anything about your character, the economy or your next craft.
+A free, personal **Path of Exile 2 companion** for Windows and Linux: live economy, what to farm, a league-start
+playbook, a Top 1% check for your character, play-session tracking, a craft lab, patch notes checked against your
+builds, and an in-game price-check overlay. It runs on your own PC in its own window, and it's built to be used
+**together with Claude**: connect it once and ask Claude anything about your character, the economy or your next
+craft.
 
 **[⬇ Download the latest installer](../../releases/latest)** · **[Using it with Claude](CLAUDE-GUIDE.md)**
 
-> Screenshots are from the author's own copy (his Blood Mage). Yours shows your own characters after you import them.
+> Character screenshots show a public top-player build from poe.ninja. Yours shows your own characters after you import them.
 
 ## Screenshots
+
+### Home
+The Divine rate and the main currencies with their 7-day change, your latest alerts, and a way into everything else.
+
+![Home](docs/screenshots/home.jpg)
+
+### Price-check overlay (Windows)
+Ctrl+D on an item in game: poe.ninja and live trade-site prices (optional), a craft estimate, and Ask Claude.
+Ctrl+Alt+D keeps it open so you can tick rows and search again. F5 / F9 and your own chat commands work too.
+
+<img src="docs/screenshots/overlay.jpg" alt="Price-check overlay" width="460">
 
 ### Economy
 Mirror, Divine and the league's chase items at a glance.
@@ -83,11 +95,11 @@ This is a young project: things can break. If something doesn't work:
 ## Install
 1. Download `ExileOracle-Setup-<version>.exe` from **[Releases](../../releases/latest)** and run it.
    Windows may say *"Windows protected your PC"* (the installer isn't code-signed): **More info → Run anyway**.
-2. It installs for your Windows user (no admin) and starts; a red icon appears by the clock. Click it for the
-   dashboard; right-click for *Start with Windows* and *Quit*.
+2. It installs for your Windows user (no admin) and starts; the Exile Oracle eye appears by the clock. Click it for the
+   dashboard (its own window); right-click for *Start with Windows* and *Quit*.
 3. First start downloads prices, the community game data and Path of Building (about 2 minutes).
-4. **Status tab → Your profile:** pick your class and ascendancy.
-5. **Connect to Claude** (Status tab) — see **[the Claude guide](CLAUDE-GUIDE.md)**.
+4. **Settings → Your profile:** pick your class and ascendancy.
+5. **Connect to Claude** (Settings) — see **[the Claude guide](CLAUDE-GUIDE.md)**.
 
 Updates: the dashboard shows a banner when a new version is out; one click downloads and installs it.
 

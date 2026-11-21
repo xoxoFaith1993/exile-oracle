@@ -106,13 +106,46 @@ def documents_dirs():
     Building runs under Wine there and keeps its builds and login in that prefix's Documents)."""
     home = os.path.expanduser('~')
     if IS_WIN:
-        return [os.path.join(home, 'Documents')]
+        out = []
+        try:   # the real Documents folder, also when OneDrive or the user moved it
+            import ctypes
+            from ctypes import wintypes as wt
+
+            class GUID(ctypes.Structure):
+                _fields_ = [('a', wt.DWORD), ('b', wt.WORD), ('c', wt.WORD), ('d', ctypes.c_ubyte * 8)]
+            docs = GUID(0xFDD39AD0, 0x238F, 0x46AF, (ctypes.c_ubyte * 8)(0xAD, 0xB4, 0x6C, 0x85, 0x48, 0x03, 0x69, 0xC7))
+            p = ctypes.c_wchar_p()
+            if ctypes.windll.shell32.SHGetKnownFolderPath(ctypes.byref(docs), 0, None, ctypes.byref(p)) == 0:
+                out.append(p.value)
+                ctypes.windll.ole32.CoTaskMemFree(p)
+        except Exception:
+            pass
+        plain = os.path.join(home, 'Documents')
+        return out + [plain] if plain not in out else out
     import glob
     user = os.environ.get('USER') or os.path.basename(home)
     cands = [os.path.join(home, '.wine', 'drive_c', 'users', user, 'Documents'),
              os.path.join(home, 'Documents')]
-    cands += glob.glob(os.path.join(home, '.local', 'share', 'Steam', 'steamapps', 'compatdata', '*', 'pfx',
-                                    'drive_c', 'users', 'steamuser', 'Documents'))
+    # Proton prefixes live in the Steam library the game is installed in: the home one, Flatpak Steam, or an SD card
+    # / extra drive (Steam Deck: /run/media/<user>/<card>/steamapps or /run/media/mmcblk0p1/steamapps)
+    libs = [os.path.join(home, '.local', 'share', 'Steam'), os.path.join(home, '.steam', 'steam'),
+            os.path.join(home, '.var', 'app', 'com.valvesoftware.Steam', '.local', 'share', 'Steam')]
+    for pat in ('/run/media/*', '/run/media/*/*', '/run/media/*/*/SteamLibrary', '/media/*/*', '/media/*/*/SteamLibrary',
+                '/mnt/*', '/mnt/*/SteamLibrary'):
+        libs += glob.glob(pat)
+    pfx = []
+    for lib in libs:
+        base = os.path.join(lib, 'steamapps', 'compatdata')
+        if os.path.isdir(base):
+            pfx += [os.path.join(base, '2694490')]                       # Path of Exile 2 first
+            pfx += sorted(glob.glob(os.path.join(base, '*')))
+    seen = set()
+    for p in pfx:
+        d = os.path.join(p, 'pfx', 'drive_c', 'users', 'steamuser', 'Documents')
+        real = os.path.realpath(d)
+        if real not in seen and os.path.isdir(d):
+            seen.add(real)
+            cands.append(d)
     cands += glob.glob(os.path.join(home, 'Games', '*', 'drive_c', 'users', '*', 'Documents'))   # Lutris
     return cands
 

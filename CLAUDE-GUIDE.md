@@ -14,7 +14,7 @@ explains. The toolkit works without Claude, but the best of it is a conversation
 4. In a new chat, ask: *"What Exile Oracle tools do you have?"* Claude should list tools starting with `poe2_`.
 
 **Claude Code (terminal)**
-On the Status tab, open *"Using Claude Code instead?"* and run the one command it shows, e.g.
+In Settings, open *"Using Claude Code instead?"* and run the one command it shows, e.g.
 ```
 claude mcp add poe2 --scope user -- "<your install>\python\python.exe" "<your install>\toolkit\server.py"
 ```
@@ -81,6 +81,6 @@ for 15 minutes).
   you, or use GGG's private trade API. Your GGG login stays inside Path of Building.
 
 ## Troubleshooting
-- *Claude doesn't list `poe2_` tools:* quit Claude completely and reopen it; check the Status tab says "Connected".
+- *Claude doesn't list `poe2_` tools:* quit Claude completely and reopen it; check Settings says "Connected".
 - *"Monitor not running":* click the red tray icon (or start Exile Oracle from the Start menu).
-- *Disconnect:* Status tab → **Disconnect**, then restart Claude.
+- *Disconnect:* Settings → **Disconnect**, then restart Claude.

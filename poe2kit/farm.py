@@ -12,7 +12,7 @@ from . import db, money, ninja
 
 # Upside the market view can't price: rewards that aren't the mechanic's own currency.
 ALSO = {
-    'Ritual': {'text': 'Ritual rewards can also offer uniques, chase ones included: players (the author included) have had Mageblood from Ritual. '
+    'Ritual': {'text': 'Ritual rewards can also offer uniques, chase ones included: Mageblood has been seen in Ritual rewards. '
                        'No public rate exists, so it is not in the numbers; treat it as upside.',
                'examples': ['Mageblood', 'Headhunter']},
 }

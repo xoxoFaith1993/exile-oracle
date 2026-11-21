@@ -35,7 +35,7 @@ Files in HOME:
      `start-monitor.bat`. Linux: `python launcher.py --stop`, then `python launcher.py`.
   3. Check that http://127.0.0.1:47830/api/status answers.
 - **Overlay:** create the empty file `HOME\overlay.quit`. The overlay closes within a second. Then switch it back on:
-  dashboard Status tab → Price-check overlay → Overlay on (or POST `{"overlay": true}` to `/api/overlay/options`).
+  dashboard Settings → Price-check overlay → Overlay on (or POST `{"overlay": true}` to `/api/overlay/options`).
   After a monitor restart it starts by itself when the setting is on.
 - **A popup window that's stuck on screen:** see "Overlay" below.
 
@@ -45,7 +45,7 @@ Files in HOME:
   `monitor.log`. If port 47830 is taken by another program, set the environment variable `POE2KIT_PORT`.
 - **"⏳ Still setting up" banner:** a first start downloads game data and Path of Building, which takes a few
   minutes. If it stays longer than 10 minutes, `monitor.log` shows the failing download (usually network).
-- **Prices empty or old:** the `prices` job runs every 30 minutes. The Status tab shows each job's last result.
+- **Prices empty or old:** the `prices` job runs every 30 minutes. Settings shows each job's last result.
 
 ## Overlay (Windows)
 
@@ -68,7 +68,7 @@ Keys work only while Path of Exile 2 is the window in front:
 
 ## Prices
 
-- **Live trade prices say "off":** the setting `live_trade` is off. It's off by default for everyone but the author:
+- **Live trade prices say "off":** the setting `live_trade` is off. It's off by default for everyone:
   it uses GGG's trade site the way Exiled Exchange 2 does, which is not a documented public API, so it's the
   player's choice. Ctrl+Shift+D → Live trade-site prices.
 - **"Trade site limit reached: try again in N s":** GGG's rate limit. Wait; don't retry in a loop.
@@ -84,7 +84,7 @@ Keys work only while Path of Exile 2 is the window in front:
 
 - **Target "Claude app":** the button saves the item and opens Claude desktop. The player pastes the copied
   question, and you read the item with `poe2_from_overlay`. If that tool is missing, Claude desktop needs a restart
-  after Connect to Claude (Status tab).
+  after Connect to Claude (Settings).
 - **Target "Claude Code chat":** the player says "watch my overlay". You then run
   `python -u <toolkit>/cli.py watch-overlay 55` **in the background**. When it finishes it prints the item: answer
   in the chat and start it again. If items arrive but you're never woken, the watcher has hung: stop it and start a
@@ -120,11 +120,11 @@ by itself.
 - Install with `sh install.sh` (no sudo). The app is in `~/.local/share/poe2toolkit/app`, data next to it.
 - The overlay is Windows-only for now.
 - Game log not found: the doctor shows the folder it looked in. Steam, Flatpak Steam and SD-card libraries are
-  searched; the game folder can also be set on the Status tab.
+  searched; the game folder can also be set in Settings. The in-game Build Planner folder is found in the game's Proton prefix in any of those libraries.
 
 ## Reporting a bug (help the player write it)
 
 Open an issue at https://github.com/xoxoFaith1993/exile-oracle/issues with:
-- toolkit version (Status tab or `poe2_status`), Windows or Linux;
+- toolkit version (Settings or `poe2_status`), Windows or Linux;
 - what they did and what happened;
 - the last ~30 lines of the relevant log, **with account names, character names and email removed**.
