@@ -21,7 +21,13 @@ def sync(con, max_pages=48, start=None):
     live = False
     while pages < max_pages:
         # Each hour is immutable once published: cache it for a long time.
-        d = net.get_json(f'{BASE}/{cursor}', con, min_age_minutes=60 * 24 * 365)
+        try:
+            d = net.get_json(f'{BASE}/{cursor}', con, min_age_minutes=60 * 24 * 365)
+        except Exception as e:
+            if '404' in str(e):   # this hour isn't published yet: we're up to date, not failing
+                live = True
+                break
+            raise
         pages += 1
         rows = []
         for m in d.get('markets', []):

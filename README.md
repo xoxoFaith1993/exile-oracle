@@ -71,6 +71,13 @@ Set your class once, connect Claude with one click.
 
 ![Your profile + Connect to Claude](docs/screenshots/status-claude.jpg)
 
+## Early stage
+This is a young project: things can break. If something doesn't work:
+- **With Claude:** ask it to fix it. It runs `poe2_doctor` (checks every part) and follows
+  **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)**, which is written for Claude: checks, safe restarts and fixes.
+- **Without Claude:** TROUBLESHOOTING.md works for people too.
+- **Still stuck?** **[Open an issue](../../issues/new?template=bug_report.md)**.
+
 ## Install
 1. Download `PoE2Toolkit-Setup-<version>.exe` from **[Releases](../../releases/latest)** and run it.
    Windows may say *"Windows protected your PC"* (the installer isn't code-signed): **More info → Run anyway**.

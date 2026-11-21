@@ -161,6 +161,13 @@ def planner_check():
           'living plan: level notes')
 
 
+def doctor_check():
+    from poe2kit import doctor
+    r = doctor.run()
+    check(r.get('checks') and 'guide' in r and 'Restarting things' in r['guide'],
+          f"doctor runs ({len(r['checks'])} checks, guide attached)")
+
+
 def mcp():
     p = subprocess.Popen([sys.executable, os.path.join(HERE, 'server.py')], stdin=subprocess.PIPE,
                          stdout=subprocess.PIPE, text=True, encoding='utf-8')
@@ -234,6 +241,7 @@ if __name__ == '__main__':
     detection()
     planner_check()
     monitor()
+    doctor_check()
     mcp()
     if '--pob' in sys.argv:
         pob_part()

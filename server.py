@@ -190,6 +190,15 @@ def t_build_planner(a):
         con.close()
 
 
+def t_doctor(a):
+    """Check every part of the toolkit; returns findings + the troubleshooting guide written for Claude."""
+    from poe2kit import doctor
+    out = doctor.run()
+    if not a.get('with_guide', True):
+        out.pop('guide', None)
+    return out
+
+
 def t_from_overlay(a):
     """Items the player sent from the price-check overlay with its Ask Claude button (newest first)."""
     from poe2kit import overlaysrv
@@ -577,6 +586,12 @@ TOOLS = [
      'Several PoB trees titled "Level 30", "Level 60", "Endgame" become a levelling route.',
      S(build_id=NUM, pob_code=STR, name=STR, notes={'type': 'object'}, edits={'type': 'object'}, follow=STR,
        check=BOOL, forget=BOOL, include_gear=BOOL, write=BOOL, confirm=BOOL, list=BOOL, remove=STR), t_build_planner),
+    ('poe2_doctor',
+     'Something in the toolkit is broken or acting odd (overlay, prices, dashboard, Build Planner, Path of Building, '
+     "Claude connection)? Call this FIRST: it checks every part (read-only) and returns what's wrong, which sections "
+     'of the troubleshooting guide apply, and the guide itself (written for you: checks, safe restarts, fixes, '
+     'rules). Then fix it with the player step by step.',
+     S(with_guide=BOOL), t_doctor),
     ('poe2_from_overlay',
      "Items the player sent from the in-game price-check overlay (its Ask Claude button), newest first: the exact "
      'item text, poe.ninja price, cheapest trade listings, what was searched, craft estimate. Call this when the '
