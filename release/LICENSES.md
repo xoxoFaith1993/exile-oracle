@@ -9,7 +9,7 @@ fan tool, and will be removed on request. Other item pictures load from GGG's ow
 
 ## Included
 - **Python 3.15** (embedded distribution), Python Software Foundation License: https://docs.python.org/3/license.html
-- **Cinzel** and **Alegreya Sans** fonts: SIL Open Font License 1.1 (licence texts in `toolkit\dashboardonts`).
+- **Cinzel** and **Alegreya Sans** fonts: SIL Open Font License 1.1 (licence texts in `toolkit\dashboard\fonts`).
 - **poblua.exe**: a small launcher that runs Path of Building's Lua runtime headless (source: `toolkit\pobhost\poblua.c`).
 
 Linux download only, built by GitHub Actions:
