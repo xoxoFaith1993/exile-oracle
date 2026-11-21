@@ -241,7 +241,7 @@ def setup():
 REPO_DIR = os.path.join(BUILD, 'repo')
 GITATTRIBUTES = '*.sh text eol=lf\n*.desktop.in text eol=lf\n'
 REPO_EXTRA = ['build_release.py', 'make_datapack.py']
-RELEASE_FILES = ['PoE2Toolkit.iss', 'LICENSES.md', 'README-friends.md', 'make_icon.py', 'icon.png', 'icon.ico', 'test_dataupdate.py']
+RELEASE_FILES = ['PoE2Toolkit.iss', 'LICENSES.md', 'README-friends.md', 'make_icon.py', 'icon.png', 'icon.ico', 'test_dataupdate.py', 'chaos_test.py']
 GITIGNORE = '''__pycache__/
 *.pyc
 /vault/

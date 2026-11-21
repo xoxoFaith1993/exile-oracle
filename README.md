@@ -289,6 +289,12 @@ the data version and has **Check now** and **Go back**.
 
 ### Settings + Connect to Claude
 Your profile, league, text size, the overlay and its keys, and Claude (or another AI app) connected with one click.
+Tell it how well you know PoE 2 (new or returning, a fair bit, veteran) and the Oracle explains just enough.
+
+**Built not to break:** no internet, a site that's down, Path of Building not installed yet, a build that can't be
+read, a damaged data file: every page and every Oracle answer says in plain words what happened and what to do, and
+keeps working from saved data. A small daily backup keeps your builds, wishlist and choices safe. A test runs every
+tool and page under those conditions before each release.
 
 ![Your profile + Connect to Claude](docs/screenshots/status-claude.jpg)
 

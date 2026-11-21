@@ -86,11 +86,20 @@ def save_settings(changes):
     try:
         with open(SETTINGS_PATH, encoding='utf-8') as f:
             cur = json.load(f)
-    except (OSError, ValueError):
+    except OSError:
         pass
+    except ValueError:   # a damaged settings file: keep a copy before writing a fresh one (the doctor reports it)
+        try:
+            import shutil
+            import time as _t
+            shutil.copy2(SETTINGS_PATH, f"{SETTINGS_PATH}.broken-{_t.strftime('%Y%m%d-%H%M%S')}")
+        except OSError:
+            pass
     cur.update(changes)
-    with open(SETTINGS_PATH, 'w', encoding='utf-8') as f:
+    tmp = SETTINGS_PATH + '.tmp'   # write-then-rename: a crash mid-save can't leave half a file
+    with open(tmp, 'w', encoding='utf-8') as f:
         json.dump(cur, f, indent=1)
+    os.replace(tmp, SETTINGS_PATH)
     return cur
 
 
@@ -114,6 +123,34 @@ def profile():
     if p:
         return p
     return {'name': None, 'class': None, 'ascendancy': None, 'path': [], 'watch': [], 'configured': False}
+
+
+# How well the player knows PoE 2 (the author, 2026-11-21: "cater to everybody", from 30 hours to thousands). The player
+# picks it; the app and Claude only change how much they explain, never what the player is allowed to do.
+EXPERIENCE = {
+    'new': {'label': 'New or returning (under about 100 hours)',
+            'how_to_answer': 'Explain game terms in a few plain words the first time you use them (effective HP, spirit, '
+                             'waystone tiers, juicing...). Give one clear recommendation with the reason, at most 2-3 '
+                             'options, and the next concrete step. Point to the dashboard page that shows it. Don\'t '
+                             'bury them in numbers, but never hide a risk.'},
+    'some': {'label': 'Played a fair bit (about 100 to 1,000 hours)',
+             'how_to_answer': 'Use game terms freely, explain only unusual ones. Give the options with their trade-offs '
+                              'and your pick, with the key numbers.'},
+    'veteran': {'label': 'Veteran (1,000+ hours)',
+                'how_to_answer': 'Be brief and numeric: the numbers, the edge cases and the trade-offs; skip basics '
+                                 'unless asked. They decide.'},
+}
+EXPERIENCE_UNSET = ('Not set. Ask once, in one short question, how well they know PoE 2 (new / a fair bit / veteran) '
+                    'or judge from how they write; never assume someone is new just because a question is simple. '
+                    'They can set it in Settings, Your profile.')
+
+
+def experience():
+    """{'level', 'label', 'how_to_answer'} for Claude and the dashboard."""
+    lv = (profile() or {}).get('experience')
+    e = EXPERIENCE.get(lv)
+    return {'level': lv if e else None, 'label': e['label'] if e else None,
+            'how_to_answer': e['how_to_answer'] if e else EXPERIENCE_UNSET}
 
 
 def watch_words():

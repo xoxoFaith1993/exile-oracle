@@ -61,6 +61,8 @@ def _num(v):
 
 def add(con, code, label, owner='me', league=None, source_url=None, notes=None):
     s = summarize(decode(code))
+    label = label or ' '.join(x for x in (s.get('ascendancy') or s.get('class'), s.get('main_skill'),
+                                         f"lv {s['level']}" if s.get('level') else None) if x) or 'Build'
     cur = con.execute(
         'INSERT INTO build(added, label, owner, league, class, ascendancy, level, main_skill, stats_json, pob_code, '
         'source_url, notes) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)',

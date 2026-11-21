@@ -7,7 +7,7 @@ import re
 import time
 import urllib.request
 
-from . import config, osutil
+from . import config, db, osutil
 
 
 def _get(path, timeout=5):
@@ -126,6 +126,33 @@ def run():
             'In-game Build Planner')
     except Exception as e:
         add('build planner', False, str(e), 'In-game Build Planner')
+
+    # the player's data: settings file readable, database healthy, a recent backup of their own data
+    try:
+        json.load(open(config.SETTINGS_PATH, encoding='utf-8')) if os.path.exists(config.SETTINGS_PATH) else None
+        broken = [f for f in os.listdir(config.HOME) if f.startswith('settings.json.broken-')]
+        add('settings file', True, 'readable' + (f'; older damaged copies kept: {", ".join(broken[-3:])}' if broken else ''))
+    except ValueError as e:
+        add('settings file', False, f'damaged ({e}): defaults are used until the next save, which keeps a copy of it',
+            'Data and backups')
+    try:
+        con = db.connect()
+        try:
+            ok = con.execute('PRAGMA quick_check').fetchone()[0]
+            rec = db.kv_get(con, 'recovered')
+        finally:
+            con.close()
+        add('database', ok == 'ok', ('healthy' if ok == 'ok' else f'quick check says: {ok}') +
+            (f'; it was repaired before: {rec}' if rec else ''), 'Data and backups')
+    except Exception as e:
+        add('database', False, f'{type(e).__name__}: {e}', 'Data and backups')
+    try:
+        bk = sorted(f for f in os.listdir(db.BACKUPS) if f.startswith('essentials-')) if os.path.isdir(db.BACKUPS) else []
+        age = (time.time() - os.path.getmtime(os.path.join(db.BACKUPS, bk[-1]))) / 86400 if bk else None
+        add('backup of your data', bool(bk) and age < 3, f'newest {bk[-1]} ({age:.1f} days old)' if bk else
+            'none yet (made once a day while the app runs)', 'Data and backups')
+    except Exception as e:
+        add('backup of your data', False, str(e), 'Data and backups')
 
     probs = _log_problems('monitor.log')
     if probs:

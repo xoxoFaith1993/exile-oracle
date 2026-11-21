@@ -259,6 +259,30 @@ def atlasplan_check():
     check(len(names) >= 10 and not bad, f'atlas strategy setups ({len(names)} strategies' + (f'; broken: {bad})' if bad else ')'))
 
 
+def failsafe_check():
+    """Fail-safes: every Claude tool and dashboard call answers in plain words with no internet, an empty data folder,
+    no Path of Building and nonsense input (release/chaos_test.py, own temp folder); a damaged database is moved aside
+    and the player's own data comes back from the daily backup."""
+    import subprocess
+    here = os.path.dirname(os.path.abspath(__file__))
+    test = os.path.join(here, 'release', 'chaos_test.py')
+    if os.path.exists(test):
+        env = dict(os.environ)
+        for k in ('POE2KIT_HOME', 'POE2KIT_PORT', 'POE2KIT_POB'):
+            env.pop(k, None)
+        r = subprocess.run([sys.executable, test], capture_output=True, text=True, env=env, timeout=900)
+        check(r.returncode == 0, 'fail-safes: every tool and dashboard call answers in plain words (no internet, empty, '
+              'nonsense input)' + ('' if r.returncode == 0 else ' -> ' + (r.stdout + r.stderr)[-600:]))
+    code = ("import os,sys;sys.path.insert(0,r'%s');from poe2kit import db,config;c=db.connect();"
+            "c.execute(\"INSERT INTO build(added,label,owner,pob_code) VALUES(1,'B','me','x')\");c.commit();"
+            "db.backup_essentials(c);c.close();open(config.DB_PATH,'wb').write(b'x'*500);"
+            "c=db.connect();print(c.execute('select label from build').fetchone()[0], bool(db.kv_get(c,'recovered')))" % here)
+    env = dict(os.environ, POE2KIT_HOME=tempfile.mkdtemp(prefix='poe2kit-recover-'))
+    r = subprocess.run([sys.executable, '-c', code], capture_output=True, text=True, env=env, timeout=120)
+    check(r.stdout.strip() == 'B True', 'damaged database: moved aside, own data restored from the backup' +
+          ('' if r.stdout.strip() == 'B True' else ' -> ' + (r.stdout + r.stderr)[-300:]))
+
+
 def dataupdate_check():
     """R27: data packs install, are used, and bad ones are refused (release/test_dataupdate.py, own temp folder)."""
     import subprocess
@@ -605,6 +629,7 @@ if __name__ == '__main__':
     vault_paste_check()
     spreads_check()
     pages_check()
+    failsafe_check()
     weaponset_check()
     buildcheck_check()
     newleague_check()

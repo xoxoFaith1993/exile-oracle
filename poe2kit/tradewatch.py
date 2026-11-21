@@ -104,7 +104,7 @@ def describe(q):
 
 def parse_input(text, league):
     """Pasted text -> {'query', 'league', 'labels', 'name'} or {'error'}."""
-    text = (text or '').strip()
+    text = (text if isinstance(text, str) else '').strip()
     if not text:
         return {'error': 'Paste a trade-site link or the item (Ctrl+C in game).'}
     m = re.search(r'pathofexile\.com/trade2/(?:search|exchange)/poe2/([^/?#\s]+)(?:/([A-Za-z0-9_-]+))?', text)

@@ -50,6 +50,8 @@ def t_status(a):
             'exchange_synced_to': datetime.datetime.fromtimestamp(int(cur)).isoformat() if cur else None,
             'builds_in_vault': con.execute('SELECT COUNT(*) FROM build').fetchone()[0],
             'active_character': _active(con),   # R17: the character every page follows (vault build id)
+            'profile': {k: config.profile().get(k) for k in ('class', 'ascendancy', 'path', 'configured')},
+            'experience': config.experience(),   # how much to explain (the player picks it in Settings)
             'db': config.DB_PATH,
         }
     finally:
@@ -129,7 +131,7 @@ def t_movers(a):
 def t_vault_add(a):
     con = db.connect()
     try:
-        bid, s = vault.add(con, a['pob_code'], a['label'], a.get('owner', 'me'), a.get('league'),
+        bid, s = vault.add(con, a['pob_code'], a.get('label') or None, a.get('owner', 'me'), a.get('league'),
                            a.get('source_url'), a.get('notes'))
         return {'id': bid, 'class': s['class'], 'ascendancy': s['ascendancy'], 'level': s['level'],
                 'main_skill': s['main_skill']}
@@ -890,28 +892,36 @@ def send(obj):
 # Sent to every AI app that connects (Claude, ChatGPT / Codex, Gemini CLI, ...): how to use Exile Oracle well.
 INSTRUCTIONS = (
     "Exile Oracle: the player's own Path of Exile 2 companion, used through you (any MCP app). In the app you are "
-    '"the Oracle". Start with poe2_status (league, data freshness, the profile class / ascendancy).\n'
-    '- Answer with real numbers from the tools and explain them plainly.\n'
-    '- Show your work: poe2_show puts views on the dashboard; for build questions use poe2_lab: every option you '
-    'compare goes on the Build Lab as a what-if card (Path of Building measures it), and the roadmap / power curves '
-    'live there too. The player watches the Lab while you talk.\n'
-    '- Characters: poe2_my_characters / poe2_import_character only when asked. Their usual goal: the top 1% '
-    '(poe2_top1). Upgrades: poe2_upgrades (DPS per divine). Selling / holding / buying and league timing: '
-    'poe2_oracle (patterns from the last three launches; mode omen / timeline / forecast / patch / farm / uniques for '
-    'the prophecy: say how often it held, it is history not a promise; mode spreads for Currency Exchange gaps). '
-    'Chase items with a target price: poe2_wishlist.\n'
-    '- Atlas and maps: poe2_atlas (strategies, setups the player draws with Show on tree, rolling costs, earnings per hour as a range). '
-    'Campaign: poe2_campaign (rush route, the rewards checklist, the zone the player is in).\n'
-    '- Several characters: poe2_status names the ACTIVE character (picked in the dashboard top bar). Answer for it '
-    'unless the player names another; build tools default to it.\n'
-    '- Levelling routes are a rule of thumb until you review them (poe2_levelling, then levelling_route=true in '
-    'poe2_build_planner).\n'
-    '- Rules: read-only toward the game. Data comes from the poe.ninja economy API, GGG public Currency Exchange '
-    "history, the player's Build Vault and game log. Never call poe.ninja builds / profile APIs. The trade site is "
-    'only used by the overlay when the player presses its key: for searches give a poe2_trade_link. Never send a '
-    'report or suggestion yourself (the player uses the forms). Roll-dependent uniques are priced at the cheapest '
-    'roll and rares at an estimated craft cost: say so.\n'
-    '- Something broken? Call poe2_doctor first and follow its guide.')
+    '"the Oracle". Start with poe2_status: league, data freshness, profile (class / ascendancy), the ACTIVE character '
+    '(answer for it unless they name another) and experience (how much to explain).\n'
+    'How to work:\n'
+    '- Real numbers from the tools, explained plainly at the depth poe2_status.experience asks for (new players: terms '
+    'explained, one clear pick; veterans: brief and numeric). You help, they decide: offer next steps, never present '
+    'a plan as the only way to play.\n'
+    '- Say where each number comes from and how sure it is. Label theory as theory: levelling routes are a rule of '
+    'thumb until reviewed; the campaign route was researched for 0.5; forecasts are ranges from past launches, not '
+    'promises; brand-new items have no history. Never invent a number a tool did not give.\n'
+    '- If a tool fails, tell the player in one plain line and work around it (saved data, another tool, or ask them). '
+    'Never stop at an error. If problems repeat, call poe2_doctor and follow its guide.\n'
+    '- Show your work: poe2_show puts views on the dashboard; every build option you compare goes on the Build Lab '
+    'as a what-if card (poe2_lab, measured by Path of Building). The player watches while you talk.\n'
+    'How the tools fit together (pick what the question needs; this is a map, not a script):\n'
+    '- A build: poe2_vault_list / poe2_vault_show -> poe2_pob_stats (real DPS / EHP / max hits) -> poe2_lab cards for '
+    'options -> poe2_upgrades (DPS per divine) -> poe2_top1 (gap to the top 1%) -> poe2_compare. Their characters: '
+    'poe2_my_characters / poe2_import_character, only when asked.\n'
+    '- A league start or a fresh start: poe2_league_plan (class + ascendancy chain: rewards, gems, ascendancy nodes, '
+    'cheap levelling uniques) -> poe2_levelling (review the route) -> poe2_build_planner (into the game\'s planner) '
+    '-> poe2_campaign (rush route, rewards checklist) -> poe2_league_start (sell / hold in days 1-7) -> poe2_farm and '
+    'poe2_atlas (first maps: strategy, setup, earnings per hour as a range).\n'
+    '- The market: poe2_oracle (omen, timeline, forecast, patch, farm, uniques, spreads), poe2_price / poe2_history / '
+    'poe2_movers, poe2_wishlist (chase items; wanted items = saved trade searches, checked only when the player '
+    'asks). Crafting: poe2_read_rare -> poe2_craft. Patch notes vs their builds: poe2_patch_notes.\n'
+    'Rules: read-only toward the game. Data: the poe.ninja economy API, GGG public Currency Exchange history, the '
+    "player's Build Vault and game log. Never call poe.ninja builds / profile APIs. GGG's trade site only when the "
+    'player presses something (the overlay, or a wanted-item check they ask for, one search at a time); otherwise '
+    'give a poe2_trade_link. Never send a report or suggestion yourself. Roll-dependent uniques are priced at the '
+    'cheapest roll and rares at an estimated craft cost: say so.\n'
+)
 
 FEED_WORDS = {
     'poe2_price': 'looked up prices', 'poe2_history': 'read price history', 'poe2_movers': 'checked the market movers',
@@ -954,6 +964,73 @@ def _feed(tool, args, ok, ms, err=None):
         pass
 
 
+REQUIRED = {   # inputs a tool can't work without (also sent to the AI app in each tool's schema)
+    'poe2_price': ['query'], 'poe2_history': ['query'], 'poe2_vault_add': ['pob_code'], 'poe2_vault_show': ['id'],
+    'poe2_import_character': ['name'], 'poe2_read_rare': ['base', 'mods'],
+}
+for _t in TOOLS:   # the required inputs go into each schema, so the AI app knows them up front
+    if REQUIRED.get(_t[0]):
+        _t[2]['required'] = REQUIRED[_t[0]]
+
+
+def _check_args(name, args, schema):
+    """Wrong or missing inputs -> one plain message for the AI app (and the cleaned arguments)."""
+    props = (schema or {}).get('properties') or {}
+    out, problems = {}, []
+    for k, v in args.items():
+        t = (props.get(k) or {}).get('type')
+        if v is None or t is None:
+            out[k] = v
+            continue
+        if t == 'string' and not isinstance(v, str):
+            if isinstance(v, (int, float)) and not isinstance(v, bool):
+                v = str(v)
+            else:
+                problems.append(f'{k} should be text')
+                continue
+        elif t in ('number', 'integer'):
+            try:
+                v = float(v) if t == 'number' else int(float(v))
+            except (TypeError, ValueError):
+                problems.append(f'{k} should be a number')
+                continue
+        elif t == 'boolean' and not isinstance(v, bool):
+            if str(v).lower() in ('true', '1', 'yes'):
+                v = True
+            elif str(v).lower() in ('false', '0', 'no'):
+                v = False
+            else:
+                problems.append(f'{k} should be true or false')
+                continue
+        elif t == 'object' and not isinstance(v, dict):
+            try:
+                v = json.loads(v) if isinstance(v, str) else None
+            except ValueError:
+                v = None
+            if not isinstance(v, dict):
+                problems.append(f'{k} should be an object ({{...}})')
+                continue
+        out[k] = v
+    missing = [k for k in REQUIRED.get(name, []) if out.get(k) in (None, '')]
+    if missing:
+        problems.append('missing ' + ', '.join(missing))
+    return out, problems
+
+
+def _dispatch(name, args):
+    """Run one tool. Returns (text for the AI app, is_error)."""
+    tool = TOOL_MAP[name]
+    args, problems = _check_args(name, args if isinstance(args, dict) else {}, tool[2])
+    if problems:
+        return (f"{name} needs different input: {'; '.join(problems)}. See the tool's description for what each "
+                'input means, then call it again.'), True
+    try:
+        return json.dumps(tool[3](args), indent=1, ensure_ascii=False, default=str), False
+    except Exception as e:   # plain words + a hint for the assistant, never a bare Python error (poe2kit/safety.py)
+        from poe2kit import safety
+        return safety.for_ai(e), True
+
+
 def handle(msg):
     method, mid = msg.get('method'), msg.get('id')
     if mid is None:
@@ -975,12 +1052,7 @@ def handle(msg):
             send({'jsonrpc': '2.0', 'id': mid, 'error': {'code': -32602, 'message': 'Unknown tool'}})
             return
         t0 = time.time()
-        try:
-            text, err = json.dumps(tool[3](p.get('arguments') or {}), indent=1, ensure_ascii=False, default=str), False
-        except net.NetError as e:
-            text, err = str(e), True
-        except Exception as e:
-            text, err = f'{type(e).__name__}: {e}', True
+        text, err = _dispatch(p.get('name'), p.get('arguments') or {})
         _feed(p.get('name'), p.get('arguments') or {}, not err, int((time.time() - t0) * 1000), text if err else None)
         send({'jsonrpc': '2.0', 'id': mid, 'result': {'content': [{'type': 'text', 'text': text}], 'isError': err}})
     elif method == 'ping':

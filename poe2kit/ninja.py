@@ -26,7 +26,21 @@ def current_league(con=None):
     chosen = config.settings().get('league')
     if chosen:
         return chosen
-    ls = leagues(con)
+    try:
+        ls = leagues(con)
+    except net.NetError:   # offline on a fresh install: the newest league we have prices for, else Standard
+        ls = []
+        own = con is None
+        c = con or db.connect()
+        try:
+            r = c.execute('SELECT league FROM price ORDER BY ts DESC LIMIT 1').fetchone()
+            if r:
+                return r[0]
+        except Exception:
+            pass
+        finally:
+            if own:
+                c.close()
     return ls[0]['id'] if ls else 'Standard'
 
 

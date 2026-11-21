@@ -32,6 +32,10 @@ the toolkit's own tools, and those tools are read-only toward the game.
 Dashboard → **Settings** → **Your profile**: your class, main ascendancy, league-start path (e.g. `Lich, Blood Mage`)
 and the words you care about in patch notes. Claude uses these as your defaults.
 
+**How well do you know PoE 2?** (new or returning / a fair bit / veteran). Home asks once, Settings can change it.
+It only changes how much Claude explains: game terms spelled out and one clear pick for newer players, short and
+numeric for veterans. It never limits what you can ask or do.
+
 Got more than one character? Pick the one you're playing in **Playing** at the top of the dashboard. Every page and
 Claude answer for that one unless you name another.
 
@@ -91,6 +95,25 @@ for 15 minutes).
 
 **Sessions**
 - "How did my last session go? Maps per hour, deaths, average map time?"
+
+**Planning a league (or starting over)**
+- "Plan my league start as a Lich then Blood Mage: campaign, first maps, first upgrades."
+- "I want to play <skill>. Is it a good league starter, and what would the first week look like?"
+- "Here's a build I like (PoB code / pobb.in link). Turn it into a league start I can actually afford."
+- "I'm stuck at tier 10 maps and dying. What's wrong, and what's the cheapest way out?"
+Claude puts every option it compares on the **Build Lab** (Path of Building measures it) and tells you which parts
+are measured and which are rules of thumb.
+
+## How Claude uses Exile Oracle
+- When Claude connects, the app gives it built-in instructions: how the tools fit together (a build, a league
+  start, the market, crafting), to answer at your experience level, to say where every number comes from, and to
+  label theory as theory (levelling routes, the 0.5 campaign route, forecasts are ranges). The same goes for
+  ChatGPT and Gemini.
+- Each tool also describes itself and which inputs it needs, so Claude picks the right one. 34 tools sounds like a
+  lot, but each one answers one kind of question with real data; Claude only calls the ones your question needs.
+- If something fails (no internet, Path of Building not installed yet, a build that can't be read), you get a
+  plain message and Claude works around it: saved data, another tool, or a question for you. Your data is never
+  lost: the app keeps a daily backup of your builds, wishlist and choices.
 
 ## 4. Tips
 - The **"Ask the Oracle:" chips** on every page open Claude with the question typed in: just press Enter. (Claude

@@ -73,7 +73,7 @@ def _target_text(w, rt):
 
 
 def add(con, name, target, unit='div', side='buy', note=''):
-    name = (name or '').strip()
+    name = (name if isinstance(name, str) else '').strip()
     if not name:
         return {'ok': False, 'error': 'Which item?'}
     if target in (None, '') or (isinstance(target, str) and not target.strip()):
@@ -104,6 +104,7 @@ def add(con, name, target, unit='div', side='buy', note=''):
 
 
 def remove(con, name):
+    name = name if isinstance(name, str) else ''
     w = _load(con)
     left = [x for x in w if x['name'].lower() != (name or '').lower()]
     _save(con, left)

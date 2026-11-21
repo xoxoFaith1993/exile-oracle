@@ -166,6 +166,31 @@ now, Go back). Packs are data only (JSON), never code.
 | "patch mode" in Settings → Game data | the game updated (new build id) | normal: for 48 hours it checks for new game data every hour, downloading only what changed |
 | Files | `HOME\datapack-live\current.txt` names the pack in use; the folder before it is kept for Go back | deleting `datapack-live` returns to the data that came with the app |
 
+## Data and backups
+- **What's the player's own data:** builds (with their tuning, plans and Lab cards), the wishlist and wanted items,
+  alert choices, play-session events, Top 1% benchmarks. Everything else (prices, exchange history, caches)
+  downloads again by itself.
+- **Daily backup:** `backups/essentials-YYYY-MM-DD.json` in the data folder, made once a day while the app runs
+  (monitor job `backup`), last 7 kept, tens of KB.
+- **Damaged database** ("file is not a database", "malformed"): the app moves it aside (`poe2kit.db.damaged-<time>`,
+  never deleted), starts a fresh one, restores the newest backup, and adds an alert "Your data file was repaired".
+  The doctor's `database` check shows it. Nothing for the player to do; prices fill in again within the hour.
+- **Damaged settings file:** defaults are used; the next save keeps a copy (`settings.json.broken-<time>`) and
+  writes a fresh file. Saves are write-then-rename, so a crash can't leave half a file.
+
+## No internet / a site is down
+- Every page keeps working from saved data. After one failed request the app uses saved copies for a minute instead
+  of waiting on every call, then tries again by itself. Messages say "Can't reach <site> right now ...".
+- A fresh install with no internet waits on game data and Path of Building: the setup banner says so and carries on
+  once online.
+
+## Error messages (how they're written)
+- Every dashboard and Oracle error goes through `poe2kit/safety.py`: plain words, "your data is safe", the next step.
+  The technical detail is in the response's `detail` (dashboard) or in brackets for the assistant (tools).
+- Wrong or missing tool inputs are caught before a tool runs (`server._check_args`, required inputs in each schema).
+- `python release/chaos_test.py` runs every tool and dashboard call with no internet, an empty data folder, no Path
+  of Building and nonsense input; it must report 0 bad (part of `smoke_test.py`).
+
 ## Reporting a bug (help the player write it)
 
 Open an issue at https://github.com/xoxoFaith1993/exile-oracle/issues with:

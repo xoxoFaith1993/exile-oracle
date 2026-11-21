@@ -44,7 +44,7 @@ PATCH_WATCH = os.path.join(HERE, 'patch-watch', 'steam') if os.path.isdir(os.pat
 STEAM_NEWS = 'https://api.steampowered.com/ISteamNews/GetNewsForApp/v2/?appid=2694490&count=15&format=json'
 NEWS_WORDS = ['patch notes', 'hotfix', '1.0', 'league']   # plus the player's own watch words (config.profile)
 JOBS = {'prices': 30, 'exchange': 60, 'news': 20, 'install': 10, 'gamedata': 720, 'pob': 720, 'ggg_apps': 10080,
-        'mybuilds': 2, 'clientlog': 1, 'update': 720, 'dataupdate': 360, 'patchwatch': 10}
+        'mybuilds': 2, 'clientlog': 1, 'update': 720, 'dataupdate': 360, 'patchwatch': 10, 'backup': 1440}
 
 log = logging.getLogger('monitor')
 
@@ -291,6 +291,12 @@ def job_dataupdate(con):
     return r.get('why') or ('up to date' if r.get('ok') else 'failed')
 
 
+def job_backup(con):
+    """Once a day: a small copy of the player's own data (builds, wishlist, choices) for recovery (poe2kit/db.py)."""
+    p = db.backup_essentials(con)
+    return f'saved {os.path.basename(p)} ({os.path.getsize(p) // 1024} KB)'
+
+
 def job_patchwatch(con):
     """R27: notice a game update and look for new game data every hour for 2 days after it."""
     from poe2kit import patchwatch
@@ -300,7 +306,7 @@ def job_patchwatch(con):
 JOB_FUNCS = {'prices': job_prices, 'exchange': job_exchange, 'news': job_news, 'install': job_install,
              'gamedata': job_gamedata, 'pob': job_pob, 'ggg_apps': job_ggg_apps, 'mybuilds': job_mybuilds,
              'clientlog': job_clientlog, 'update': job_update, 'dataupdate': job_dataupdate,
-             'patchwatch': job_patchwatch}
+             'patchwatch': job_patchwatch, 'backup': job_backup}
 
 
 def run_job(con, name):
@@ -335,6 +341,9 @@ def api(path, q):
     import server as tools  # reuse the MCP tool functions
     con = db.connect()
     try:
+        if path.startswith('/api/lab/') and path not in ('/api/lab/roadmap', '/api/lab/feed') and not q.get('build'):
+            raise ValueError('Pick a build first: the Build Lab works on a build from your vault (Builds page: paste '
+                             'one, or import your character).')
         if path == '/api/lab/roadmap':   # Build Lab stage 1
             from poe2kit import lab, buildplan
             # the followed plan, else the newest build
@@ -616,8 +625,14 @@ def craft_post(path, b):
             from poe2kit import updates
             return updates.install(con)
         if path == '/api/profile':
-            keep = {k: b[k] for k in ('class', 'ascendancy', 'path', 'watch', 'name') if k in b}
-            keep['configured'] = True
+            keep = {k: b[k] for k in ('class', 'ascendancy', 'path', 'watch', 'name', 'experience') if k in b}
+            if 'experience' not in keep and config.profile().get('experience'):   # a save from an older page keeps it
+                keep['experience'] = config.profile()['experience']
+            if keep.get('experience') not in config.EXPERIENCE:
+                keep.pop('experience', None)
+            keep['configured'] = bool(keep.get('class') or config.profile().get('configured'))
+            if 'class' not in b:   # only the experience was sent (the Home question): keep the rest of the profile
+                keep = dict(config.profile(), **keep)
             ch = {'profile': keep}
             if 'poe2_dir' in b:
                 ch['poe2_dir'] = b['poe2_dir'] or None
@@ -742,7 +757,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             body = json.loads(self.rfile.read(n) or b'{}')
             if u.path == '/api/overlay/item':
                 from poe2kit import overlaysrv
-                data = {'id': overlaysrv.submit(body.get('text', ''))}
+                data = {'id': overlaysrv.submit(body.get('text') if isinstance(body.get('text'), str) else '')}
             elif u.path == '/api/overlay/search':
                 from poe2kit import overlaysrv
                 data = overlaysrv.research(body.get('filters'))
@@ -890,7 +905,16 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 data = craft_post(u.path, body)
             return self._send(200, json.dumps(data, default=str).encode('utf-8'), 'application/json')
         except Exception as e:
-            return self._send(500, json.dumps({'error': f'{type(e).__name__}: {e}'}).encode(), 'application/json')
+            return self._fail(e)
+
+    def _fail(self, e):
+        """Every dashboard error in plain words with a next step (poe2kit/safety.py), never a raw Python error."""
+        from poe2kit import safety
+        x = safety.explain(e)
+        if x['kind'] == 'bug':
+            log.warning('dashboard call failed: %s', x['detail'])
+        code = {'offline': 503, 'input': 400, 'missing': 500}.get(x['kind'], 500)
+        return self._send(code, json.dumps(x).encode(), 'application/json')
 
     def do_GET(self):
         u = urllib.parse.urlparse(self.path)
@@ -999,12 +1023,16 @@ class Handler(http.server.BaseHTTPRequestHandler):
             except FileNotFoundError as e:
                 wait = setting_up()
                 if wait:   # a fresh install still downloading: say so instead of a crash
+                    off = net.offline_now()
                     return self._send(503, json.dumps({'setup': True, 'waiting_for': wait, 'error':
-                        'Still setting up (first start): downloading ' + ' and '.join(wait) +
-                        '. This takes a few minutes; this view works once it finishes.'}).encode(), 'application/json')
-                return self._send(500, json.dumps({'error': f'{type(e).__name__}: {e}'}).encode(), 'application/json')
+                        ('Still setting up (first start): ' + ' and '.join(wait) + ' still need downloading, and there is '
+                         'no internet connection right now. This view works once you are online again (it carries on '
+                         'by itself).') if off else
+                        ('Still setting up (first start): downloading ' + ' and '.join(wait) +
+                         '. This takes a few minutes; this view works once it finishes.')}).encode(), 'application/json')
+                return self._fail(e)
             except Exception as e:
-                return self._send(500, json.dumps({'error': f'{type(e).__name__}: {e}'}).encode(), 'application/json')
+                return self._fail(e)
         return self._send(404, b'not found', 'text/plain')
 
 

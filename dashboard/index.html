@@ -491,6 +491,9 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
 <main>
   <section id="home" class="on">
     <div class="home-hero"><img src="/static/emblem.png" alt=""><div><h1>EXILE ORACLE</h1><div class="sub" id="homesub">Your Path of Exile 2 companion</div></div></div>
+    <div class="card" id="expask" hidden style="margin-bottom:14px"><div class="lab-head"><h2 style="margin:0">How well do you know Path of Exile 2?</h2><span style="flex:1"></span><a href="#" class="small muted" id="expskip">not now</a></div>
+      <div class="sub">So the Oracle explains just enough: more for newer players, short and numeric for veterans. It never changes what you can do. You can change it any time in Settings.</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn expbtn" data-e="new">New or returning</button><button class="btn expbtn" data-e="some">Played a fair bit</button><button class="btn expbtn" data-e="veteran">Veteran (1,000+ hours)</button></div></div>
     <div class="home-grid">
       <div class="card"><h2>Currency</h2><div class="sub">Live from GGG's currency exchange · 7-day change</div><div id="homecur"><div class="muted small">loading…</div></div></div>
       <div class="card"><h2>Alerts</h2><div class="sub">Price moves on your items, news, patch notes</div><div id="homealerts"><div class="muted small">loading…</div></div></div>
@@ -841,6 +844,10 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
         <label class="small">Class <select class="crin" id="pfcls"></select></label>
         <label class="small">Main ascendancy <select class="crin" id="pfasc"></select></label>
         <label class="small">League-start path <input class="crin" id="pfpath" placeholder="e.g. Lich, Blood Mage" style="width:180px"></label></div>
+      <label class="small" style="display:block;margin-top:8px">How well do you know Path of Exile 2? <select class="crin" id="pfexp">
+        <option value="">not set</option><option value="new">New or returning (under about 100 hours)</option>
+        <option value="some">Played a fair bit (about 100 to 1,000 hours)</option><option value="veteran">Veteran (1,000+ hours)</option></select>
+        <span class="muted">Only changes how much the Oracle explains, never what you can do.</span></label>
       <label class="small" style="display:block;margin-top:8px">Watch words for patch notes and news (comma separated) <input class="crin" id="pfwatch" style="width:100%"></label>
       <label class="small" style="display:block;margin-top:8px">Path of Exile 2 folder <input class="crin" id="pfdir" style="width:100%" placeholder="found automatically"></label>
       <div style="margin-top:8px"><button class="btn" id="pfsave">Save profile</button> <span class="small muted" id="pfmsg"></span></div>
@@ -874,8 +881,25 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
 <script>
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+// ---------- fail-safes: any failed call shows a plain message (poe2kit/safety.py writes it), never a frozen page ----------
+function oops(msg, kind) {
+  let b = document.getElementById('oopsbar');
+  if (!b) { b = document.createElement('div'); b.id = 'oopsbar'; b.className = 'card small';
+    b.style.cssText = 'position:fixed;right:18px;bottom:18px;max-width:460px;z-index:50;border-color:var(--accent);box-shadow:0 6px 24px #000a';
+    document.body.appendChild(b); }
+  b.innerHTML = `<div style="display:flex;gap:8px;align-items:flex-start"><div style="flex:1">${kind === 'offline' ? '📡 ' : '⚠ '}${esc(msg)}</div><a href="#" onclick="this.closest('#oopsbar').remove();return false" title="Close">✕</a></div>`;
+  clearTimeout(b._t); b._t = setTimeout(() => b.isConnected && b.remove(), 12000);
+  document.querySelectorAll('section.on .spin').forEach(s => { s.replaceWith(Object.assign(document.createElement('span'), { className: 'small muted', textContent: 'Could not load this part.' })); });
+}
+window.addEventListener('unhandledrejection', ev => {   // a view that broke while drawing: say so, don't freeze
+  const m = (ev.reason && ev.reason.message) || String(ev.reason || '');
+  if (m && !ev.reason?.shown) oops(m.startsWith('Still setting up') ? m : 'Part of this page could not be shown. Your data is safe; try the page again, or ask the Oracle to run the doctor if it keeps happening.');
+});
 const get = async (p) => {
-  const r = await fetch(p), j = await r.json();
+  let r, j;
+  try { r = await fetch(p); j = await r.json(); }
+  catch (e) { const er = new Error('The Exile Oracle background service is not answering. Start it again from the tray icon or the Start menu (your data is safe).'); oops(er.message); er.shown = true; throw er; }
+  if (!r.ok && !j.setup) { oops(j.error || 'Something went wrong.', j.kind); const er = new Error(j.error || 'failed'); er.shown = true; throw er; }
   if (r.status === 503 && j.setup) {   // fresh install still downloading: one banner, stop this view's render
     let b = document.getElementById('setupbar');
     if (!b) { b = document.createElement('div'); b.id = 'setupbar'; b.className = 'card small';
@@ -985,7 +1009,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   document.querySelectorAll('nav button').forEach(x => x.classList.toggle('on', x === b));
   document.querySelectorAll('section').forEach(s => s.classList.toggle('on', s.id === b.dataset.tab));
   setTimeout(() => pageAsks(b.dataset.tab));   // after the page's scripts have all loaded
-  if (b.dataset.tab === 'home') { loadHome(); loadHomeOracle(); loadOmen(); }
+  if (b.dataset.tab === 'home') { loadHome(); loadHomeOracle(); loadOmen(); askExperience(); }
   if (b.dataset.tab === 'status') { loadConnectors(); loadLeagues(); }
   if (b.dataset.tab === 'lab') initLab();
   if (b.dataset.tab === 'atlas') { loadAtlas(); loadAtlasPlan(); }
@@ -1927,7 +1951,7 @@ async function loadHome() {
     : '<div class="muted small">Nothing yet.</div>';
 }
 document.querySelectorAll('.quick [data-go]').forEach(b => b.onclick = () => document.querySelector(`nav [data-tab="${b.dataset.go}"]`).click());
-if (document.querySelector('#home.on')) { loadHome(); loadHomeOracle(); loadOmen(); }
+if (document.querySelector('#home.on')) { loadHome(); loadHomeOracle(); loadOmen(); setTimeout(askExperience); }
 pageAsks('home');
 $('#ordaysel').onchange = () => loadOracle($('#ordaysel').value);
 
@@ -2539,7 +2563,10 @@ document.addEventListener('click', async e => {
 
 
 // ---------- Craft lab ----------
-const post = async (p, b) => { const r = await fetch(p, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(b) }); return r.json(); };
+const post = async (p, b) => {   // errors come back as {error} for the caller to show where the player clicked
+  try { const r = await fetch(p, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(b) }); return await r.json(); }
+  catch (e) { return { ok: false, error: 'The Exile Oracle background service is not answering. Start it again from the tray icon or the Start menu (your data is safe).' }; }
+};
 let CR = { base: '', ilvl: 82, pool: null, state: null, targets: [], history: [], plan: null };
 try { const s = JSON.parse(localStorage.getItem('poe2craft') || 'null'); if (s) CR = Object.assign(CR, s, { pool: null, plan: null }); } catch (e) {}
 const crSave = () => { try { const { pool, plan, ...keep } = CR; localStorage.setItem('poe2craft', JSON.stringify(keep)); } catch (e) {} };
@@ -2897,6 +2924,17 @@ function curIcons(text, sz = 22) {
 
 // ---------- profile ----------
 let PFCLASSES = null;
+async function askExperience() {   // once, on Home, until the player answers or says not now
+  let st = STATUS;
+  try { st = st || await get('/api/status'); } catch (e) { return; }
+  let skipped = false;
+  try { skipped = localStorage.getItem('eo-exp-skip') === '1'; } catch (e) {}
+  $('#expask').hidden = !!((st.profile || {}).experience) || skipped;
+  document.querySelectorAll('.expbtn').forEach(b => b.onclick = async () => {
+    await post('/api/profile', { experience: b.dataset.e }); $('#expask').hidden = true; STATUS = await get('/api/status');
+  });
+  $('#expskip').onclick = ev => { ev.preventDefault(); try { localStorage.setItem('eo-exp-skip', '1'); } catch (e) {} $('#expask').hidden = true; };
+}
 async function loadProfile() {
   const st = await get('/api/status'); const pr = st.profile || {};
   PFCLASSES = PFCLASSES || await get('/api/classes');
@@ -2905,6 +2943,7 @@ async function loadProfile() {
   $('#pfcls').onchange = fillAsc; fillAsc();
   $('#pfpath').value = (pr.path || []).join(', ');
   $('#pfwatch').value = (pr.watch || []).join(', ');
+  $('#pfexp').value = pr.experience || '';
   $('#pfdir').value = (st.paths && st.paths.poe2) || '';
   $('#pfpaths').innerHTML = st.paths ? `Version ${esc(st.paths.version)} · data in ${esc(st.paths.home)} · game log: ${esc(st.paths.client_log || 'not found yet (play once)')}` : '';
   if (!pr.configured) $('#pfmsg').textContent = 'Not set up yet: pick your class and ascendancy, then save.';
@@ -2912,7 +2951,8 @@ async function loadProfile() {
 $('#pfsave').onclick = async () => {
   const split = v => v.split(',').map(x => x.trim()).filter(Boolean);
   const r = await post('/api/profile', { class: $('#pfcls').value || null, ascendancy: $('#pfasc').value || null,
-    path: split($('#pfpath').value), watch: split($('#pfwatch').value.toLowerCase()), poe2_dir: $('#pfdir').value.trim() || null });
+    path: split($('#pfpath').value), watch: split($('#pfwatch').value.toLowerCase()), experience: $('#pfexp').value || null,
+    poe2_dir: $('#pfdir').value.trim() || null });
   $('#pfmsg').textContent = r.ok ? 'Saved.' : 'Could not save.';
   STATUS = await get('/api/status'); LSCLASSES = null;
 };
