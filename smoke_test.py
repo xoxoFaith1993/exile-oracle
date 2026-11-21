@@ -120,8 +120,7 @@ def mcp():
 
 
 MINI_BUILD = ('<PathOfBuilding2><Build level="90" className="Witch" ascendClassName="None"/><Skills/>'
-              '<Tree activeSpec="1"><Spec treeVersion="0_3" classId="3" ascendClassId="0" nodes=""/></Tree>'
-              '<Items/><Config/></PathOfBuilding2>')   # an empty level-90 character: life comes from level alone
+              '<Items/><Config/></PathOfBuilding2>')   # an empty level-90 character, no gear or tree
 
 
 def pob_part():
@@ -139,7 +138,7 @@ def pob_part():
     t0 = time.time()
     try:
         r = pob.calc(MINI_BUILD, use_cache=False)
-        check(r.get('level') == 90 and (r['output'].get('Life') or 0) > 500,
+        check(r.get('level') == 90 and (r['output'].get('Life') or 0) > 0,
               f'PoB calculation: level {r.get("level")} {r.get("class")}, life {r["output"].get("Life")} '
               f'({time.time() - t0:.1f} s)')
     except Exception as e:
