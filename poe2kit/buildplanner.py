@@ -94,7 +94,7 @@ def _levels(title):
     return 100 if re.search(r'end ?game|final|maps', title or '', re.I) else None
 
 
-def make(con, build_id=None, pob_code=None, notes=None, name=None, include_gear=True, auto_route=True):
+def make(con, build_id=None, pob_code=None, notes=None, name=None, include_gear=True, auto_route=False):
     """notes (all optional, usually written by Claude):
          {'description': str,
           'passives': {node name or game id: text},
@@ -191,7 +191,7 @@ def make(con, build_id=None, pob_code=None, notes=None, name=None, include_gear=
             if p:
                 passives.append(p)
 
-    levelling_gear = bool(report.get('route') == 'automatic' or staged)
+    levelling_gear = True   # "look for these mods" until 55, the endgame item after: sound for every plan
 
     # ---- skills: socket groups (not the copies PoB adds for item/tree-granted skills) ----
     meta = _meta_gems()
@@ -221,14 +221,14 @@ def make(con, build_id=None, pob_code=None, notes=None, name=None, include_gear=
             if text:
                 sk['additional_text'] = _note(text)
             from . import route
-            gl = route.gem_level(gid) if auto_route else None
+            gl = route.gem_level(gid)   # a fact from the game data: shown for every plan
             if gl and gl > 1:   # when it can first be cut and used
                 sk['level_interval'] = [gl, 100]
             if i == 0 and supports:
                 sk['support_skills'] = []
                 for s in supports:
                     st = sn.get((s.get('nameSpec') or '').lower())
-                    sl = route.gem_level(s.get('gemId')) if auto_route else None
+                    sl = route.gem_level(s.get('gemId'))
                     e = {'id': s.get('gemId')}
                     if sl and sl > 1:
                         e['level_interval'] = [sl, 100]
@@ -291,7 +291,12 @@ def make(con, build_id=None, pob_code=None, notes=None, name=None, include_gear=
            f"{b.get('ascendClassName') if b is not None else ''} level {b.get('level') if b is not None else '?'}, "
            f"exported by the PoE 2 Toolkit {time.strftime('%Y-%m-%d')}",
            'link': f'https://github.com/{config.REPO}'}
-    if auto_route and report.get('route') == 'automatic':   # the passive points quests (24 in all) are easy to skip
+    if report.get('route') == 'automatic':
+        doc['description'] += '\nLevelling route reviewed with Claude: passives show 10 levels before they are due.'
+    elif not staged:
+        doc['description'] += ('\nFull endgame path. Ask Claude to plan and review a levelling route for this build '
+                               '(passive order, early skills).')
+    if True:   # the passive point quests (24 in all) are easy to skip: a fact, shown for every plan
         from . import route
         qs = route.quest_reminders()
         if qs:

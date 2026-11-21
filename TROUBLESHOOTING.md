@@ -98,6 +98,7 @@ by itself.
 | Problem | Check | Fix |
 |---|---|---|
 | Plan not in the game's list | does `Documents/My Games/Path of Exile 2/BuildPlanner` exist (Steam Deck: inside the Proton prefix)? | start the game once; send the build again |
+| No levelling order, the whole endgame path shows at once | `poe2_build_planner` plan `levelling_route` | normal: the automatic order is a rule of thumb, so it only goes into the game after Claude reviews it. Use `poe2_levelling` mode `route` (and `gems` / `rank_skills` / `rank_supports` for early skills), then `poe2_build_planner levelling_route=true` |
 | Plan listed but nothing drawn on the tree | passives have level ranges | a planned passive shows 10 levels before it's due ("Take at level N"), so at level 1 only the first ~12 show |
 | Not updating as you level | `poe2_build_planner` `plan.follow` = the character's exact name? the game log is found? | switch on following with the exact character name. Updates come within about a minute of a level-up; reopen the passive tree. |
 | Gear hints show endgame items at low level | — | fixed: levelling plans show "look for" hints until 55 and the endgame item after |

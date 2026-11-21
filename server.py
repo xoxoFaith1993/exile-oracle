@@ -175,7 +175,8 @@ def t_build_planner(a):
                 db.kv_set(con, buildplan.KEY + str(int(bid)), '{}')
             follow = a.get('follow')
             buildplan.save(con, bid, notes=a.get('notes'), edits=a.get('edits'), name=a.get('name'),
-                           follow=(follow or None) if follow != '' else '')
+                           follow=(follow or None) if follow != '' else '',
+                           levelling_route=a.get('levelling_route') if 'levelling_route' in a else None)
             res = buildplan.export(con, bid, write=bool(a.get('write')), confirm=bool(a.get('confirm')))
             out = {'report': res['report'], 'plan': buildplan.get(con, bid), 'folder': bp.folder()}
             if a.get('write'):
@@ -188,6 +189,62 @@ def t_build_planner(a):
         return out
     finally:
         con.close()
+
+
+def t_levelling(a):
+    """Review a levelling route with Path of Building before switching it on for the in-game plan."""
+    from poe2kit import buildplan, route, stagecheck, vault
+    import xml.etree.ElementTree as ET
+    con = db.connect()
+    try:
+        bid = a.get('build_id')
+        r = con.execute('SELECT label, pob_code FROM build WHERE id=?', (int(bid),)).fetchone() if bid is not None else None
+        if not r:
+            return {'error': 'give build_id (poe2_vault_list)'}
+        xml, _ = buildplan.apply_edits(vault.decode(r['pob_code']), buildplan.get(con, bid).get('edits'))
+    finally:
+        con.close()
+    mode = a.get('mode') or 'route'
+    if mode == 'route':
+        root = ET.fromstring(xml)
+        tree = root.find('Tree')
+        spec = tree.findall('Spec')[max(0, int(tree.get('activeSpec') or 1) - 1)]
+        ver = spec.get('treeVersion') or '0_5'
+        have = [int(x) for x in (spec.get('nodes') or '').split(',') if x]
+        main, asc, _s = route.order(have, ver, root.find('Build').get('className'))
+        nodes, _, _ = route._tree(ver)
+        lv = route.levels(len(main))
+        ws = route.weapon_set_nodes(main, lv, ver)
+        upto = int(a.get('up_to_level') or 100)
+        rows = [{'level': l, 'node': nodes.get(n, {}).get('n'), 'kind': nodes.get(n, {}).get('k'),
+                 'stats': '; '.join(nodes.get(n, {}).get('s') or [])[:90], 'weapon_set': bool(n in ws)}
+                for n, l in zip(main, lv) if l <= upto]
+        return {'build': r['label'], 'passives': rows,
+                'ascendancy': [{'level': l, 'node': nodes.get(n, {}).get('n')} for n, l in
+                               zip(asc, route.asc_levels(len(asc)))],
+                'how': 'Order = best value per point from the class start (a rule of thumb: check that life and '
+                       'resistances come early enough). Levels = 1 point per level + 2 per point quest. If it looks '
+                       'right (or after fixing it with poe2_build_planner edits), switch it on with '
+                       'poe2_build_planner levelling_route=true.'}
+    lvl = int(a.get('level') or 14)
+    if mode == 'test':
+        cat = stagecheck.catalogue()
+        g = cat.get(str(a.get('skill', '')).lower())
+        if not g:
+            return {'error': f"unknown skill {a.get('skill')}"}
+        sups = tuple(cat[x.lower()]['id'] for x in a.get('supports') or [] if x.lower() in cat)
+        return stagecheck.check(xml, lvl, g['id'], sups)
+    if mode == 'rank_supports':
+        return stagecheck.rank(xml, lvl, a.get('skill'), a.get('supports') or [], kind='supports',
+                               limit=int(a.get('limit') or 30))
+    if mode == 'rank_skills':
+        return {'level': lvl, 'ranked': stagecheck.rank(xml, lvl, None, a.get('supports') or [],
+                                                        candidates=a.get('skills') or [], kind='skills')}
+    if mode == 'gems':   # what can be cut by this level, with tags, to pick candidates from
+        cat = stagecheck.catalogue()
+        return {'level': lvl, 'skills': [{'name': g['name'], 'from': g['level'], 'tags': g['tags']} for g in cat.values()
+                                         if not g['support'] and g['level'] and g['level'] <= lvl]}
+    return {'error': 'mode: route | gems | test | rank_supports | rank_skills'}
 
 
 def t_doctor(a):
@@ -583,9 +640,22 @@ TOOLS = [
      "about unconnected nodes; tell the player, then save. write=true saves 'PoE2 Toolkit - <name>.build' (the "
      'first write ever needs confirm=true after asking the player); without write you get a preview. forget=true '
      "clears the saved plan. list=true shows the folder; remove=<file> deletes one of the toolkit's own files. "
-     'Several PoB trees titled "Level 30", "Level 60", "Endgame" become a levelling route.',
+     'Several PoB trees titled "Level 30", "Level 60", "Endgame" become a levelling route. levelling_route=true '
+     'switches on the automatic passive order (levels, weapon-set notes) ONLY after you reviewed it with '
+     'poe2_levelling; without it the plan shows the full endgame path.',
      S(build_id=NUM, pob_code=STR, name=STR, notes={'type': 'object'}, edits={'type': 'object'}, follow=STR,
+       levelling_route=BOOL,
        check=BOOL, forget=BOOL, include_gear=BOOL, write=BOOL, confirm=BOOL, list=BOOL, remove=STR), t_build_planner),
+    ('poe2_levelling',
+     'Review a levelling route for a vault build BEFORE it goes into the in-game Build Planner (the automatic order '
+     'is a rule of thumb; plans stay a plain endgame path until you switch the route on). mode="route": the passive '
+     'order with the level each comes at (check life/res come early enough); mode="gems": skills cuttable by '
+     '`level`; mode="test": one skill + supports at `level` in Path of Building (DPS, life, mana; no gear); '
+     'mode="rank_supports": every cuttable support for `skill` ranked by DPS gain (slow: ~2 min); '
+     'mode="rank_skills": compare `skills` at `level`. Then save levelling skills with poe2_build_planner edits '
+     '{"levelling_skills": [...]} and switch the route on with levelling_route=true.',
+     S(build_id=NUM, mode=STR, level=NUM, up_to_level=NUM, skill=STR, supports={'type': 'array'},
+       skills={'type': 'array'}, limit=NUM), t_levelling),
     ('poe2_doctor',
      'Something in the toolkit is broken or acting odd (overlay, prices, dashboard, Build Planner, Path of Building, '
      "Claude connection)? Call this FIRST: it checks every part (read-only) and returns what's wrong, which sections "

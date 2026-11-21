@@ -65,3 +65,59 @@ def check(base_xml, level, skill, supports=()):
     return {'level': level, 'passives': n, 'skill': res.get('main_skill'),
             'dps': st.get('DPS (combined)') or st.get('DPS (main skill)'), 'life': st.get('life'),
             'mana': st.get('mana'), 'es': st.get('energy shield')}
+
+
+_cat = {}
+
+
+def catalogue():
+    """Every gem PoB knows: name (lower) -> {name, id, support, tier, level (first cuttable), tags}."""
+    if _cat:
+        return _cat
+    import os
+    from . import config
+    text = open(os.path.join(config.POB_DIR, 'src', 'Data', 'Gems.lua'), encoding='utf-8').read()
+    for b in text.split('\n\t["')[1:]:
+        g = re.search(r'gameId = "([^"]+)"', b)
+        n = re.search(r'\n\t\tname = "([^"]+)"', b)
+        if not (g and n):
+            continue
+        tags = re.search(r'tags = \{(.*?)\n\t\t\}', b, re.S)
+        _cat.setdefault(n.group(1).lower(), {
+            'name': n.group(1), 'id': g.group(1), 'support': 'SupportGem' in g.group(1),
+            'tags': sorted(set(re.findall(r'(\w+) = true', tags.group(1) if tags else '')) - {'grants_active_skill'}),
+            'level': route.gem_level(g.group(1))})
+    return _cat
+
+
+def rank(base_xml, level, skill, supports=(), candidates=None, kind='supports', limit=30):
+    """kind='supports': each cuttable support (by `level`) added to skill+supports, ranked by DPS gain.
+    kind='skills': each candidate skill (names) with the given supports, ranked by DPS."""
+    cat = catalogue()
+    sk = cat.get(str(skill).lower())
+    if kind == 'supports' and not sk:
+        raise ValueError(f'unknown skill {skill}')
+    sup_ids = tuple(cat[x.lower()]['id'] for x in supports if x.lower() in cat)
+    if kind == 'skills':
+        out = []
+        for name in candidates or []:
+            g = cat.get(str(name).lower())
+            if not g:
+                out.append({'skill': name, 'error': 'unknown gem'})
+                continue
+            r = check(base_xml, level, g['id'], sup_ids)
+            out.append({'skill': g['name'], 'dps': r['dps'], 'cuttable_from': g['level']})
+        return sorted(out, key=lambda x: -(x.get('dps') or 0))
+    base = check(base_xml, level, sk['id'], sup_ids)['dps'] or 0
+    want = set(sk['tags']) & {'spell', 'attack', 'projectile', 'area', 'lightning', 'fire', 'cold', 'chaos',
+                              'physical', 'minion', 'duration', 'melee', 'critical'}
+    pool = [g for g in cat.values() if g['support'] and g['level'] and g['level'] <= level and g['id'] not in sup_ids
+            and (set(g['tags']) & want or not g['tags'])]
+    pool = sorted(pool, key=lambda g: -len(set(g['tags']) & want))[:limit]
+    out = []
+    for g in pool:
+        d = check(base_xml, level, sk['id'], sup_ids + (g['id'],))['dps'] or 0
+        out.append({'support': g['name'], 'gain_pct': round((d / base - 1) * 100, 1) if base else None,
+                    'cuttable_from': g['level']})
+    return {'skill': sk['name'], 'level': level, 'base_dps': base,
+            'ranked': sorted(out, key=lambda x: -(x['gain_pct'] or 0))}

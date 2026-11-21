@@ -300,9 +300,12 @@ def export(con, build_id, write=True, confirm=False, level=None, name=None):
     if not r:
         raise ValueError('no such build in the vault')
     xml, warnings = apply_edits(vault.decode(r['pob_code']), st.get('edits'))
-    doc, rep = buildplanner.make(con, None, vault.encode(xml), st.get('notes'), name or st.get('name') or r['label'])
+    route_on = bool(st.get('levelling_route'))   # only after Claude reviewed it (the order is a rule of thumb)
+    doc, rep = buildplanner.make(con, None, vault.encode(xml), st.get('notes'), name or st.get('name') or r['label'],
+                                 auto_route=route_on)
     if rep.get('slots') == 0:   # gear prices need the vault build id
-        doc2, rep2 = buildplanner.make(con, build_id, None, st.get('notes'), name or st.get('name') or r['label'])
+        doc2, rep2 = buildplanner.make(con, build_id, None, st.get('notes'), name or st.get('name') or r['label'],
+                                       auto_route=route_on)
         if st.get('edits'):
             doc2['passives'], doc2['skills'] = doc['passives'], doc['skills']
         doc, rep = doc2, dict(rep2, passives=rep['passives'], skills=rep['skills'])
