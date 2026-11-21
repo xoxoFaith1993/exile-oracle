@@ -250,6 +250,7 @@ function render(st) {
       <button class="btn primary" id="search">search</button>
       <div class="seg"><button data-s="securable" class="${f.status !== 'online' ? 'on' : ''}">instant buyout</button><button data-s="online" class="${f.status === 'online' ? 'on' : ''}">online</button></div>
       <span class="grow"></span>
+      <button class="btn" id="askclaude" title="Save this item for Claude and open the Claude app">ask claude</button>
       <button class="btn" id="trade"${r.url ? '' : ' disabled'}>trade ↗</button>
     </div>`;
   }
@@ -316,6 +317,15 @@ function wire() {
   document.querySelectorAll('.seg button').forEach(b => b.onclick = () => { filters.status = b.dataset.s; render({ ...lastState, result: { ...cur } }); });
   const s = $('#search');
   if (s) s.onclick = () => fetch('/api/overlay/search', { method: 'POST', body: JSON.stringify({ filters }) });
+  const ac = $('#askclaude');
+  if (ac) ac.onclick = async () => {
+    ac.disabled = true;
+    const r = await (await fetch('/api/overlay/send_claude', { method: 'POST', body: '{}' })).json();
+    if (r.ok) {
+      try { await navigator.clipboard.writeText(r.prompt); } catch (e) {}
+      ac.textContent = 'sent ✓ paste in claude';
+    } else { ac.textContent = r.error || 'not sent'; }
+  };
   const tr = $('#trade');
   if (tr) tr.onclick = () => { if (cur && cur.url) fetch('/api/open', { method: 'POST', body: JSON.stringify({ url: cur.url }) }); };
 }

@@ -75,6 +75,65 @@ def wait(after, timeout=25):
         return {k: v for k, v in _state.items() if k != 'text'}
 
 
+# ---------------- "Ask Claude" (the popup's button) ----------------
+
+INBOX = 'claude_inbox'
+
+
+def send_to_claude():
+    """Save the item on screen (its text, price check and listings) for Claude to read with poe2_from_overlay.
+    Returns the short question the popup copies to the clipboard."""
+    import json
+    from . import db
+    with _lock:
+        text, res = _state['text'], _state['result'] or {}
+    if not text or not res.get('item'):
+        return {'ok': False, 'error': 'nothing priced yet'}
+    t = res.get('trade') or {}
+    entry = {'ts': time.time(), 'item_text': text, 'item': res.get('item'), 'league': res.get('league'),
+             'headline': res.get('headline'), 'ninja': {k: (res.get('ninja') or {}).get(k) for k in
+                                                       ('div', 'change_pct', 'listings', 'volume', 'roll_dependent')}
+             if res.get('ninja') else None,
+             'trade': {'total': t.get('total'), 'low_div': t.get('low_div'), 'median_div': t.get('median_div'),
+                       'listings': [{k: p.get(k) for k in ('amount', 'currency', 'div', 'ilvl', 'listed')}
+                                    for p in (t.get('prices') or [])],
+                       'searched_for': t.get('filters')} if t.get('state') == 'done' else {'state': t.get('state')},
+             'craft_estimate': res.get('estimate'), 'notes': res.get('notes'), 'trade_url': res.get('url'),
+             'ex_per_div': res.get('ex_per_div')}
+    con = db.connect()
+    try:
+        try:
+            inbox = json.loads(db.kv_get(con, INBOX, '[]') or '[]')
+        except ValueError:
+            inbox = []
+        inbox = [entry] + inbox[:19]
+        db.kv_set(con, INBOX, json.dumps(inbox))
+    finally:
+        con.close()
+    it = res['item']
+    name = it.get('name') or it.get('base') or 'an item'
+    base = f" ({it['base']})" if it.get('base') and it.get('base') != it.get('name') else ''
+    prompt = (f"I just sent {name}{base} from my PoE 2 price check overlay. Read it with poe2_from_overlay and tell "
+              "me what to do with it: keep, sell (for how much), craft on it, or use it in my build?")
+    return {'ok': True, 'prompt': prompt}
+
+
+def inbox(limit=5, clear=False):
+    import json
+    from . import db
+    con = db.connect()
+    try:
+        try:
+            items = json.loads(db.kv_get(con, INBOX, '[]') or '[]')
+        except ValueError:
+            items = []
+        if clear:
+            db.kv_set(con, INBOX, '[]')
+        return items[:max(1, int(limit or 5))]
+    finally:
+        con.close()
+
+
 # ---------------- popup size (the page measures itself; overlay.pyw fits the window to it) ----------------
 
 _size = {'ver': 0}

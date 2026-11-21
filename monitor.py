@@ -531,6 +531,18 @@ class Handler(http.server.BaseHTTPRequestHandler):
             elif u.path == '/api/overlay/options':
                 from poe2kit import overlaysrv
                 data = overlaysrv.set_options(body)
+            elif u.path == '/api/overlay/send_claude':   # popup's "Ask Claude": save it, bring Claude forward
+                from poe2kit import overlaysrv, osutil
+                data = overlaysrv.send_to_claude()
+                if data.get('ok') and body.get('open', True):
+                    try:
+                        if osutil.IS_WIN:
+                            os.startfile('claude://')
+                        else:
+                            import webbrowser
+                            webbrowser.open('https://claude.ai/new')
+                    except OSError as e:
+                        data['open_error'] = str(e)
             elif u.path == '/api/overlay/settings_open':
                 from poe2kit import overlaysrv
                 data = overlaysrv.open_settings()

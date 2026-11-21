@@ -190,6 +190,18 @@ def t_build_planner(a):
         con.close()
 
 
+def t_from_overlay(a):
+    """Items the player sent from the price-check overlay with its Ask Claude button (newest first)."""
+    from poe2kit import overlaysrv
+    items = overlaysrv.inbox(a.get('limit') or 3, bool(a.get('clear')))
+    return {'items': items,
+            'how_to_help': 'Each entry has the exact in-game item text (item_text), the poe.ninja price, the cheapest '
+                           'trade listings and what was searched. For "is it an upgrade?" use poe2_whatif with '
+                           'item_text and the slot; for rares, poe2_craft_* tools can tell what it would cost to make; '
+                           'prices are in divines (ex_per_div converts).' if items else
+                           'Nothing sent yet: in game, price check an item and press Ask Claude in the popup.'}
+
+
 def t_trade_link(a):
     """Build an official trade-site search URL for the user to open (no trade API calls are made)."""
     league = a.get('league') or ninja.current_league()
@@ -565,6 +577,11 @@ TOOLS = [
      'Several PoB trees titled "Level 30", "Level 60", "Endgame" become a levelling route.',
      S(build_id=NUM, pob_code=STR, name=STR, notes={'type': 'object'}, edits={'type': 'object'}, follow=STR,
        check=BOOL, forget=BOOL, include_gear=BOOL, write=BOOL, confirm=BOOL, list=BOOL, remove=STR), t_build_planner),
+    ('poe2_from_overlay',
+     "Items the player sent from the in-game price-check overlay (its Ask Claude button), newest first: the exact "
+     'item text, poe.ninja price, cheapest trade listings, what was searched, craft estimate. Call this when the '
+     'player says they sent / just checked an item. limit (default 3), clear=true empties the list.',
+     S(limit=NUM, clear=BOOL), t_from_overlay),
     ('poe2_trade_link', 'Make an official trade-site search link (by unique name and/or base type) to open in a browser.',
      S(name=STR, type=STR, league=STR), t_trade_link),
 ]
