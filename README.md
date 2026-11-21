@@ -259,6 +259,15 @@ your target becomes the omen on Home. Ask the Oracle too: "put Mageblood on my w
 
 ![Wishlist](docs/screenshots/wishlist.jpg)
 
+**Wanted items:** for one specific item you're after, like a staff with exact stats you can't afford yet, paste its
+trade-site link (or the item itself, copied in game with Ctrl+C). Press Check now whenever you like: the cheapest
+listings with their stats, which ones are new, re-priced, or gone since your last check (sold or taken down; the
+trade site doesn't say which), and the cheapest price at each of your checks. Pin one listing to follow it. It's
+checked only when you press the button, inside GGG's limits (the same "live trade-site prices" switch as the
+overlay); for instant news of new listings, Open live search uses the trade site's own live search.
+
+![Wanted items](docs/screenshots/wanted.jpg)
+
 ### Question chips
 Every page has ready-made questions. A click opens Claude (or ChatGPT) with the question already typed in: press
 Enter. Settings → Question chips picks the app, or plain copy.

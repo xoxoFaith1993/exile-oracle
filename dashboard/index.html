@@ -798,6 +798,17 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
         <button class="btn" id="wladd">Add to wishlist</button> <span class="small muted" id="wlmsg"></span></div>
       <div id="wlitems" style="margin-top:10px"></div></div>
   </section>
+    <div class="card"><div class="lab-head"><h2 style="margin:0">Wanted items</h2><span class="small muted" id="wtsub"></span></div>
+      <div class="sub">A specific item you're after, like a staff with exact stats you can't afford yet. Paste its trade-site link (or the item itself, copied in game with Ctrl+C) and press Check now whenever you want: the cheapest listings, new ones, re-priced ones, and the ones that are gone (sold or taken down). Pin a listing to follow it. Checked only when you press the button, inside the trade site's limits.</div>
+      <textarea class="crin" id="wttext" rows="2" placeholder="Paste a trade-site link (pathofexile.com/trade2/search/...) or the item text" style="width:100%;margin-top:8px;resize:vertical"></textarea>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:6px">
+        <input class="crin" id="wtname" placeholder="Name (optional), e.g. My endgame staff" style="flex:1;min-width:200px">
+        <span class="small muted">buy at or under</span>
+        <input class="crin" id="wttarget" type="number" min="0" step="any" placeholder="price (optional)" style="width:130px">
+        <select class="crin" id="wtunit"><option value="div">div</option><option value="ex">ex</option><option value="chaos">chaos</option></select>
+        <button class="btn" id="wtadd">Add wanted item</button> <span class="small muted" id="wtmsg"></span></div>
+      <div id="wtitems" style="margin-top:10px"></div></div>
+  </section>
   <section id="alerts">
     <div class="card"><div class="lab-head"><h2 style="margin:0">Alerts</h2><span style="flex:1"></span>
       <button class="btn" id="alread">Mark all read</button> <button class="btn" id="alclear" title="Delete alerts you've already seen">Clear read</button></div>
@@ -933,7 +944,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   if (b.dataset.tab === 'economy') { loadLeagues(); loadOverview(); loadMovers(); loadMarket(); loadOracle($('#ordaysel').value); loadSpreads(); }
   if (b.dataset.tab === 'builds') loadBuilds();
   if (b.dataset.tab === 'alerts') loadAlerts(true);
-  if (b.dataset.tab === 'wishlist') loadWishlist();
+  if (b.dataset.tab === 'wishlist') { loadWishlist(); loadWanted(); }
   if (b.dataset.tab === 'patches') loadPatches();
   if (b.dataset.tab === 'farm') { loadFarm(); loadPlaybook(); }
   if (b.dataset.tab === 'sessions') loadSessions();
@@ -2054,6 +2065,68 @@ async function loadAlerts(markSeen) {
     loadAlertSettings();
   }
 }
+// ---------- wanted items: saved trade searches, checked by hand ----------
+async function loadWanted() {
+  const r = await get('/api/wanted');
+  const it = r.items || [];
+  $('#wtsub').textContent = it.length ? `${it.length} item${it.length === 1 ? '' : 's'}` : '';
+  const when = ts => ts ? ago(ts) : '';
+  const agoL = ts => { const h = (Date.now() / 1000 - ts) / 3600; return h < 48 ? ago(ts) : Math.round(h / 24) + ' days ago'; };
+  const lrow = (w, l, pinned) => `<tr${w.under_target && w.under_target.includes(l.id) ? ' style="background:rgba(80,160,90,.12)"' : ''}>
+      <td style="white-space:nowrap"><b>${esc(l.amount)} ${esc(l.cur_name || l.currency)}</b>${l.price && l.currency !== 'divine' ? `<div class="small muted">≈ ${esc(l.price)}</div>` : ''}
+        ${l.was ? `<div class="small" style="color:var(--accent)">was ${esc(l.was.amount)} ${esc(l.was.currency)}</div>` : ''}</td>
+      <td class="small">${(l.mods || []).slice(0, 6).map(esc).join('<br>')}${(l.mods || []).length > 6 ? '<br><span class="muted">…</span>' : ''}</td>
+      <td class="small">${l.new ? '<span class="pill" style="border-color:var(--eo-good);color:var(--eo-good)">new</span> ' : ''}${w.under_target && w.under_target.includes(l.id) ? '<span class="pill" style="border-color:var(--eo-good);color:var(--eo-good)">under your target</span> ' : ''}
+        <div class="muted">${l.listed ? 'listed ' + esc(agoL(Date.parse(l.listed) / 1000)) : ''}${l.online ? (l.afk ? ' · seller afk' : ' · seller online') : ' · seller offline'}</div></td>
+      <td>${pinned ? '<span class="small muted">pinned</span>' : `<button class="btn wtpin" data-w="${w.id}" data-l="${esc(l.id)}" style="padding:1px 8px;font-size:11px" title="Follow this listing: every check says if it's still there, re-priced or gone">Pin</button>`}</td></tr>`;
+  $('#wtitems').innerHTML = (!r.enabled ? `<div class="small" style="margin-bottom:8px;color:var(--accent)">Trade-site checks are off. <button class="btn" id="wtallow" style="padding:1px 8px;font-size:11px">Allow checks when I press Check now</button> <span class="muted">(the same switch as the overlay's live prices)</span></div>` : '') +
+    (!it.length ? '<div class="empty">No wanted items yet. Paste a trade-site link or an item above.</div>' : it.map(w => {
+      const L = w.last;
+      const p = w.pinned;
+      const pinNow = p && L ? L.listings.find(x => x.id === p.id) : null;
+      return `<div class="card" style="margin:10px 0;padding:12px">
+        <div class="lab-head" style="flex-wrap:wrap;gap:8px"><b style="font-size:15px">${esc(w.name)}</b>
+          ${w.target ? `<span class="pill">buy at or under ${esc(w.target)}</span>` : ''}<span style="flex:1"></span>
+          <button class="btn wtcheck" data-w="${w.id}">Check now</button>
+          <a class="btn" style="text-decoration:none" href="${esc(w.url)}" target="_blank" rel="noopener">Open on trade site</a>
+          <a class="btn" style="text-decoration:none" href="${esc(w.live_url)}" target="_blank" rel="noopener" title="The trade site's own live search: it tells you the moment a new match is listed">Open live search</a>
+          <button class="btn wtdel" data-w="${w.id}">Remove</button></div>
+        <div class="small muted" style="margin-top:4px">${(w.labels || []).map(esc).join(' · ')}${w.league ? ' · ' + esc(w.league) : ''}</div>
+        <div class="small" style="margin-top:6px" id="wtres-${w.id}">${L ? `Checked ${esc(when(L.ts))}: <b>${L.total}</b> listed${L.prev_total != null && L.prev_total !== L.total ? ` (was ${L.prev_total})` : ''} · cheapest <b>${esc(L.low || '?')}</b>${L.median ? ` · middle of the cheapest 10: ${esc(L.median)}` : ''}` : '<span class="muted">Not checked yet: press Check now.</span>'}</div>
+        ${w.history && w.history.length > 1 ? `<div class="small muted" style="margin-top:2px">Cheapest at your last checks: ${w.history.slice(-8).map(h => esc(h.low || '?')).join(' → ')}</div>` : ''}
+        ${p ? `<div class="small" style="margin-top:6px;padding:6px 8px;border:1px solid var(--grid)"><b>Pinned listing:</b> ${p.state === 'gone' ? `<span style="color:var(--accent)">gone ${esc(when(p.gone_at))} (sold or taken down)</span>` : p.last ? `${esc(p.last.amount)} ${esc(p.last.cur_name || p.last.currency)}${p.first && (p.first.amount !== p.last.amount || p.first.currency !== p.last.currency) ? ` <span style="color:var(--accent)">(was ${esc(p.first.amount)} ${esc(p.first.currency)} when you pinned it)</span>` : ''} · still listed` : 'press Check now to follow it'} <a href="#" class="wtunpin" data-w="${w.id}">unpin</a></div>` : ''}
+        ${L && L.listings.length ? `<table class="up" style="margin-top:8px;table-layout:fixed"><colgroup><col style="width:16%"><col style="width:52%"><col style="width:22%"><col style="width:10%"></colgroup>
+          <tr><th>Price</th><th>Stats</th><th>Listing</th><th></th></tr>${L.listings.map(l => lrow(w, l, p && p.id === l.id)).join('')}</table>` : ''}
+        ${L && (L.gone || []).length ? `<div class="small" style="margin-top:6px"><b>Gone since you started checking</b> (sold or taken down): ${L.gone.map(g => esc(g.price || (g.amount + ' ' + g.currency)) + (g.gone_at ? ' <span class="muted">' + esc(when(g.gone_at)) + '</span>' : '')).join(' · ')}</div>` : ''}
+      </div>`;
+    }).join('')) + `<div class="small muted" style="margin-top:6px">${esc(r.note || '')}</div>`;
+  if ($('#wtallow')) $('#wtallow').onclick = async () => { await post('/api/wanted/allow', {}); loadWanted(); };
+  document.querySelectorAll('.wtcheck').forEach(b => b.onclick = async () => {
+    b.disabled = true; b.textContent = 'Checking…';
+    const x = await post('/api/wanted/check', { id: b.dataset.w });
+    if (!x.ok) { b.disabled = false; b.textContent = 'Check now'; $('#wtres-' + b.dataset.w).innerHTML = `<span style="color:var(--accent)">${esc(x.error || 'Check failed')}</span>`; return; }
+    loadWanted();
+  });
+  document.querySelectorAll('.wtpin').forEach(b => b.onclick = async () => { await post('/api/wanted/pin', { id: b.dataset.w, listing: b.dataset.l }); loadWanted(); });
+  document.querySelectorAll('.wtunpin').forEach(a => a.onclick = async ev => { ev.preventDefault(); await post('/api/wanted/pin', { id: a.dataset.w, listing: null }); loadWanted(); });
+  document.querySelectorAll('.wtdel').forEach(btn => btn.onclick = async () => {
+    if (!btn.classList.contains('sure')) {
+      btn.classList.add('sure'); btn.textContent = 'Sure? Click again'; btn.style.borderColor = 'var(--accent)';
+      setTimeout(() => { if (btn.isConnected) { btn.classList.remove('sure'); btn.textContent = 'Remove'; btn.style.borderColor = ''; } }, 4000);
+      return;
+    }
+    await post('/api/wanted/remove', { id: btn.dataset.w }); loadWanted();
+  });
+  if (!$('#wtadd').dataset.wired) {
+    $('#wtadd').dataset.wired = 1;
+    $('#wtadd').onclick = async () => {
+      const x = await post('/api/wanted/add', { text: $('#wttext').value, name: $('#wtname').value, target: $('#wttarget').value, unit: $('#wtunit').value });
+      $('#wtmsg').textContent = x.ok ? `Added ${x.name}.${x.note ? ' ' + x.note : ''} Press Check now to see listings.` : x.error;
+      if (x.ok) { $('#wttext').value = ''; $('#wtname').value = ''; $('#wttarget').value = ''; loadWanted(); }
+    };
+  }
+}
+
 // ---------- wishlist (R25) ----------
 async function loadWishlist() {
   const r = await get('/api/wishlist');

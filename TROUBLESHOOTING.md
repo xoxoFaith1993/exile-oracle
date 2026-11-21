@@ -74,6 +74,10 @@ Settings → Price-check overlay; saved as `price_keys` in settings.json):
 
 ## Prices
 
+- **Wanted items (Wishlist page) say "Trade-site checks are off":** the same `live_trade` switch as the overlay's
+  live prices. The button on the card switches it on. "Wait a minute between checks": the same wanted item can be
+  checked once a minute. "Trade site limit reached": GGG's limit for everyone on this PC; wait and press again.
+  "That link's search can't be read": older short search ids aren't the search itself; paste the item text instead.
 - **Live trade prices say "off":** the setting `live_trade` is off. It's off by default for everyone:
   it uses GGG's trade site the way Exiled Exchange 2 does, which is not a documented public API, so it's the
   player's choice. Ctrl+Shift+D → Live trade-site prices.

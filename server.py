@@ -670,6 +670,17 @@ def t_wishlist(a):
                 return r
         elif act == 'remove':
             r = wishlist.remove(con, a.get('item'))
+        elif act.startswith('wanted'):
+            from poe2kit import tradewatch
+            if act == 'wanted_add':
+                r = tradewatch.add(con, a.get('text'), a.get('name'), a.get('target'), a.get('unit') or 'div')
+            elif act == 'wanted_check':
+                return tradewatch.check(con, a.get('id'))
+            elif act == 'wanted_remove':
+                r = tradewatch.remove(con, a.get('id'))
+            if act != 'wanted' and not r.get('ok'):
+                return r
+            return tradewatch.status(con)
         return wishlist.status(con)
     finally:
         con.close()
@@ -853,9 +864,14 @@ TOOLS = [
      'target) or sell (side=sell: when it rises to it) at a target price. action=list (default) shows each wish with '
      'its live price, the last 7 days, how far from the target, next week\'s likely range from the price forecast (heading = likely / '
      'maybe) and calls from the newest patch notes. action=add needs item (the poe.ninja name); target + unit '
-     '(div, ex or chaos) are optional: without a target the item is just tracked (no target alerts). action=remove needs item. The dashboard alerts on a hit, a forecast heading there, or a patch call, '
+     '(div, ex or chaos) are optional: without a target the item is just tracked (no target alerts). action=remove needs item. '
+     'Wanted items (saved trade-site searches, e.g. a staff with specific stats): action=wanted lists them with the '
+     'last check; wanted_add needs text (a trade-site link or the in-game item text), optional name / target / unit; '
+     'wanted_check (id) runs ONE trade search now, only when the player asks (cheapest listings, new ones, re-priced, '
+     'gone = sold or taken down, the pinned listing); wanted_remove (id). Never check in a loop. The dashboard alerts on a hit, a forecast heading there, or a patch call, '
      'and a hit becomes the Home omen. Add only what the player asked for.',
-     S(action={'type': 'string', 'enum': ['list', 'add', 'remove']}, item=STR, target=NUM,
+     S(action={'type': 'string', 'enum': ['list', 'add', 'remove', 'wanted', 'wanted_add', 'wanted_check', 'wanted_remove']},
+       item=STR, target=NUM, text=STR, name=STR, id=STR,
        unit={'type': 'string', 'enum': ['div', 'ex', 'chaos']}, side={'type': 'string', 'enum': ['buy', 'sell']}, note=STR),
      t_wishlist),
     ('poe2_trade_link', 'Make an official trade-site search link (by unique name and/or base type) to open in a browser.',

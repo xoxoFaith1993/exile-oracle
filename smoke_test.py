@@ -307,6 +307,28 @@ def wishlist_check():
           'wishlist: target hit alerts once, becomes the omen, track with no target, chaos targets, remove')
 
 
+def wanted_check():
+    """Wanted items: a trade link's search is read locally (no request), a check never runs with trade checks off."""
+    from poe2kit import tradewatch as tw, db, config
+    q = {'status': {'option': 'securable'}, 'name': 'Mageblood', 'type': 'Utility Belt', 'stats': [{'type': 'and', 'filters': []}]}
+    sid = tw.encode_query(q)
+    link = 'https://www.pathofexile.com/trade2/search/poe2/Test%20League/' + sid
+    p = tw.parse_input(link, 'Other')
+    bad = tw.parse_input('hello there', 'Other')
+    con = db.connect()
+    was = config.settings().get('live_trade', False)
+    config.save_settings({'live_trade': False})
+    a = tw.add(con, link, 'My belt', 90, 'div')
+    off = tw.check(con, a['id'])
+    st = tw.status(con)['items']
+    gone = tw.remove(con, a['id'])
+    config.save_settings({'live_trade': was})
+    con.close()
+    check(tw.decode_id(sid) == q and p.get('query') == q and p.get('league') == 'Test League' and bad.get('error')
+          and a['ok'] and off.get('off') and st and st[0]['url'].endswith(sid) and st[0]['live_url'].endswith('/live')
+          and gone['ok'], 'wanted items: trade links read locally, no trade request while checks are off')
+
+
 def patchwatch_check():
     """R27 step 2: a game update starts patch mode (hourly data checks for 2 days), then it ends."""
     from poe2kit import patchwatch, gamedata, dataupdate, db
@@ -552,6 +574,7 @@ if __name__ == '__main__':
     alerts_check()
     patchwatch_check()
     wishlist_check()
+    wanted_check()
     vault_paste_check()
     spreads_check()
     weaponset_check()

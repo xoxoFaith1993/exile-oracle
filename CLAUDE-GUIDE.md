@@ -46,6 +46,7 @@ for 15 minutes).
 - "What's Mageblood / a Divine / Omen of Light worth, and where is it heading this week?"
 - "What are the biggest price movers in the last 24 hours?"
 - "Put Mageblood on my wishlist at 90 div" / "what's on my wishlist, and is anything close?" (Wishlist page)
+- "I want a staff with these stats: <trade link>. Check it now." (Wanted items: one trade search when you ask)
 - "Any Currency Exchange gaps worth trading right now?" (the same item cheaper in one currency than another; Economy page)
 - "It's day 1 of the league: what should I sell straight away and what should I hold?"
 

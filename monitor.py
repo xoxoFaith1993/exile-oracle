@@ -429,6 +429,9 @@ def api(path, q):
         if path == '/api/wishlist':   # R25: chase items with a target price
             from poe2kit import wishlist
             return wishlist.status(con)
+        if path == '/api/wanted':   # Wishlist: saved trade searches, checked by hand
+            from poe2kit import tradewatch
+            return tradewatch.status(con)
         if path == '/api/wishlist/search':
             rows = ninja.latest(con, (q.get('q') or '').strip(), None, 12) if len((q.get('q') or '').strip()) >= 2 else []
             rt = money.rates(con, ninja.current_league(con))
@@ -794,6 +797,20 @@ class Handler(http.server.BaseHTTPRequestHandler):
             elif u.path == '/api/ask/open':   # a question chip: open the AI app with the question typed in
                 from poe2kit import overlaysrv
                 data = overlaysrv.open_question(body.get('text'))
+            elif u.path in ('/api/wanted/add', '/api/wanted/check', '/api/wanted/remove', '/api/wanted/pin'):
+                from poe2kit import db as _db, tradewatch
+                c = _db.connect()
+                try:
+                    act = u.path.rsplit('/', 1)[1]
+                    data = tradewatch.add(c, body.get('text'), body.get('name'), body.get('target'), body.get('unit') or 'div') \
+                        if act == 'add' else tradewatch.check(c, body.get('id')) if act == 'check' \
+                        else tradewatch.remove(c, body.get('id')) if act == 'remove' \
+                        else tradewatch.pin(c, body.get('id'), body.get('listing'))
+                finally:
+                    c.close()
+            elif u.path == '/api/wanted/allow':   # the player switches trade-site checks on (same switch as the overlay)
+                config.save_settings({'live_trade': True})
+                data = {'ok': True}
             elif u.path in ('/api/wishlist/add', '/api/wishlist/remove'):   # R25 wishlist
                 from poe2kit import db as _db, wishlist
                 c = _db.connect()

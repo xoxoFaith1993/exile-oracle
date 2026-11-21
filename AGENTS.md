@@ -19,9 +19,13 @@ you assume.
   - no memory reading, no changes to game files;
   - the only keys ever sent are Ctrl+Alt+C on an overlay hotkey press and the player's chat-command keys (one chat
     command per press).
-- **GGG's trade site** is used only by the optional overlay setting `live_trade` (off by default):
-  - one search per check, GGG's `X-Rate-Limit` headers obeyed, never retried in a loop;
-  - no login;
+- **GGG's trade site** is used only behind the optional setting `live_trade` (off by default), and only when the
+  player presses something: the overlay's price check, and Check now on a Wishlist wanted item
+  (`poe2kit/tradewatch.py`):
+  - one search per check (plus fetches of the listings), GGG's `X-Rate-Limit` headers obeyed, never retried in a
+    loop, never in the background (the same wanted item at most once a minute);
+  - no login, no seller names stored;
+  - a trade link's search id is the gzip-compressed search itself, read locally (no request);
   - nothing else calls it.
 - **Other GGG / poe.ninja data:** only documented public data (poe.ninja economy API, GGG's Currency Exchange
   history, the Build Planner file format). No undocumented endpoints beyond the trade site above, and no scraping.
@@ -54,6 +58,7 @@ you assume.
   - Currency Exchange gaps: `spreads.py` (the same item priced differently vs Ex / Div / Chaos, strict filters; R24);
   - data updates: `dataupdate.py` (data-only packs from our GitHub, checked, switched, rolled back; R27);
   - alerts: `alerts.py` (the kinds the player picked, real-move filters, daily market digest, the Oracle's calls);
+  - wanted items: `tradewatch.py` (saved trade searches checked by hand: new / re-priced / gone listings, pins);
   - wishlist: `wishlist.py` (chase items with a target price: hit / forecast heading there / patch call alerts, Home omen; R25);
   - platform differences: `osutil.py`;
   - checks: `doctor.py`.
