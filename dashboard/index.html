@@ -809,6 +809,16 @@ table.up td, table.up th { padding: 5px 7px; } table.up .pos { color: var(--eo-g
         </div>
       </div>
     </div>
+    <div class="card" id="crdes"><h2>Desecration <span class="pill">bones</span></h2>
+      <div class="sub">A bone adds one hidden (unrevealed) desecrated prefix or suffix to a rare; if the item is full, a random mod goes. Reveal it at the Well of Souls: pick 1 of 3 options (Omen of Abyssal Echoes rerolls the 3 once). Only one desecrated mod per item: Orb of Annulment + Omen of Light removes it.</div>
+      <div class="crrow" style="margin-top:8px;flex-wrap:wrap;gap:6px">
+        <select id="crbone" class="crin"></select>
+        <select id="crdside" class="crin"><option value="">either side</option><option value="prefix">prefix (Omen of Sinistral Necromancy)</option><option value="suffix">suffix (Omen of Dextral Necromancy)</option></select>
+        <select id="crdlin" class="crin"><option value="">no lineage omen</option></select>
+        <button class="btn" id="crdes1">Desecrate (simulate)</button><button class="btn" id="crdes2" title="Record that you used the bone in game">I did this in game</button></div>
+      <div id="crreveal" style="margin-top:8px"></div>
+      <details style="margin-top:8px"><summary class="small">Abyss-exclusive mods this item can get</summary><div id="crexcl" class="small" style="margin-top:6px"></div></details>
+      <div class="small muted" id="crdnote" style="margin-top:6px"></div></div>
     <div class="card"><h2>Next step</h2><div class="sub" id="crplansub"></div><div id="crplan"></div></div>
     <div class="grid2">
       <div class="card"><h2>History <span class="muted small" id="crspent"></span></h2><div id="crhist"></div>
@@ -2699,7 +2709,7 @@ try { const s = JSON.parse(localStorage.getItem('poe2craft') || 'null'); if (s) 
 const crSave = () => { try { const { pool, plan, ...keep } = CR; localStorage.setItem('poe2craft', JSON.stringify(keep)); } catch (e) {} };
 const famById = fid => CR.pool && CR.pool.families.find(f => f.fid === fid);
 const tierText = (fid, tier) => { const f = famById(fid); const t = f && f.tiers.find(x => x.tier === tier); return t ? t.text : (f ? f.template : '?'); };
-const isTarget = m => CR.targets.some(t => (t.fid != null && m.fid === t.fid && (m.tier || 99) <= (t.max_tier || 99)) || (t.text && m.text && t.text.toLowerCase() === m.text.toLowerCase()));
+const isTarget = m => CR.targets.some(t => (t.fid != null && m.fid === t.fid && (m.tier || 99) <= (t.max_tier || 99)) || (t.xid && m.xid === t.xid) || (t.text && m.text && t.text.toLowerCase() === m.text.toLowerCase()));
 
 async function crLoadPool(keepState) {
   CR.base = $('#crbase').value.trim(); CR.ilvl = +$('#crilvl').value || 82;
@@ -2716,23 +2726,71 @@ async function crLoadPool(keepState) {
   tierFill($('#craddfam'), $('#craddtier'), '≤ '); tierFill($('#crmanfam'), $('#crmantier'), '');
   if (!keepState || !CR.state || CR.state.base !== CR.base) CR.state = { base: CR.base, ilvl: CR.ilvl, rarity: 'normal', mods: [], corrupted: false };
   CR.state.ilvl = CR.ilvl;
-  crSave(); crRender(); crPlan();
+  crSave(); crRender(); crPlan(); crDesLoad();
 }
 function crRender() {
   const tgt = side => CR.targets.filter(t => (t.fid != null ? (famById(t.fid) || {}).side : t.side) === side);
-  const trow = t => { const i = CR.targets.indexOf(t); const done = CR.state && CR.state.mods.some(m => isTarget({ ...m }) && ((t.fid != null && m.fid === t.fid) || (t.text && m.text === t.text)));
-    return `<div class="crmod ${done ? 'ok' : ''}">${done ? '✔' : '○'} ${esc(t.fid != null ? tierText(t.fid, t.max_tier) : t.text)} ${t.fid != null ? `<span class="pill">T${t.max_tier} or better</span>` : '<span class="pill">special</span>'}
+  crDesRender();
+  const trow = t => { const i = CR.targets.indexOf(t); const done = CR.state && CR.state.mods.some(m => isTarget({ ...m }) && ((t.fid != null && m.fid === t.fid) || (t.xid && m.xid === t.xid) || (t.text && m.text === t.text)));
+    return `<div class="crmod ${done ? 'ok' : ''}">${done ? '✔' : '○'} ${esc(t.fid != null ? tierText(t.fid, t.max_tier) : t.text)} ${t.fid != null ? `<span class="pill">T${t.max_tier} or better</span>` : t.xid ? `<span class="pill">desecrated${t.lineage ? ' · ' + esc(t.lineage) : ''}</span>` : '<span class="pill">special</span>'}
       <button class="x" data-rmt="${i}" title="Remove target">✕</button></div>`; };
   $('#crtargets').innerHTML = ['prefix', 'suffix'].map(s => `<div class="small muted" style="margin-top:6px">${s === 'prefix' ? 'Prefixes' : 'Suffixes'} (${tgt(s).length}/3)</div>${tgt(s).map(trow).join('') || '<div class="small muted">none</div>'}`).join('');
   const st = CR.state || { rarity: 'normal', mods: [] };
   $('#crrarity').textContent = st.rarity + (st.corrupted ? ' · corrupted' : '');
-  const mrow = (m, i) => `<div class="crmod ${isTarget(m) ? 'ok' : 'bad'}">${m.fractured ? '🔒' : isTarget(m) ? '✔' : '✗'} ${esc(m.text)} ${m.tier ? `<span class="pill">T${m.tier}</span>` : ''}
+  const mrow = (m, i) => `<div class="crmod ${isTarget(m) ? 'ok' : 'bad'}">${m.fractured ? '🔒' : isTarget(m) ? '✔' : '✗'} ${esc(m.text)} ${m.tier ? `<span class="pill">T${m.tier}</span>` : ''}${m.kind === 'desecrated' ? `<span class="pill" style="border-color:#7a4bb3">${m.unrevealed ? 'unrevealed' : 'desecrated'}${m.lineage ? ' · ' + esc(m.lineage) : ''}</span>` : ''}
       <button class="x" data-frac="${i}" title="Toggle fractured">🔒</button><button class="x" data-rmm="${i}" title="Remove (record a removal)">✕</button></div>`;
   $('#critem').innerHTML = ['prefix', 'suffix'].map(s => { const ms = st.mods.map((m, i) => [m, i]).filter(([m]) => m.side === s);
     return `<div class="small muted" style="margin-top:6px">${s === 'prefix' ? 'Prefixes' : 'Suffixes'} (${ms.length}/${st.rarity === 'magic' ? 1 : 3})</div>${ms.map(([m, i]) => mrow(m, i)).join('') || '<div class="small muted">empty</div>'}`; }).join('');
   const spent = CR.history.reduce((a, h) => a + (h.cost || 0), 0);
   $('#crspent').textContent = CR.history.length ? `· ${CR.history.length} steps · spent ${P(spent)}` : '';
   $('#crhist').innerHTML = CR.history.slice().reverse().map(h => `<div class="small" style="padding:4px 0;border-bottom:1px solid var(--grid)">${curIcons(h.label, 18)}<b>${esc(h.label)}</b> <span class="muted">${h.real ? 'in game' : 'simulated'} · ${esc(P(h.cost))}</span><div class="muted">${esc(h.msg)}</div></div>`).join('') || '<div class="small muted">Nothing yet.</div>';
+}
+// ---- desecration (poe2kit/desecration.py) ----
+let CRD = null;
+async function crDesLoad() {
+  if (!CR.base) return;
+  CRD = await get(`/api/craft/desecration?base=${encodeURIComponent(CR.base)}&ilvl=${CR.ilvl}`);
+  $('#crbone').innerHTML = CRD.bones.length ? CRD.bones.map(b => `<option value="${esc(b.name)}"${b.ok ? '' : ' disabled'}>${esc(b.name)}${b.ok ? (b.exclusive_option_chance ? '' : ' (no Abyss mods)') : ' (' + esc(b.why) + ')'}</option>`).join('') : '<option value="">no bone fits this item</option>';
+  const okb = CRD.bones.find(b => b.ok && b.tier === 'Preserved') || CRD.bones.find(b => b.ok);
+  if (okb) $('#crbone').value = okb.name;
+  $('#crdlin').innerHTML = '<option value="">no lineage omen</option>' + CRD.lineage_omens.map(o => `<option>${esc(o)}</option>`).join('');
+  const ex = s => CRD.exclusive[s].map(m => `<div style="margin-top:3px">${esc(m.text)} <span class="pill">${esc(m.lineage || 'Abyss')}</span> <a href="#" class="crxadd" data-x="${esc(m.xid)}" data-s="${s}" data-t="${esc(m.text)}" data-l="${esc(m.lineage || '')}">add as target</a></div>`).join('') || '<div class="muted">none for this item</div>';
+  $('#crexcl').innerHTML = `<b>Prefixes</b>${ex('prefix')}<b style="display:block;margin-top:6px">Suffixes</b>${ex('suffix')}`;
+  document.querySelectorAll('.crxadd').forEach(a => a.onclick = ev => { ev.preventDefault();
+    if (!CR.targets.some(t => t.xid === a.dataset.x)) CR.targets.push({ xid: a.dataset.x, side: a.dataset.s, text: a.dataset.t, lineage: a.dataset.l || null });
+    crSave(); crRender(); crPlan(); });
+  $('#crdnote').textContent = CRD.note || '';
+  crDesRender();
+}
+function crDesRender() {
+  if (!$('#crreveal')) return;
+  const u = CR.state && CR.state.mods.find(m => m.unrevealed);
+  $('#crreveal').innerHTML = u ? `<div class="small"><b>Unrevealed ${esc(u.side)}</b> from ${esc(u.bone || 'a bone')}${u.lineage_omen ? ' (' + esc(u.lineage_omen) + ' guaranteed in the options)' : ''}.
+      <button class="btn" id="crrev" style="padding:1px 10px">Reveal (simulate): show the 3 options</button>
+      <span class="muted">In game? Remove the unrevealed line (✕) and add what you picked (+ mod, or the exclusive list below).</span></div><div id="crrevopts"></div>` : '';
+  if ($('#crrev')) $('#crrev').onclick = () => crReveal(false);
+}
+async function crReveal(echoed) {
+  const r = await post('/api/craft/reveal_options', { state: CR.state, seed: Date.now() % 100000 });
+  if (r.error) { $('#crrevopts').innerHTML = `<div class="small" style="color:var(--accent)">${esc(r.error)}</div>`; return; }
+  $('#crrevopts').innerHTML = `<div class="small" style="margin-top:6px">Pick one${echoed ? ' (rerolled with Abyssal Echoes)' : ''}:</div>` +
+    r.options.map((o, i) => `<div class="crmod ${isTarget(o) ? 'ok' : ''}" style="cursor:pointer" data-ropt="${i}">${isTarget(o) ? '✔' : '○'} ${esc(o.text)} ${o.lineage ? `<span class="pill" style="border-color:#7a4bb3">${esc(o.lineage)}</span>` : ''} <button class="btn" style="padding:0 8px;font-size:11px;margin-left:auto">Take this one</button></div>`).join('') +
+    (echoed ? '' : `<button class="btn" id="crecho" style="margin-top:6px;padding:1px 10px">Reroll the 3 with Omen of Abyssal Echoes</button>`);
+  document.querySelectorAll('[data-ropt]').forEach(el => el.onclick = async () => {
+    const o = r.options[+el.dataset.ropt];
+    const x = await post('/api/craft/apply', { state: CR.state, action: { type: 'reveal', mod: o, echoes: echoed }, targets: CR.targets });
+    CR.state = x.state; CR.history.push({ label: 'Reveal at the Well of Souls' + (echoed ? ' + Abyssal Echoes' : ''), msg: x.message, cost: x.cost_div, real: false });
+    crSave(); crRender(); crPlan(); });
+  if ($('#crecho')) $('#crecho').onclick = () => crReveal(true);
+}
+async function crDesecrate(real) {
+  if (!CR.state) return;
+  const action = { type: 'desecrate', bone: $('#crbone').value, side: $('#crdside').value || null, lineage_omen: $('#crdlin').value || null };
+  const x = await post('/api/craft/apply', { state: CR.state, action, targets: CR.targets, seed: Date.now() % 100000 });
+  if (!x.used || !x.used.length) { $('#crreveal').innerHTML = `<div class="small" style="color:var(--accent)">${esc(x.message || 'That did not work.')}</div>`; return; }
+  CR.state = x.state;
+  CR.history.push({ label: x.used.join(' + '), msg: x.message + (real ? ' (done in game: the side is as the game chose; fix it with ✕ / + if it differs)' : ''), cost: x.cost_div, real });
+  crSave(); crRender(); crPlan();
 }
 async function crPlan() {
   if (!CR.state || !CR.pool) { $('#crplan').innerHTML = '<div class="muted small">Load a base first.</div>'; return; }
@@ -2772,6 +2830,7 @@ async function crImport(text, asTarget) {
   crSave(); crRender(); crPlan();
 }
 function crInit() {
+  $('#crdes1').onclick = () => crDesecrate(false); $('#crdes2').onclick = () => crDesecrate(true);
   get('/api/craft/bases').then(b => { $('#crbases').innerHTML = b.map(x => `<option value="${esc(x.name)}">${esc(x.class)}</option>`).join(''); });
   $('#crbase').value = CR.base || ''; $('#crilvl').value = CR.ilvl || 82;
   if (CR.base) crLoadPool(true); else crRender();

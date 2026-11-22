@@ -138,7 +138,9 @@ the game's own log): where to go next and which rewards not to skip. It's click-
 
 ### Crafting
 **Craft lab:** plan a craft with every mod's tier, practise it step by step at live currency prices, and record what
-really happened.
+really happened. **Desecration** is in it too: the right bone for your item, side and lineage omens, the hidden mod
+and the 3-choice reveal at the Well of Souls (with the Abyssal Echoes reroll), every Abyss-exclusive mod your item
+can get, and what a desecration costs per try, from [the research](research/desecration/desecration.md).
 
 ### In game: the price-check overlay (Windows)
 Press **Ctrl+D** on an item: the poe.ninja price, live trade-site prices if you switch them on, a craft estimate

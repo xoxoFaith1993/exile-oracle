@@ -261,8 +261,32 @@ def analyze(con, base, mods, ilvl=None, league=None):
             r['source'] = 'special'
             continue
         items = [bone, SIDE_OMEN[r['side']][3]] + ([r['omen']] if r.get('omen') else [])
-        step(f"Desecrated mod “{r['text']}”: {bone} + {' + '.join(items[1:])}, then reveal it at the Well of Souls "
-             f"(Omen of Abyssal Echoes lets you reroll the 3 choices once).", items)
+        odds, exp = None, None
+        try:   # the real bone for this class, a lineage omen when it helps, and the odds (poe2kit/desecration.py)
+            import re as _re
+            from . import desecration as _d, craftsim as _cs
+            pool_ = _cs.get_pool(base, ilvl)
+            norm = lambda s: _re.sub(r'\(?[\d.]+(-[\d.]+)?\)?', '#', s or '').lower()
+            xm = next((m for m in _d.exclusive(pool_['class'], r['side']) if norm(m['text']) == norm(r['text'])), None)
+            ok = [b for b in _d.bones_for(pool_['class'], ilvl) if b['ok'] and b['exclusive_option_chance']]
+            if xm and ok:
+                bb = min(ok, key=lambda b: pr.get(b['name']) or 9e9)
+                lo = next((k for k, v in _d.LINEAGE_OMEN.items() if v == xm.get('lineage')), None) \
+                    if bb['lineage_omens'] else None
+                items = [bb['name'], _d.SIDE_OMEN[r['side']]] + ([lo] if lo else []) + [_d.ECHOES]
+                p = _d.p_offer({'base': base, 'ilvl': ilvl, 'rarity': 'rare', 'mods': []}, pool_,
+                               {'xid': xm['id'], 'side': r['side']}, _d.bone(bb['name']), True, xm.get('lineage') if lo else None)
+                c = sum(pr.get(i) or 0 for i in items)
+                odds = f'about {p * 100:.0f}% per try' if p else None
+                exp = round(c / p, 2) if p and c else None
+                bone = bb['name']
+        except Exception:
+            pass
+        step(f"Desecrated mod “{r['text']}”: {' + '.join(items)}, then reveal it at the Well of Souls and pick it from "
+             f"the 3 options (Abyssal Echoes rerolls them once). A miss: Orb of Annulment + Omen of Light removes only "
+             f"the desecrated mod, then try again.", items,
+             (f'{odds} (rough: our reading of the game data, every mod counted the same).' if odds else
+              'Odds unknown for this one; budget extra tries.'), exp=exp)
     if any(r.get('roll_pct', 100) < 100 for r in rows if r['source'] == 'normal'):
         step('Finish: Divine Orbs to push the rolls up (rerolls all values).', ['Divine Orb'],
              'Optional and repeatable; Omen of Sanctification makes the next Divine sanctify the item instead.')

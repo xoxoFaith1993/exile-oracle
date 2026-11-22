@@ -340,6 +340,33 @@ def rescue_check():
           "I'm stuck: gaps biggest first, three ways out, plain questions without a build")
 
 
+def desecration_check():
+    """Desecration: bone rules (rare only, item level limits), the hidden mod, 3 reveal options with a lineage omen's
+    guarantee, Omen of Light, and the planner reaching an Abyss-exclusive target."""
+    import random as _r
+    try:
+        from poe2kit import craftsim as cs, desecration as d
+        p = cs.get_pool('Gold Ring', 82)
+        ex = d.exclusive('Ring', 'suffix', lineage='Ulaman')
+    except (FileNotFoundError, ValueError, KeyError) as e:
+        check(True, f'desecration skipped ({type(e).__name__}: {e})')
+        return
+    rng = _r.Random(2)
+    s = {'base': 'Gold Ring', 'ilvl': 82, 'rarity': 'rare', 'corrupted': False, 'mods': []}
+    gn = cs.apply(dict(s), {'type': 'desecrate', 'bone': 'Gnawed Collarbone'}, rng)[2]
+    s1, _m, used = cs.apply(s, {'type': 'desecrate', 'bone': 'Preserved Collarbone', 'side': 'suffix',
+                               'lineage_omen': 'Omen of the Sovereign'}, rng)
+    opts = d.options(s1, p, rng, d.bone('Preserved Collarbone'), 'Ulaman')
+    s2 = cs.apply(s1, {'type': 'reveal', 'mod': opts[0]}, rng)[0]
+    s3 = cs.apply(s2, {'type': 'annul', 'light': True}, rng)[0]
+    t = {'xid': ex[0]['id'], 'side': 'suffix'}
+    pl = cs.plan(dict(s, mods=[]), [t], {'Preserved Collarbone': 0.1, 'Omen of Dextral Necromancy': 1})
+    check(not gn and used[0] == 'Preserved Collarbone' and len(opts) == 3 and any(o.get('lineage') == 'Ulaman' for o in opts)
+          and not any(m.get('unrevealed') for m in s2['mods']) and not s3['mods']
+          and pl['options'] and pl['options'][0]['action']['type'] == 'desecrate',
+          'desecration: bone rules, hidden mod, 3-choice reveal with lineage omen, Omen of Light, planner')
+
+
 def wishlist_check():
     """R25: a wish at its target alerts once, becomes the Home omen, and can be removed."""
     import time as _t
@@ -656,6 +683,7 @@ if __name__ == '__main__':
     alerts_check()
     patchwatch_check()
     wishlist_check()
+    desecration_check()
     rescue_check()
     journey_check()
     wanted_check()

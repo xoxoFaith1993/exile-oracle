@@ -61,6 +61,7 @@ you assume.
   - alerts: `alerts.py` (the kinds the player picked, real-move filters, daily market digest, the Oracle's calls);
   - league plan: `journey.py` (six stages, checks measured by Path of Building against researched thresholds with sources, the next checkpoint, farming you can run; from scratch without a build);
   - "I'm stuck": `rescue.py` (symptom -> measured gaps for the content played -> fix cheaply / respec / start over; plain questions when the build can't be read);
+  - desecration: `desecration.py` (bones, the hidden mod, the 3-choice reveal, omens, odds; data from research/desecration) used by `craftsim.py` and `crafting.py`;
   - wanted items: `tradewatch.py` (saved trade searches checked by hand: new / re-priced / gone listings, pins);
   - wishlist: `wishlist.py` (chase items with a target price: hit / forecast heading there / patch call alerts, Home omen; R25);
   - platform differences: `osutil.py`;

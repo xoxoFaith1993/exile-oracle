@@ -1,6 +1,6 @@
 {
  "data_version": "2026.11.21.1",
- "built": 1795305454,
+ "built": 1795308496,
  "min_app": "0.6.1",
  "files": {
   "atlas-strategies.json": {
@@ -26,6 +26,10 @@
   "currency_effects.json": {
    "size": 187683,
    "sha256": "f2bdb6ef52bfa1693100180016243c211c59235b91fef5346ca6e2d994c91178"
+  },
+  "desecration.json": {
+   "size": 164409,
+   "sha256": "5aed4ddac049b53ae4b5f55a3a15f02e5b96553380a4e526a71f4c57fc7e6363"
   },
   "essence_map.json": {
    "size": 18326,

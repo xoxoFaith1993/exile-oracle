@@ -782,7 +782,11 @@ TOOLS = [
     ('poe2_craft', 'Crafting Lab: how to make a rare item. Reads every mod (tier, prefix/suffix, normal / essence-only / '
      'desecrated), the base + item level needed, rough odds per Exalt tier with side omens, and a step-by-step route '
      'with live currency costs. Input: item_text (Ctrl+C or PoB text), or build_id + slot (e.g. a top build saved in '
-     'the vault), or base + mods. Odds assume equal weights (real weights are not in the game files): treat as a floor.',
+     'the vault), or base + mods. Odds assume equal weights (real weights are not in the game files): treat as a floor. '
+     'Desecration is modelled: bones by item class and item level (Gnawed up to 64, Ancient mods level 40+), the hidden '
+     'mod, the 3-choice reveal at the Well of Souls (Abyssal Echoes rerolls once), Necromancy side omens, Sovereign / '
+     'Liege / Blackblooded lineage omens (weapons and jewellery), Omen of Light to remove it; each option is '
+     'Abyss-exclusive with about 8% (our reading of the game data, low confidence): say so.',
      S(item_text=STR, build_id=NUM, slot=STR, base=STR, mods=STR, item_level=NUM, league=STR), t_craft),
     ('poe2_my_characters', "List the player's PoE 2 characters (all leagues incl. Standard) through Path of Building's own "
      'GGG login, in the background. Cached 15 min; only call when needed.', S(fresh=BOOL), t_my_characters),

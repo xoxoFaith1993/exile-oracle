@@ -5,7 +5,10 @@ Item state (JSON, what the dashboard holds):
   {"base": "...", "ilvl": 82, "rarity": "normal|magic|rare", "corrupted": false,
    "mods": [{"fid": 12, "tier": 2, "side": "prefix", "text": "...", "kind": "normal|essence|desecrated",
              "fractured": false}]}
-Targets: [{"fid": 12, "max_tier": 2}]  (fid = family index in the base's pool, tier 1 = best)
+Targets: [{"fid": 12, "max_tier": 2}]  (fid = family index in the base's pool, tier 1 = best), or
+         [{"xid": "AbyssMod...", "side": "suffix"}] for an Abyss-exclusive desecrated mod (poe2kit/desecration.py)
+Desecration: an unrevealed mod is {"kind": "desecrated", "unrevealed": true, "side", "bone"}; revealed exclusive
+mods carry "xid" and "lineage".
 
 Every outcome assumes equal weights (the real ones aren't in the game files), so odds are optimistic."""
 
@@ -100,7 +103,8 @@ def _remove(state, side, rng, lowest=False, pool=None):
     if not cands:
         return None
     if lowest and pool:
-        lv = lambda m: next((t['level'] for t in _fam(pool, m['fid'])['tiers'] if t['tier'] == m['tier']), 0) \
+        lv = lambda m: 1 if m.get('unrevealed') else 65 if m.get('xid') else \
+            next((t['level'] for t in _fam(pool, m['fid'])['tiers'] if t['tier'] == m['tier']), 0) \
             if m.get('fid') is not None else 0
         low = min(lv(m) for m in cands)
         cands = [m for m in cands if lv(m) == low]
@@ -157,6 +161,13 @@ def apply(state, action, rng=None):
         added = [_roll(s, pool, sides, crafting.MIN_LEVEL[EXALT[grade]], rng) for _ in range(n)]
         used = [EXALT[grade]] + ([OMEN['exalt'][side]] if side else []) + (['Omen of Greater Exaltation'] if n == 2 else [])
         msg = 'Added ' + ', '.join(m['text'] for m in added if m) if any(added) else 'No room on that side'
+    elif a == 'annul' and action.get('light'):   # Omen of Light: removes only the desecrated mod
+        from . import desecration as _d
+        dm = next((m for m in s['mods'] if m.get('kind') == 'desecrated' and not m.get('fractured')), None)
+        if not dm:
+            return s, 'There is no desecrated mod to remove.', used
+        s['mods'].remove(dm)
+        used, msg = ['Orb of Annulment', 'Omen of Light'], f"Removed the desecrated {dm['text']}"
     elif a == 'annul':
         n = 2 if action.get('greater_annulment') else 1
         gone = [_remove(s, side, rng) for _ in range(n)]
@@ -192,6 +203,70 @@ def apply(state, action, rng=None):
         m = rng.choice(cands)
         m['fractured'] = True
         used, msg = ['Fracturing Orb'], f'Fractured {m["text"]}'
+    elif a == 'desecrate':
+        from . import desecration as _d
+        b = _d.bone(action.get('bone') or '')
+        if not b:
+            return s, 'Pick a bone.', used
+        if s['rarity'] != 'rare':
+            return s, 'Bones only work on rare items.', used
+        if pool['class'] not in (b.get('item_classes') or []):
+            return s, f"{b['name']} doesn't work on {pool['class']} items.", used
+        if b.get('max_item_level') and s['ilvl'] > b['max_item_level']:
+            return s, f"{b['name']} only works up to item level {b['max_item_level']}.", used
+        if b.get('min_item_level') and s['ilvl'] < b['min_item_level']:
+            return s, f"{b['name']} needs item level {b['min_item_level']} or more.", used
+        if _d.has_desecrated(s):
+            return s, 'The item already has a desecrated mod (remove it first: Annulment + Omen of Light).', used
+        lin = _d.LINEAGE_OMEN.get(action.get('lineage_omen') or '')
+        if lin and not b.get('lineage_omens_allowed'):
+            return s, f"{action['lineage_omen']} only works with Preserved or Ancient bones on weapons and jewellery.", used
+        removed = None
+        if len(s['mods']) >= 6 or (side and _open(s, side) <= 0):   # a full item (or side): a random mod goes
+            removed = _remove(s, side if side and _open(s, side) <= 0 else None, rng)
+        room = [sd for sd in ('prefix', 'suffix') if _open(s, sd) > 0]
+        sd = side if side in room else (rng.choice(room) if room else None)
+        if not sd:
+            return s, 'No room for the desecrated mod.', used
+        s['mods'].append({'fid': None, 'tier': None, 'side': sd, 'text': f'Unrevealed desecrated {sd}',
+                          'kind': 'desecrated', 'unrevealed': True, 'fractured': False, 'bone': b['name'],
+                          'lineage_omen': lin})
+        used = [b['name']] + ([_d.SIDE_OMEN[side]] if side else []) + ([action['lineage_omen']] if lin else [])
+        msg = f'Added an unrevealed desecrated {sd}' + (f" (removed {removed['text']})" if removed else '') + \
+            '. Reveal it at the Well of Souls.'
+    elif a == 'reveal':
+        from . import desecration as _d
+        u = _d.unrevealed(s)
+        if not u:
+            return s, 'There is no unrevealed desecrated mod.', used
+        pick = action.get('mod')
+        if not pick:   # the simulator: take a target if offered, else the first option; Echoes rerolls once
+            targets = action.get('targets') or []
+            b = _d.bone(u.get('bone') or '')
+            opts = _d.options(s, pool, rng, b, u.get('lineage_omen'))
+            pick = next((o for o in opts if _is_target(o, targets)), None)
+            if not pick and action.get('echoes'):
+                opts = _d.options(s, pool, rng, b, u.get('lineage_omen'))
+                pick = next((o for o in opts if _is_target(o, targets)), None)
+            pick = pick or (opts[0] if opts else None)
+        if not pick:
+            return s, 'No options could be offered for this item.', used
+        s['mods'].remove(u)
+        s['mods'].append(dict(pick, kind='desecrated', unrevealed=False))
+        used = [_d.ECHOES] if action.get('echoes') else []
+        msg = f"Revealed {pick['text']}" + (f" ({pick['lineage']})" if pick.get('lineage') else '')
+    elif a == 'putrefaction':
+        from . import desecration as _d
+        b = _d.bone(action.get('bone') or '')
+        if not b or s['rarity'] != 'rare':
+            return s, 'Putrefaction needs a rare item and a bone.', used
+        keep = [m for m in s['mods'] if m.get('fractured')]
+        s['mods'] = keep + [{'fid': None, 'tier': None, 'side': sd, 'text': f'Unrevealed desecrated {sd}', 'kind': 'desecrated',
+                             'unrevealed': True, 'fractured': False, 'bone': b['name']}
+                            for sd in ['prefix'] * (3 - sum(m['side'] == 'prefix' for m in keep)) +
+                            ['suffix'] * (3 - sum(m['side'] == 'suffix' for m in keep))]
+        s['corrupted'] = True
+        used, msg = [b['name'], 'Omen of Putrefaction'], 'Every mod replaced by unrevealed desecrated mods; the item is corrupted'
     elif a == 'divine':
         used, msg = ['Divine Orb'], 'Rerolled the values'
     elif a == 'set':  # record a real in-game result exactly (from the UI)
@@ -206,6 +281,8 @@ def apply(state, action, rng=None):
 def _is_target(m, targets):
     for t in targets:
         if m.get('fid') is not None and m['fid'] == t.get('fid') and (m.get('tier') or 99) <= t.get('max_tier', 99):
+            return True
+        if t.get('xid') and m.get('xid') == t['xid']:
             return True
         if t.get('text') and m.get('text') and t['text'].lower() == m['text'].lower():
             return True
@@ -234,8 +311,8 @@ def plan(state, targets, prices):
     """Ranked options for the next step, with odds of progress and cost per try."""
     pool = get_pool(state['base'], state['ilvl'])
     hit, junk = progress(state, targets)
-    missing = [t for t in targets if t not in hit and t.get('fid') is not None]
-    side_of = lambda t: _fam(pool, t['fid'])['side']
+    missing = [t for t in targets if t not in hit and (t.get('fid') is not None or t.get('xid'))]
+    side_of = lambda t: t['side'] if t.get('xid') else _fam(pool, t['fid'])['side']
     miss_side = {s: [t for t in missing if side_of(t) == s] for s in ('prefix', 'suffix')}
     cost = lambda items: round(sum(prices.get(i) or 0 for i in items), 4)
     opts = []
@@ -302,11 +379,13 @@ def plan(state, targets, prices):
                         opts.append({'label': f'Chaos Orb + {OMEN["chaos"][s]} (swap a {s})',
                                      'action': {'type': 'chaos', 'side': s}, 'p_progress': round(p_ch, 4),
                                      'cost': cost(items), 'note': 'progress = removes junk AND rolls a target'})
+        opts += _desecration_options(state, pool, targets, missing, prices, cost)
         good_unfrac = [m for m in state['mods'] if _is_target(m, targets) and not m.get('fractured')]
         if len(state['mods']) >= 4 and good_unfrac and not any(m.get('fractured') for m in state['mods']):
             p = len(good_unfrac) / len(state['mods'])
             opts.append({'label': 'Fracturing Orb (lock a mod)', 'action': {'type': 'fracture'}, 'p_progress': round(p, 4),
                          'cost': cost(['Fracturing Orb']), 'note': 'fractures a random mod: good if it picks a target'})
+    opts = [o for o in opts if o.get('p_progress') != 0]   # can't reach any missing target this way
     for o in opts:
         if o.get('p_progress') and o.get('cost') and 'expected_cost' not in o:
             o['expected_cost'] = round(o['cost'] / o['p_progress'], 2)
@@ -315,6 +394,64 @@ def plan(state, targets, prices):
         opts[0]['recommended'] = True
     return {'done': False, 'hit': len(hit), 'of': len(targets), 'missing': len(missing), 'junk': len(junk),
             'options': opts}
+
+
+def _desecration_options(state, pool, targets, missing, prices, cost):
+    """Bones on a rare: reveal a waiting mod, clear a junk desecrated mod, or desecrate for a missing target (the only
+    way to the Abyss-exclusive mods). Odds from poe2kit/desecration.p_offer (uniform weights, 8% per option)."""
+    try:
+        from . import desecration as _d
+        bones = [b for b in _d.bones_for(pool['class'], state['ilvl']) if b['ok']]
+    except Exception:
+        return []
+    out = []
+    u = _d.unrevealed(state)
+    note = 'odds: about 8% per option from the Abyss pool (our reading of the game data); every mod counts the same'
+    if u:
+        b = _d.bone(u.get('bone') or '') or {}
+        for echoes in (False, True):
+            p = max((_d.p_offer(state, pool, t, b, echoes, u.get('lineage_omen')) for t in missing
+                     if (t['side'] if t.get('xid') else _fam(pool, t['fid'])['side']) == u['side']), default=0)
+            items = [_d.ECHOES] if echoes else []
+            out.append({'label': 'Reveal it at the Well of Souls' + (f' + {_d.ECHOES} (reroll once)' if echoes else ''),
+                        'action': {'type': 'reveal', 'echoes': echoes, 'targets': targets}, 'p_progress': round(p, 4),
+                        'cost': cost(items), 'note': 'pick 1 of 3 options; ' + note})
+        return out
+    dm = next((m for m in state['mods'] if m.get('kind') == 'desecrated'), None)
+    if dm:
+        if not _is_target(dm, targets) and not dm.get('fractured'):
+            out.append({'label': 'Orb of Annulment + Omen of Light (remove the desecrated mod)',
+                        'action': {'type': 'annul', 'light': True}, 'p_progress': None,
+                        'cost': cost(['Orb of Annulment', 'Omen of Light']),
+                        'note': 'frees the item for another bone; removes only the desecrated mod'})
+        return out
+    for t in missing:
+        side = t['side'] if t.get('xid') else _fam(pool, t['fid'])['side']
+        if not t.get('xid') and _open(state, side) <= 0:
+            continue   # a normal target on a full side: the bone would remove a random mod first
+        lin = None
+        if t.get('xid'):
+            m = next((x for x in _d.data()['mod_pool'] if x['id'] == t['xid']), {})
+            lin = m.get('lineage')
+        best = None
+        for b in bones:
+            bd = _d.bone(b['name'])
+            lo = next((k for k, v in _d.LINEAGE_OMEN.items() if v == lin), None) if lin and b['lineage_omens'] else None
+            for echoes in (False, True):
+                p = _d.p_offer(state, pool, dict(t, side=side), bd, echoes, _d.LINEAGE_OMEN.get(lo) if lo else None)
+                if not p:
+                    continue
+                items = [b['name'], _d.SIDE_OMEN[side]] + ([lo] if lo else []) + ([_d.ECHOES] if echoes else [])
+                c = cost(items)
+                e = c / p if c else None
+                if best is None or (e is not None and (best['expected_cost'] is None or e < best['expected_cost'])):
+                    best = {'label': ' + '.join(items) + ', then reveal', 'p_progress': round(p, 4), 'cost': c,
+                            'expected_cost': round(e, 2) if e else None, 'note': note,
+                            'action': {'type': 'desecrate', 'bone': b['name'], 'side': side,
+                                       'lineage_omen': lo, 'then_echoes': echoes}}
+        if best:
+            out.append(best)
+    return out
 
 
 # ---------------- simulator ----------------
@@ -339,6 +476,9 @@ def simulate(state, targets, prices, runs=300, max_steps=120, base_cost=0.0, see
             act = pl['options'][0]['action']
             s, _msg, used = apply(s, act, rng)
             spent += sum(prices.get(i) or 0 for i in used)
+            if act['type'] == 'desecrate' and any(m.get('unrevealed') for m in s['mods']):
+                s, _msg, used = apply(s, {'type': 'reveal', 'echoes': act.get('then_echoes'), 'targets': targets}, rng)
+                spent += sum(prices.get(i) or 0 for i in used)
             steps += 1
         results.append({'ok': plan(s, targets, prices)['done'], 'cost': spent, 'steps': steps})
     ok = [r for r in results if r['ok']]

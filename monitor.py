@@ -537,6 +537,15 @@ def api(path, q):
         if path == '/api/craft/bases':
             from poe2kit import craftsim
             return craftsim.bases()
+        if path == '/api/craft/desecration':   # bones, omens and the Abyss-exclusive mods for this base
+            from poe2kit import craftsim, desecration
+            p = craftsim.get_pool(q.get('base', ''), int(q.get('ilvl', 82)))
+            ex = {s: desecration.exclusive(p['class'], s) for s in ('prefix', 'suffix')}
+            return {'class': p['class'], 'bones': desecration.bones_for(p['class'], p['ilvl']),
+                    'lineage_omens': list(desecration.LINEAGE_OMEN), 'side_omens': desecration.SIDE_OMEN,
+                    'exclusive': {s: [{'xid': m['id'], 'text': m['text'].replace('\n', ' / '), 'lineage': m.get('lineage'),
+                                       'side': s, 'name': m.get('name')} for m in v] for s, v in ex.items()},
+                    'note': desecration.UNCERTAIN}
         if path == '/api/craft/pool':
             from poe2kit import craftsim
             return craftsim.pool_for_ui(q.get('base', ''), int(q.get('ilvl', 82)))
@@ -695,6 +704,15 @@ def craft_post(path, b):
             return patchnotes.analyze(con, b.get('text', ''), b.get('title') or 'pasted notes')
         if path == '/api/craft/plan':
             return craftsim.plan(b['state'], b.get('targets', []), pr)
+        if path == '/api/craft/reveal_options':   # the 3 options for the unrevealed mod (practise mode)
+            from poe2kit import craftsim, desecration
+            st = b['state']
+            u = desecration.unrevealed(st)
+            if not u:
+                return {'options': [], 'error': 'There is no unrevealed desecrated mod on the item.'}
+            pool = craftsim.get_pool(st['base'], st['ilvl'])
+            return {'options': desecration.options(st, pool, random.Random(b.get('seed')), desecration.bone(u.get('bone') or ''),
+                                                   u.get('lineage_omen')), 'side': u['side']}
         if path == '/api/craft/apply':
             st, msg, used = craftsim.apply(b['state'], b['action'], random.Random(b.get('seed')))
             return {'state': st, 'message': msg, 'used': used,

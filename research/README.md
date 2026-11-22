@@ -22,6 +22,7 @@ which are labelled and checked against the data.
 | Atlas | [atlas/atlas.md](atlas/atlas.md) | The atlas tree from the game files, 11 strategies with key nodes, waystone mod danger and reward, rolling, tablets | Atlas, Maps and Tablets pages, waystone check |
 | Campaign | [campaign/campaign.md](campaign/campaign.md) | The rush route, every permanent reward, trials, breakpoints, times | Campaign page, route panel |
 | Bosses | [bosses/boss-readiness.md](bosses/boss-readiness.md) | What each pinnacle boss needs (life, resistances, damage) | Build Lab boss readiness |
+| Desecration | [desecration/desecration.md](desecration/desecration.md) | Bones, the Well of Souls reveal (3 choices, odds model), every desecrated mod from the game files (294 that can roll), abyss omens, what each step costs | Craft lab, `poe2_craft` |
 | Drop rates | [drop-rates.md](drop-rates.md) | What the public web knows about PoE 2 drop rates | Farming page |
 
 **What's left out:** downloaded raw pages and API dumps (`cache/` folders). They are large, and they are other people's

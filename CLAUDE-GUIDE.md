@@ -92,6 +92,8 @@ for 15 minutes).
 - "How do I craft this?" (paste the item text) — Claude reads every mod's tier and gives a step-by-step route with
   current currency costs; the **Craft** tab can then follow it step by step.
 - "Is this rare any good?" (paste it)
+- "I want the Ulaman lightning and chaos resistance on this ring: which bone and omens, and what will it cost?"
+  (desecration: bones, the 3-choice reveal, lineage omens; the **Craft** tab can practise it)
 
 **Sessions**
 - "How did my last session go? Maps per hour, deaths, average map time?"
