@@ -58,6 +58,8 @@ Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: 
 
 [Run]
 Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\toolkit\tray.pyw"""; WorkingDir: "{app}\toolkit"; Description: "Start Exile Oracle now"; Flags: nowait postinstall skipifsilent
+; an update from the app's banner runs quietly (/SILENT): start the app again by itself
+Filename: "{app}\python\pythonw.exe"; Parameters: """{app}\toolkit\tray.pyw"""; WorkingDir: "{app}\toolkit"; Flags: nowait runasoriginaluser; Check: WizardSilent
 
 [UninstallRun]
 Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -Command ""Get-CimInstance Win32_Process -Filter \""Name like 'python%'\"" | Where-Object {{ $_.CommandLine -like '*{app}*' } | ForEach-Object {{ Stop-Process -Id $_.ProcessId -Force }"""; Flags: runhidden; RunOnceId: "StopToolkit"

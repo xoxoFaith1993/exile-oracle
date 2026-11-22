@@ -40,10 +40,16 @@ def check(con):
 
 
 def status(con):
+    """The last check, judged against the version running NOW (the author, 2026-11-21: after updating, the banner still
+    said "you have 0.6.0" until the next check, so the update looked like it hadn't worked)."""
     try:
-        return json.loads(db.kv_get(con, 'update', '{}') or '{}')
+        info = json.loads(db.kv_get(con, 'update', '{}') or '{}')
     except ValueError:
         return {}
+    if info.get('latest'):
+        info['current'] = config.VERSION
+        info['available'] = bool(info.get('asset')) and _ver(info['latest']) > _ver(config.VERSION)
+    return info
 
 
 def install(con):
@@ -66,7 +72,9 @@ def install(con):
         return {'ok': False, 'why': 'download incomplete, try again'}
     from . import osutil
     if os.name == 'nt':
-        osutil.detached([path])   # the installer closes this app, then updates it
+        # quiet mode: a progress bar only, no licence / setup pages again (accepted at the first install); the
+        # installer closes this app, updates it in place and starts it again
+        osutil.detached([path, '/SILENT', '/SP-', '/SUPPRESSMSGBOXES', '/NOCANCEL'])
         return {'ok': True, 'file': path}
     import tarfile
     out = os.path.join(d, 'linux-' + info['latest'])
